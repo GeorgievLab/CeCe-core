@@ -38,6 +38,10 @@ set(SRCS
     Repository.cpp
     Context.hpp
     Context.cpp
+    Loader.hpp
+    Loader.cpp
+    LibraryLoader.hpp
+    LibraryLoader.cpp
 )
 
 # ######################################################################### #

@@ -23,12 +23,16 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-// Declaration
-#include "cece/plugin/LibraryLoader.hpp"
+#pragma once
+
+/* ************************************************************************ */
 
 // CeCe
-#include "cece/core/Log.hpp"
-#include "cece/core/Tuple.hpp"
+#include "cece/core/String.hpp"
+#include "cece/core/ViewPtr.hpp"
+#include "cece/core/UniquePtr.hpp"
+#include "cece/core/FilePath.hpp"
+#include "cece/plugin/Config.hpp"
 
 /* ************************************************************************ */
 
@@ -37,73 +41,93 @@ namespace plugin {
 
 /* ************************************************************************ */
 
-Map<String, FilePath> LibraryLoader::scanDirectory(const FilePath& directory) const
-{
-    Map<String, FilePath> result;
-
-    Log::debug("Scanning `", directory, "` for shared library plugins");
-
-    if (!isDirectory(directory))
-    {
-        Log::warning("Directory `", directory, "` doesn't exists");
-        return result;
-    }
-
-    // Foreach directory
-    for (const auto& path : openDirectory(directory))
-    {
-        // Only files
-        if (!isFile(path))
-        {
-            Log::debug("Skipping `", path, "` - not a file");
-            continue;
-        }
-
-        // Get path
-        const auto filename = path.getFilename();
-        const auto prefixLength = Library::FILE_PREFIX.length();
-        const auto suffixLength = Library::FILE_EXTENSION.length();
-        const auto suffixStart = filename.length() - suffixLength;
-
-        Log::debug("Checking: ", filename);
-
-        // Different prefix
-        if (filename.substr(0, prefixLength) != Library::FILE_PREFIX)
-            continue;
-
-        // Different extension
-        if (filename.substr(suffixStart) != Library::FILE_EXTENSION)
-            continue;
-
-        Log::debug("Plugin: ", filename.substr(prefixLength, suffixStart - prefixLength), " @ ", path);
-
-        result.emplace(filename.substr(prefixLength, suffixStart - prefixLength), std::move(path));
-    }
-
-    return result;
-}
+class Api;
+class Context;
 
 /* ************************************************************************ */
 
-ViewPtr<Api> LibraryLoader::loadPlugin(const String& name, const FilePath& path)
+/**
+ * @brief Shared library wrapper.
+ */
+class SharedLibrary final
 {
-    // Try to find library in cache
-    auto it = m_libraries.find(name);
 
-    // Found
-    if (it != m_libraries.end())
-        return getValue<1>(*it).getApi();
+// Public Constants
+public:
 
-    Log::debug("Loading shared library plugin `", name, "` from `", path, "`...");
 
-    // Insert into cache
-    auto ptr = m_libraries.emplace(std::piecewise_construct,
-        std::forward_as_tuple(name),
-        std::forward_as_tuple(name, path)
-    );
+    /// Library file prefix
+    static const String FILE_PREFIX;
 
-    return getValue<1>(*getValue<0>(ptr)).getApi();
-}
+    /// Library file extension
+    static const String FILE_EXTENSION;
+
+
+// Public Types
+public:
+
+
+    /// Create API function pointer type.
+    using CreateFn = Api* (*)();
+
+    /// Returns plugin configuration.
+    using GetConfigFn = Config* (*)();
+
+
+// Public Ctors & Dtors
+public:
+
+
+    /**
+     * @brief Constructor.
+     *
+     * @param path Path to shared library.
+     */
+    SharedLibrary(FilePath path);
+
+
+    /**
+     * @brief Destructor.
+     */
+    ~SharedLibrary();
+
+
+// Public Operations
+public:
+
+
+    /**
+     * @brief Create plugin API.
+     *
+     * @Returns Created API.
+     */
+    UniquePtr<Api> createApi();
+
+
+// Private Operations
+private:
+
+
+    /**
+     * @brief Check configuration file.
+     *
+     * @param config
+     *
+     * @throw
+     */
+    void checkConfig(Config* config);
+
+
+// Private Data Members
+private:
+
+    /// Path to library file.
+    FilePath m_path;
+
+    /// Shared library handle.
+    void* m_handle;
+
+};
 
 /* ************************************************************************ */
 

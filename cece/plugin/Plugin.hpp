@@ -27,11 +27,15 @@
 
 /* ************************************************************************ */
 
+// C++
+#include <utility>
+
 // CeCe
+#include "cece/core/String.hpp"
+#include "cece/core/StringView.hpp"
 #include "cece/core/ViewPtr.hpp"
-#include "cece/core/DynamicArray.hpp"
-#include "cece/core/FilePath.hpp"
-#include "cece/plugin/Plugin.hpp"
+#include "cece/core/UniquePtr.hpp"
+#include "cece/plugin/Api.hpp"
 
 /* ************************************************************************ */
 
@@ -41,10 +45,9 @@ namespace plugin {
 /* ************************************************************************ */
 
 /**
- * @brief Plugin loader interface. Allows to load plugins other than
- * shared library.
+ * @brief Loaded plugin information.
  */
-class Loader
+class Plugin
 {
 
 // Public Ctors & Dtors
@@ -52,23 +55,48 @@ public:
 
 
     /**
-     * @brief Destructor.
+     * @brief Constructor.
+     *
+     * @param name Plugin name.
+     * @param api  Plugin API.
      */
-    virtual ~Loader() = 0;
+    explicit Plugin(String name, UniquePtr<Api> api) noexcept;
 
 
-// Public Operations
+// Public Accessors & Mutators
 public:
 
 
     /**
-     * @brief Scan given directory to load plugins.
+     * @brief Returns plugin name.
      *
-     * @param directory Directory to scan.
-     *
-     * @return A list of loaded plugins.
+     * @return Plugin name.
      */
-    virtual DynamicArray<Plugin> scanDirectory(const FilePath& directory) = 0;
+    StringView getName() const noexcept
+    {
+        return m_name;
+    }
+
+
+    /**
+     * @brief Returns plugin API.
+     *
+     * @return Plugin API.
+     */
+    ViewPtr<Api> getApi() const noexcept
+    {
+        return m_api;
+    }
+
+
+// Private Data Members
+public:
+
+    /// Plugin name.
+    String m_name;
+
+    /// Plugin API.
+    UniquePtr<Api> m_api;
 
 };
 

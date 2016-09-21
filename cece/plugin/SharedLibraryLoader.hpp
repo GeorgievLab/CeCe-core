@@ -28,10 +28,10 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/ViewPtr.hpp"
 #include "cece/core/DynamicArray.hpp"
 #include "cece/core/FilePath.hpp"
-#include "cece/plugin/Plugin.hpp"
+#include "cece/plugin/Loader.hpp"
+#include "cece/plugin/SharedLibrary.hpp"
 
 /* ************************************************************************ */
 
@@ -41,21 +41,10 @@ namespace plugin {
 /* ************************************************************************ */
 
 /**
- * @brief Plugin loader interface. Allows to load plugins other than
- * shared library.
+ * @brief Shared library plugin loader.
  */
-class Loader
+class SharedLibraryLoader : public Loader
 {
-
-// Public Ctors & Dtors
-public:
-
-
-    /**
-     * @brief Destructor.
-     */
-    virtual ~Loader() = 0;
-
 
 // Public Operations
 public:
@@ -68,7 +57,14 @@ public:
      *
      * @return A list of loaded plugins.
      */
-    virtual DynamicArray<Plugin> scanDirectory(const FilePath& directory) = 0;
+    DynamicArray<Plugin> scanDirectory(const FilePath& directory) override;
+
+
+// Private Data Members
+private:
+
+    /// Loaded libraries.
+    DynamicArray<SharedLibrary> m_libraries;
 
 };
 

@@ -54,89 +54,29 @@ Manager::Manager() noexcept
 
 /* ************************************************************************ */
 
+Manager::~Manager() = default;
+
+/* ************************************************************************ */
+
 DynamicArray<String> Manager::getNames() const noexcept
 {
     DynamicArray<String> names;
-    names.reserve(m_paths.size());
+    names.reserve(m_plugins.size());
 
-    for (const auto& p : m_paths)
-        names.push_back(p.first);
+    for (const auto& p : m_plugins)
+        names.emplace_back(p.getName());
 
     return names;
 }
 
 /* ************************************************************************ */
 
-StringView Manager::getName(ViewPtr<const Api> api) const noexcept
+ViewPtr<Api> Manager::getApi(StringView name) const noexcept
 {
-    for (const auto& p : m_loaded)
+    for (const auto& p : m_plugins)
     {
-        if (std::get<1>(p).getApi() == api)
-            return std::get<0>(p);
-    }
-
-    return {};
-}
-
-/* ************************************************************************ */
-
-void Manager::addDirectory(FilePath path)
-{
-    Log::debug("New plugins directory: `", path, "`");
-
-    m_directories.push_back(path);
-
-    // Scan added directory
-    auto plugins = scanDirectory(path);
-
-    // Append plugin directories
-    m_paths.insert(make_move_iterator(plugins.begin()), make_move_iterator(plugins.end()));
-}
-
-/* ************************************************************************ */
-
-void Manager::loadAll()
-{
-    for (const auto& name : getNames())
-        load(name);
-}
-
-/* ************************************************************************ */
-
-ViewPtr<Api> Manager::load(StringView name)
-{
-    // Plugin is already loaded
-    if (isLoaded(name))
-        return getApi(name);
-
-    try
-    {
-        // Load internal
-        auto api = loadInternal(String(name)).getApi();
-        CECE_ASSERT(api);
-
-        // Load dependencies
-        for (const auto& plugin : api->requiredPlugins())
-        {
-            // Recursive load
-            load(plugin);
-        }
-
-        // Store plugin name for unload order (reversed)
-        // It's much easier to store in reverse order than in regular order.
-        // No duplicate are stored because isLoaded is checked before.
-        m_unloadOrderRev.push_back(String(name));
-
-        Log::debug("Loading plugin '", name, "'...");
-
-        // Load plugin
-        api->onLoad(getRepository());
-
-        return api;
-    }
-    catch (const Exception& e)
-    {
-        Log::warning(e.what());
+        if (p.getName() == name)
+            return p.getApi();
     }
 
     return nullptr;
@@ -144,66 +84,54 @@ ViewPtr<Api> Manager::load(StringView name)
 
 /* ************************************************************************ */
 
-Map<String, FilePath> Manager::scanDirectory(const FilePath& directory) noexcept
+StringView Manager::getName(ViewPtr<const Api> api) const noexcept
 {
-    Map<String, FilePath> result;
-
-    Log::debug("Scanning `", directory, "` for plugins");
-
-    if (!isDirectory(directory))
+    for (const auto& p : m_plugins)
     {
-        Log::warning("Directory `", directory, "` doesn't exists");
-        return result;
+        if (p.getApi() == api)
+            return p.getName();
     }
 
-    // Foreach directory
-    for (const auto& path : openDirectory(directory))
-    {
-        // Only files
-        if (!isFile(path))
-        {
-            Log::debug("Skipping `", path, "` - not a file");
-            continue;
-        }
-
-        // Get path
-        const auto filename = path.getFilename();
-        const auto prefixLength = Library::FILE_PREFIX.length();
-        const auto suffixLength = Library::FILE_EXTENSION.length();
-        const auto suffixStart = filename.length() - suffixLength;
-
-        Log::debug("Checking: ", filename);
-
-        // Different prefix
-        if (filename.substr(0, prefixLength) != Library::FILE_PREFIX)
-            continue;
-
-        // Different extension
-        if (filename.substr(suffixStart) != Library::FILE_EXTENSION)
-            continue;
-
-        Log::debug("Plugin: ", filename.substr(prefixLength, suffixStart - prefixLength), " @ ", path);
-
-        result.emplace(filename.substr(prefixLength, suffixStart - prefixLength), std::move(path));
-    }
-
-    return result;
+    return {};
 }
 
 /* ************************************************************************ */
 
-Map<String, FilePath> Manager::scanDirectories() const noexcept
+Manager& Manager::addLoader(UniquePtr<Loader> loader)
 {
-    Map<String, FilePath> result;
+    m_loaders.push_back(std::move(loader));
+    ViewPtr<Loader> ptr = m_loaders.back();
 
-    // Foreach directories
-    for (const auto& dirName : getDirectories())
+    // Scan directories
+    for (const auto& dir : m_directories)
     {
-        auto tmp = scanDirectory(dirName);
-        result.insert(make_move_iterator(tmp.begin()), make_move_iterator(tmp.end()));
+        auto plugins = ptr->scanDirectory(dir);
+        m_plugins.insert(m_plugins.end(), make_move_iterator(plugins.begin()), make_move_iterator(plugins.end()));
     }
 
-    return result;
+    return *this;
+}
+
+/* ************************************************************************ */
+
+Manager& Manager::addDirectory(FilePath path)
+{
+    Log::debug("New plugins directory: `", path, "`");
+
+    // Add directory
+    m_directories.push_back(path);
+
+    // Scan directory by loaders
+    for (auto& loader : m_loaders)
+    {
+        // Scan directory
+        auto plugins = loader->scanDirectory(path);
+
+        // Add plugins
+        m_plugins.insert(m_plugins.end(), make_move_iterator(plugins.begin()), make_move_iterator(plugins.end()));
+    }
+
+    return *this;
 }
 
 /* ************************************************************************ */
@@ -212,52 +140,6 @@ Manager& Manager::s()
 {
     static Manager instance;
     return instance;
-}
-
-/* ************************************************************************ */
-
-Library& Manager::loadInternal(String name)
-{
-    // Try to find library in cache
-    auto it = m_loaded.find(name);
-
-    // Found
-    if (it != m_loaded.end())
-        return std::get<1>(*it);
-
-    {
-        Log::debug("Loading external plugin `", name, "`...");
-
-        // Load plugin library
-        auto it = m_paths.find(name);
-
-        if (it == m_paths.end())
-            throw InvalidArgumentException("Unable to find plugin '" + name + "'");
-
-        // Insert into cache
-        auto ptr = m_loaded.emplace(std::piecewise_construct,
-            std::forward_as_tuple(name),
-            std::forward_as_tuple(name, it->second)
-        );
-
-        return std::get<1>(*std::get<0>(ptr));
-    }
-}
-
-/* ************************************************************************ */
-
-void Manager::unloadPlugins()
-{
-    // List is in reverse order
-    for (auto i = m_unloadOrderRev.rbegin(); i != m_unloadOrderRev.rend(); ++i)
-    {
-        auto it = m_loaded.find(*i);
-        CECE_ASSERT(it != m_loaded.end());
-
-        Log::debug("Unloading plugin '", *i, "'...");
-
-        it->second.getApi()->onUnload(getRepository());
-    }
 }
 
 /* ************************************************************************ */

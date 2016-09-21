@@ -27,10 +27,10 @@
 set(SRCS
     Config.hpp
     definition.hpp
-    Library.hpp
-    Library.cpp
     Api.hpp
     Api.cpp
+    Plugin.hpp
+    Plugin.cpp
     Manager.hpp
     Manager.cpp
     RepositoryRecord.hpp
@@ -40,8 +40,10 @@ set(SRCS
     Context.cpp
     Loader.hpp
     Loader.cpp
-    LibraryLoader.hpp
-    LibraryLoader.cpp
+    SharedLibrary.hpp
+    SharedLibrary.cpp
+    SharedLibraryLoader.hpp
+    SharedLibraryLoader.cpp
 )
 
 # ######################################################################### #

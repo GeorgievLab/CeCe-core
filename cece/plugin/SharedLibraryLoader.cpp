@@ -23,17 +23,13 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
+// Declaration
+#include "cece/plugin/SharedLibraryLoader.hpp"
 
 // CeCe
-#include "cece/core/ViewPtr.hpp"
-#include "cece/core/Map.hpp"
-#include "cece/core/String.hpp"
-#include "cece/core/FilePath.hpp"
-#include "cece/plugin/Loader.hpp"
-#include "cece/plugin/Library.hpp"
+#include "cece/core/Assert.hpp"
+#include "cece/core/Log.hpp"
+#include "cece/core/Exception.hpp"
 
 /* ************************************************************************ */
 
@@ -42,44 +38,64 @@ namespace plugin {
 
 /* ************************************************************************ */
 
-/**
- * @brief Shared library plugin loader.
- */
-class LibraryLoader : public Loader
+DynamicArray<Plugin> SharedLibraryLoader::scanDirectory(const FilePath& directory)
 {
+    DynamicArray<Plugin> result;
 
-// Public Operations
-public:
+    Log::debug("Scanning `", directory, "` for shared library plugins");
+    CECE_ASSERT(isDirectory(directory));
 
+    // Foreach directory
+    for (const auto& path : openDirectory(directory))
+    {
+        // Only files
+        if (!isFile(path))
+        {
+            Log::debug("Skipping `", path, "` - not a file");
+            continue;
+        }
 
-    /**
-     * @brief Scan given directory to find available plugins.
-     *
-     * @param directory Directory to scan.
-     *
-     * @return Map of found plugins.
-     */
-    Map<String, FilePath> scanDirectory(const FilePath& directory) const override;
+        // Get path
+        const auto filename = path.getFilename();
+        const auto prefixLength = SharedLibrary::FILE_PREFIX.length();
+        const auto suffixLength = SharedLibrary::FILE_EXTENSION.length();
+        const auto suffixStart = filename.length() - suffixLength;
 
+        Log::debug("Checking: ", filename);
 
-    /**
-     * @brief Load plugin.
-     *
-     * @param name Plugin name.
-     * @param path Path to plugin file.
-     *
-     * @return Pointer to plugin API. API is managed by loader.
-     */
-    ViewPtr<Api> loadPlugin(const String& name, const FilePath& path) override;
+        // Different prefix
+        if (filename.substr(0, prefixLength) != SharedLibrary::FILE_PREFIX)
+            continue;
 
+        // Different extension
+        if (filename.substr(suffixStart) != SharedLibrary::FILE_EXTENSION)
+            continue;
 
-// Private Data Members
-private:
+        // Plugin name
+        const String name = filename.substr(prefixLength, suffixStart - prefixLength);
 
-    /// Loaded libraries.
-    Map<String, Library> m_libraries;
+        Log::debug("Loading plugin: ", name, " @ ", path);
 
-};
+        try
+        {
+            // Open shared library
+            SharedLibrary lib(path);
+
+            // Obtain API from library
+            auto api = lib.createApi();
+
+            // Store library
+            m_libraries.push_back(std::move(lib));
+            result.emplace_back(name, std::move(api));
+        }
+        catch (const Exception& e)
+        {
+            Log::warning("Unable to load shared library from: ", path, " (", e.what(), ")");
+        }
+    }
+
+    return result;
+}
 
 /* ************************************************************************ */
 

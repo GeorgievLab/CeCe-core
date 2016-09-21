@@ -31,10 +31,9 @@
 #include "cece/core/String.hpp"
 #include "cece/core/StringView.hpp"
 #include "cece/core/DynamicArray.hpp"
-#include "cece/core/Map.hpp"
 #include "cece/core/ViewPtr.hpp"
 #include "cece/core/FilePath.hpp"
-#include "cece/plugin/Library.hpp"
+#include "cece/plugin/Loader.hpp"
 #include "cece/plugin/Repository.hpp"
 
 /* ************************************************************************ */
@@ -81,93 +80,11 @@ public:
     /**
      * @brief Destructor.
      */
-    ~Manager()
-    {
-        unloadPlugins();
-    }
+    ~Manager();
 
 
 // Public Accessors
 public:
-
-
-    /**
-     * @brief Returns directories where plugins are stored.
-     *
-     * @return List of directories.
-     *
-     * @see addDirectory
-     */
-    const DynamicArray<FilePath>& getDirectories() const noexcept
-    {
-        return m_directories;
-    }
-
-
-    /**
-     * @brief Check if plugin with given name exists.
-     *
-     * @param name Plugin name.
-     *
-     * @return If plugin exists.
-     */
-    bool isAvailable(StringView name) const noexcept
-    {
-        // FIXME: In C++14 there is overloaded version of find
-        return m_paths.find(String(name)) != m_paths.end();
-    }
-
-
-    /**
-     * @brief Return a list of plugins.
-     *
-     * @return An array of plugin names.
-     */
-    DynamicArray<String> getNames() const noexcept;
-
-
-    /**
-     * @brief Check if plugin is loaded.
-     *
-     * @param name Plugin name.
-     *
-     * @return
-     */
-    bool isLoaded(StringView name) const noexcept
-    {
-        // FIXME: In C++14 there is overloaded version of find
-        return m_loaded.find(String(name)) != m_loaded.end();
-    }
-
-
-    /**
-     * @brief Returns plugin API of loaded plugin.
-     *
-     * @param name Plugin name.
-     *
-     * @return Pointer to API or nullptr, if plugin is not loaded.
-     */
-    ViewPtr<Api> getApi(StringView name) const noexcept
-    {
-        // Try to find library
-        // FIXME: In C++14 there is overloaded version of find
-        auto it = m_loaded.find(String(name));
-
-        if (it == m_loaded.end())
-            return nullptr;
-
-        return std::get<1>(*it).getApi();
-    }
-
-
-    /**
-     * @brief Find API name.
-     *
-     * @param name Plugin API.
-     *
-     * @return Plugin name.
-     */
-    StringView getName(ViewPtr<const Api> api) const noexcept;
 
 
     /**
@@ -192,8 +109,80 @@ public:
     }
 
 
+    /**
+     * @brief Returns plugin loaders.
+     *
+     * @return
+     */
+    const DynamicArray<UniquePtr<Loader>>& getLoaders() const noexcept
+    {
+        return m_loaders;
+    }
+
+
+    /**
+     * @brief Returns plugins search directories.
+     *
+     * @return List of directories.
+     */
+    const DynamicArray<FilePath>& getDirectories() const noexcept
+    {
+        return m_directories;
+    }
+
+
+    /**
+     * @brief Return a list of plugins.
+     *
+     * @return An array of plugin names.
+     */
+    DynamicArray<String> getNames() const noexcept;
+
+
+    /**
+     * @brief Check if plugin is loaded.
+     *
+     * @param name Plugin name.
+     *
+     * @return
+     */
+    bool isLoaded(StringView name) const noexcept;
+
+
+    /**
+     * @brief Returns plugin API of loaded plugin.
+     *
+     * @param name Plugin name.
+     *
+     * @return Pointer to API or nullptr, if plugin is not loaded.
+     */
+    ViewPtr<Api> getApi(StringView name) const noexcept;
+
+
+    /**
+     * @brief Find API name.
+     *
+     * @param name Plugin API.
+     *
+     * @return Plugin name.
+     */
+    StringView getName(ViewPtr<const Api> api) const noexcept;
+
+
 // Public Mutators
 public:
+
+
+    /**
+     * @brief Add a plugin loader.
+     *
+     * It also invoke loader's scan function for all currently stored paths.
+     *
+     * @param loader Pointer to plugin loader.
+     *
+     * @return *this.
+     */
+    Manager& addLoader(UniquePtr<Loader> loader);
 
 
     /**
@@ -201,87 +190,31 @@ public:
      *
      * @param directories List of directories.
      *
-     * @see addDirectory
+     * @return *this
      */
-    void addDirectories(DynamicArray<FilePath> directories)
+    Manager& addDirectories(DynamicArray<FilePath> directories)
     {
         for (auto&& directory : directories)
             addDirectory(std::move(directory));
+
+        return *this;
     }
 
 
     /**
      * @brief Add directory where the plugins are stored.
      *
-     * @param path
+     * For all stored loaders, it invoke their scan function.
+     *
+     * @param path Path with plugins.
+     *
+     * @return *this
      */
-    void addDirectory(FilePath path);
+    Manager& addDirectory(FilePath path);
 
 
 // Public Operations
 public:
-
-
-    /**
-     * @brief Load all plugins.
-     */
-    void loadAll();
-
-
-    /**
-     * @brief Load plugin.
-     *
-     * @param name Plugin name.
-     *
-     * @return Pointer to API or nullptr, if plugin is not loaded.
-     */
-    ViewPtr<Api> load(StringView name);
-
-
-    /**
-     * @brief Scan directory for plugins.
-     *
-     * @param directory Plugins directory to scan.
-     *
-     * @return Paths to plugins.
-     */
-    static Map<String, FilePath> scanDirectory(const FilePath& directory) noexcept;
-
-
-    /**
-     * @brief Scan plugins directories for plugins.
-     *
-     * @return
-     *
-     * @see scanDirectory
-     */
-    Map<String, FilePath> scanDirectories() const noexcept;
-
-
-    /**
-     * @brief Rescan directories for extern plugins.
-     *
-     * @see scanDirectory
-     */
-    void rescanDirectories() noexcept
-    {
-        m_paths = scanDirectories();
-    }
-
-
-    /**
-     * @brief Release all loaded plugins.
-     *
-     * After this point the plugins features are not available.
-     */
-    void releasePlugins() noexcept
-    {
-        // Unload plugins
-        unloadPlugins();
-
-        // Release plugins
-        m_loaded.clear();
-    }
 
 
     /**
@@ -292,45 +225,20 @@ public:
     static Manager& s();
 
 
-// Private Operations
-private:
-
-
-    /**
-     * @brief Load plugin (internal).
-     *
-     * @param name Plugin name.
-     *
-     * @return Reference to loaded plugin.
-     */
-    Library& loadInternal(String name);
-
-
-    /**
-     * @brief Load all plugins.
-     *
-     * It calls `onUnload` for all loaded plugins.
-     */
-    void unloadPlugins();
-
-
 // Private Data Members
 private:
 
     /// Plugin repository.
     Repository m_repository;
 
+    /// Plugin loaders.
+    DynamicArray<UniquePtr<Loader>> m_loaders;
+
     /// Plugins directory paths.
     DynamicArray<FilePath> m_directories;
 
-    /// Paths to plugin libraries.
-    Map<String, FilePath> m_paths;
-
-    /// Loaded plugins.
-    Map<String, Library> m_loaded;
-
-    /// Order in which plugins should be unloaded (in reverse order).
-    DynamicArray<String> m_unloadOrderRev;
+    /// List of loaded plugins.
+    DynamicArray<Plugin> m_plugins;
 
 };
 

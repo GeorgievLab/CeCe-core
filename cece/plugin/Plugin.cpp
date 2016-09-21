@@ -23,16 +23,11 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
+// Declaration
+#include "cece/plugin/Plugin.hpp"
 
 // CeCe
-#include "cece/core/String.hpp"
-#include "cece/core/ViewPtr.hpp"
-#include "cece/core/UniquePtr.hpp"
-#include "cece/core/FilePath.hpp"
-#include "cece/plugin/Config.hpp"
+#include "cece/plugin/Api.hpp"
 
 /* ************************************************************************ */
 
@@ -41,121 +36,12 @@ namespace plugin {
 
 /* ************************************************************************ */
 
-class Api;
-class Context;
-
-/* ************************************************************************ */
-
-/**
- * @brief Helper class for wrapping plugin.
- */
-class Library final
+Plugin::Plugin(String name, UniquePtr<Api> api) noexcept
+    : m_name(std::move(name))
+    , m_api(std::move(api))
 {
-
-// Public Constants
-public:
-
-
-    /// Library file prefix
-    static const String FILE_PREFIX;
-
-    /// Library file extension
-    static const String FILE_EXTENSION;
-
-
-// Public Types
-public:
-
-
-    /// Create API function pointer type.
-    using CreateFn = Api* (*)();
-
-    /// Returns plugin configuration.
-    using GetConfigFn = Config* (*)();
-
-
-// Public Ctors & Dtors
-public:
-
-
-    /**
-     * @brief Constructor.
-     *
-     * @param name Plugin name.
-     * @param api  Plugin builtin api.
-     */
-    Library(String name, UniquePtr<Api> api);
-
-
-    /**
-     * @brief Constructor.
-     *
-     * @param name Plugin name.
-     * @param path Path to plugin.
-     */
-    Library(String name, FilePath path);
-
-
-    /**
-     * @brief Destructor.
-     */
-    ~Library();
-
-
-// Public Accessors
-public:
-
-
-    /**
-     * @brief Returns plugin name.
-     *
-     * @return
-     */
-    const String& getName() const noexcept
-    {
-        return m_name;
-    }
-
-
-    /**
-     * @brief Returns API object.
-     *
-     * @return
-     */
-    ViewPtr<Api> getApi() const noexcept
-    {
-        return m_api;
-    }
-
-
-// Private Operations
-private:
-
-
-    /**
-     * @brief Check configuration file.
-     *
-     * @param config
-     *
-     * @throw
-     */
-    void checkConfig(Config* config);
-
-
-// Private Data Members
-private:
-
-    /// Plugin name.
-    String m_name;
-
-    /// Implementation
-    struct Impl;
-    UniquePtr<Impl> m_impl;
-
-    /// Library API.
-    UniquePtr<Api> m_api;
-
-};
+    // Nothing to do
+}
 
 /* ************************************************************************ */
 

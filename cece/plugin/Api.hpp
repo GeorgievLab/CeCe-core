@@ -64,10 +64,7 @@ public:
     /**
      * @brief Destructor.
      */
-    virtual ~Api()
-    {
-        // Nothing to do
-    }
+    virtual ~Api() = 0;
 
 
 // Public Operations

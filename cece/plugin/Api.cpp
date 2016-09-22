@@ -36,6 +36,10 @@ namespace plugin {
 
 /* ************************************************************************ */
 
+Api::~Api() = default;
+
+/* ************************************************************************ */
+
 void Api::onUnload(Repository& repository) const
 {
     repository.unregisterApi(this);

@@ -156,10 +156,14 @@ public:
             return {};
 
         LPSTR buffer = nullptr;
-        const auto size = FormatMessageA(
+        auto size = FormatMessageA(
             FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
             NULL, err, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&buffer, 0, NULL
         );
+
+        // Remove trailing new lines.
+        while (size > 0 && (buffer[size - 1] == '\r' || buffer[size - 1] == '\n'))
+            --size;
 
         String message(buffer, size);
 

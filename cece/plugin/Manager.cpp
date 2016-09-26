@@ -109,28 +109,37 @@ ViewPtr<Api> Manager::load(StringView name)
     if (isLoaded(name))
         return getApi(name);
 
-    // Load internal
-    auto api = loadInternal(String(name)).getApi();
-    CECE_ASSERT(api);
-
-    // Load dependencies
-    for (const auto& plugin : api->requiredPlugins())
+    try
     {
-        // Recursive load
-        load(plugin);
+        // Load internal
+        auto api = loadInternal(String(name)).getApi();
+        CECE_ASSERT(api);
+
+        // Load dependencies
+        for (const auto& plugin : api->requiredPlugins())
+        {
+            // Recursive load
+            load(plugin);
+        }
+
+        // Store plugin name for unload order (reversed)
+        // It's much easier to store in reverse order than in regular order.
+        // No duplicate are stored because isLoaded is checked before.
+        m_unloadOrderRev.push_back(String(name));
+
+        Log::debug("Loading plugin '", name, "'...");
+
+        // Load plugin
+        api->onLoad(getRepository());
+
+        return api;
+    }
+    catch (const Exception& e)
+    {
+        Log::warning(e.what());
     }
 
-    // Store plugin name for unload order (reversed)
-    // It's much easier to store in reverse order than in regular order.
-    // No duplicate are stored because isLoaded is checked before.
-    m_unloadOrderRev.push_back(String(name));
-
-    Log::debug("Loading plugin '", name, "'...");
-
-    // Load plugin
-    api->onLoad(getRepository());
-
-    return api;
+    return nullptr;
 }
 
 /* ************************************************************************ */

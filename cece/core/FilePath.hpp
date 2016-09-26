@@ -110,7 +110,8 @@ public:
      */
     FilePath& operator/=(const FilePath& path)
     {
-        m_path += SEPARATOR;
+        if (!m_path.empty())
+            m_path += SEPARATOR;
         m_path.append(path.m_path);
         return *this;
     }
@@ -125,7 +126,8 @@ public:
      */
     FilePath& operator/=(const String& source)
     {
-        m_path += SEPARATOR;
+        if (!m_path.empty())
+            m_path += SEPARATOR;
         m_path.append(source);
         return *this;
     }
@@ -140,7 +142,8 @@ public:
      */
     FilePath& operator/=(const char* source)
     {
-        m_path += SEPARATOR;
+        if (!m_path.empty())
+            m_path += SEPARATOR;
         m_path.append(source);
         return *this;
     }

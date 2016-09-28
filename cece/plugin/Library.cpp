@@ -105,7 +105,12 @@ public:
         int size = MultiByteToWideChar(CP_UTF8, 0, str.data(), (int) str.size(), NULL, 0);
         std::wstring result(size, L'\0');
         MultiByteToWideChar(CP_UTF8, 0, str.data(), (int) str.size(), &result.front(), size);
+
+        // Disable error reporting box (on Windows 7)
+        DWORD oldMode;
+        SetThreadErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX | SEM_NOOPENFILEERRORBOX, &oldMode);
         m_ptr = LoadLibraryW(result.c_str());
+        SetThreadErrorMode(oldMode, NULL);
 #endif
     }
 
@@ -155,17 +160,25 @@ public:
         if (err == 0)
             return {};
 
-        LPSTR buffer = nullptr;
-        auto size = FormatMessageA(
+        LPWSTR buffer = nullptr;
+        auto size = FormatMessage(
             FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
             NULL, err, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&buffer, 0, NULL
         );
 
         // Remove trailing new lines.
-        while (size > 0 && (buffer[size - 1] == '\r' || buffer[size - 1] == '\n'))
+        while (size > 0 && (buffer[size - 1] == L'\r' || buffer[size - 1] == L'\n'))
             --size;
 
-        String message(buffer, size);
+        String message;
+
+        // Convert to UTF-8
+        if (size)
+        {
+            int utf8Size = WideCharToMultiByte(CP_UTF8, 0, buffer, size, NULL, 0, NULL, NULL);
+            message.assign(utf8Size, '\0');
+            WideCharToMultiByte(CP_UTF8, 0, buffer, size, &message.front(), utf8Size, NULL, NULL);
+        }
 
         // Free the buffer
         LocalFree(buffer);

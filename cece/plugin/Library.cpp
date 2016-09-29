@@ -160,25 +160,17 @@ public:
         if (err == 0)
             return {};
 
-        LPWSTR buffer = nullptr;
-        auto size = FormatMessage(
+        LPSTR buffer = nullptr;
+        auto size = FormatMessageA(
             FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-            NULL, err, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&buffer, 0, NULL
+            NULL, err, MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), (LPSTR)&buffer, 0, NULL
         );
 
         // Remove trailing new lines.
-        while (size > 0 && (buffer[size - 1] == L'\r' || buffer[size - 1] == L'\n'))
+        while (size > 0 && (buffer[size - 1] == '\r' || buffer[size - 1] == '\n'))
             --size;
 
-        String message;
-
-        // Convert to UTF-8
-        if (size)
-        {
-            int utf8Size = WideCharToMultiByte(CP_UTF8, 0, buffer, size, NULL, 0, NULL, NULL);
-            message.assign(utf8Size, '\0');
-            WideCharToMultiByte(CP_UTF8, 0, buffer, size, &message.front(), utf8Size, NULL, NULL);
-        }
+        String message(buffer, size);
 
         // Free the buffer
         LocalFree(buffer);

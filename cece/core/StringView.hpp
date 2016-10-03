@@ -173,6 +173,17 @@ public:
 
 
     /**
+     * @brief Returns if view is empty.
+     *
+     * @return
+     */
+    bool isEmpty() const noexcept
+    {
+        return m_length == 0;
+    }
+
+
+    /**
      * @brief Returns sequence data.
      *
      * @return

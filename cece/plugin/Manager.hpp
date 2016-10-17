@@ -77,12 +77,6 @@ public:
     Manager() noexcept;
 
 
-    /**
-     * @brief Destructor.
-     */
-    ~Manager();
-
-
 // Public Accessors
 public:
 
@@ -221,8 +215,22 @@ public:
      * @brief Returns global instance of plugin manager.
      *
      * @return
+     *
+     * @deprecated
      */
     static Manager& s();
+
+
+// Private Operations
+private:
+
+
+    /**
+     * @brief Add plugins into inner list.
+     *
+     * @param plugins Plugins to add.
+     */
+    void appendPlugins(DynamicArray<Plugin> plugins);
 
 
 // Private Data Members

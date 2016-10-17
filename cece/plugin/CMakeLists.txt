@@ -46,10 +46,39 @@ set(SRCS
     SharedLibraryLoader.cpp
 )
 
+set(SRCS_TEST
+    ManagerTest.cpp
+)
+
 # ######################################################################### #
 
 dir_pretend(SOURCES plugin/ ${SRCS})
+dir_pretend(SOURCES_TEST plugin/test/ ${SRCS_TEST})
 
 set(SOURCES_PLUGIN ${SOURCES} PARENT_SCOPE)
+set(SOURCES_PLUGIN_TEST ${SOURCES_TEST} PARENT_SCOPE)
+
+# ######################################################################### #
+
+# Test plugin
+add_library(cece-test-plugin SHARED
+    test/TestPlugin.cpp
+)
+
+# Properties
+set_target_properties(cece-test-plugin PROPERTIES
+    CXX_STANDARD 11
+    CXX_EXTENSIONS Off
+    CXX_STANDARD_REQUIRED On
+)
+
+target_include_directories(cece-test-plugin
+    PRIVATE ${CMAKE_SOURCE_DIR}
+    PRIVATE ${CMAKE_BINARY_DIR}
+)
+
+add_custom_command(TARGET cece-test-plugin POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:cece-test-plugin> ${CMAKE_BINARY_DIR}/cece
+)
 
 # ######################################################################### #

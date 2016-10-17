@@ -148,8 +148,11 @@ String getError(void* handle) noexcept
     LPSTR buffer = nullptr;
     const auto size = FormatMessageA(
         FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-        NULL, err, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&buffer, 0, NULL
+        NULL, err, MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), (LPSTR)&buffer, 0, NULL
     );
+
+    while (size > 0 && (buffer[size - 1] == '\r' || buffer[size - 1] == '\n'))
+        --size;
 
     String message(buffer, size);
 
@@ -228,9 +231,31 @@ SharedLibrary::SharedLibrary(FilePath path)
 
 SharedLibrary::~SharedLibrary()
 {
-    Log::debug("Closing shared library `", m_path, "`");
-    closeLibrary(m_handle);
-    Log::debug("Shared library closed `", m_path, "`");
+    if (m_handle)
+    {
+        Log::debug("Closing shared library `", m_path, "`");
+        closeLibrary(m_handle);
+        Log::debug("Shared library closed `", m_path, "`");
+    }
+}
+
+/* ************************************************************************ */
+
+SharedLibrary::SharedLibrary(SharedLibrary&& src) noexcept
+    : m_path(std::move(src.m_path))
+    , m_handle(src.m_handle)
+{
+    src.m_handle = nullptr;
+}
+
+/* ************************************************************************ */
+
+SharedLibrary& SharedLibrary::operator=(SharedLibrary&& src) noexcept
+{
+    std::swap(m_path, src.m_path);
+    std::swap(m_handle, src.m_handle);
+
+    return *this;
 }
 
 /* ************************************************************************ */

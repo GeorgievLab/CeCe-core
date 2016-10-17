@@ -79,17 +79,51 @@ public:
 
 
     /**
+     * @brief Default constructor.
+     */
+    SharedLibrary() = default;
+
+
+    /**
      * @brief Constructor.
      *
      * @param path Path to shared library.
      */
-    SharedLibrary(FilePath path);
+    explicit SharedLibrary(FilePath path);
 
 
     /**
      * @brief Destructor.
      */
     ~SharedLibrary();
+
+
+    /**
+     * @brief Copy constructor.
+     */
+    SharedLibrary(const SharedLibrary&) = delete;
+
+
+    /**
+     * @brief Move constructor.
+     */
+    SharedLibrary(SharedLibrary&&) noexcept;
+
+
+// Public Operators
+public:
+
+
+    /**
+     * @brief Copy assignment operator.
+     */
+    SharedLibrary& operator=(const SharedLibrary&) = delete;
+
+
+    /**
+     * @brief Move assignment operator.
+     */
+    SharedLibrary& operator=(SharedLibrary&&) noexcept;
 
 
 // Public Operations
@@ -125,7 +159,7 @@ private:
     FilePath m_path;
 
     /// Shared library handle.
-    void* m_handle;
+    void* m_handle = nullptr;
 
 };
 

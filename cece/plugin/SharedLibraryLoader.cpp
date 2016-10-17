@@ -38,12 +38,20 @@ namespace plugin {
 
 /* ************************************************************************ */
 
-DynamicArray<Plugin> SharedLibraryLoader::scanDirectory(const FilePath& directory)
+DynamicArray<Plugin> SharedLibraryLoader::loadAll(const FilePath& directory)
 {
-    DynamicArray<Plugin> result;
-
     Log::debug("Scanning `", directory, "` for shared library plugins");
+
+    // Not a directory
+    if (!isDirectory(directory))
+    {
+        Log::warning("`", directory, "` is not a directory, skipping...");
+        return {};
+    }
+
     CECE_ASSERT(isDirectory(directory));
+
+    DynamicArray<Plugin> result;
 
     // Foreach directory
     for (const auto& path : openDirectory(directory))

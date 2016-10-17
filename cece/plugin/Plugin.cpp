@@ -26,6 +26,9 @@
 // Declaration
 #include "cece/plugin/Plugin.hpp"
 
+// C++
+#include <utility>
+
 // CeCe
 #include "cece/plugin/Api.hpp"
 

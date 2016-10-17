@@ -27,9 +27,6 @@
 
 /* ************************************************************************ */
 
-// C++
-#include <utility>
-
 // CeCe
 #include "cece/core/String.hpp"
 #include "cece/core/StringView.hpp"

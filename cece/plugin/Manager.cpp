@@ -54,10 +54,6 @@ Manager::Manager() noexcept
 
 /* ************************************************************************ */
 
-Manager::~Manager() = default;
-
-/* ************************************************************************ */
-
 DynamicArray<String> Manager::getNames() const noexcept
 {
     DynamicArray<String> names;
@@ -71,8 +67,23 @@ DynamicArray<String> Manager::getNames() const noexcept
 
 /* ************************************************************************ */
 
+bool Manager::isLoaded(StringView name) const noexcept
+{
+    for (const auto& p : m_plugins)
+    {
+        if (p.getName() == name)
+            return true;
+    }
+
+    return false;
+}
+
+/* ************************************************************************ */
+
 ViewPtr<Api> Manager::getApi(StringView name) const noexcept
 {
+    CECE_ASSERT(!name.isEmpty());
+
     for (const auto& p : m_plugins)
     {
         if (p.getName() == name)
@@ -86,6 +97,8 @@ ViewPtr<Api> Manager::getApi(StringView name) const noexcept
 
 StringView Manager::getName(ViewPtr<const Api> api) const noexcept
 {
+    CECE_ASSERT(api);
+
     for (const auto& p : m_plugins)
     {
         if (p.getApi() == api)
@@ -99,14 +112,17 @@ StringView Manager::getName(ViewPtr<const Api> api) const noexcept
 
 Manager& Manager::addLoader(UniquePtr<Loader> loader)
 {
+    CECE_ASSERT(loader);
+
+    Log::debug("New plugins loader.");
+
     m_loaders.push_back(std::move(loader));
-    ViewPtr<Loader> ptr = m_loaders.back();
 
     // Scan directories
     for (const auto& dir : m_directories)
     {
-        auto plugins = ptr->scanDirectory(dir);
-        m_plugins.insert(m_plugins.end(), make_move_iterator(plugins.begin()), make_move_iterator(plugins.end()));
+        CECE_ASSERT(!m_loaders.empty());
+        appendPlugins(m_loaders.back()->loadAll(dir));
     }
 
     return *this;
@@ -116,20 +132,16 @@ Manager& Manager::addLoader(UniquePtr<Loader> loader)
 
 Manager& Manager::addDirectory(FilePath path)
 {
-    Log::debug("New plugins directory: `", path, "`");
+    CECE_ASSERT(!path.isEmpty());
+
+    Log::debug("New plugins directory: `", path, "`.");
 
     // Add directory
-    m_directories.push_back(path);
+    m_directories.push_back(std::move(path));
 
     // Scan directory by loaders
     for (auto& loader : m_loaders)
-    {
-        // Scan directory
-        auto plugins = loader->scanDirectory(path);
-
-        // Add plugins
-        m_plugins.insert(m_plugins.end(), make_move_iterator(plugins.begin()), make_move_iterator(plugins.end()));
-    }
+        appendPlugins(loader->loadAll(m_directories.back()));
 
     return *this;
 }
@@ -140,6 +152,17 @@ Manager& Manager::s()
 {
     static Manager instance;
     return instance;
+}
+
+/* ************************************************************************ */
+
+void Manager::appendPlugins(DynamicArray<Plugin> plugins)
+{
+    m_plugins.insert(
+        m_plugins.end(),
+        std::make_move_iterator(plugins.begin()),
+        std::make_move_iterator(plugins.end())
+    );
 }
 
 /* ************************************************************************ */

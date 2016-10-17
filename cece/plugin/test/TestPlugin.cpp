@@ -23,63 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
+// Plugin.cpp
+#include "cece/plugin/definition.hpp"
+#include "cece/plugin/Api.hpp"
 
-/* ************************************************************************ */
+class TestPluginApi : public cece::plugin::Api { };
 
-// CeCe
-#include "cece/core/ViewPtr.hpp"
-#include "cece/core/DynamicArray.hpp"
-#include "cece/core/FilePath.hpp"
-#include "cece/plugin/Plugin.hpp"
-
-/* ************************************************************************ */
-
-namespace cece {
-namespace plugin {
-
-/* ************************************************************************ */
-
-/**
- * @brief Plugin loader interface. Allows to load plugins other than
- * shared library.
- *
- * Loader have to implement `loadAll` member function which scans given
- * directory for plugins that match loader requirements. There is no checks if
- * other loader loaded the same plugin.
- */
-class Loader
-{
-
-// Public Ctors & Dtors
-public:
-
-
-    /**
-     * @brief Destructor.
-     */
-    virtual ~Loader() = 0;
-
-
-// Public Operations
-public:
-
-
-    /**
-     * @brief Load all plugins from given directory.
-     *
-     * @param directory Directory to where are plugins located. The directory
-     *                  may not exists.
-     *
-     * @return A list of loaded plugins.
-     */
-    virtual DynamicArray<Plugin> loadAll(const FilePath& directory) = 0;
-
-};
-
-/* ************************************************************************ */
-
-}
-}
+CECE_DEFINE_PLUGIN(test_plugin, TestPluginApi)
 
 /* ************************************************************************ */

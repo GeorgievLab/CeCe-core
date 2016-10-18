@@ -61,35 +61,38 @@ set(SOURCES_PLUGIN_TEST ${SOURCES_TEST} PARENT_SCOPE)
 
 # ######################################################################### #
 
-if (CECE_BUILD_TESTS)
-    function (add_test_plugin NAME SOURCE)
-        # Test plugin
-        add_library(cece-${NAME} SHARED
-            test/plugins/${SOURCE}
-        )
+function (add_test_plugin NAME SOURCE)
+    if (CECE_BUILD_TESTS)
+        return ()
+    endif ()
 
-        # Properties
-        set_target_properties(cece-${NAME} PROPERTIES
-            CXX_STANDARD 11
-            CXX_EXTENSIONS Off
-            CXX_STANDARD_REQUIRED On
-        )
-
-        target_include_directories(cece-${NAME}
-            PRIVATE ${CMAKE_SOURCE_DIR}
-            PRIVATE ${CMAKE_BINARY_DIR}
-        )
-
-        add_custom_command(TARGET cece-${NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:cece-${NAME}> ${CMAKE_BINARY_DIR}/cece
-        )
-    endfunction ()
+    set(FULLNAME cece-${NAME})
 
     # Test plugin
-    add_test_plugin(test-plugin TestPlugin.cpp)
-    add_test_plugin(invalid-plugin InvalidPlugin.cpp)
-    add_test_plugin(old-plugin OldPlugin.cpp)
+    add_library(${FULLNAME} SHARED
+        test/plugins/${SOURCE}
+    )
 
-endif ()
+    # Properties
+    set_target_properties(${FULLNAME} PROPERTIES
+        CXX_STANDARD 11
+        CXX_EXTENSIONS Off
+        CXX_STANDARD_REQUIRED On
+    )
+
+    target_include_directories(${FULLNAME}
+        PRIVATE ${CMAKE_SOURCE_DIR}
+        PRIVATE ${CMAKE_BINARY_DIR}
+    )
+
+    add_custom_command(TARGET ${FULLNAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${FULLNAME}> ${CMAKE_BINARY_DIR}/cece
+    )
+endfunction ()
+
+# Test plugin
+add_test_plugin(test-plugin TestPlugin.cpp)
+add_test_plugin(invalid-plugin InvalidPlugin.cpp)
+add_test_plugin(old-plugin OldPlugin.cpp)
 
 # ######################################################################### #

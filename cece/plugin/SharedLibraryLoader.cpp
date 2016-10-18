@@ -135,6 +135,9 @@ UniquePtr<Api> createApi(const SharedLibrary& lib)
 
 DynamicArray<Plugin> SharedLibraryLoader::loadAll(const FilePath& directory)
 {
+    static const auto PREFIX = SharedLibrary::PREFIX + "cece-";
+    static const auto EXTENSION = SharedLibrary::EXTENSION;
+
     Log::debug("Scanning `", directory, "` for shared library plugins");
 
     // Not a directory
@@ -160,18 +163,18 @@ DynamicArray<Plugin> SharedLibraryLoader::loadAll(const FilePath& directory)
 
         // Get path
         const auto filename = path.getFilename();
-        const auto prefixLength = SharedLibrary::PREFIX.length();
-        const auto suffixLength = SharedLibrary::EXTENSION.length();
+        const auto prefixLength = PREFIX.length();
+        const auto suffixLength = EXTENSION.length();
         const auto suffixStart = filename.length() - suffixLength;
 
         Log::debug("Checking: `", filename, "`");
 
         // Different prefix
-        if (filename.substr(0, prefixLength) != SharedLibrary::PREFIX)
+        if (filename.substr(0, prefixLength) != PREFIX)
             continue;
 
         // Different extension
-        if (filename.substr(suffixStart) != SharedLibrary::EXTENSION)
+        if (filename.substr(suffixStart) != EXTENSION)
             continue;
 
         // Plugin name

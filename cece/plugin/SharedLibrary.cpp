@@ -49,11 +49,11 @@ namespace plugin {
 /* ************************************************************************ */
 
 #if __linux__ || __MINGW32__
-const String SharedLibrary::PREFIX = "libcece-";
+const String SharedLibrary::PREFIX = "lib";
 #elif _WIN32
-const String SharedLibrary::PREFIX = "cece-";
+const String SharedLibrary::PREFIX = "";
 #elif __APPLE__ && __MACH__
-const String SharedLibrary::PREFIX = "libcece-";
+const String SharedLibrary::PREFIX = "lib";
 #endif
 
 /* ************************************************************************ */

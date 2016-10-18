@@ -77,8 +77,6 @@ before_script:
 
 script:
     - VERBOSE=1 cmake --build build
-
-after_success:
     - pushd build
     - GTEST_COLOR=1 ctest --verbose
     - popd

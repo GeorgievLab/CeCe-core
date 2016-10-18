@@ -42,6 +42,12 @@ namespace plugin {
 
 /**
  * @brief Shared library plugin loader.
+ *
+ * Open shared libraries are open until object destruction. The reason for
+ * this is the plugin uses code from shared library and it must be loaded
+ * for whole time. Unloading removes those code from runtime and application
+ * will crash. After destruction of this object no plugin code should
+ * be called. Standard usage with `Manager` should guarantee that.
  */
 class SharedLibraryLoader final : public Loader
 {

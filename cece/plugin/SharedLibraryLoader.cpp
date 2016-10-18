@@ -164,7 +164,7 @@ DynamicArray<Plugin> SharedLibraryLoader::loadAll(const FilePath& directory)
         const auto suffixLength = SharedLibrary::EXTENSION.length();
         const auto suffixStart = filename.length() - suffixLength;
 
-        Log::debug("Checking: ", filename);
+        Log::debug("Checking: `", filename, "`");
 
         // Different prefix
         if (filename.substr(0, prefixLength) != SharedLibrary::PREFIX)
@@ -177,7 +177,7 @@ DynamicArray<Plugin> SharedLibraryLoader::loadAll(const FilePath& directory)
         // Plugin name
         const String name = filename.substr(prefixLength, suffixStart - prefixLength);
 
-        Log::debug("Loading plugin: ", name, " @ ", path);
+        Log::debug("Loading plugin: `", name, "` @ `", path, "`");
 
         try
         {
@@ -196,7 +196,7 @@ DynamicArray<Plugin> SharedLibraryLoader::loadAll(const FilePath& directory)
         }
         catch (const Exception& e)
         {
-            Log::warning("Unable to load shared library from: ", path, " (", e.what(), ")");
+            Log::warning("Unable to load plugin `", name, "` @ `", path, "`: ", e.what());
         }
     }
 

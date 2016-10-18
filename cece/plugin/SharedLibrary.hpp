@@ -45,6 +45,8 @@ namespace plugin {
 
 /**
  * @brief Shared library RAII wrapper.
+ *
+ * It hides OS-specific shared library handling.
  */
 class SharedLibrary final
 {

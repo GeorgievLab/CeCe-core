@@ -27,14 +27,109 @@
 #include "cece/plugin/SharedLibraryLoader.hpp"
 
 // CeCe
+#include "cece/config.hpp"
 #include "cece/core/Assert.hpp"
 #include "cece/core/Log.hpp"
+#include "cece/core/ViewPtr.hpp"
 #include "cece/core/Exception.hpp"
+#include "cece/plugin/definition.hpp"
+#include "cece/plugin/Api.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
 namespace plugin {
+
+/* ************************************************************************ */
+
+namespace {
+
+/* ************************************************************************ */
+
+/// Create API function pointer type.
+using CreateFn = Api* (*)();
+
+/* ************************************************************************ */
+
+/// Returns plugin configuration.
+using GetConfigFn = Config* (*)();
+
+/* ************************************************************************ */
+
+/**
+ * @brief Check configuration file.
+ *
+ * @param config
+ *
+ * @throw
+ */
+void checkConfig(const SharedLibrary& lib)
+{
+    auto path = lib.getPath().toString();
+
+    // Get configuration
+    auto getConfigFn = lib.getAddr<GetConfigFn>("get_config");
+
+    if (!getConfigFn)
+        throw RuntimeException("Shared library `" + path + "` doesn't contains 'get_config' function");
+
+    // Get configuration
+    auto config = getConfigFn();
+
+    if (!config)
+        throw RuntimeException("Plugin `" + path + "` returns no config");
+
+    if (config->apiVersion != config::PLUGIN_API_VERSION)
+        throw RuntimeException("Plugin `" + path + "` is built against different API version than CeCe");
+
+    if (config->dimension != config::DIMENSION)
+        throw RuntimeException("Plugin `" + path + "` returns nullptr config");
+
+    if (config->realSize != sizeof(config::RealType))
+        throw RuntimeException("Plugin `" + path + "` is built with different real type than CeCe");
+
+#ifdef CECE_RENDER
+    if (!config->renderEnabled)
+        throw RuntimeException("Plugin `" + path + "` is built without render support, but CeCe did");
+#else
+    if (config->renderEnabled)
+        throw RuntimeException("Plugin `" + path + "` is built with render support, but CeCe didn't");
+#endif
+
+#ifdef CECE_THREAD_SAFE
+    if (!config->threadSafe)
+        throw RuntimeException("Plugin `" + path + "` is built without thread safety, but CeCe did");
+#else
+    if (config->threadSafe)
+        throw RuntimeException("Plugin `" + path + "` is built with thread safety, but CeCe didn't");
+#endif
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief Create API from shared library.
+ *
+ * @param lib Shared library.
+ *
+ * @return Plugin API.
+ *
+ * @throw
+ */
+UniquePtr<Api> createApi(const SharedLibrary& lib)
+{
+    // Get create API function
+    auto fn = lib.getAddr<CreateFn>("create");
+
+    if (!fn)
+        throw RuntimeException("Shared library `" + lib.getPath().toString() + "` doesn't contains 'create' function");
+
+    return UniquePtr<Api>(fn());
+}
+
+/* ************************************************************************ */
+
+}
 
 /* ************************************************************************ */
 
@@ -59,24 +154,24 @@ DynamicArray<Plugin> SharedLibraryLoader::loadAll(const FilePath& directory)
         // Only files
         if (!isFile(path))
         {
-            Log::debug("Skipping `", path, "` - not a file");
+            Log::debug("Skipping `", path, "`: not a file");
             continue;
         }
 
         // Get path
         const auto filename = path.getFilename();
-        const auto prefixLength = SharedLibrary::FILE_PREFIX.length();
-        const auto suffixLength = SharedLibrary::FILE_EXTENSION.length();
+        const auto prefixLength = SharedLibrary::PREFIX.length();
+        const auto suffixLength = SharedLibrary::EXTENSION.length();
         const auto suffixStart = filename.length() - suffixLength;
 
         Log::debug("Checking: ", filename);
 
         // Different prefix
-        if (filename.substr(0, prefixLength) != SharedLibrary::FILE_PREFIX)
+        if (filename.substr(0, prefixLength) != SharedLibrary::PREFIX)
             continue;
 
         // Different extension
-        if (filename.substr(suffixStart) != SharedLibrary::FILE_EXTENSION)
+        if (filename.substr(suffixStart) != SharedLibrary::EXTENSION)
             continue;
 
         // Plugin name
@@ -89,8 +184,11 @@ DynamicArray<Plugin> SharedLibraryLoader::loadAll(const FilePath& directory)
             // Open shared library
             SharedLibrary lib(path);
 
+            // Check configuration
+            checkConfig(lib);
+
             // Obtain API from library
-            auto api = lib.createApi();
+            auto api = createApi(lib);
 
             // Store library
             m_libraries.push_back(std::move(lib));

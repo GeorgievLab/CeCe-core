@@ -27,12 +27,14 @@
 
 /* ************************************************************************ */
 
+#if _WIN32
+#include <windows.h>
+#endif
+
 // CeCe
 #include "cece/core/String.hpp"
-#include "cece/core/ViewPtr.hpp"
-#include "cece/core/UniquePtr.hpp"
+#include "cece/core/StringView.hpp"
 #include "cece/core/FilePath.hpp"
-#include "cece/plugin/Config.hpp"
 
 /* ************************************************************************ */
 
@@ -41,13 +43,8 @@ namespace plugin {
 
 /* ************************************************************************ */
 
-class Api;
-class Context;
-
-/* ************************************************************************ */
-
 /**
- * @brief Shared library wrapper.
+ * @brief Shared library RAII wrapper.
  */
 class SharedLibrary final
 {
@@ -57,21 +54,23 @@ public:
 
 
     /// Library file prefix
-    static const String FILE_PREFIX;
+    static const String PREFIX;
 
     /// Library file extension
-    static const String FILE_EXTENSION;
+    static const String EXTENSION;
 
 
 // Public Types
 public:
 
 
-    /// Create API function pointer type.
-    using CreateFn = Api* (*)();
-
-    /// Returns plugin configuration.
-    using GetConfigFn = Config* (*)();
+#if _WIN32
+    /// Handle type - Win32.
+    using HandleType = HMODULE;
+#else
+    /// Handle type - POSIX.
+    using HandleType = void*;
+#endif
 
 
 // Public Ctors & Dtors
@@ -126,30 +125,45 @@ public:
     SharedLibrary& operator=(SharedLibrary&&) noexcept;
 
 
-// Public Operations
+// Public Accessors & Mutators
 public:
 
 
     /**
-     * @brief Create plugin API.
+     * @brief Returns library path.
      *
-     * @Returns Created API.
+     * @return Path to shared library.
      */
-    UniquePtr<Api> createApi();
-
-
-// Private Operations
-private:
+    const FilePath& getPath() const noexcept
+    {
+        return m_path;
+    }
 
 
     /**
-     * @brief Check configuration file.
+     * @brief Returns address of required symbol.
      *
-     * @param config
+     * @param name Symbol name.
      *
-     * @throw
+     * @return Pointer to symbol or nullptr.
      */
-    void checkConfig(Config* config);
+    void* getAddr(StringView name) const noexcept;
+
+
+    /**
+     * @brief Returns address of required symbol.
+     *
+     * @tparam T Type of the symbol.
+     *
+     * @param name Symbol name.
+     *
+     * @return Pointer to symbol or nullptr.
+     */
+    template<typename T>
+    T getAddr(StringView name) const noexcept
+    {
+        return reinterpret_cast<T>(reinterpret_cast<std::intptr_t>(getAddr(name)));
+    }
 
 
 // Private Data Members
@@ -159,7 +173,7 @@ private:
     FilePath m_path;
 
     /// Shared library handle.
-    void* m_handle = nullptr;
+    HandleType m_handle = nullptr;
 
 };
 

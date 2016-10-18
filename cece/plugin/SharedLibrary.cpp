@@ -29,21 +29,17 @@
 // C++
 #include <cstdint>
 #include <cstdlib>
+#include <utility>
 
 #if _WIN32
-#  include <windows.h>
+#include <windows.h>
 #else
-// POSIX
-#  include <dlfcn.h>
+#include <dlfcn.h>
 #endif
 
 // CeCe
-#include "cece/config.hpp"
 #include "cece/core/Log.hpp"
 #include "cece/core/Exception.hpp"
-#include "cece/core/FilePath.hpp"
-#include "cece/plugin/definition.hpp"
-#include "cece/plugin/Api.hpp"
 
 /* ************************************************************************ */
 
@@ -52,24 +48,22 @@ namespace plugin {
 
 /* ************************************************************************ */
 
-#if __linux__
-const String SharedLibrary::FILE_PREFIX = "libcece-";
-#elif __MINGW32__
-const String SharedLibrary::FILE_PREFIX = "libcece-";
+#if __linux__ || __MINGW32__
+const String SharedLibrary::PREFIX = "libcece-";
 #elif _WIN32
-const String SharedLibrary::FILE_PREFIX = "cece-";
+const String SharedLibrary::PREFIX = "cece-";
 #elif __APPLE__ && __MACH__
-const String SharedLibrary::FILE_PREFIX = "libcece-";
+const String SharedLibrary::PREFIX = "libcece-";
 #endif
 
 /* ************************************************************************ */
 
 #if __linux__
-const String SharedLibrary::FILE_EXTENSION = ".so";
+const String SharedLibrary::EXTENSION = ".so";
 #elif _WIN32
-const String SharedLibrary::FILE_EXTENSION = ".dll";
+const String SharedLibrary::EXTENSION = ".dll";
 #elif __APPLE__ && __MACH__
-const String SharedLibrary::FILE_EXTENSION = ".dylib";
+const String SharedLibrary::EXTENSION = ".dylib";
 #endif
 
 /* ************************************************************************ */
@@ -85,7 +79,7 @@ namespace {
  *
  * @return Library handle.
  */
-void* openLibrary(const FilePath& path) noexcept
+SharedLibrary::HandleType openLibrary(const FilePath& path) noexcept
 {
 #if _WIN32
     String str = path.toString();
@@ -106,7 +100,7 @@ void* openLibrary(const FilePath& path) noexcept
  *
  * @param handle Library handle.
  */
-void closeLibrary(void* handle) noexcept
+void closeLibrary(SharedLibrary::HandleType handle) noexcept
 {
 #if _WIN32
     // WIN32
@@ -122,10 +116,12 @@ void closeLibrary(void* handle) noexcept
 
 /**
  * Check if library is loaded.
+ *
  * @param  handle Library handle.
+ *
  * @return Is loaded?
  */
-bool isLoaded(void* handle) noexcept
+bool isLoaded(SharedLibrary::HandleType handle) noexcept
 {
     return handle != nullptr;
 }
@@ -137,7 +133,7 @@ bool isLoaded(void* handle) noexcept
  *
  * @return
  */
-String getError(void* handle) noexcept
+String getError(SharedLibrary::HandleType handle) noexcept
 {
 #if _WIN32
     // Get error message
@@ -146,7 +142,7 @@ String getError(void* handle) noexcept
         return {};
 
     LPSTR buffer = nullptr;
-    const auto size = FormatMessageA(
+    auto size = FormatMessageA(
         FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
         NULL, err, MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), (LPSTR)&buffer, 0, NULL
     );
@@ -167,43 +163,6 @@ String getError(void* handle) noexcept
 
 /* ************************************************************************ */
 
-/**
- * @brief Returns address of required symbol.
- *
- * @param handle Library handle.
- * @param name   Symbol name.
- *
- * @return Pointer to symbol or nullptr.
- */
-void* getAddr(void* handle, const char* name) noexcept
-{
-#if _WIN32
-    return reinterpret_cast<void*>(reinterpret_cast<std::intptr_t>(GetProcAddress(handle, name)));
-#else
-    // POSIX
-    return dlsym(handle, name);
-#endif
-}
-
-/* ************************************************************************ */
-
-/**
- * @brief Returns address of required symbol.
- *
- * @param handle Library handle.
- * @param name   Symbol name.
- *
- * @return Pointer to symbol or nullptr.
- */
-template<typename T>
-T getAddr(void* handle, const char* name) noexcept
-{
-    return reinterpret_cast<T>(reinterpret_cast<std::intptr_t>(getAddr(handle, name)));
-}
-
-
-/* ************************************************************************ */
-
 }
 
 /* ************************************************************************ */
@@ -213,16 +172,7 @@ SharedLibrary::SharedLibrary(FilePath path)
     , m_handle(openLibrary(m_path))
 {
     if (!isLoaded(m_handle))
-        throw RuntimeException("Shared library '" + m_path.toString() + "' cannot be loaded: " + getError(m_handle));
-
-    // Get configuration
-    auto getConfigFn = getAddr<GetConfigFn>(m_handle, "get_config");
-
-    if (!getConfigFn)
-        throw RuntimeException("Shared library '" + m_path.toString() + "' doesn't contains 'get_config' function");
-
-    // Check configuration
-    checkConfig(getConfigFn());
+        throw RuntimeException("Shared library `" + m_path.toString() + "` cannot be loaded: " + getError(m_handle));
 
     Log::debug("Library loaded `", m_path, "`.");
 }
@@ -231,7 +181,7 @@ SharedLibrary::SharedLibrary(FilePath path)
 
 SharedLibrary::~SharedLibrary()
 {
-    if (m_handle)
+    if (isLoaded(m_handle))
     {
         Log::debug("Closing shared library `", m_path, "`");
         closeLibrary(m_handle);
@@ -260,49 +210,13 @@ SharedLibrary& SharedLibrary::operator=(SharedLibrary&& src) noexcept
 
 /* ************************************************************************ */
 
-UniquePtr<Api> SharedLibrary::createApi()
+void* SharedLibrary::getAddr(StringView name) const noexcept
 {
-    // Get create API function
-    auto fn = getAddr<CreateFn>(m_handle, "create");
-
-    if (!fn)
-        throw RuntimeException("Shared library '" + m_path.toString() + "' doesn't contains 'create' function");
-
-    return UniquePtr<Api>(fn());
-}
-
-/* ************************************************************************ */
-
-void SharedLibrary::checkConfig(Config* config)
-{
-    const auto path = m_path.toString();
-
-    if (!config)
-        throw RuntimeException("Library '" + path + "' returns no config");
-
-    if (config->apiVersion != config::PLUGIN_API_VERSION)
-        throw RuntimeException("Library '" + path + "' is built against different API version than CeCe");
-
-    if (config->dimension != config::DIMENSION)
-        throw RuntimeException("Library '" + path + "' returns nullptr config");
-
-    if (config->realSize != sizeof(config::RealType))
-        throw RuntimeException("Library '" + path + "' is built with different real type than CeCe");
-
-#ifdef CECE_RENDER
-    if (!config->renderEnabled)
-        throw RuntimeException("Library '" + path + "' is built without render support, but CeCe did");
+#if _WIN32
+    return reinterpret_cast<void*>(reinterpret_cast<std::intptr_t>(GetProcAddress(m_handle, name.getData())));
 #else
-    if (config->renderEnabled)
-        throw RuntimeException("Library '" + path + "' is built with render support, but CeCe didn't");
-#endif
-
-#ifdef CECE_THREAD_SAFE
-    if (!config->threadSafe)
-        throw RuntimeException("Library '" + path + "' is built without thread safety, but CeCe did");
-#else
-    if (config->threadSafe)
-        throw RuntimeException("Library '" + path + "' is built with thread safety, but CeCe didn't");
+    // POSIX
+    return dlsym(m_handle, name.getData());
 #endif
 }
 

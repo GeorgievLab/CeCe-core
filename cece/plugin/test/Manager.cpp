@@ -95,14 +95,14 @@ TEST(Manager, load)
     // Load test plugin
     auto api = mgr.getApi("test-plugin");
 
-    ASSERT_TRUE(api);
+    ASSERT_NE(nullptr, api);
     EXPECT_EQ("test-plugin", mgr.getName(api));
 
     // Plugin cannot be loaded - missing functions
-    EXPECT_FALSE(mgr.getApi("invalid-plugin"));
+    EXPECT_EQ(nullptr, mgr.getApi("invalid-plugin"));
 
     // Plugin cannot be loaded - old API
-    EXPECT_FALSE(mgr.getApi("old-plugin"));
+    EXPECT_EQ(nullptr, mgr.getApi("old-plugin"));
 }
 
 /* ************************************************************************ */

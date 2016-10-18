@@ -23,7 +23,7 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-// Plugin.cpp
+// CeCe
 #include "cece/plugin/definition.hpp"
 #include "cece/plugin/Api.hpp"
 

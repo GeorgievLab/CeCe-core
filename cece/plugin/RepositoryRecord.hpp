@@ -44,7 +44,8 @@ namespace plugin {
 /* ************************************************************************ */
 
 /**
- * @brief Repository record.
+ * @brief Repository record. Each plugin (and API) have own repository record
+ * where information about provided objects is stored.
  */
 class RepositoryRecord
 {

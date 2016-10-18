@@ -73,6 +73,11 @@ function (add_test_plugin NAME SOURCE)
         test/plugins/${SOURCE}
     )
 
+    # Link dependency
+    target_link_libraries(${FULLNAME}
+        cece
+    )
+
     # Properties
     set_target_properties(${FULLNAME} PROPERTIES
         CXX_STANDARD 11

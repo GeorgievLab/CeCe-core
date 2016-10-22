@@ -148,6 +148,7 @@ if (CECE_TESTS_BUILD)
 
     target_link_libraries(${PROJECT_NAME}_test
         ${PROJECT_NAME}
+        cece
         gtest_main
     )
 

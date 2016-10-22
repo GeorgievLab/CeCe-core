@@ -32,6 +32,7 @@
 #endif
 
 // CeCe
+#include "cece/export.hpp"
 #include "cece/core/String.hpp"
 #include "cece/core/StringView.hpp"
 #include "cece/core/FilePath.hpp"
@@ -56,10 +57,10 @@ public:
 
 
     /// Library file prefix
-    static const String PREFIX;
+    static const CECE_EXPORT String PREFIX;
 
     /// Library file extension
-    static const String EXTENSION;
+    static const CECE_EXPORT String EXTENSION;
 
 
 // Public Types

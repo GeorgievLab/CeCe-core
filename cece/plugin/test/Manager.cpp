@@ -85,9 +85,9 @@ TEST(Manager, load)
     mgr.addLoader(makeUnique<SharedLibraryLoader>());
     mgr.addDirectory(".");
 
-    ASSERT_TRUE(pathExists(SharedLibrary::PREFIX + "cece-test-plugin" + SharedLibrary::EXTENSION));
-    EXPECT_TRUE(pathExists(SharedLibrary::PREFIX + "cece-invalid-plugin" + SharedLibrary::EXTENSION));
-    EXPECT_TRUE(pathExists(SharedLibrary::PREFIX + "cece-old-plugin" + SharedLibrary::EXTENSION));
+    ASSERT_PRED1(pathExists, SharedLibrary::PREFIX + "cece-test-plugin" + SharedLibrary::EXTENSION);
+    EXPECT_PRED1(pathExists, SharedLibrary::PREFIX + "cece-invalid-plugin" + SharedLibrary::EXTENSION);
+    EXPECT_PRED1(pathExists, SharedLibrary::PREFIX + "cece-old-plugin" + SharedLibrary::EXTENSION);
 
     // Plugins should be loaded
     EXPECT_TRUE(mgr.isLoaded("test-plugin"));

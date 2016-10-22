@@ -33,6 +33,13 @@
 
 /* ************************************************************************ */
 
+#ifdef _WIN32
+// Required on Windows otherwise no symbols are exported
+#define CECE_PLUGIN_EXPORT __declspec(dllexport)
+#endif
+
+/* ************************************************************************ */
+
 #ifdef CECE_RENDER
 #  define CECE_RENDER_VALUE 1
 #else
@@ -88,7 +95,7 @@
  * @param name Plugin name.
  */
 #define CECE_PLUGIN_CREATE_PROTOTYPE(name) \
-    extern "C" cece::plugin::Api* CECE_PLUGIN_PROTOTYPE_NAME(create, name)()
+    extern "C" CECE_PLUGIN_EXPORT cece::plugin::Api* CECE_PLUGIN_PROTOTYPE_NAME(create, name)()
 
 /* ************************************************************************ */
 
@@ -121,7 +128,7 @@
  * @param name Plugin name.
  */
 #define CECE_PLUGIN_GET_CONFIG_PROTOTYPE(name) \
-    extern "C" cece::plugin::Config* CECE_PLUGIN_PROTOTYPE_NAME(get_config, name)()
+    extern "C" CECE_PLUGIN_EXPORT cece::plugin::Config* CECE_PLUGIN_PROTOTYPE_NAME(get_config, name)()
 
 /* ************************************************************************ */
 

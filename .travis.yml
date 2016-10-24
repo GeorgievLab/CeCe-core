@@ -76,10 +76,7 @@ before_script:
     - popd
 
 script:
-    - VERBOSE=1 cmake --build build
-    - pushd build
-    - GTEST_COLOR=1 ctest --verbose
-    - popd
+    - VERBOSE=1 cmake --build build && pushd build && GTEST_COLOR=1 ctest --verbose && popd
 
 notifications:
     slack:

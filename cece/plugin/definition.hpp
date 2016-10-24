@@ -35,7 +35,9 @@
 
 #ifdef _WIN32
 // Required on Windows otherwise no symbols are exported
-#define CECE_PLUGIN_EXPORT __declspec(dllexport)
+#  define CECE_PLUGIN_EXPORT __declspec(dllexport)
+#else
+#  define CECE_PLUGIN_EXPORT
 #endif
 
 /* ************************************************************************ */

@@ -29,6 +29,9 @@ cmake_minimum_required(VERSION 3.1)
 
 add_subdirectory(core)
 add_subdirectory(plugin)
-add_subdirectory(render)
+
+if (CECE_RENDER)
+    add_subdirectory(render)
+endif ()
 
 # ######################################################################### #

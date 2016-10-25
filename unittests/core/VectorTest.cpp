@@ -23,12 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-// GTest
-#include <gtest/gtest.h>
-
 // C++
 #include <sstream>
 #include <complex>
+
+// GTest
+#include "gtest/gtest.h"
 
 // CeCe
 #include "cece/core/Vector.hpp"

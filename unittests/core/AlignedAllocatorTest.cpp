@@ -27,7 +27,7 @@
 #include <cstdint>
 
 // GTest
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 
 // CeCe
 #include "cece/core/AlignedAllocator.hpp"

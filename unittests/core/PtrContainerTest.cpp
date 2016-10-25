@@ -27,7 +27,7 @@
 #include <algorithm>
 
 // GTest
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 
 // CeCe
 #include "cece/core/UniquePtr.hpp"

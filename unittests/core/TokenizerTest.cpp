@@ -23,11 +23,11 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-// GTest
-#include <gtest/gtest.h>
-
 // C++
 #include <cstring>
+
+// GTest
+#include "gtest/gtest.h"
 
 // CeCe
 #include "cece/core/Assert.hpp"

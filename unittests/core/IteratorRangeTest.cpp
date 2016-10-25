@@ -24,7 +24,7 @@
 /* ************************************************************************ */
 
 // GTest
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 
 // CeCe
 #include "cece/core/IteratorRange.hpp"

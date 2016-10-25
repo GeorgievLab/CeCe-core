@@ -23,40 +23,56 @@
 #                                                                           #
 # ######################################################################### #
 
-# Sources
-set(SRCS
-    Config.hpp
-    definition.hpp
-    Api.hpp
-    Api.cpp
-    Plugin.hpp
-    Plugin.cpp
-    Manager.hpp
-    Manager.cpp
-    RepositoryRecord.hpp
-    Repository.hpp
-    Repository.cpp
-    Context.hpp
-    Context.cpp
-    Loader.hpp
-    Loader.cpp
-    SharedLibrary.hpp
-    SharedLibrary.cpp
-    SharedLibraryLoader.hpp
-    SharedLibraryLoader.cpp
-)
-
-set(SRCS_TEST
-#    Manager.cpp
-#    Api.cpp
+cece_add_test(plugin
+    SOURCES
+        Api.cpp
+        Manager.cpp
 )
 
 # ######################################################################### #
 
-dir_pretend(SOURCES plugin/ ${SRCS})
-dir_pretend(SOURCES_TEST plugin/test/ ${SRCS_TEST})
+##
+## Helper function which build a test plugin.
+##
+function (add_test_plugin NAME SOURCE)
+    if (CECE_BUILD_TESTS)
+        return ()
+    endif ()
 
-set(SOURCES_PLUGIN ${SOURCES} PARENT_SCOPE)
-set(SOURCES_PLUGIN_TEST ${SOURCES_TEST} PARENT_SCOPE)
+    set(FULLNAME cece-${NAME})
+
+    # Test plugin
+    add_library(${FULLNAME} SHARED
+        plugins/${SOURCE}
+    )
+
+    # Link dependency
+    target_link_libraries(${FULLNAME}
+        cece
+    )
+
+    # Properties
+    set_target_properties(${FULLNAME} PROPERTIES
+        CXX_STANDARD 11
+        CXX_EXTENSIONS Off
+        CXX_STANDARD_REQUIRED On
+    )
+
+    target_include_directories(${FULLNAME}
+        PRIVATE ${CMAKE_SOURCE_DIR}
+        PRIVATE ${CMAKE_BINARY_DIR}
+    )
+
+    #add_custom_command(TARGET ${FULLNAME} POST_BUILD
+    #    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${FULLNAME}> ${CMAKE_BINARY_DIR}/cece
+    #)
+endfunction ()
+
+# ######################################################################### #
+
+# Test plugin
+add_test_plugin(test-plugin TestPlugin.cpp)
+add_test_plugin(invalid-plugin InvalidPlugin.cpp)
+add_test_plugin(old-plugin OldPlugin.cpp)
 
 # ######################################################################### #

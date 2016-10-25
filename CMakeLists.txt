@@ -34,6 +34,10 @@ project(cece
 
 # ######################################################################### #
 
+include(CMake/Functions.cmake)
+
+# ######################################################################### #
+
 # Options
 option(CECE_RENDER                  "Enable simulation rendering (vizualization support)" On)
 option(CECE_RENDER_CHECK_ERRORS     "Enable renderer errors checking." Off)
@@ -114,5 +118,11 @@ endif ()
 
 # CeCe library
 add_subdirectory(cece)
+
+# ######################################################################### #
+
+if (CECE_TESTS_BUILD)
+    add_subdirectory(unittests)
+endif ()
 
 # ######################################################################### #

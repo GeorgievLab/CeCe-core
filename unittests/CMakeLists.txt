@@ -23,40 +23,12 @@
 #                                                                           #
 # ######################################################################### #
 
-# Sources
-set(SRCS
-    Config.hpp
-    definition.hpp
-    Api.hpp
-    Api.cpp
-    Plugin.hpp
-    Plugin.cpp
-    Manager.hpp
-    Manager.cpp
-    RepositoryRecord.hpp
-    Repository.hpp
-    Repository.cpp
-    Context.hpp
-    Context.cpp
-    Loader.hpp
-    Loader.cpp
-    SharedLibrary.hpp
-    SharedLibrary.cpp
-    SharedLibraryLoader.hpp
-    SharedLibraryLoader.cpp
-)
-
-set(SRCS_TEST
-#    Manager.cpp
-#    Api.cpp
-)
+cmake_minimum_required(VERSION 3.1)
 
 # ######################################################################### #
 
-dir_pretend(SOURCES plugin/ ${SRCS})
-dir_pretend(SOURCES_TEST plugin/test/ ${SRCS_TEST})
-
-set(SOURCES_PLUGIN ${SOURCES} PARENT_SCOPE)
-set(SOURCES_PLUGIN_TEST ${SOURCES_TEST} PARENT_SCOPE)
+add_subdirectory(core)
+add_subdirectory(plugin)
+add_subdirectory(render)
 
 # ######################################################################### #

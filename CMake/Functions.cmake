@@ -23,40 +23,41 @@
 #                                                                           #
 # ######################################################################### #
 
-# Sources
-set(SRCS
-    Config.hpp
-    definition.hpp
-    Api.hpp
-    Api.cpp
-    Plugin.hpp
-    Plugin.cpp
-    Manager.hpp
-    Manager.cpp
-    RepositoryRecord.hpp
-    Repository.hpp
-    Repository.cpp
-    Context.hpp
-    Context.cpp
-    Loader.hpp
-    Loader.cpp
-    SharedLibrary.hpp
-    SharedLibrary.cpp
-    SharedLibraryLoader.hpp
-    SharedLibraryLoader.cpp
-)
+##
+## Add CeCe test.
+## NAME: Test name
+##
+function (cece_add_test NAME)
+    if (NOT CECE_TESTS_BUILD)
+        return ()
+    endif ()
 
-set(SRCS_TEST
-#    Manager.cpp
-#    Api.cpp
-)
+    set(FULLNAME "cece-${NAME}_test")
 
-# ######################################################################### #
+    include(CMakeParseArguments)
+    cmake_parse_arguments(ARG "" "" "SOURCES;LIBRARIES" ${ARGN})
 
-dir_pretend(SOURCES plugin/ ${SRCS})
-dir_pretend(SOURCES_TEST plugin/test/ ${SRCS_TEST})
+    # Create executable
+    add_executable(${FULLNAME}
+        ${ARG_SOURCES}
+    )
 
-set(SOURCES_PLUGIN ${SOURCES} PARENT_SCOPE)
-set(SOURCES_PLUGIN_TEST ${SOURCES_TEST} PARENT_SCOPE)
+    # Properties
+    set_target_properties(${FULLNAME} PROPERTIES
+        CXX_STANDARD 11
+        CXX_EXTENSIONS Off
+        CXX_STANDARD_REQUIRED On
+    )
+
+    # Libraries
+    target_link_libraries(${FULLNAME}
+        cece
+        ${ARG_LIBRARIES}
+        gtest_main
+    )
+
+    # Register test
+    add_test(${FULLNAME} ${FULLNAME})
+endfunction ()
 
 # ######################################################################### #

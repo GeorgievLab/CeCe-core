@@ -100,29 +100,10 @@ set(SRCS
     CliColor.cpp
 )
 
-set(SRCS_TEST
-    AlignedAllocatorTest.cpp
-    DynamicArrayTest.cpp
-    IteratorRangeTest.cpp
-    VectorRangeTest.cpp
-    UnitsTest.cpp
-    StringViewTest.cpp
-    VectorTest.cpp
-    VectorUnitsTest.cpp
-    ExpressionParserTest.cpp
-    TokenizerTest.cpp
-    ParametersTest.cpp
-    PtrContainerTest.cpp
-    ViewPtrTest.cpp
-    FilePathTest.cpp
-)
-
 # ######################################################################### #
 
 dir_pretend(SOURCES core/ ${SRCS})
-dir_pretend(SOURCES_TEST core/test/ ${SRCS_TEST})
 
 set(SOURCES_CORE ${SOURCES} PARENT_SCOPE)
-set(SOURCES_CORE_TEST ${SOURCES_TEST} PARENT_SCOPE)
 
 # ######################################################################### #

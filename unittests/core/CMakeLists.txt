@@ -23,40 +23,22 @@
 #                                                                           #
 # ######################################################################### #
 
-# Sources
-set(SRCS
-    Config.hpp
-    definition.hpp
-    Api.hpp
-    Api.cpp
-    Plugin.hpp
-    Plugin.cpp
-    Manager.hpp
-    Manager.cpp
-    RepositoryRecord.hpp
-    Repository.hpp
-    Repository.cpp
-    Context.hpp
-    Context.cpp
-    Loader.hpp
-    Loader.cpp
-    SharedLibrary.hpp
-    SharedLibrary.cpp
-    SharedLibraryLoader.hpp
-    SharedLibraryLoader.cpp
+cece_add_test(core
+    SOURCES
+        AlignedAllocatorTest.cpp
+        DynamicArrayTest.cpp
+        IteratorRangeTest.cpp
+        VectorRangeTest.cpp
+        UnitsTest.cpp
+        StringViewTest.cpp
+        VectorTest.cpp
+        VectorUnitsTest.cpp
+        ExpressionParserTest.cpp
+        TokenizerTest.cpp
+        ParametersTest.cpp
+        PtrContainerTest.cpp
+        ViewPtrTest.cpp
+        FilePathTest.cpp
 )
-
-set(SRCS_TEST
-#    Manager.cpp
-#    Api.cpp
-)
-
-# ######################################################################### #
-
-dir_pretend(SOURCES plugin/ ${SRCS})
-dir_pretend(SOURCES_TEST plugin/test/ ${SRCS_TEST})
-
-set(SOURCES_PLUGIN ${SOURCES} PARENT_SCOPE)
-set(SOURCES_PLUGIN_TEST ${SOURCES_TEST} PARENT_SCOPE)
 
 # ######################################################################### #

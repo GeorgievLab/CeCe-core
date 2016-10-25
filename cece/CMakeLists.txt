@@ -133,26 +133,26 @@ endif ()
 # ######################################################################### #
 
 if (CECE_TESTS_BUILD)
-    add_executable(${PROJECT_NAME}_test
-        ${SOURCES_CORE_TEST}
-        ${SOURCES_PLUGIN_TEST}
-        ${SOURCES_RENDER_TEST}
-    )
+    #add_executable(${PROJECT_NAME}_test
+    #    ${SOURCES_CORE_TEST}
+    #    ${SOURCES_PLUGIN_TEST}
+    #    ${SOURCES_RENDER_TEST}
+    #)
 
     # Properties
-    set_target_properties(${PROJECT_NAME}_test PROPERTIES
-        CXX_STANDARD 11
-        CXX_EXTENSIONS Off
-        CXX_STANDARD_REQUIRED On
-    )
+    #set_target_properties(${PROJECT_NAME}_test PROPERTIES
+    #    CXX_STANDARD 11
+    #    CXX_EXTENSIONS Off
+    #    CXX_STANDARD_REQUIRED On
+    #)
 
-    target_link_libraries(${PROJECT_NAME}_test
-        ${PROJECT_NAME}
-        cece
-        gtest_main
-    )
+    #target_link_libraries(${PROJECT_NAME}_test
+    #    ${PROJECT_NAME}
+    #    cece
+    #    gtest_main
+    #)
 
-    add_test(${PROJECT_NAME} ${PROJECT_NAME}_test)
+    #add_test(${PROJECT_NAME} ${PROJECT_NAME}_test)
 endif ()
 
 # ######################################################################### #

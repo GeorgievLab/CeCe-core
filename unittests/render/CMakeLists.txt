@@ -23,40 +23,9 @@
 #                                                                           #
 # ######################################################################### #
 
-# Sources
-set(SRCS
-    Config.hpp
-    definition.hpp
-    Api.hpp
-    Api.cpp
-    Plugin.hpp
-    Plugin.cpp
-    Manager.hpp
-    Manager.cpp
-    RepositoryRecord.hpp
-    Repository.hpp
-    Repository.cpp
-    Context.hpp
-    Context.cpp
-    Loader.hpp
-    Loader.cpp
-    SharedLibrary.hpp
-    SharedLibrary.cpp
-    SharedLibraryLoader.hpp
-    SharedLibraryLoader.cpp
+cece_add_test(render
+    SOURCES
+        ColorTest.cpp
 )
-
-set(SRCS_TEST
-#    Manager.cpp
-#    Api.cpp
-)
-
-# ######################################################################### #
-
-dir_pretend(SOURCES plugin/ ${SRCS})
-dir_pretend(SOURCES_TEST plugin/test/ ${SRCS_TEST})
-
-set(SOURCES_PLUGIN ${SOURCES} PARENT_SCOPE)
-set(SOURCES_PLUGIN_TEST ${SOURCES_TEST} PARENT_SCOPE)
 
 # ######################################################################### #

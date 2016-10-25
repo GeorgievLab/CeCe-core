@@ -25,8 +25,8 @@
 
 cece_add_test(plugin
     SOURCES
-        Api.cpp
-        Manager.cpp
+        ApiTest.cpp
+        ManagerTest.cpp
 )
 
 # ######################################################################### #

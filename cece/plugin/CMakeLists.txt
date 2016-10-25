@@ -46,17 +46,10 @@ set(SRCS
     SharedLibraryLoader.cpp
 )
 
-set(SRCS_TEST
-#    Manager.cpp
-#    Api.cpp
-)
-
 # ######################################################################### #
 
 dir_pretend(SOURCES plugin/ ${SRCS})
-dir_pretend(SOURCES_TEST plugin/test/ ${SRCS_TEST})
 
 set(SOURCES_PLUGIN ${SOURCES} PARENT_SCOPE)
-set(SOURCES_PLUGIN_TEST ${SOURCES_TEST} PARENT_SCOPE)
 
 # ######################################################################### #

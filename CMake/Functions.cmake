@@ -57,7 +57,18 @@ function (cece_add_test NAME)
     )
 
     # Register test
-    add_test(${FULLNAME} ${FULLNAME})
+    add_test(
+        NAME ${FULLNAME}
+        COMMAND ${FULLNAME}
+        WORKING_DIRECTORY $<TARGET_FILE_DIR:${FULLNAME}>
+    )
+
+    if (WIN32)
+        # Windows doen't support rpath, so we need to copy the main library to the test executable
+        add_custom_command(TARGET ${FULLNAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:cece> $<TARGET_FILE_DIR:${FULLNAME}>
+        )
+    endif ()
 endfunction ()
 
 # ######################################################################### #

@@ -86,7 +86,12 @@ SharedLibrary::HandleType openLibrary(const FilePath& path) noexcept
     int size = MultiByteToWideChar(CP_UTF8, 0, str.data(), (int) str.size(), NULL, 0);
     std::wstring result(size, L'\0');
     MultiByteToWideChar(CP_UTF8, 0, str.data(), (int) str.size(), &result.front(), size);
-    return LoadLibraryW(result.c_str());
+
+    DWORD oldMode;
+    SetThreadErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX | SEM_NOOPENFILEERRORBOX, &oldMode);
+    auto handle = LoadLibraryW(result.c_str());
+    SetThreadErrorMode(oldMode, NULL);
+    return handle;
 #else
     // POSIX
     return dlopen(path.c_str(), RTLD_LAZY);

@@ -37,10 +37,10 @@ environment:
           CECE_RENDER: On
         - GENERATOR: Visual Studio 14 2015
           CECE_RENDER: Off
-        - GENERATOR: MinGW Makefiles
-          CECE_RENDER: On
-        - GENERATOR: MinGW Makefiles
-          CECE_RENDER: Off
+#        - GENERATOR: MinGW Makefiles
+#          CECE_RENDER: On
+#        - GENERATOR: MinGW Makefiles
+#          CECE_RENDER: Off
 
 matrix:
     allow_failures:

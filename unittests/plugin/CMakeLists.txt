@@ -62,13 +62,6 @@ function (add_test_plugin NAME SOURCE)
         PRIVATE ${CMAKE_SOURCE_DIR}
         PRIVATE ${CMAKE_BINARY_DIR}
     )
-
-    if (WIN32)
-        # Copy plugins in test directory
-        add_custom_command(TARGET ${FULLNAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${FULLNAME}> $<TARGET_FILE:cece-plugin_test>
-        )
-    endif ()
 endfunction ()
 
 # ######################################################################### #

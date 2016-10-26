@@ -62,6 +62,6 @@ build_script:
     - pushd build && cmake --build . --config Release & popd
 
 test_script:
-    - pushd build && ctest --verbose & popd
+    - pushd build && ctest -C Release --verbose & popd
 
 # ######################################################################### #

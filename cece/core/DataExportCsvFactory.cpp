@@ -39,7 +39,7 @@ inline namespace core {
 
 /* ************************************************************************ */
 
-UniquePtr<DataExport> DataExportCsvFactory::create(String name) const noexcept
+UniquePtr<DataExport> DataExportCsvFactory::create(String name) const
 {
     return makeUnique<DataExportCsv>(std::move(name));
 }

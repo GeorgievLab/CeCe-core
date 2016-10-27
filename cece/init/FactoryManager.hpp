@@ -63,7 +63,7 @@ public:
      * @param name Factory name.
      */
     template<typename InitializerType>
-    void createForInitializer(String name) noexcept
+    void createForInitializer(String name)
     {
         createFor<InitializerType>(std::move(name));
     }

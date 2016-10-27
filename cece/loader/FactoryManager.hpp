@@ -63,7 +63,7 @@ public:
      * @param name Factory name.
      */
     template<typename LoaderType>
-    void createForLoader(String name) noexcept
+    void createForLoader(String name)
     {
         create<FactoryTyped<LoaderType>>(std::move(name));
     }

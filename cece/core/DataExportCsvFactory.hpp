@@ -58,7 +58,7 @@ public:
      *
      * @return Created object pointer.
      */
-    UniquePtr<DataExport> create(String name) const noexcept override;
+    UniquePtr<DataExport> create(String name) const override;
 
 };
 

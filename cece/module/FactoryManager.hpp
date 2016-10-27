@@ -66,7 +66,7 @@ public:
      * @param name Factory name.
      */
     template<typename ModuleType>
-    void createForModule(String name) noexcept
+    void createForModule(String name)
     {
         create<FactoryTyped<ModuleType>>(std::move(name));
     }

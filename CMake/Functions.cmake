@@ -72,3 +72,52 @@ function (cece_add_test NAME)
 endfunction ()
 
 # ######################################################################### #
+
+##
+## Initialize GIT submodule
+## PATH: Submodule path
+## [CHECK]: Path to tested file in submodule (default CMakeLists.txt)
+##
+function(cece_init_submodule PATH)
+    if (ARGC GREATER 1)
+        set(TEST_PATH "${PATH}/${ARGV1}")
+    else ()
+        set(TEST_PATH "${PATH}/CMakeLists.txt")
+    endif ()
+
+    # Check if file exists
+    if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${TEST_PATH}")
+        find_package(Git REQUIRED)
+        execute_process(
+            COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive ${PATH}
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        )
+    endif ()
+endfunction ()
+
+# ######################################################################### #
+
+##
+## Initialize vendor submodule (in `vendor` directory).
+## PATH: Vendor submodule name
+## [CHECK]: Path to tested file in submodule (default CMakeLists.txt)
+##
+function(cece_init_vendor PATH)
+    cece_init_submodule(vendor/${PATH} ${ARGN})
+endfunction ()
+
+# ######################################################################### #
+
+##
+## Enable CCACHE for given directory.
+## DIRECTORY: Cache directory.
+##
+function (cece_enable_ccache)
+    find_program(CCACHE_FOUND ccache)
+    if (CCACHE_FOUND)
+        set_property(DIRECTORY ${DIRECTORY} PROPERTY RULE_LAUNCH_COMPILE ccache)
+        set_property(DIRECTORY ${DIRECTORY} PROPERTY RULE_LAUNCH_LINK ccache)
+    endif ()
+endfunction ()
+
+# ######################################################################### #

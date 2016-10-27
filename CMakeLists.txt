@@ -63,13 +63,7 @@ if (CECE_TESTS_BUILD)
     enable_testing()
 
     # Init google test submodule
-    if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/googletest/CMakeLists.txt")
-        find_package(Git REQUIRED)
-        execute_process(
-            COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive vendor/googletest
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        )
-    endif ()
+    cece_init_vendor(googletest)
 
     message(STATUS "Build unit tests")
     set(BUILD_GMOCK Off CACHE BOOL "" FORCE)
@@ -79,21 +73,11 @@ if (CECE_TESTS_BUILD)
     add_subdirectory(vendor/googletest)
     target_include_directories(gtest INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/googletest/include)
 
-    find_program(CCACHE_FOUND ccache)
-    if (CCACHE_FOUND)
-        set_property(DIRECTORY vendor/googletest PROPERTY RULE_LAUNCH_COMPILE ccache)
-        set_property(DIRECTORY vendor/googletest PROPERTY RULE_LAUNCH_LINK ccache)
-    endif ()
+    cece_enable_ccache(vendor/googletest)
 endif ()
 
-# Init google test submodule
-if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/Box2D/Box2D/CMakeLists.txt")
-    find_package(Git REQUIRED)
-    execute_process(
-        COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive vendor/Box2D
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    )
-endif ()
+# Init Box2D submodule
+cece_init_vendor(Box2D Box2D/CMakeLists.txt)
 
 # Add Box2D physics library
 set(BOX2D_BUILD_EXAMPLES Off CACHE BOOL "" FORCE)
@@ -108,11 +92,7 @@ add_subdirectory(vendor/Box2D/Box2D)
 set_target_properties(Box2D PROPERTIES POSITION_INDEPENDENT_CODE On)
 target_include_directories(Box2D INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/Box2D/Box2D)
 
-find_program(CCACHE_FOUND ccache)
-if (CCACHE_FOUND)
-    set_property(DIRECTORY vendor/Box2D/Box2D PROPERTY RULE_LAUNCH_COMPILE ccache)
-    set_property(DIRECTORY vendor/Box2D/Box2D PROPERTY RULE_LAUNCH_LINK ccache)
-endif ()
+cece_enable_ccache(vendor/Box2D/Box2D)
 
 # ######################################################################### #
 

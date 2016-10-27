@@ -42,10 +42,6 @@ environment:
         - GENERATOR: MinGW Makefiles
           CECE_RENDER: Off
 
-matrix:
-    allow_failures:
-        - GENERATOR: MinGW Makefiles
-
 # Branches to build
 branches:
     except:

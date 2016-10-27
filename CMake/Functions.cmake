@@ -63,7 +63,7 @@ function (cece_add_test NAME)
         WORKING_DIRECTORY $<TARGET_FILE_DIR:${FULLNAME}>
     )
 
-    if (WIN32)
+    if (WIN32 OR MINGW)
         # Windows doen't support rpath, so we need to copy the main library to the test executable
         add_custom_command(TARGET ${FULLNAME} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:cece> $<TARGET_FILE_DIR:${FULLNAME}>

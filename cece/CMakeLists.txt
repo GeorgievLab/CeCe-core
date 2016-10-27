@@ -113,6 +113,12 @@ generate_export_header(${PROJECT_NAME}
     EXPORT_FILE_NAME "export.hpp"
 )
 
+# Export all for MINGW
+if (MINGW)
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--export-all-symbols")
+    set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--export-all-symbols")
+endif ()
+
 # ######################################################################### #
 
 # Link Box2D internally

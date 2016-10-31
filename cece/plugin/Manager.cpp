@@ -54,6 +54,22 @@ Manager::Manager() noexcept
 
 /* ************************************************************************ */
 
+Manager::~Manager()
+{
+    // Unload plugins
+    for (auto& plugin : m_plugins)
+    {
+        plugin.getApi()->onUnload(m_repository);
+
+        // Explicit API unregister
+        // Plugin developer can easily forgot call this and without it
+        // the app crashes with segfault
+        m_repository.unregisterApi(plugin.getApi());
+    }
+}
+
+/* ************************************************************************ */
+
 DynamicArray<String> Manager::getNames() const noexcept
 {
     DynamicArray<String> names;
@@ -148,21 +164,14 @@ Manager& Manager::addDirectory(FilePath path)
 
 /* ************************************************************************ */
 
-Manager& Manager::s()
-{
-    static Manager instance;
-    return instance;
-}
-
-/* ************************************************************************ */
-
 void Manager::appendPlugins(DynamicArray<Plugin> plugins)
 {
-    m_plugins.insert(
-        m_plugins.end(),
-        std::make_move_iterator(plugins.begin()),
-        std::make_move_iterator(plugins.end())
-    );
+    // Load and store plugins
+    for (auto&& plugin : plugins)
+    {
+        plugin.getApi()->onLoad(m_repository);
+        m_plugins.push_back(std::move(plugin));
+    }
 }
 
 /* ************************************************************************ */

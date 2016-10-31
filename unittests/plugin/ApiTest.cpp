@@ -78,7 +78,7 @@ public:
      *
      * @param repository Plugins repository.
      */
-    void onLoad(Repository& repository) const override
+    void onLoad(Repository& repository) override
     {
         onLoadCalled = true;
     }
@@ -89,7 +89,7 @@ public:
      *
      * @param repository Plugins repository.
      */
-    void onUnload(Repository& repository) const override
+    void onUnload(Repository& repository) override
     {
         onUnloadCalled = true;
     }
@@ -156,7 +156,7 @@ public:
 
 TEST(Api, virtualFunctions)
 {
-    auto api = makeUnique<TestApi>();;
+    auto api = makeUnique<TestApi>();
     ViewPtr<Api> base = api;
 
     ASSERT_NE(api, nullptr);

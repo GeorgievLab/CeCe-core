@@ -98,7 +98,7 @@ public:
      *
      * @param repository Plugins repository.
      */
-    virtual void onLoad(Repository& repository) const
+    virtual void onLoad(Repository& repository)
     {
         // Nothing to do
     }
@@ -109,7 +109,10 @@ public:
      *
      * @param repository Plugins repository.
      */
-    virtual void onUnload(Repository& repository) const;
+    virtual void onUnload(Repository& repository)
+    {
+        // Nothing to do
+    }
 
 
     /**

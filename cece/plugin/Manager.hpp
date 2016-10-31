@@ -77,6 +77,12 @@ public:
     Manager() noexcept;
 
 
+    /**
+     * Destructor.
+     */
+    ~Manager();
+
+
 // Public Accessors
 public:
 
@@ -205,20 +211,6 @@ public:
      * @return *this
      */
     Manager& addDirectory(FilePath path);
-
-
-// Public Operations
-public:
-
-
-    /**
-     * @brief Returns global instance of plugin manager.
-     *
-     * @return
-     *
-     * @deprecated
-     */
-    static Manager& s();
 
 
 // Private Operations

@@ -23,16 +23,19 @@
 /*                                                                          */
 /* ************************************************************************ */
 
+// GTest
+#include "gtest/gtest.h"
+
 // CeCe
-#include "cece/core/Exception.hpp"
+#include "cece/plugin/RepositoryRecord.hpp"
+#include "cece/loader/Loader.hpp"
 #include "cece/init/Initializer.hpp"
 #include "cece/module/Module.hpp"
 #include "cece/object/Object.hpp"
 #include "cece/program/Program.hpp"
-#include "cece/plugin/definition.hpp"
-#include "cece/plugin/Api.hpp"
+#include "cece/simulator/DefaultSimulation.hpp"
 #include "cece/plugin/Repository.hpp"
-#include "cece/plugin/RepositoryRecord.hpp"
+#include "cece/plugin/Manager.hpp"
 
 /* ************************************************************************ */
 
@@ -42,6 +45,26 @@ using namespace cece::plugin;
 /* ************************************************************************ */
 
 namespace {
+
+/* ************************************************************************ */
+
+class TestLoader final : public loader::Loader
+{
+public:
+
+    UniquePtr<simulator::Simulation> fromStream(const plugin::Repository& repository, InStream& is,
+        const FilePath& filename = "<stream>",
+        ViewPtr<const Parameters> parameters = nullptr) const override
+    {
+        return makeUnique<simulator::DefaultSimulation>(repository, filename);
+    }
+
+    void toStream(OutStream& os, const simulator::Simulation& simulation,
+        const FilePath& filename = "<stream>") const override
+    {
+        // Nothing to do
+    }
+};
 
 /* ************************************************************************ */
 
@@ -96,45 +119,98 @@ public:
 
 /* ************************************************************************ */
 
-class TestPluginApi : public Api
+TEST(RepositoryRecord, ctor)
 {
+    RepositoryRecord record("my-record");
 
-public:
-
-    void onLoad(Repository& repository) override
-    {
-        if (m_count != 0)
-            throw RuntimeException("onLoad called multiple times");
-
-        ++m_count;
-
-        repository.registerApi(this)
-            .registerInitializer<TestInitializer>("initializer")
-            .registerModule<TestModule>("module")
-            .registerObject<TestObject>("object")
-            .registerProgram<TestProgram>("program")
-        ;
-    }
-
-    void onUnload(Repository& repository) override
-    {
-        --m_count;
-
-        if (m_count != 0)
-            throw RuntimeException("onUnload called multiple times");
-
-        repository.unregisterApi(this);
-    }
-
-private:
-
-    /// Number of onLoad calls
-    int m_count = 0;
-
-};
+    EXPECT_EQ("my-record", record.getName());
+}
 
 /* ************************************************************************ */
 
-CECE_DEFINE_PLUGIN(test_plugin, TestPluginApi)
+TEST(RepositoryRecord, loader)
+{
+    RepositoryRecord record("");
+
+    EXPECT_FALSE(record.isRegisteredLoader("loader"));
+    record.registerLoader<TestLoader>("loader");
+    EXPECT_TRUE(record.isRegisteredLoader("loader"));
+
+    // Create loader
+    auto loader = record.createLoader("loader");
+    ASSERT_NE(nullptr, loader);
+
+    EXPECT_EQ(typeid(TestLoader), typeid(*loader));
+}
+
+/* ************************************************************************ */
+
+TEST(RepositoryRecord, initializer)
+{
+    RepositoryRecord record("");
+
+    EXPECT_FALSE(record.isRegisteredInitializer("initializer"));
+    record.registerInitializer<TestInitializer>("initializer");
+    EXPECT_TRUE(record.isRegisteredInitializer("initializer"));
+
+    auto initializer = record.createInitializer("initializer");
+    ASSERT_NE(nullptr, initializer);
+
+    EXPECT_EQ(typeid(TestInitializer), typeid(*initializer));
+}
+
+/* ************************************************************************ */
+
+TEST(RepositoryRecord, module)
+{
+    RepositoryRecord record("");
+
+    EXPECT_FALSE(record.isRegisteredModule("module"));
+    record.registerModule<TestModule>("module");
+    EXPECT_TRUE(record.isRegisteredModule("module"));
+
+    plugin::Manager mgr;
+    plugin::Repository repo(mgr);
+    simulator::DefaultSimulation simulation(repo);
+    auto module = record.createModule("module", simulation);
+    ASSERT_NE(nullptr, module);
+
+    EXPECT_EQ(typeid(TestModule), typeid(*module));
+}
+
+/* ************************************************************************ */
+
+TEST(RepositoryRecord, object)
+{
+    RepositoryRecord record("");
+
+    EXPECT_FALSE(record.isRegisteredObject("object"));
+    record.registerObject<TestObject>("object");
+    EXPECT_TRUE(record.isRegisteredObject("object"));
+
+    plugin::Manager mgr;
+    plugin::Repository repo(mgr);
+    simulator::DefaultSimulation simulation(repo);
+    auto object = record.createObject("object", simulation, object::Object::Type::Static);
+    ASSERT_NE(nullptr, object);
+
+    EXPECT_EQ(typeid(TestObject), typeid(*object));
+}
+
+/* ************************************************************************ */
+
+TEST(RepositoryRecord, program)
+{
+    RepositoryRecord record("");
+
+    EXPECT_FALSE(record.isRegisteredProgram("program"));
+    record.registerProgram<TestProgram>("program");
+    EXPECT_TRUE(record.isRegisteredProgram("program"));
+
+    auto program = record.createProgram("program");
+    ASSERT_NE(nullptr, program);
+
+    EXPECT_EQ(typeid(TestProgram), typeid(*program));
+}
 
 /* ************************************************************************ */

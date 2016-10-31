@@ -31,8 +31,9 @@
 #include "cece/core/FilePath.hpp"
 #include "cece/core/StringView.hpp"
 #include "cece/core/ViewPtr.hpp"
-#include "cece/core/Map.hpp"
+#include "cece/core/Set.hpp"
 #include "cece/core/Parameters.hpp"
+#include "cece/plugin/Manager.hpp"
 
 /// @deprecated
 #include "cece/object/Object.hpp"
@@ -74,38 +75,27 @@ public:
     /**
      * @brief Constructor.
      *
-     * @param repository Plugins repository.
+     * @param manager Plugins manager.
      */
-    explicit Context(const Repository& repository) noexcept
-        : m_repository(repository)
+    explicit Context(const Manager& manager) noexcept
+        : m_manager(manager)
     {
         // Nothing to do
     }
 
 
-// Public Accessors
+// Public Accessors & Mutators
 public:
 
 
     /**
-     * @brief Returns context repository.
+     * @brief Returns plugin repository.
      *
      * @return
      */
     const Repository& getRepository() const noexcept
     {
-        return m_repository;
-    }
-
-
-    /**
-     * @brief Returns map of imported plugins.
-     *
-     * @return
-     */
-    const Map<String, ViewPtr<const Api>>& getImported() const noexcept
-    {
-        return m_plugins;
+        return m_manager.getRepository();
     }
 
 
@@ -141,46 +131,6 @@ public:
      * @return Plugin API.
      */
     ViewPtr<const Api> removePlugin(StringView name);
-
-
-    /**
-     * @brief Create a simulation from file.
-     *
-     * @param filepath   Path to file.
-     * @param parameters Optional initialization parameters.
-     *
-     * @return Pointer to simulation.
-     *
-     * @throw In case of missing file or error in simulation file.
-     */
-    UniquePtr<simulator::Simulation> createSimulation(const FilePath& filepath, ViewPtr<const Parameters> parameters = nullptr) const;
-
-
-    /**
-     * @brief Create a simulation from source.
-     *
-     * @param type   Type of used loader.
-     * @param source Source code.
-     *
-     * @return Pointer to simulation.
-     *
-     * @throw In case of missing file or error in simulation file.
-     */
-    UniquePtr<simulator::Simulation> createSimulation(StringView type, StringView source) const;
-
-
-    /**
-     * @brief Create a simulation from source.
-     *
-     * @param type     Type of used loader.
-     * @param source   Source code.
-     * @param filepath Path to file.
-     *
-     * @return Pointer to simulation.
-     *
-     * @throw In case of missing file or error in simulation file.
-     */
-    UniquePtr<simulator::Simulation> createSimulation(StringView type, StringView source, const FilePath& filepath) const;
 
 
     /**
@@ -241,11 +191,11 @@ private:
 // Private Data Members
 private:
 
-    /// Plugins repository.
-    const Repository& m_repository;
+    /// Plugins manager.
+    const Manager& m_manager;
 
     /// Imported plugins.
-    Map<String, ViewPtr<const Api>> m_plugins;
+    Set<String> m_importedPlugins;
 
 };
 

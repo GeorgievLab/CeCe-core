@@ -27,7 +27,8 @@
 #include "cece/plugin/Repository.hpp"
 
 // CeCe
-#include "cece/core/Log.hpp"
+#include "cece/core/Assert.hpp"
+#include "cece/core/Exception.hpp"
 
 /* ************************************************************************ */
 
@@ -36,17 +37,47 @@ namespace plugin {
 
 /* ************************************************************************ */
 
-RepositoryRecord& Repository::registerApi(ViewPtr<const Api> api) noexcept
+bool Repository::exists(StringView name) const noexcept
 {
-    auto it = m_records.emplace(api, RepositoryRecord{});
-    return it.first->second;
+    return m_records.find(String(name)) != m_records.end();
 }
 
 /* ************************************************************************ */
 
-void Repository::unregisterApi(ViewPtr<const Api> api) noexcept
+ViewPtr<RepositoryRecord> Repository::get(StringView name) noexcept
 {
-    m_records.erase(api);
+    auto it = m_records.find(String(name));
+
+    return it != m_records.end() ? &(it->second) : nullptr;
+}
+
+/* ************************************************************************ */
+
+ViewPtr<const RepositoryRecord> Repository::get(StringView name) const noexcept
+{
+    auto it = m_records.find(String(name));
+
+    return it != m_records.end() ? &(it->second) : nullptr;
+}
+
+/* ************************************************************************ */
+
+RepositoryRecord& Repository::createRecord(String name)
+{
+    // Try to find existing record
+    if (exists(name))
+        throw InvalidArgumentException("Record with name `" + name + "` already exists");
+
+    auto pair = m_records.emplace(name, RepositoryRecord{});
+    CECE_ASSERT(pair.second);
+    return pair.first->second;
+}
+
+/* ************************************************************************ */
+
+void Repository::removeRecord(StringView name) noexcept
+{
+    m_records.erase(String(name));
 }
 
 /* ************************************************************************ */

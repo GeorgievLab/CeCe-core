@@ -30,6 +30,7 @@
 #include <utility>
 
 // CeCe
+#include "cece/core/Assert.hpp"
 #include "cece/plugin/Api.hpp"
 
 /* ************************************************************************ */
@@ -43,7 +44,8 @@ Plugin::Plugin(String name, UniquePtr<Api> api) noexcept
     : m_name(std::move(name))
     , m_api(std::move(api))
 {
-    // Nothing to do
+    CECE_ASSERT(!m_name.empty());
+    CECE_ASSERT(m_api.get() != nullptr);
 }
 
 /* ************************************************************************ */

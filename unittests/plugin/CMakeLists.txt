@@ -26,6 +26,8 @@
 cece_add_test(plugin
     SOURCES
         ApiTest.cpp
+        PluginTest.cpp
+        RepositoryRecordTest.cpp
         ManagerTest.cpp
 )
 

@@ -29,7 +29,6 @@
 
 // CeCe
 #include "cece/core/String.hpp"
-#include "cece/core/StringView.hpp"
 #include "cece/core/ViewPtr.hpp"
 #include "cece/core/UniquePtr.hpp"
 #include "cece/plugin/Api.hpp"
@@ -44,7 +43,7 @@ namespace plugin {
 /**
  * @brief Loaded plugin information.
  */
-class Plugin
+class Plugin final
 {
 
 // Public Ctors & Dtors
@@ -69,7 +68,7 @@ public:
      *
      * @return Plugin name.
      */
-    StringView getName() const noexcept
+    const String& getName() const noexcept
     {
         return m_name;
     }

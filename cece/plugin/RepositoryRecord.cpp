@@ -23,16 +23,15 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
+// Declaration
+#include "cece/plugin/RepositoryRecord.hpp"
 
 // CeCe
-#include "cece/core/ViewPtr.hpp"
-#include "cece/core/String.hpp"
-#include "cece/core/StringView.hpp"
-#include "cece/core/Map.hpp"
-#include "cece/plugin/RepositoryRecord.hpp"
+#include "cece/loader/Loader.hpp"
+#include "cece/init/Initializer.hpp"
+#include "cece/module/Module.hpp"
+#include "cece/object/Object.hpp"
+#include "cece/program/Program.hpp"
 
 /* ************************************************************************ */
 
@@ -41,89 +40,38 @@ namespace plugin {
 
 /* ************************************************************************ */
 
-/**
- * @brief Repository is a set of repository record which hold information
- * about simulation extensions.
- */
-class Repository final
+UniquePtr<loader::Loader> RepositoryRecord::createLoader(StringView name) const
 {
+    return m_loaderFactoryManager.createLoader(name);
+}
 
-// Public Accessors
-public:
+/* ************************************************************************ */
 
+UniquePtr<init::Initializer> RepositoryRecord::createInitializer(StringView name) const
+{
+    return m_initFactoryManager.createInitializer(name);
+}
 
-    /**
-     * @brief Returns all repository records.
-     *
-     * @return
-     */
-    const Map<String, RepositoryRecord>& getRecords() const noexcept
-    {
-        return m_records;
-    }
+/* ************************************************************************ */
 
+UniquePtr<module::Module> RepositoryRecord::createModule(StringView name, simulator::Simulation& simulation) const
+{
+    return m_moduleFactoryManager.createModule(name, simulation);
+}
 
-    /**
-     * @brief Returns if record with given name exists.
-     *
-     * @param name Record name.
-     *
-     * @return
-     */
-    bool exists(StringView name) const noexcept;
+/* ************************************************************************ */
 
+UniquePtr<object::Object> RepositoryRecord::createObject(StringView name, simulator::Simulation& simulation, object::Object::Type type) const
+{
+    return m_objectFactoryManager.createObject(name, simulation, type);
+}
 
-    /**
-     * @brief Returns repository record with given name.
-     *
-     * @param name Record name.
-     *
-     * @return Repository record.
-     */
-    ViewPtr<RepositoryRecord> get(StringView name) noexcept;
+/* ************************************************************************ */
 
-
-    /**
-     * @brief Returns repository record with given name.
-     *
-     * @param name Record name.
-     *
-     * @return Repository record.
-     */
-    ViewPtr<const RepositoryRecord> get(StringView name) const noexcept;
-
-
-// Public Mutators
-public:
-
-
-    /**
-     * @brief Create a new record..
-     *
-     * @param name Record name.
-     *
-     * @return Repository record.
-     *
-     * @throw In case a record with given name already exists.
-     */
-    RepositoryRecord& createRecord(String name);
-
-
-    /**
-     * @brief Remove repository record.
-     *
-     * @param name Record name.
-     */
-    void removeRecord(StringView name) noexcept;
-
-
-// Private Data Members
-private:
-
-    /// Repository records.
-    Map<String, RepositoryRecord> m_records;
-
-};
+UniquePtr<program::Program> RepositoryRecord::createProgram(StringView name) const
+{
+    return m_programFactoryManager.createProgram(name);
+}
 
 /* ************************************************************************ */
 

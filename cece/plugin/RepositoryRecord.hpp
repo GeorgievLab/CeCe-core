@@ -27,6 +27,9 @@
 
 /* ************************************************************************ */
 
+// C++
+#include <utility>
+
 // CeCe
 #include "cece/core/String.hpp"
 #include "cece/core/StringView.hpp"
@@ -44,123 +47,90 @@ namespace plugin {
 /* ************************************************************************ */
 
 /**
- * @brief Repository record. Each plugin (and API) have own repository record
- * where information about provided objects is stored.
+ * @brief Record for repository. Each record has own name and list of
+ * factory managers for each extension type.
+ * In most cases the plugin populate created record by offered objects.
+ *
+ * @code{.cpp}
+   record
+       .registerModule<MyModule>("my-module")
+       .registerProgram<MyProgram>("my-program")
+   ;
+
+   record.createModule("my-module");
+   record.createProgram("my-program");
+   @endcode
  */
-class RepositoryRecord
+class RepositoryRecord final
 {
 
-// Public Accessors
+
+// Public Accessors & Mutators
 public:
 
 
     /**
-     * @brief Returns loader factory manager.
+     * Returns if loader with given name is registered.
+     *
+     * @param  name Loader name.
      *
      * @return
      */
-    loader::FactoryManager& getLoaderFactoryManager() noexcept
+    bool isRegisteredLoader(StringView name) const noexcept
     {
-        return m_loaderFactoryManager;
+        return m_loaderFactoryManager.exists(name);
     }
 
 
     /**
-     * @brief Returns loader factory manager.
+     * Returns if initializer with given name is registered.
+     *
+     * @param  name Initializer name.
      *
      * @return
      */
-    const loader::FactoryManager& getLoaderFactoryManager() const noexcept
+    bool isRegisteredInitializer(StringView name) const noexcept
     {
-        return m_loaderFactoryManager;
+        return m_initFactoryManager.exists(name);
     }
 
 
     /**
-     * @brief Returns initializer factory manager.
+     * Returns if module with given name is registered.
+     *
+     * @param  name Module name.
      *
      * @return
      */
-    init::FactoryManager& getInitFactoryManager() noexcept
+    bool isRegisteredModule(StringView name) const noexcept
     {
-        return m_initFactoryManager;
+        return m_moduleFactoryManager.exists(name);
     }
 
 
     /**
-     * @brief Returns initializer factory manager.
+     * Returns if object with given name is registered.
+     *
+     * @param  name Object name.
      *
      * @return
      */
-    const init::FactoryManager& getInitFactoryManager() const noexcept
+    bool isRegisteredObject(StringView name) const noexcept
     {
-        return m_initFactoryManager;
+        return m_objectFactoryManager.exists(name);
     }
 
 
     /**
-     * @brief Returns module factory manager.
+     * Returns if program with given name is registered.
+     *
+     * @param  name Program name.
      *
      * @return
      */
-    module::FactoryManager& getModuleFactoryManager() noexcept
+    bool isRegisteredProgram(StringView name) const noexcept
     {
-        return m_moduleFactoryManager;
-    }
-
-
-    /**
-     * @brief Returns module factory manager.
-     *
-     * @return
-     */
-    const module::FactoryManager& getModuleFactoryManager() const noexcept
-    {
-        return m_moduleFactoryManager;
-    }
-
-
-    /**
-     * @brief Returns object factory manager.
-     *
-     * @return
-     */
-    object::FactoryManager& getObjectFactoryManager() noexcept
-    {
-        return m_objectFactoryManager;
-    }
-
-
-    /**
-     * @brief Returns object factory manager.
-     *
-     * @return
-     */
-    const object::FactoryManager& getObjectFactoryManager() const noexcept
-    {
-        return m_objectFactoryManager;
-    }
-
-
-    /**
-     * @brief Returns program factory manager.
-     *
-     * @return
-     */
-    program::FactoryManager& getProgramFactoryManager() noexcept
-    {
-        return m_programFactoryManager;
-    }
-
-
-    /**
-     * @brief Returns program factory manager.
-     *
-     * @return
-     */
-    const program::FactoryManager& getProgramFactoryManager() const noexcept
-    {
-        return m_programFactoryManager;
+        return m_programFactoryManager.exists(name);
     }
 
 
@@ -306,6 +276,61 @@ public:
     {
         m_programFactoryManager.remove(name);
     }
+
+
+// Public Operations
+public:
+
+
+    /**
+     * @brief Create a loader.
+     *
+     * @return A loader.
+     */
+    UniquePtr<loader::Loader> createLoader(StringView name) const;
+
+
+    /**
+     * @brief Create an initializer of given type name.
+     *
+     * @param name Type of required initializer.
+     *
+     * @return Pointer to created initializer.
+     */
+    UniquePtr<init::Initializer> createInitializer(StringView name) const;
+
+
+    /**
+     * @brief Create a module of given type name.
+     *
+     * @param name       Type of required module.
+     * @param simulation Simulation object.
+     *
+     * @return Pointer to created module.
+     */
+    UniquePtr<module::Module> createModule(StringView name, simulator::Simulation& simulation) const;
+
+
+    /**
+     * @brief Create an object of given type name.
+     *
+     * @param name       Type of required object.
+     * @param simulation Simulation object.
+     * @param type       Type of created object.
+     *
+     * @return Pointer to created object.
+     */
+    UniquePtr<object::Object> createObject(StringView name, simulator::Simulation& simulation, object::Object::Type type) const;
+
+
+    /**
+     * @brief Create a program of given type name.
+     *
+     * @param name Type of required program.
+     *
+     * @return Pointer to created program.
+     */
+    UniquePtr<program::Program> createProgram(StringView name) const;
 
 
 // Private Data Members

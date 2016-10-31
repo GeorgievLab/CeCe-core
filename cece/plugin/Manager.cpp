@@ -33,10 +33,6 @@
 #include "cece/core/Assert.hpp"
 #include "cece/core/Log.hpp"
 #include "cece/core/Exception.hpp"
-#include "cece/core/IteratorRange.hpp"
-#include "cece/core/FilePath.hpp"
-#include "cece/loader/Loader.hpp"
-#include "cece/loader/FactoryManager.hpp"
 #include "cece/plugin/Api.hpp"
 
 /* ************************************************************************ */
@@ -47,7 +43,6 @@ namespace plugin {
 /* ************************************************************************ */
 
 Manager::Manager() noexcept
-    : m_repository(*this)
 {
     // Nothing to do
 }
@@ -59,12 +54,13 @@ Manager::~Manager()
     // Unload plugins
     for (auto& plugin : m_plugins)
     {
+        // Unload plugin
         plugin.getApi()->onUnload(m_repository);
 
-        // Explicit API unregister
-        // Plugin developer can easily forgot call this and without it
-        // the app crashes with segfault
-        m_repository.unregisterApi(plugin.getApi());
+        // Explicit record remove
+        // It's easy to forget to remove record from repository and in most
+        // cases the record have same name as the plugin
+        m_repository.removeRecord(plugin.getName());
     }
 }
 
@@ -75,8 +71,8 @@ DynamicArray<String> Manager::getNames() const noexcept
     DynamicArray<String> names;
     names.reserve(m_plugins.size());
 
-    for (const auto& p : m_plugins)
-        names.emplace_back(p.getName());
+    for (const auto& plugin : m_plugins)
+        names.emplace_back(plugin.getName());
 
     return names;
 }
@@ -85,9 +81,9 @@ DynamicArray<String> Manager::getNames() const noexcept
 
 bool Manager::isLoaded(StringView name) const noexcept
 {
-    for (const auto& p : m_plugins)
+    for (const auto& plugin : m_plugins)
     {
-        if (p.getName() == name)
+        if (plugin.getName() == name)
             return true;
     }
 
@@ -100,10 +96,10 @@ ViewPtr<Api> Manager::getApi(StringView name) const noexcept
 {
     CECE_ASSERT(!name.isEmpty());
 
-    for (const auto& p : m_plugins)
+    for (const auto& plugin : m_plugins)
     {
-        if (p.getName() == name)
-            return p.getApi();
+        if (plugin.getName() == name)
+            return plugin.getApi();
     }
 
     return nullptr;
@@ -115,10 +111,10 @@ StringView Manager::getName(ViewPtr<const Api> api) const noexcept
 {
     CECE_ASSERT(api);
 
-    for (const auto& p : m_plugins)
+    for (const auto& plugin : m_plugins)
     {
-        if (p.getApi() == api)
-            return p.getName();
+        if (plugin.getApi() == api)
+            return plugin.getName();
     }
 
     return {};

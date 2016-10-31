@@ -23,111 +23,32 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
+// GTest
+#include "gtest/gtest.h"
 
 // CeCe
-#include "cece/core/ViewPtr.hpp"
-#include "cece/core/String.hpp"
-#include "cece/core/StringView.hpp"
-#include "cece/core/Map.hpp"
-#include "cece/plugin/RepositoryRecord.hpp"
+#include "cece/plugin/Plugin.hpp"
+#include "cece/plugin/Api.hpp"
 
 /* ************************************************************************ */
 
-namespace cece {
-namespace plugin {
+using namespace cece;
+using namespace cece::plugin;
 
 /* ************************************************************************ */
 
-/**
- * @brief Repository is a set of repository record which hold information
- * about simulation extensions.
- */
-class Repository final
+class TestApi final : public Api {};
+
+/* ************************************************************************ */
+
+TEST(Plugin, accessors)
 {
-
-// Public Accessors
-public:
-
-
-    /**
-     * @brief Returns all repository records.
-     *
-     * @return
-     */
-    const Map<String, RepositoryRecord>& getRecords() const noexcept
     {
-        return m_records;
+        Plugin plugin("plugin1", makeUnique<TestApi>());
+
+        EXPECT_EQ("plugin1", plugin.getName());
+        EXPECT_NE(nullptr, plugin.getApi());
     }
-
-
-    /**
-     * @brief Returns if record with given name exists.
-     *
-     * @param name Record name.
-     *
-     * @return
-     */
-    bool exists(StringView name) const noexcept;
-
-
-    /**
-     * @brief Returns repository record with given name.
-     *
-     * @param name Record name.
-     *
-     * @return Repository record.
-     */
-    ViewPtr<RepositoryRecord> get(StringView name) noexcept;
-
-
-    /**
-     * @brief Returns repository record with given name.
-     *
-     * @param name Record name.
-     *
-     * @return Repository record.
-     */
-    ViewPtr<const RepositoryRecord> get(StringView name) const noexcept;
-
-
-// Public Mutators
-public:
-
-
-    /**
-     * @brief Create a new record..
-     *
-     * @param name Record name.
-     *
-     * @return Repository record.
-     *
-     * @throw In case a record with given name already exists.
-     */
-    RepositoryRecord& createRecord(String name);
-
-
-    /**
-     * @brief Remove repository record.
-     *
-     * @param name Record name.
-     */
-    void removeRecord(StringView name) noexcept;
-
-
-// Private Data Members
-private:
-
-    /// Repository records.
-    Map<String, RepositoryRecord> m_records;
-
-};
-
-/* ************************************************************************ */
-
-}
 }
 
 /* ************************************************************************ */

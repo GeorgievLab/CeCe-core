@@ -50,19 +50,22 @@ class Api;
 /**
  * @brief Manager of simulator plugins.
  *
- * This class is responsible for loading and unloading plugins. It all begins
- * with registering plugins directory:
- * @code
-    plugin::Manager m;
-    m.addDirectory("plugins");
-   @endcode
- * which scan given plugins directory and store paths of those plugins into internal
- * variable. Then when plugin is required, it's loaded from given path.
- * @code
-    plugin::Manager m;
-    auto pluginApi = m.load("myplugin");
-   @endcode
- * Loading plugin also loads dependent plugins.
+ * The functionality is based on two things:
+ *  - plugin loader
+ *  - plugin directory
+ *
+ * Plugin directory are path of directory where loaded plugins are stored
+ * and where loaders looks for available plugins. Loader looks into plugins
+ * directory and according to own rules it loads plugins found in plugins
+ * directory.
+ * By default, manager needs to add a plugin loader (SharedLibraryLoader is
+ * available) and specify plugins directory. No additional action is required,
+ * calling one either `addLoader` or `addDirectory` invoke plugins loading.
+ * For each loaded valid plugin the `Api::onLoad` is called and when the manager is
+ * being destroyed the `Api::onUnload` is called.
+ *
+ * @note The plugin loader is responsible for proper plugin loading and the plugin
+ * code must be loaded in memory until `Loader` is destroyed.
  */
 class Manager final
 {
@@ -88,7 +91,7 @@ public:
 
 
     /**
-     * @brief Returns plugin repository.
+     * @brief Returns mutable plugin repository.
      *
      * @return
      */
@@ -99,7 +102,7 @@ public:
 
 
     /**
-     * @brief Returns plugin repository.
+     * @brief Returns immutable plugin repository.
      *
      * @return
      */

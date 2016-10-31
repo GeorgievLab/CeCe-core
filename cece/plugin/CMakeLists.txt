@@ -34,6 +34,7 @@ set(SRCS
     Manager.hpp
     Manager.cpp
     RepositoryRecord.hpp
+    RepositoryRecord.cpp
     Repository.hpp
     Repository.cpp
     Context.hpp

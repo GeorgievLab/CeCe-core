@@ -24,10 +24,108 @@
 /* ************************************************************************ */
 
 // CeCe
+#include "cece/core/Exception.hpp"
+#include "cece/init/Initializer.hpp"
+#include "cece/module/Module.hpp"
+#include "cece/object/Object.hpp"
+#include "cece/program/Program.hpp"
 #include "cece/plugin/definition.hpp"
 #include "cece/plugin/Api.hpp"
+#include "cece/plugin/Repository.hpp"
+#include "cece/plugin/RepositoryRecord.hpp"
 
-class TestPluginApi : public cece::plugin::Api { };
+/* ************************************************************************ */
+
+using namespace cece;
+using namespace cece::plugin;
+
+/* ************************************************************************ */
+
+class TestInitializer : public init::Initializer
+{
+public:
+    using init::Initializer::Initializer;
+
+    void init(simulator::Simulation& simulation) const
+    {
+        // Nothing to do
+    }
+};
+
+/* ************************************************************************ */
+
+class TestModule : public module::Module
+{
+public:
+    using module::Module::Module;
+};
+
+/* ************************************************************************ */
+
+class TestObject : public object::Object
+{
+public:
+    using object::Object::Object;
+};
+
+/* ************************************************************************ */
+
+class TestProgram : public program::Program
+{
+public:
+    using program::Program::Program;
+
+    UniquePtr<Program> clone() const override
+    {
+        return makeUnique<TestProgram>(*this);
+    }
+
+    void call(simulator::Simulation& simulation, object::Object& object, units::Time dt)
+    {
+        // Nothing to do
+    }
+};
+
+/* ************************************************************************ */
+
+class TestPluginApi : public Api
+{
+
+public:
+
+    void onLoad(Repository& repository) override
+    {
+        if (m_count != 0)
+            throw RuntimeException("onLoad called multiple times");
+
+        ++m_count;
+
+        repository.registerApi(this)
+            .registerInitializer<TestInitializer>("initializer")
+            .registerModule<TestModule>("module")
+            .registerObject<TestObject>("object")
+            .registerProgram<TestProgram>("program")
+        ;
+    }
+
+    void onUnload(Repository& repository) override
+    {
+        --m_count;
+
+        if (m_count != 0)
+            throw RuntimeException("onUnload called multiple times");
+
+        repository.unregisterApi(this);
+    }
+
+private:
+
+    /// Number of onLoad calls
+    int m_count = 0;
+
+};
+
+/* ************************************************************************ */
 
 CECE_DEFINE_PLUGIN(test_plugin, TestPluginApi)
 

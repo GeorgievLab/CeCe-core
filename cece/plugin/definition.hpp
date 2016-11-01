@@ -59,42 +59,23 @@
 /* ************************************************************************ */
 
 /**
- * @brief Define function name for extern plugins.
+ * @brief      Plugin function prototype name.
  *
- * @param prefix Function prefix.
- * @param name   Plugin name.
+ * @param      name    Function name.
+ * @param      plugin  Plugin name.
+ *
+ * @return     Function prototype.
  */
-#define CECE_PLUGIN_PROTOTYPE_NAME_EXTERN(prefix, name) prefix
+#define CECE_PLUGIN_PROTOTYPE_NAME(name, plugin) name
 
 /* ************************************************************************ */
 
 /**
- * @brief Define function name for builtin plugins.
+ * @brief      Prototype of function for creating plugin API object.
  *
- * @param prefix Function prefix.
- * @param name   Plugin name.
- */
-#define CECE_PLUGIN_PROTOTYPE_NAME_BUILTIN(prefix, name) prefix ## _ ## name
-
-/* ************************************************************************ */
-
-/**
- * @brief Function name.
+ * @param      name  Plugin name.
  *
- * @param name Plugin name.
- */
-#if CECE_PLUGIN_BUILTIN
-#define CECE_PLUGIN_PROTOTYPE_NAME(prefix, name) CECE_PLUGIN_PROTOTYPE_NAME_BUILTIN(prefix, name)
-#else
-#define CECE_PLUGIN_PROTOTYPE_NAME(prefix, name) CECE_PLUGIN_PROTOTYPE_NAME_EXTERN(prefix, name)
-#endif
-
-/* ************************************************************************ */
-
-/**
- * @brief Prototype of function for creating plugin API object.
- *
- * @param name Plugin name.
+ * @return     Create plugin function prototype.
  */
 #define CECE_PLUGIN_CREATE_PROTOTYPE(name) \
     extern "C" CECE_PLUGIN_EXPORT cece::plugin::Api* CECE_PLUGIN_PROTOTYPE_NAME(create, name)()
@@ -102,32 +83,38 @@
 /* ************************************************************************ */
 
 /**
- * @brief Declare function for creating plugin API object.
+ * @brief      Declare function for creating plugin API object.
  *
- * @param name Plugin name.
+ * @param      name  Plugin name.
+ *
+ * @return     Create plugin function declaration.
  */
-#define CECE_DECLARE_PLUGIN_CREATE(name) CECE_PLUGIN_CREATE_PROTOTYPE(name)
+#define CECE_PLUGIN_DECLARE_CREATE(name) CECE_PLUGIN_CREATE_PROTOTYPE(name)
 
 /* ************************************************************************ */
 
 /**
- * @brief Define function for creating plugin API object.
+ * @brief      Define function for creating plugin API object.
  *
- * @param name      Plugin name.
- * @param className Plugin API class name.
+ * @param      name       Plugin name.
+ * @param      className  Plugin API class name.
+ *
+ * @return     Create plugin function definition.
  */
-#define CECE_DEFINE_PLUGIN_CREATE(name, className) \
-    CECE_PLUGIN_CREATE_PROTOTYPE(name) \
-    { \
-        return new className{}; \
+#define CECE_PLUGIN_DEFINE_CREATE(name, className) \
+    CECE_PLUGIN_CREATE_PROTOTYPE(name)             \
+    {                                              \
+        return new className{};                    \
     }
 
 /* ************************************************************************ */
 
 /**
- * @brief Prototype of function for returning plugin configuration.
+ * @brief      Prototype of function for returning plugin configuration.
  *
- * @param name Plugin name.
+ * @param      name  Plugin name.
+ *
+ * @return     Plugin get config function prototype.
  */
 #define CECE_PLUGIN_GET_CONFIG_PROTOTYPE(name) \
     extern "C" CECE_PLUGIN_EXPORT cece::plugin::Config* CECE_PLUGIN_PROTOTYPE_NAME(get_config, name)()
@@ -135,53 +122,60 @@
 /* ************************************************************************ */
 
 /**
- * @brief Declare function for returning plugin configuration.
+ * @brief      Declare function for returning plugin configuration.
  *
- * @param name Plugin name.
+ * @param      name  Plugin name.
+ *
+ * @return     Plugin get config function definition.
  */
-#define CECE_DECLARE_GET_CONFIG_VERSION(name) CECE_PLUGIN_GET_CONFIG_PROTOTYPE(name)
+#define CECE_PLUGIN_DECLARE_GET_CONFIG(name) CECE_PLUGIN_GET_CONFIG_PROTOTYPE(name)
 
 /* ************************************************************************ */
 
 /**
- * @brief Define function for returning plugin configuration.
+ * @brief      Define function for returning plugin configuration.
  *
- * @param name Plugin name.
+ * @param      name  Plugin name.
+ *
+ * @return     Plugin get config function definition.
  */
-#define CECE_DEFINE_GET_CONFIG_VERSION(name) \
-    CECE_PLUGIN_GET_CONFIG_PROTOTYPE(name) \
-    { \
-        static cece::plugin::Config config = { \
-            cece::config::PLUGIN_API_VERSION,   /* apiVersion */ \
-            sizeof(cece::config::RealType),     /* realSize */ \
-            CECE_RENDER_VALUE,                  /* renderEnabled */ \
-            CECE_THREAD_SAFE_VALUE,             /* threadSafe */ \
-            cece::config::DIMENSION             /* dimension */ \
-        }; \
-        return &config; \
+#define CECE_PLUGIN_DEFINE_GET_CONFIG(name)                       \
+    CECE_PLUGIN_GET_CONFIG_PROTOTYPE(name)                        \
+    {                                                             \
+        static cece::plugin::Config config = {                    \
+            cece::config::PLUGIN_API_VERSION, /* apiVersion */    \
+            sizeof(cece::config::RealType),   /* realSize */      \
+            CECE_RENDER_VALUE,                /* renderEnabled */ \
+            CECE_THREAD_SAFE_VALUE            /* threadSafe */    \
+        };                                                        \
+        return &config;                                           \
     }
 
 /* ************************************************************************ */
 
 /**
- * @brief Declare plugin functions.
+ * @brief      Declare plugin functions.
  *
- * @param name Plugin name.
+ * @param      name  Plugin name.
+ *
+ * @return     Plugin functions declarations.
  */
-#define CECE_DECLARE_PLUGIN(name) \
-    CECE_DECLARE_PLUGIN_CREATE(name); \
-    CECE_DECLARE_GET_CONFIG_VERSION(name)
+#define CECE_PLUGIN_DECLARE(name)            \
+    CECE_PLUGIN_DECLARE_PLUGIN_CREATE(name); \
+    CECE_PLUGIN_DECLARE_GET_CONFIG(name)
 
 /* ************************************************************************ */
 
 /**
- * @brief Define plugin functions.
+ * @brief      Define plugin functions.
  *
- * @param name      Plugin name.
- * @param className Plugin API class name.
+ * @param      name       Plugin name.
+ * @param      className  Plugin API class name.
+ *
+ * @return     Plugin functions definitions.
  */
-#define CECE_DEFINE_PLUGIN(name, className) \
-    CECE_DEFINE_PLUGIN_CREATE(name, className) \
-    CECE_DEFINE_GET_CONFIG_VERSION(name)
+#define CECE_PLUGIN_DEFINE(name, className)    \
+    CECE_PLUGIN_DEFINE_CREATE(name, className) \
+    CECE_PLUGIN_DEFINE_GET_CONFIG(name)
 
 /* ************************************************************************ */

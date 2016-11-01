@@ -62,9 +62,9 @@ namespace {
  * @return
  */
 template<typename RecordFn>
-DynamicArray<String> getPluginNames(const Repository& repo, RecordFn fn)
+DynamicArray<StringView> getPluginNames(const Repository& repo, RecordFn fn)
 {
-    DynamicArray<String> names;
+    DynamicArray<StringView> names;
 
     // Foreach repository records
     for (const auto& record : repo.getRecords())
@@ -85,7 +85,7 @@ DynamicArray<String> getPluginNames(const Repository& repo, RecordFn fn)
  *
  * @return
  */
-String join(const DynamicArray<String>& array) noexcept
+String join(const DynamicArray<StringView>& array) noexcept
 {
     String res;
 
@@ -94,7 +94,7 @@ String join(const DynamicArray<String>& array) noexcept
         if (it != array.begin())
             res += ", ";
 
-        res += *it;
+        res += String(*it);
     }
 
     return res;
@@ -106,17 +106,10 @@ String join(const DynamicArray<String>& array) noexcept
 
 /* ************************************************************************ */
 
-bool Context::isImported(StringView name) const noexcept
-{
-    return m_importedPlugins.find(String(name)) != m_importedPlugins.end();
-}
-
-/* ************************************************************************ */
-
 ViewPtr<const Api> Context::importPlugin(StringView name)
 {
     // Do not add duplicates
-    auto it = m_importedPlugins.find(String(name));
+    auto it = m_importedPlugins.find(name);
 
     // Already imported
     if (it != m_importedPlugins.end())
@@ -124,28 +117,14 @@ ViewPtr<const Api> Context::importPlugin(StringView name)
 
     Log::info("Importing plugin '", name, "'...");
 
-    // Load plugin
-    auto api = m_manager.getApi(name);
+    // Check if plugin is loaded
+    if (!m_manager.isLoaded(name))
+        throw RuntimeException("Cannot import plugin `" + String(name) + "`: No plugin with that name is not loaded.");
 
-    // Plugin not found
-    if (!api)
-        throw RuntimeException("Cannot import plugin: " + String(name));
+    // Store name of the imported plugin
+    m_importedPlugins.insert(name);
 
-    // Check conflict plugins
-    for (const auto& pluginName : api->conflictPlugins())
-    {
-        if (isImported(pluginName))
-            throw RuntimeException("Cannot import plugin: " + String(name) + ". Confliction with plugin: " + pluginName);
-    }
-
-    // Import required plugins
-    for (const auto& pluginName : api->requiredPlugins())
-        importPlugin(pluginName);
-
-    // Store API
-    m_importedPlugins.insert(String(name));
-
-    return api;
+    return m_manager.getApi(name);
 }
 
 /* ************************************************************************ */
@@ -153,7 +132,7 @@ ViewPtr<const Api> Context::importPlugin(StringView name)
 ViewPtr<const Api> Context::removePlugin(StringView name)
 {
     // Find plugin
-    auto it = m_importedPlugins.find(String(name));
+    auto it = m_importedPlugins.find(name);
 
     // Nothing to unload
     if (it == m_importedPlugins.end())
@@ -167,21 +146,38 @@ ViewPtr<const Api> Context::removePlugin(StringView name)
 
 /* ************************************************************************ */
 
+UniquePtr<loader::Loader> Context::createLoader(StringView name) const
+{
+    // Foreach repository records and find loader with given name
+    for (const auto& item : getRepository().getRecords())
+    {
+        const auto& record = item.second;
+
+        // Exists factory
+        if (record.isRegisteredLoader(name))
+            return record.createLoader(name);
+    }
+
+    throw RuntimeException("Unable to find loader '" + String(name) + "'");
+}
+
+/* ************************************************************************ */
+
 UniquePtr<init::Initializer> Context::createInitializer(StringView typeName) const
 {
     ViewPtr<const RepositoryRecord> resultRecord;
-    DynamicArray<String> importedNames;
+    DynamicArray<StringView> importedNames;
 
     // Foreach loaded APIs and find factory
     for (const auto& plugin : m_importedPlugins)
     {
         // Get record
-        auto rec = getRepository().get(plugin);
+        const auto& rec = getRepository().get(plugin);
 
         // Exists factory
-        if (rec && rec->isRegisteredInitializer(typeName))
+        if (rec.isRegisteredInitializer(typeName))
         {
-            resultRecord = rec;
+            resultRecord = &rec;
             importedNames.push_back(plugin);
         }
     }
@@ -213,18 +209,18 @@ UniquePtr<init::Initializer> Context::createInitializer(StringView typeName) con
 UniquePtr<module::Module> Context::createModule(StringView typeName, simulator::Simulation& simulation) const
 {
     ViewPtr<const RepositoryRecord> resultRecord;
-    DynamicArray<String> importedNames;
+    DynamicArray<StringView> importedNames;
 
     // Foreach loaded APIs and find factory
     for (const auto& plugin : m_importedPlugins)
     {
         // Get record
-        auto rec = getRepository().get(plugin);
+        const auto& rec = getRepository().get(plugin);
 
         // Exists factory
-        if (rec && rec->isRegisteredModule(typeName))
+        if (rec.isRegisteredModule(typeName))
         {
-            resultRecord = rec;
+            resultRecord = &rec;
             importedNames.push_back(plugin);
         }
     }
@@ -256,18 +252,18 @@ UniquePtr<module::Module> Context::createModule(StringView typeName, simulator::
 UniquePtr<object::Object> Context::createObject(StringView typeName, simulator::Simulation& simulation, object::Object::Type type) const
 {
     ViewPtr<const RepositoryRecord> resultRecord;
-    DynamicArray<String> importedNames;
+    DynamicArray<StringView> importedNames;
 
     // Foreach loaded APIs and find factory
     for (const auto& plugin : m_importedPlugins)
     {
         // Get record
-        auto rec = getRepository().get(plugin);
+        const auto& rec = getRepository().get(plugin);
 
         // Exists factory
-        if (rec && rec->isRegisteredObject(typeName))
+        if (rec.isRegisteredObject(typeName))
         {
-            resultRecord = rec;
+            resultRecord = &rec;
             importedNames.push_back(plugin);
         }
     }
@@ -299,18 +295,18 @@ UniquePtr<object::Object> Context::createObject(StringView typeName, simulator::
 UniquePtr<program::Program> Context::createProgram(StringView typeName) const
 {
     ViewPtr<const RepositoryRecord> resultRecord;
-    DynamicArray<String> importedNames;
+    DynamicArray<StringView> importedNames;
 
     // Foreach loaded APIs and find factory
     for (const auto& plugin : m_importedPlugins)
     {
         // Get record
-        auto rec = getRepository().get(plugin);
+        const auto& rec = getRepository().get(plugin);
 
         // Exists factory
-        if (rec && rec->isRegisteredProgram(typeName))
+        if (rec.isRegisteredProgram(typeName))
         {
-            resultRecord = rec;
+            resultRecord = &rec;
             importedNames.push_back(plugin);
         }
     }
@@ -335,23 +331,6 @@ UniquePtr<program::Program> Context::createProgram(StringView typeName) const
     throw RuntimeException(
         "Cannot create program: " + String(typeName) + ". Program found in plugin(s): " + join(names)
     );
-}
-
-/* ************************************************************************ */
-
-UniquePtr<loader::Loader> Context::createLoader(StringView name) const
-{
-    // Foreach repository records and find loader with given name
-    for (const auto& item : getRepository().getRecords())
-    {
-        const auto& record = item.second;
-
-        // Exists factory
-        if (record.isRegisteredLoader(name))
-            return record.createLoader(name);
-    }
-
-    throw RuntimeException("Unable to find loader '" + String(name) + "'");
 }
 
 /* ************************************************************************ */

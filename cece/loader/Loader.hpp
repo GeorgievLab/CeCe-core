@@ -40,7 +40,7 @@
 namespace cece {
     inline namespace core   { class Parameters; }
     namespace simulator     { class Simulation; }
-    namespace plugin        { class Repository; }
+    namespace plugin        { class Manager; }
 }
 
 /* ************************************************************************ */
@@ -83,7 +83,7 @@ public:
      * @return Pointer to created simulation.
      */
     virtual UniquePtr<simulator::Simulation> fromFile(
-        const plugin::Repository& repository, const FilePath& filename,
+        const plugin::Manager& manager, const FilePath& filename,
         ViewPtr<const Parameters> parameters = nullptr) const;
 
 
@@ -96,7 +96,7 @@ public:
      * @return Pointer to created simulation.
      */
     virtual UniquePtr<simulator::Simulation> fromSource(
-        const plugin::Repository& repository,
+        const plugin::Manager& manager,
         const String& source, const FilePath& filename = "<source>",
         ViewPtr<const Parameters> parameters = nullptr) const;
 
@@ -133,7 +133,7 @@ public:
      * @return Created simulation.
      */
     virtual UniquePtr<simulator::Simulation> fromStream(
-        const plugin::Repository& repository, InStream& is,
+        const plugin::Manager& manager, InStream& is,
         const FilePath& filename = "<stream>",
         ViewPtr<const Parameters> parameters = nullptr) const = 0;
 

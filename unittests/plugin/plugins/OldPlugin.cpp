@@ -30,7 +30,7 @@
 class OldPluginApi : public cece::plugin::Api { };
 
 // Create function
-CECE_DEFINE_PLUGIN_CREATE(old_plugin, OldPluginApi)
+CECE_PLUGIN_DEFINE_CREATE(old_plugin, OldPluginApi)
 
 // Get config
 CECE_PLUGIN_GET_CONFIG_PROTOTYPE(old_plugin)
@@ -39,8 +39,7 @@ CECE_PLUGIN_GET_CONFIG_PROTOTYPE(old_plugin)
         cece::config::PLUGIN_API_VERSION - 1, // Previous API version
         sizeof(cece::config::RealType),
         CECE_RENDER_VALUE,
-        CECE_THREAD_SAFE_VALUE,
-        cece::config::DIMENSION
+        CECE_THREAD_SAFE_VALUE
     };
     return &config;
 }

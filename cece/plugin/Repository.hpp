@@ -28,7 +28,6 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/ViewPtr.hpp"
 #include "cece/core/String.hpp"
 #include "cece/core/StringView.hpp"
 #include "cece/core/Map.hpp"
@@ -48,14 +47,14 @@ namespace plugin {
 class Repository final
 {
 
-// Public Accessors
+// Public Accessors & Mutators
 public:
 
 
     /**
-     * @brief Returns all repository records.
+     * @brief      Returns all repository records.
      *
-     * @return
+     * @return     A map of repository records.
      */
     const Map<String, RepositoryRecord>& getRecords() const noexcept
     {
@@ -64,55 +63,55 @@ public:
 
 
     /**
-     * @brief Returns if record with given name exists.
+     * @brief      Returns if record with given name exists.
      *
-     * @param name Record name.
+     * @param[in]  name  Record name.
      *
-     * @return
+     * @return     Exists a record with given name?
      */
     bool exists(StringView name) const noexcept;
 
 
     /**
-     * @brief Returns repository record with given name.
+     * @brief      Returns repository record with given name.
      *
-     * @param name Record name.
+     * @param[in]  name  Record name.
      *
-     * @return Repository record.
+     * @return     Repository record.
+     * @throws     InvalidArgumentException  In case a record with given name doesn't
+     *                                       exists.
      */
-    ViewPtr<RepositoryRecord> get(StringView name) noexcept;
+    RepositoryRecord& get(StringView name);
 
 
     /**
-     * @brief Returns repository record with given name.
+     * @brief      Returns repository record with given name.
      *
-     * @param name Record name.
+     * @param[in]  name  Record name.
      *
-     * @return Repository record.
+     * @return     Repository record.
+     * @throws     InvalidArgumentException  In case a record with given name doesn't
+     *                                       exists.
      */
-    ViewPtr<const RepositoryRecord> get(StringView name) const noexcept;
-
-
-// Public Mutators
-public:
+    const RepositoryRecord& get(StringView name) const;
 
 
     /**
-     * @brief Create a new record..
+     * @brief      Create a new record..
      *
-     * @param name Record name.
+     * @param[in]  name  Record name.
      *
-     * @return Repository record.
-     *
-     * @throw In case a record with given name already exists.
+     * @return     Repository record.
+     * @throws     InvalidArgumentException  In case a record with given name already
+     *                                       exists.
      */
     RepositoryRecord& createRecord(String name);
 
 
     /**
-     * @brief Remove repository record.
+     * @brief      Remove repository record.
      *
-     * @param name Record name.
+     * @param[in]  name  Record name.
      */
     void removeRecord(StringView name) noexcept;
 

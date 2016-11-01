@@ -50,7 +50,7 @@ class TestInitializer final : public init::Initializer
 public:
     using init::Initializer::Initializer;
 
-    void init(simulator::Simulation& simulation) const
+    void init(simulator::Simulation& simulation) const override
     {
         // Nothing to do
     }
@@ -84,7 +84,7 @@ public:
         return makeUnique<TestProgram>(*this);
     }
 
-    void call(simulator::Simulation& simulation, object::Object& object, units::Time dt)
+    void call(simulator::Simulation& simulation, object::Object& object, units::Time dt) override
     {
         // Nothing to do
     }
@@ -101,14 +101,14 @@ class TestPluginApi : public Api
 
 public:
 
-    void onLoad(Repository& repository) override
+    void onLoad(RepositoryRecord& repository) override
     {
         if (m_count != 0)
             throw RuntimeException("onLoad called multiple times");
 
         ++m_count;
 
-        repository.registerApi(this)
+        repository
             .registerInitializer<TestInitializer>("initializer")
             .registerModule<TestModule>("module")
             .registerObject<TestObject>("object")
@@ -116,14 +116,12 @@ public:
         ;
     }
 
-    void onUnload(Repository& repository) override
+    void onUnload(RepositoryRecord& repository) override
     {
         --m_count;
 
         if (m_count != 0)
             throw RuntimeException("onUnload called multiple times");
-
-        repository.unregisterApi(this);
     }
 
 private:
@@ -135,6 +133,6 @@ private:
 
 /* ************************************************************************ */
 
-CECE_DEFINE_PLUGIN(test_plugin, TestPluginApi)
+CECE_PLUGIN_DEFINE(test_plugin, TestPluginApi)
 
 /* ************************************************************************ */

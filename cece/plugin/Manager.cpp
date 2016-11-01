@@ -42,10 +42,7 @@ namespace plugin {
 
 /* ************************************************************************ */
 
-Manager::Manager() noexcept
-{
-    // Nothing to do
-}
+Manager::Manager() noexcept = default;
 
 /* ************************************************************************ */
 
@@ -53,22 +50,14 @@ Manager::~Manager()
 {
     // Unload plugins
     for (auto& plugin : m_plugins)
-    {
-        // Unload plugin
-        plugin.getApi()->onUnload(m_repository);
-
-        // Explicit record remove
-        // It's easy to forget to remove record from repository and in most
-        // cases the record have same name as the plugin
-        m_repository.removeRecord(plugin.getName());
-    }
+        plugin.getApi()->onUnload(m_repository.get(plugin.getName()));
 }
 
 /* ************************************************************************ */
 
-DynamicArray<String> Manager::getNames() const noexcept
+DynamicArray<StringView> Manager::getNames() const noexcept
 {
-    DynamicArray<String> names;
+    DynamicArray<StringView> names;
     names.reserve(m_plugins.size());
 
     for (const auto& plugin : m_plugins)
@@ -81,6 +70,8 @@ DynamicArray<String> Manager::getNames() const noexcept
 
 bool Manager::isLoaded(StringView name) const noexcept
 {
+    CECE_ASSERT(!name.isEmpty());
+
     for (const auto& plugin : m_plugins)
     {
         if (plugin.getName() == name)
@@ -103,21 +94,6 @@ ViewPtr<Api> Manager::getApi(StringView name) const noexcept
     }
 
     return nullptr;
-}
-
-/* ************************************************************************ */
-
-StringView Manager::getName(ViewPtr<const Api> api) const noexcept
-{
-    CECE_ASSERT(api);
-
-    for (const auto& plugin : m_plugins)
-    {
-        if (plugin.getApi() == api)
-            return plugin.getName();
-    }
-
-    return {};
 }
 
 /* ************************************************************************ */
@@ -165,7 +141,10 @@ void Manager::appendPlugins(DynamicArray<Plugin> plugins)
     // Load and store plugins
     for (auto&& plugin : plugins)
     {
-        plugin.getApi()->onLoad(m_repository);
+        // Create repository record
+        plugin.getApi()->onLoad(m_repository.createRecord(plugin.getName()));
+
+        // Store plugin
         m_plugins.push_back(std::move(plugin));
     }
 }

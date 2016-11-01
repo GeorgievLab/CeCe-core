@@ -63,7 +63,7 @@ class Repository;
 /* ************************************************************************ */
 
 /**
- * @brief Plugins context for simulation.
+ * @brief      Plugins context for simulation.
  */
 class Context
 {
@@ -73,9 +73,9 @@ public:
 
 
     /**
-     * @brief Constructor.
+     * @brief      Constructor.
      *
-     * @param manager Plugins manager.
+     * @param      manager  Plugins manager.
      */
     explicit Context(const Manager& manager) noexcept
         : m_manager(manager)
@@ -89,9 +89,9 @@ public:
 
 
     /**
-     * @brief Returns plugin repository.
+     * @brief      Returns plugin repository.
      *
-     * @return
+     * @return     The repository.
      */
     const Repository& getRepository() const noexcept
     {
@@ -100,13 +100,27 @@ public:
 
 
     /**
-     * @brief Returns if plugin is already imported.
+     * @brief      Returns a set of imported plugin names.
      *
-     * @param name Plugin name.
-     *
-     * @return
+     * @return     A set of imported plugin names.
      */
-    bool isImported(StringView name) const noexcept;
+    const Set<StringView>& getImportedPlugins() const noexcept
+    {
+        return m_importedPlugins;
+    }
+
+
+    /**
+     * @brief      Returns if plugin is already imported.
+     *
+     * @param      name  Plugin name.
+     *
+     * @return     True if a plugin with given name is imported, False otherwise.
+     */
+    bool isImported(StringView name) const noexcept
+    {
+        return m_importedPlugins.find(name) != m_importedPlugins.end();
+    }
 
 
 // Public Operations
@@ -114,23 +128,33 @@ public:
 
 
     /**
-     * @brief Import plugin.
+     * @brief      Import plugin.
      *
-     * @param name Plugin name.
+     * @param      name  Plugin name.
      *
-     * @return Plugin API.
+     * @return     Imported plugin API.
      */
     ViewPtr<const Api> importPlugin(StringView name);
 
 
     /**
-     * @brief Remove plugin.
+     * @brief      Remove imported plugin.
      *
-     * @param name Plugin name.
+     * @param      name  Plugin name.
      *
-     * @return Plugin API.
+     * @return     Plugin API.
      */
     ViewPtr<const Api> removePlugin(StringView name);
+
+
+    /**
+     * @brief      Create a loader.
+     *
+     * @param      name  Loader register name.
+     *
+     * @return     A loader.
+     */
+    UniquePtr<loader::Loader> createLoader(StringView name) const;
 
 
     /**
@@ -176,18 +200,6 @@ public:
     UniquePtr<program::Program> createProgram(StringView typeName) const;
 
 
-// Private Operations
-private:
-
-
-    /**
-     * @brief Create a loader.
-     *
-     * @return A loader.
-     */
-    UniquePtr<loader::Loader> createLoader(StringView name) const;
-
-
 // Private Data Members
 private:
 
@@ -195,7 +207,7 @@ private:
     const Manager& m_manager;
 
     /// Imported plugins.
-    Set<String> m_importedPlugins;
+    Set<StringView> m_importedPlugins;
 
 };
 

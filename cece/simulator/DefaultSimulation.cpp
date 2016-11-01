@@ -99,8 +99,9 @@ struct DefaultSimulation::ContactListener : public b2ContactListener
 
 /* ************************************************************************ */
 
-DefaultSimulation::DefaultSimulation(const plugin::Repository& repository, FilePath path) noexcept
-    : m_pluginContext(repository)
+DefaultSimulation::DefaultSimulation(const plugin::Manager& manager, FilePath path) noexcept
+    : m_pluginManager(manager)
+    , m_pluginContext(m_pluginManager)
     , m_fileName(std::move(path))
     , m_world{makeUnique<b2World>(b2Vec2{0.0f, 0.0f})}
 {
@@ -253,7 +254,7 @@ ViewPtr<const plugin::Api> DefaultSimulation::loadPlugin(StringView name)
         return nullptr;
 
     // Init simulation
-    api->initSimulation(*this);
+    //api->initSimulation(*this);
 
     return api;
 }
@@ -268,7 +269,7 @@ void DefaultSimulation::unloadPlugin(StringView name)
         return;
 
     // Finalize simulation
-    api->finalizeSimulation(*this);
+    //api->finalizeSimulation(*this);
 }
 
 /* ************************************************************************ */
@@ -589,11 +590,12 @@ void DefaultSimulation::terminate()
     m_modules.terminate();
 
     // Call finalize simulations for all plugins
-    const auto& plugins = m_pluginContext.getImported();
+    const auto& plugins = m_pluginContext.getImportedPlugins();
     for (auto it = plugins.rbegin(); it != plugins.rend(); ++it)
     {
-        CECE_ASSERT(it->second);
-        it->second->finalizeSimulation(*this);
+        auto api = m_pluginManager.getApi(*it);
+        CECE_ASSERT(api);
+        //api->finalizeSimulation(*this);
     }
 }
 

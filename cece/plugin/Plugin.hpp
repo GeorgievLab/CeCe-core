@@ -51,10 +51,10 @@ public:
 
 
     /**
-     * @brief Constructor.
+     * @brief      Constructor.
      *
-     * @param name Plugin name.
-     * @param api  Plugin API.
+     * @param[in]  name  Plugin name.
+     * @param[in]  api   Plugin API.
      */
     explicit Plugin(String name, UniquePtr<Api> api) noexcept;
 
@@ -64,9 +64,9 @@ public:
 
 
     /**
-     * @brief Returns plugin name.
+     * @brief      Returns plugin name.
      *
-     * @return Plugin name.
+     * @return     Plugin name.
      */
     const String& getName() const noexcept
     {
@@ -75,9 +75,9 @@ public:
 
 
     /**
-     * @brief Returns plugin API.
+     * @brief      Returns plugin API.
      *
-     * @return Plugin API.
+     * @return     Pointer view to plugin API.
      */
     ViewPtr<Api> getApi() const noexcept
     {

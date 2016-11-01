@@ -27,13 +27,6 @@
 
 /* ************************************************************************ */
 
-// CeCe
-#include "cece/core/UniquePtr.hpp"
-#include "cece/core/String.hpp"
-#include "cece/core/DynamicArray.hpp"
-
-/* ************************************************************************ */
-
 namespace cece {
     namespace config    { class Configuration; }
     namespace simulator { class Simulation; }
@@ -46,13 +39,29 @@ namespace plugin {
 
 /* ************************************************************************ */
 
-class Repository;
+class RepositoryRecord;
 
 /* ************************************************************************ */
 
 /**
- * @brief Plugin API type. Custom plugins implements this class' functions
- * to provide additional functionality to the simulator.
+ * @brief      Plugin API abstract class.
+ *
+ * @details    Custom plugins implements this class' functions to provide
+ *             additional functionality to the simulator.
+ *
+ *             Each valid plugin must export a function which create an instance
+ *             of own Api class implementation. Api have several optional member
+ *             functions which are called in different times.
+ *
+ * - `onLoad` - When the plugin is loaded into a Manager. Main purpose of this
+ *   function is initialize plugin for global use and in most cases register
+ *   offered extensions into repository.
+ * - `onUnload` - Opposite of the `onLoad` function. It's called when the plugin
+ *   is being unloaded from the Manager.
+ * - `onImport` - When the plugin is being imported/used by the simulation.
+ * - `onRemove` - When the plugin is being de-imported by the simulation.
+ * - `storeConfig` - Support function used only when the memory representation
+ *   needs to be stored.
  */
 class Api
 {
@@ -62,7 +71,7 @@ public:
 
 
     /**
-     * @brief Destructor.
+     * @brief      Destructor.
      */
     virtual ~Api() = 0;
 
@@ -72,94 +81,60 @@ public:
 
 
     /**
-     * @brief Returns a list of required plugins.
+     * @brief      When the plugin is loaded by plugin manager.
      *
-     * @return
+     * @param      repository  Repository record for the plugin.
      */
-    virtual DynamicArray<String> requiredPlugins() const
-    {
-        return {};
-    }
-
-
-    /**
-     * @brief Returns a list of plugins that will conflict with.
-     *
-     * @return
-     */
-    virtual DynamicArray<String> conflictPlugins() const
-    {
-        return {};
-    }
-
-
-    /**
-     * @brief On plugin load.
-     *
-     * @param repository Plugins repository.
-     */
-    virtual void onLoad(Repository& repository)
+    virtual void onLoad(RepositoryRecord& repository)
     {
         // Nothing to do
     }
 
 
     /**
-     * @brief On plugin unload.
+     * @brief      When the plugin is unloaded from plugin manager.
      *
-     * @param repository Plugins repository.
+     * @param      repository  Repository record for the plugin.
      */
-    virtual void onUnload(Repository& repository)
+    virtual void onUnload(RepositoryRecord& repository)
     {
         // Nothing to do
     }
 
 
     /**
-     * @brief Init simulation.
+     * @brief      When the plugin is imported into simulation.
      *
-     * @param simulation Simulation.
+     * @param      simulation  The simulation which imports the plugin.
+     * @param[in]  config      Plugin import configuration.
      */
-    virtual void initSimulation(simulator::Simulation& simulation) const
+    virtual void onImport(simulator::Simulation& simulation, const config::Configuration& config)
     {
         // Nothing to do
     }
 
 
     /**
-     * @brief Finalize simulation.
+     * @brief      When the plugin is being removed from the simulation.
      *
-     * @param simulation Simulation.
+     * @param      simulation  The simulation.
      */
-    virtual void finalizeSimulation(simulator::Simulation& simulation) const
+    virtual void onRemove(simulator::Simulation& simulation)
     {
         // Nothing to do
     }
 
 
     /**
-     * @brief Load plugin configuration.
+     * @brief      Store plugin configuration.
      *
-     * @param simulation Current simulation.
-     * @param config     Plugin configuration.
-     */
-    virtual void loadConfig(simulator::Simulation& simulation, const config::Configuration& config) const
-    {
-        // Nothing to do
-    }
-
-
-    /**
-     * @brief Store plugin configuration.
-     *
-     * @param simulation Current simulation.
-     * @param config     Plugin configuration.
+     * @param[in]  simulation  Current simulation.
+     * @param      config      Output plugin configuration.
      */
     virtual void storeConfig(const simulator::Simulation& simulation, config::Configuration& config) const
     {
         // Nothing to do
     }
-
 
 };
 

@@ -68,7 +68,7 @@
 namespace cece {
     namespace config { class Configuration; }
     namespace plugin { class Api; }
-    namespace plugin { class Repository; }
+    namespace plugin { class Manager; }
 }
 
 class b2World;
@@ -93,10 +93,10 @@ public:
     /**
      * @brief Constructor.
      *
-     * @param repository Plugin repository.
-     * @param path       Path to simulation file.
+     * @param manager Plugin manager.
+     * @param path    Path to simulation file.
      */
-    explicit DefaultSimulation(const plugin::Repository& repository, FilePath path = "<memory>") noexcept;
+    explicit DefaultSimulation(const plugin::Manager& manager, FilePath path = "<memory>") noexcept;
 
 
     /**
@@ -789,6 +789,9 @@ protected:
 
 // Private Data Members
 private:
+
+    /// Plugin manager.
+    const plugin::Manager& m_pluginManager;
 
     /// Simulation plugin context.
     plugin::Context m_pluginContext;

@@ -33,16 +33,17 @@ namespace plugin {
 /* ************************************************************************ */
 
 /**
- * @brief Library configuration. Plugin with different configuration
- * cannot be used in simulation.
+ * @brief      Plugin build configuration.
+ *
+ * @details    Plugin with different configuration cannot be used in a
+ *             simulation.
  */
 struct Config
 {
-    int apiVersion;
-    int realSize;
-    int renderEnabled;
-    int threadSafe;
-    int dimension;
+    int apiVersion;    ///< Plugin API version.
+    int realSize;      ///< Plugin real type size in bytes.
+    int renderEnabled; ///< If plugin supports rendering.
+    int threadSafe;    ///< If plugin is built with thread support.
 };
 
 /* ************************************************************************ */

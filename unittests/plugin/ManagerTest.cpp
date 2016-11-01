@@ -102,22 +102,22 @@ TEST(Manager, load)
 
     // Load test plugin
     auto api = mgr.getApi("test-plugin");
-
     ASSERT_NE(nullptr, api);
-    EXPECT_EQ("test-plugin", mgr.getName(api));
 
     // Test plugin should add some testing classes to repository
-    ASSERT_TRUE(mgr.getRepository().exists(api));
+    ASSERT_TRUE(mgr.getRepository().exists("test-plugin"));
 
     // Get record
-    auto record = mgr.getRepository().get(api);
-    ASSERT_NE(nullptr, record);
+    const RepositoryRecord* record;
+    ASSERT_NO_THROW({
+        record = &mgr.getRepository().get("test-plugin");
+    });
 
-    EXPECT_TRUE(record->getInitFactoryManager().exists("initializer"));
-    EXPECT_FALSE(record->getInitFactoryManager().exists("init"));
-    EXPECT_TRUE(record->getModuleFactoryManager().exists("module"));
-    EXPECT_TRUE(record->getObjectFactoryManager().exists("object"));
-    EXPECT_TRUE(record->getProgramFactoryManager().exists("program"));
+    EXPECT_TRUE(record->isRegisteredInitializer("initializer"));
+    EXPECT_FALSE(record->isRegisteredInitializer("init"));
+    EXPECT_TRUE(record->isRegisteredModule("module"));
+    EXPECT_TRUE(record->isRegisteredObject("object"));
+    EXPECT_TRUE(record->isRegisteredProgram("program"));
 
     // Plugin cannot be loaded - missing functions
     EXPECT_EQ(nullptr, mgr.getApi("invalid-plugin"));

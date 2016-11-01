@@ -48,24 +48,25 @@ class Api;
 /* ************************************************************************ */
 
 /**
- * @brief Manager of simulator plugins.
+ * @brief      Manager of simulator plugins.
  *
- * The functionality is based on two things:
- *  - plugin loader
- *  - plugin directory
+ * @details    The functionality is based on two things: plugin loader and
+ *             plugin directory.
  *
- * Plugin directory are path of directory where loaded plugins are stored
- * and where loaders looks for available plugins. Loader looks into plugins
- * directory and according to own rules it loads plugins found in plugins
- * directory.
- * By default, manager needs to add a plugin loader (SharedLibraryLoader is
- * available) and specify plugins directory. No additional action is required,
- * calling one either `addLoader` or `addDirectory` invoke plugins loading.
- * For each loaded valid plugin the `Api::onLoad` is called and when the manager is
- * being destroyed the `Api::onUnload` is called.
+ *             Plugin directory are path of directory where loaded plugins are
+ *             stored and where loaders looks for available plugins. Loader
+ *             looks into plugins directory and according to own rules it loads
+ *             plugins found in plugins directory. By default, manager needs to
+ *             add a plugin loader (SharedLibraryLoader is available) and
+ *             specify plugins directory. No additional action is required,
+ *             calling one either `addLoader` or `addDirectory` invoke plugins
+ *             loading. For each loaded valid plugin the `Api::onLoad` is called
+ *             and when the manager is being destroyed the `Api::onUnload` is
+ *             called.
  *
- * @note The plugin loader is responsible for proper plugin loading and the plugin
- * code must be loaded in memory until `Loader` is destroyed.
+ * @note       The plugin loader is responsible for proper plugin loading and
+ *             the plugin code must be loaded in memory until `Loader` is
+ *             destroyed.
  */
 class Manager final
 {
@@ -75,13 +76,13 @@ public:
 
 
     /**
-     * @brief Constructor.
+     * @brief      Constructor.
      */
     Manager() noexcept;
 
 
     /**
-     * Destructor.
+     * @brief      Destructor.
      */
     ~Manager();
 
@@ -91,9 +92,9 @@ public:
 
 
     /**
-     * @brief Returns mutable plugin repository.
+     * @brief      Returns mutable plugin repository.
      *
-     * @return
+     * @return     Manager's repository.
      */
     Repository& getRepository() noexcept
     {
@@ -102,9 +103,9 @@ public:
 
 
     /**
-     * @brief Returns immutable plugin repository.
+     * @brief      Returns immutable plugin repository.
      *
-     * @return
+     * @return     Manager's repository.
      */
     const Repository& getRepository() const noexcept
     {
@@ -113,9 +114,9 @@ public:
 
 
     /**
-     * @brief Returns plugin loaders.
+     * @brief      Returns plugin loaders.
      *
-     * @return
+     * @return     A list of plugin loaders.
      */
     const DynamicArray<UniquePtr<Loader>>& getLoaders() const noexcept
     {
@@ -124,9 +125,9 @@ public:
 
 
     /**
-     * @brief Returns plugins search directories.
+     * @brief      Returns plugins search directories.
      *
-     * @return List of directories.
+     * @return     A list of directories.
      */
     const DynamicArray<FilePath>& getDirectories() const noexcept
     {
@@ -135,41 +136,31 @@ public:
 
 
     /**
-     * @brief Return a list of plugins.
+     * @brief      Return a list of plugins.
      *
-     * @return An array of plugin names.
+     * @return     An array of plugin names.
      */
-    DynamicArray<String> getNames() const noexcept;
+    DynamicArray<StringView> getNames() const noexcept;
 
 
     /**
-     * @brief Check if plugin is loaded.
+     * @brief      Check if plugin is loaded.
      *
-     * @param name Plugin name.
+     * @param[in]  name  Plugin name.
      *
-     * @return
+     * @return     True if plugin is loaded, False otherwise.
      */
     bool isLoaded(StringView name) const noexcept;
 
 
     /**
-     * @brief Returns plugin API of loaded plugin.
+     * @brief      Returns plugin API of loaded plugin.
      *
-     * @param name Plugin name.
+     * @param[in]  name  Plugin name.
      *
-     * @return Pointer to API or nullptr, if plugin is not loaded.
+     * @return     Pointer to API or nullptr, if plugin is not loaded.
      */
     ViewPtr<Api> getApi(StringView name) const noexcept;
-
-
-    /**
-     * @brief Find API name.
-     *
-     * @param name Plugin API.
-     *
-     * @return Plugin name.
-     */
-    StringView getName(ViewPtr<const Api> api) const noexcept;
 
 
 // Public Mutators
@@ -177,23 +168,24 @@ public:
 
 
     /**
-     * @brief Add a plugin loader.
+     * @brief      Add a plugin loader.
      *
-     * It also invoke loader's scan function for all currently stored paths.
+     *             It also invoke loader's scan function for all currently
+     *             stored paths.
      *
-     * @param loader Pointer to plugin loader.
+     * @param[in]  loader  Pointer to plugin loader.
      *
-     * @return *this.
+     * @return     *this.
      */
     Manager& addLoader(UniquePtr<Loader> loader);
 
 
     /**
-     * @brief Store additional directories.
+     * @brief      Store additional directories.
      *
-     * @param directories List of directories.
+     * @param[in]  directories  List of directories.
      *
-     * @return *this
+     * @return     *this.
      */
     Manager& addDirectories(DynamicArray<FilePath> directories)
     {
@@ -205,13 +197,13 @@ public:
 
 
     /**
-     * @brief Add directory where the plugins are stored.
+     * @brief      Add directory where the plugins are stored.
      *
-     * For all stored loaders, it invoke their scan function.
+     * @details    For all stored loaders, it invoke their scan function.
      *
-     * @param path Path with plugins.
+     * @param[in]  path  Path with plugins.
      *
-     * @return *this
+     * @return     *this
      */
     Manager& addDirectory(FilePath path);
 
@@ -221,18 +213,15 @@ private:
 
 
     /**
-     * @brief Add plugins into inner list.
+     * @brief      Add plugins into inner list.
      *
-     * @param plugins Plugins to add.
+     * @param[in]  plugins  Plugins to add.
      */
     void appendPlugins(DynamicArray<Plugin> plugins);
 
 
 // Private Data Members
 private:
-
-    /// Plugin repository.
-    Repository m_repository;
 
     /// Plugin loaders.
     DynamicArray<UniquePtr<Loader>> m_loaders;
@@ -242,6 +231,9 @@ private:
 
     /// List of loaded plugins.
     DynamicArray<Plugin> m_plugins;
+
+    /// Plugin repository.
+    Repository m_repository;
 
 };
 

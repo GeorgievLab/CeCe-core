@@ -52,80 +52,47 @@ public:
 
 
     /**
-     * @brief Returns a list of required plugins.
+     * @brief      When the plugin is loaded by plugin manager.
      *
-     * @return
+     * @param      repository  Repository record for the plugin.
      */
-    DynamicArray<String> requiredPlugins() const override
-    {
-        return {"plugin1", "plugin2"};
-    }
-
-
-    /**
-     * @brief Returns a list of plugins that will conflict with.
-     *
-     * @return
-     */
-    DynamicArray<String> conflictPlugins() const override
-    {
-        return {"plugin3", "plugin4"};
-    }
-
-
-    /**
-     * @brief On plugin load.
-     *
-     * @param repository Plugins repository.
-     */
-    void onLoad(Repository& repository) override
+    void onLoad(RepositoryRecord& repository) override
     {
         onLoadCalled = true;
     }
 
 
     /**
-     * @brief On plugin unload.
+     * @brief      When the plugin is unloaded from plugin manager.
      *
-     * @param repository Plugins repository.
+     * @param      repository  Repository record for the plugin.
      */
-    void onUnload(Repository& repository) override
+    void onUnload(RepositoryRecord& repository) override
     {
         onUnloadCalled = true;
     }
 
 
     /**
-     * @brief Init simulation.
+     * @brief      When the plugin is imported into simulation.
      *
-     * @param simulation Simulation.
+     * @param      simulation  The simulation which imports the plugin.
+     * @param[in]  config      Plugin import configuration.
      */
-    void initSimulation(simulator::Simulation& simulation) const override
+    void onImport(simulator::Simulation& simulation, const config::Configuration& config) override
     {
-        initSimulationCalled = true;
+        onImportCalled = true;
     }
 
 
     /**
-     * @brief Finalize simulation.
+     * @brief      When the plugin is being removed from the simulation.
      *
-     * @param simulation Simulation.
+     * @param      simulation  The simulation.
      */
-    void finalizeSimulation(simulator::Simulation& simulation) const override
+    void onRemove(simulator::Simulation& simulation) override
     {
-        finalizeSimulationCalled = true;
-    }
-
-
-    /**
-     * @brief Load plugin configuration.
-     *
-     * @param simulation Current simulation.
-     * @param config     Plugin configuration.
-     */
-    void loadConfig(simulator::Simulation& simulation, const config::Configuration& config) const override
-    {
-        loadConfigCalled = true;
+        onRemoveCalled = true;
     }
 
 
@@ -146,9 +113,8 @@ public:
 
     mutable bool onLoadCalled = false;
     mutable bool onUnloadCalled = false;
-    mutable bool initSimulationCalled = false;
-    mutable bool finalizeSimulationCalled = false;
-    mutable bool loadConfigCalled = false;
+    mutable bool onImportCalled = false;
+    mutable bool onRemoveCalled = false;
     mutable bool storeConfigCalled = false;
 };
 
@@ -164,32 +130,25 @@ TEST(Api, virtualFunctions)
     ASSERT_EQ(base, api);
 
     // No access to those objects, just for passing references to the functions.
-    Repository* repository = nullptr;
+    RepositoryRecord* record;
     config::Configuration* config = nullptr;
     simulator::Simulation* sim = nullptr;
 
-    EXPECT_EQ((DynamicArray<String>{"plugin1", "plugin2"}), base->requiredPlugins());
-    EXPECT_EQ((DynamicArray<String>{"plugin3", "plugin4"}), base->conflictPlugins());
-
     EXPECT_FALSE(api->onLoadCalled);
-    base->onLoad(*repository);
+    base->onLoad(*record);
     EXPECT_TRUE(api->onLoadCalled);
 
     EXPECT_FALSE(api->onUnloadCalled);
-    base->onUnload(*repository);
+    base->onUnload(*record);
     EXPECT_TRUE(api->onUnloadCalled);
 
-    EXPECT_FALSE(api->initSimulationCalled);
-    base->initSimulation(*sim);
-    EXPECT_TRUE(api->initSimulationCalled);
+    EXPECT_FALSE(api->onImportCalled);
+    base->onImport(*sim, *config);
+    EXPECT_TRUE(api->onImportCalled);
 
-    EXPECT_FALSE(api->finalizeSimulationCalled);
-    base->finalizeSimulation(*sim);
-    EXPECT_TRUE(api->finalizeSimulationCalled);
-
-    EXPECT_FALSE(api->loadConfigCalled);
-    base->loadConfig(*sim, *config);
-    EXPECT_TRUE(api->loadConfigCalled);
+    EXPECT_FALSE(api->onRemoveCalled);
+    base->onRemove(*sim);
+    EXPECT_TRUE(api->onRemoveCalled);
 
     EXPECT_FALSE(api->storeConfigCalled);
     base->storeConfig(*sim, *config);

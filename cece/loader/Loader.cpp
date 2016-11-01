@@ -42,21 +42,21 @@ namespace loader {
 /* ************************************************************************ */
 
 UniquePtr<simulator::Simulation> Loader::fromFile(
-    const plugin::Repository& repository, const FilePath& filename,
+    const plugin::Manager& manager, const FilePath& filename,
     ViewPtr<const Parameters> parameters) const
 {
     std::ifstream file(filename.toString(), std::ios::in);
-    return fromStream(repository, file, filename, parameters);
+    return fromStream(manager, file, filename, parameters);
 }
 
 /* ************************************************************************ */
 
 UniquePtr<simulator::Simulation> Loader::fromSource(
-    const plugin::Repository& repository, const String& source,
+    const plugin::Manager& manager, const String& source,
     const FilePath& filename, ViewPtr<const Parameters> parameters) const
 {
     std::istringstream is(source, std::ios::in);
-    return fromStream(repository, is, filename, parameters);
+    return fromStream(manager, is, filename, parameters);
 }
 
 /* ************************************************************************ */

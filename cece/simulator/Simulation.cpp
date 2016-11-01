@@ -115,8 +115,8 @@ ViewPtr<const plugin::Api> Simulation::loadPlugin(const config::Configuration& c
     // Load plugin with given name name
     auto plugin = loadPlugin(name);
 
-    if (plugin)
-        plugin->loadConfig(*this, config);
+    //if (plugin)
+    //    plugin->loadConfig(*this, config);
 
     return plugin;
 }

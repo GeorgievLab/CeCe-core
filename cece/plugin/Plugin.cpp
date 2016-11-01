@@ -31,7 +31,6 @@
 
 // CeCe
 #include "cece/core/Assert.hpp"
-#include "cece/plugin/Api.hpp"
 
 /* ************************************************************************ */
 

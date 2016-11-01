@@ -44,20 +44,26 @@ bool Repository::exists(StringView name) const noexcept
 
 /* ************************************************************************ */
 
-ViewPtr<RepositoryRecord> Repository::get(StringView name) noexcept
+RepositoryRecord& Repository::get(StringView name)
 {
     auto it = m_records.find(String(name));
 
-    return it != m_records.end() ? &(it->second) : nullptr;
+    if (it == m_records.end())
+        throw InvalidArgumentException("Record with name `" + String(name) + "` doesn't exists");
+
+    return it->second;
 }
 
 /* ************************************************************************ */
 
-ViewPtr<const RepositoryRecord> Repository::get(StringView name) const noexcept
+const RepositoryRecord& Repository::get(StringView name) const
 {
     auto it = m_records.find(String(name));
 
-    return it != m_records.end() ? &(it->second) : nullptr;
+    if (it == m_records.end())
+        throw InvalidArgumentException("Record with name `" + String(name) + "` doesn't exists");
+
+    return it->second;
 }
 
 /* ************************************************************************ */

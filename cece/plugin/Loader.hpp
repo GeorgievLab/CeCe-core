@@ -41,12 +41,12 @@ namespace plugin {
 /* ************************************************************************ */
 
 /**
- * @brief Plugin loader interface. Allows to load plugins other than
- * shared library.
+ * @brief      Plugin loader interface. Allows to load plugins other than shared
+ *             library.
  *
- * Loader have to implement `loadAll` member function which scans given
- * directory for plugins that match loader requirements. There is no checks if
- * other loader loaded the same plugin.
+ * @details    Loader have to implement `loadAll` member function which scans
+ *             given directory for plugins that match loader requirements. There
+ *             is no checks if other loader loaded the same plugin.
  */
 class Loader
 {
@@ -56,7 +56,7 @@ public:
 
 
     /**
-     * @brief Destructor.
+     * @brief      Destructor.
      */
     virtual ~Loader() = 0;
 
@@ -66,12 +66,12 @@ public:
 
 
     /**
-     * @brief Load all plugins from given directory.
+     * @brief      Load all plugins from given directory.
      *
-     * @param directory Directory to where are plugins located. The directory
-     *                  may not exists.
+     * @param      directory  Directory to where are plugins located. The
+     *                        directory may not exists.
      *
-     * @return A list of loaded plugins.
+     * @return     A list of loaded plugins.
      */
     virtual DynamicArray<Plugin> loadAll(const FilePath& directory) = 0;
 

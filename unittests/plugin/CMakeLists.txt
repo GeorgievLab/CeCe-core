@@ -29,6 +29,7 @@ cece_add_test(plugin
         PluginTest.cpp
         RepositoryRecordTest.cpp
         ManagerTest.cpp
+        ContextTest.cpp
 )
 
 # ######################################################################### #

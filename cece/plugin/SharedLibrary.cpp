@@ -73,11 +73,11 @@ namespace {
 /* ************************************************************************ */
 
 /**
- * @brief Open shared library.
+ * @brief      Open shared library.
  *
- * @param path Path to library.
+ * @param      path  Path to library.
  *
- * @return Library handle.
+ * @return     Library handle.
  */
 SharedLibrary::HandleType openLibrary(const FilePath& path) noexcept
 {
@@ -101,9 +101,9 @@ SharedLibrary::HandleType openLibrary(const FilePath& path) noexcept
 /* ************************************************************************ */
 
 /**
- * @brief Close shared library.
+ * @brief      Close shared library.
  *
- * @param handle Library handle.
+ * @param      handle  Library handle.
  */
 void closeLibrary(SharedLibrary::HandleType handle) noexcept
 {
@@ -120,11 +120,11 @@ void closeLibrary(SharedLibrary::HandleType handle) noexcept
 /* ************************************************************************ */
 
 /**
- * Check if library is loaded.
+ * @brief      Check if library is loaded.
  *
- * @param  handle Library handle.
+ * @param      handle  Library handle.
  *
- * @return Is loaded?
+ * @return     Is loaded?
  */
 bool isLoaded(SharedLibrary::HandleType handle) noexcept
 {
@@ -134,9 +134,11 @@ bool isLoaded(SharedLibrary::HandleType handle) noexcept
 /* ************************************************************************ */
 
 /**
- * @brief Returns error string.
+ * @brief      Returns error string.
  *
- * @return
+ * @param[in]  handle  Handle to shared library.
+ *
+ * @return     The error message.
  */
 String getError(SharedLibrary::HandleType handle) noexcept
 {

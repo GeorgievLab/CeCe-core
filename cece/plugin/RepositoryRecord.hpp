@@ -47,34 +47,35 @@ namespace plugin {
 /* ************************************************************************ */
 
 /**
- * @brief Record for repository. Each record has own name and list of
- * factory managers for each extension type.
- * In most cases the plugin populate created record by offered objects.
+ * @brief       Record for repository.
  *
- * @code{.cpp}
-   record
-       .registerModule<MyModule>("my-module")
-       .registerProgram<MyProgram>("my-program")
-   ;
+ * @details     Each record has own name and list of factory
+ *              managers for each extension type. In most cases the plugin
+ *              populate created record by offered objects.
+ *
+ *              @code{.cpp}
+record
+   .registerModule<MyModule>("my-module")
+   .registerProgram<MyProgram>("my-program")
+;
 
-   record.createModule("my-module");
-   record.createProgram("my-program");
-   @endcode
+auto module = record.createModule("my-module");
+auto program = record.createProgram("my-program");
+@endcode
  */
 class RepositoryRecord final
 {
-
 
 // Public Accessors & Mutators
 public:
 
 
     /**
-     * Returns if loader with given name is registered.
+     * @brief      Checks if a loader is registered under given name.
      *
-     * @param  name Loader name.
+     * @param[in]  name  Registration name.
      *
-     * @return
+     * @return     Is a loader with given name registered?
      */
     bool isRegisteredLoader(StringView name) const noexcept
     {
@@ -83,11 +84,11 @@ public:
 
 
     /**
-     * Returns if initializer with given name is registered.
+     * @brief      Checks if an initializer is registered under given name.
      *
-     * @param  name Initializer name.
+     * @param[in]  name  Registration name.
      *
-     * @return
+     * @return     Is an initializer with given name registered?
      */
     bool isRegisteredInitializer(StringView name) const noexcept
     {
@@ -96,11 +97,11 @@ public:
 
 
     /**
-     * Returns if module with given name is registered.
+     * @brief      Checks if a module is registered under given name.
      *
-     * @param  name Module name.
+     * @param[in]  name  Registration name.
      *
-     * @return
+     * @return     Is an initializer with given name registered?
      */
     bool isRegisteredModule(StringView name) const noexcept
     {
@@ -109,11 +110,11 @@ public:
 
 
     /**
-     * Returns if object with given name is registered.
+     * @brief      Checks if an object is registered under given name.
      *
-     * @param  name Object name.
+     * @param[in]  name  Registration name.
      *
-     * @return
+     * @return     Is an object with given name registered?
      */
     bool isRegisteredObject(StringView name) const noexcept
     {
@@ -122,11 +123,11 @@ public:
 
 
     /**
-     * Returns if program with given name is registered.
+     * @brief      Checks if a program is registered under given name.
      *
-     * @param  name Program name.
+     * @param[in]  name  Registration name.
      *
-     * @return
+     * @return     Is a program with given name registered?
      */
     bool isRegisteredProgram(StringView name) const noexcept
     {
@@ -139,16 +140,17 @@ public:
 
 
     /**
-     * @brief Register new loader type and create factory for it.
+     * @brief      Register a new loader type.
      *
-     * @tparam LoaderType Type of loader that is created by factory.
+     * @param[in]  name        Loader registration name.
      *
-     * @param name Factory name.
+     * @tparam     LoaderType  Type of a loader registered under given name.
      *
-     * @return *this.
+     * @return     *this.
+     * @throws     Exception  If another loader is already registered under given name.
      */
     template<typename LoaderType>
-    RepositoryRecord& registerLoader(String name) noexcept
+    RepositoryRecord& registerLoader(String name)
     {
         m_loaderFactoryManager.createFor<LoaderType>(std::move(name));
         return *this;
@@ -156,16 +158,19 @@ public:
 
 
     /**
-     * @brief Register new initializer type and create factory for it.
+     * @brief      Register a new initializer type.
      *
-     * @tparam InitializerType Type of initializer that is created by factory.
+     * @param[in]  name             Initializer registration name.
      *
-     * @param name Initializer name.
+     * @tparam     InitializerType  Type of an initializer registered under
+     *                              given name.
      *
-     * @return *this.
+     * @return     *this.
+     * @throws     Exception  If another initializer is already registered under given
+     *                        name.
      */
     template<typename InitializerType>
-    RepositoryRecord& registerInitializer(String name) noexcept
+    RepositoryRecord& registerInitializer(String name)
     {
         m_initFactoryManager.createFor<InitializerType>(std::move(name));
         return *this;
@@ -173,16 +178,17 @@ public:
 
 
     /**
-     * @brief Register new module type and create factory for it.
+     * @brief      Register a new module type.
      *
-     * @tparam ModuleType Type of module that is created by factory.
+     * @param[in]  name        Module registration name.
      *
-     * @param name Factory name.
+     * @tparam     ModuleType  Type of a module registered under given name.
      *
-     * @return *this.
+     * @return     *this.
+     * @throws     Exception  If another module is already registered under given name.
      */
     template<typename ModuleType>
-    RepositoryRecord& registerModule(String name) noexcept
+    RepositoryRecord& registerModule(String name)
     {
         m_moduleFactoryManager.createFor<ModuleType>(std::move(name));
         return *this;
@@ -190,16 +196,17 @@ public:
 
 
     /**
-     * @brief Register new object type and create factory for it.
+     * @brief      Register a new object type.
      *
-     * @tparam ObjectType Type of object that is created by factory.
+     * @param[in]  name        Object registration name.
      *
-     * @param name Factory name.
+     * @tparam     ObjectType  Type of an object registered under given name.
      *
-     * @return *this.
+     * @return     *this.
+     * @throws     Exception  If another object is already registered under given name.
      */
     template<typename ObjectType>
-    RepositoryRecord& registerObject(String name) noexcept
+    RepositoryRecord& registerObject(String name)
     {
         m_objectFactoryManager.createFor<ObjectType>(std::move(name));
         return *this;
@@ -207,16 +214,18 @@ public:
 
 
     /**
-     * @brief Register new program type and create factory for it.
+     * @brief      Register a new program type.
      *
-     * @tparam ObjectType Type of program that is created by factory.
+     * @param[in]  name         Program registration name.
      *
-     * @param name Factory name.
+     * @tparam     ProgramType  Type of a program registered under given name.
      *
-     * @return *this.
+     * @return     *this.
+     * @throws     Exception  If another program is already registered under given
+     *                        name.
      */
     template<typename ProgramType>
-    RepositoryRecord& registerProgram(String name) noexcept
+    RepositoryRecord& registerProgram(String name)
     {
         m_programFactoryManager.createFor<ProgramType>(std::move(name));
         return *this;
@@ -224,9 +233,9 @@ public:
 
 
     /**
-     * @brief Unregister loader type.
+     * @brief      Unregister loader type.
      *
-     * @param name Loader type name.
+     * @param[in]  name  Loader registration name.
      */
     void unregisterLoader(StringView name) noexcept
     {
@@ -235,9 +244,9 @@ public:
 
 
     /**
-     * @brief Unregister initializer type.
+     * @brief      Unregister initializer type.
      *
-     * @param name Initializer type name.
+     * @param[in]  name  Initializer registration name.
      */
     void unregisterInitializer(StringView name) noexcept
     {
@@ -246,9 +255,9 @@ public:
 
 
     /**
-     * @brief Unregister module type.
+     * @brief      Unregister module type.
      *
-     * @param name Module type name.
+     * @param[in]  name  Module registration name.
      */
     void unregisterModule(StringView name) noexcept
     {
@@ -257,9 +266,9 @@ public:
 
 
     /**
-     * @brief Unregister object type.
+     * @brief      Unregister object type.
      *
-     * @param name Object type name.
+     * @param[in]  name  Object registration name.
      */
     void unregisterObject(StringView name) noexcept
     {
@@ -268,9 +277,9 @@ public:
 
 
     /**
-     * @brief Unregister program type.
+     * @brief      Unregister program type.
      *
-     * @param name Program type name.
+     * @param[in]  name  Program registration name.
      */
     void unregisterProgram(StringView name) noexcept
     {
@@ -283,52 +292,74 @@ public:
 
 
     /**
-     * @brief Create a loader.
+     * @brief      Create a loader.
      *
-     * @return A loader.
+     * @details    Return value must be valid pointer (no `nullptr`). If a
+     *             loader cannot be created an exception should be thrown.
+     *
+     * @param[in]  name  Loader registration name.
+     *
+     * @return     A pointer to created loader.
+     * @throws     Exception  If loader cannot be created.
      */
     UniquePtr<loader::Loader> createLoader(StringView name) const;
 
 
     /**
-     * @brief Create an initializer of given type name.
+     * @brief      Create an initializer.
      *
-     * @param name Type of required initializer.
+     * @details    Return value must be valid pointer (no `nullptr`). If an
+     *             initializer cannot be created an exception should be thrown.
      *
-     * @return Pointer to created initializer.
+     * @param[in]  name  Initializer registration name.
+     *
+     * @return     A pointer to created initializer.
+     * @throws     Exception  If initializer cannot be created.
      */
     UniquePtr<init::Initializer> createInitializer(StringView name) const;
 
 
     /**
-     * @brief Create a module of given type name.
+     * @brief      Create a module.
      *
-     * @param name       Type of required module.
-     * @param simulation Simulation object.
+     * @details    Return value must be valid pointer (no `nullptr`). If a
+     *             module cannot be created an exception should be thrown.
      *
-     * @return Pointer to created module.
+     * @param[in]  name        Module registration name.
+     * @param      simulation  The simulation
+     *
+     * @return     A pointer to created module.
+     * @throws     Exception  If module cannot be created.
      */
     UniquePtr<module::Module> createModule(StringView name, simulator::Simulation& simulation) const;
 
 
     /**
-     * @brief Create an object of given type name.
+     * @brief      Create an object.
      *
-     * @param name       Type of required object.
-     * @param simulation Simulation object.
-     * @param type       Type of created object.
+     * @details    Return value must be valid pointer (no `nullptr`). If a
+     *             module cannot be created an exception should be thrown.
      *
-     * @return Pointer to created object.
+     * @param[in]  name        Module registration name.
+     * @param      simulation  The simulation
+     * @param[in]  type        The type
+     *
+     * @return     A pointer to created module.
+     * @throws     Exception  If module cannot be created.
      */
     UniquePtr<object::Object> createObject(StringView name, simulator::Simulation& simulation, object::Object::Type type) const;
 
 
     /**
-     * @brief Create a program of given type name.
+     * @brief      Create a program.
      *
-     * @param name Type of required program.
+     * @details    Return value must be valid pointer (no `nullptr`). If a
+     *             program cannot be created an exception should be thrown.
      *
-     * @return Pointer to created program.
+     * @param[in]  name  Program registration name.
+     *
+     * @return     A pointer to created program.
+     * @throws     Exception  If program cannot be created.
      */
     UniquePtr<program::Program> createProgram(StringView name) const;
 

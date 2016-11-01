@@ -45,9 +45,9 @@ namespace plugin {
 /* ************************************************************************ */
 
 /**
- * @brief Shared library RAII wrapper.
+ * @brief      Shared library RAII wrapper.
  *
- * It hides OS-specific shared library handling.
+ * @details    It hides OS-specific shared library handling.
  */
 class SharedLibrary final
 {
@@ -81,35 +81,39 @@ public:
 
 
     /**
-     * @brief Default constructor.
+     * @brief      Default constructor.
      */
     SharedLibrary() = default;
 
 
     /**
-     * @brief Constructor.
+     * @brief      Constructor.
      *
-     * @param path Path to shared library.
+     * @param      path  Path to shared library.
      */
     explicit SharedLibrary(FilePath path);
 
 
     /**
-     * @brief Destructor.
+     * @brief      Destructor.
      */
     ~SharedLibrary();
 
 
     /**
-     * @brief Copy constructor.
+     * @brief      Copy constructor.
+     *
+     * @param[in]  src Source object.
      */
-    SharedLibrary(const SharedLibrary&) = delete;
+    SharedLibrary(const SharedLibrary& src) = delete;
 
 
     /**
-     * @brief Move constructor.
+     * @brief      Move constructor.
+     *
+     * @param[in]  src Source object.
      */
-    SharedLibrary(SharedLibrary&&) noexcept;
+    SharedLibrary(SharedLibrary&& src) noexcept;
 
 
 // Public Operators
@@ -117,15 +121,23 @@ public:
 
 
     /**
-     * @brief Copy assignment operator.
+     * @brief      Copy assignment operator.
+     *
+     * @param[in]  src   Source object.
+     *
+     * @return     *this.
      */
-    SharedLibrary& operator=(const SharedLibrary&) = delete;
+    SharedLibrary& operator=(const SharedLibrary& src) = delete;
 
 
     /**
-     * @brief Move assignment operator.
+     * @brief      Move assignment operator.
+     *
+     * @param[in]  src   Source object.
+     *
+     * @return     *this.
      */
-    SharedLibrary& operator=(SharedLibrary&&) noexcept;
+    SharedLibrary& operator=(SharedLibrary&& src) noexcept;
 
 
 // Public Accessors & Mutators
@@ -133,9 +145,9 @@ public:
 
 
     /**
-     * @brief Returns library path.
+     * @brief      Returns library path.
      *
-     * @return Path to shared library.
+     * @return     Path to shared library.
      */
     const FilePath& getPath() const noexcept
     {
@@ -144,28 +156,28 @@ public:
 
 
     /**
-     * @brief Returns address of required symbol.
+     * @brief      Returns address of required symbol.
      *
-     * @param name Symbol name.
+     * @param[in]  name  Symbol name.
      *
-     * @return Pointer to symbol or nullptr.
+     * @return     Pointer to symbol or nullptr.
      */
     void* getAddr(StringView name) const noexcept;
 
 
     /**
-     * @brief Returns address of required symbol.
+     * @brief      Returns address of required symbol.
      *
-     * @tparam T Type of the symbol.
+     * @param[in]  name       Symbol name.
      *
-     * @param name Symbol name.
+     * @tparam     Signature  Type of the symbol.
      *
-     * @return Pointer to symbol or nullptr.
+     * @return     Pointer to symbol or nullptr.
      */
-    template<typename T>
-    T getAddr(StringView name) const noexcept
+    template<typename Signature>
+    Signature getAddr(StringView name) const noexcept
     {
-        return reinterpret_cast<T>(reinterpret_cast<std::intptr_t>(getAddr(name)));
+        return reinterpret_cast<Signature>(reinterpret_cast<std::intptr_t>(getAddr(name)));
     }
 
 

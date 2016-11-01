@@ -57,11 +57,9 @@ using GetConfigFn = Config* (*)();
 /* ************************************************************************ */
 
 /**
- * @brief Check configuration file.
+ * @brief      Check configuration file.
  *
- * @param config
- *
- * @throw
+ * @param[in]  lib   The shared library.
  */
 void checkConfig(const SharedLibrary& lib)
 {
@@ -81,9 +79,6 @@ void checkConfig(const SharedLibrary& lib)
 
     if (config->apiVersion != config::PLUGIN_API_VERSION)
         throw RuntimeException("Plugin `" + path + "` is built against different API version than CeCe");
-
-    if (config->dimension != config::DIMENSION)
-        throw RuntimeException("Plugin `" + path + "` returns nullptr config");
 
     if (config->realSize != sizeof(config::RealType))
         throw RuntimeException("Plugin `" + path + "` is built with different real type than CeCe");
@@ -108,13 +103,11 @@ void checkConfig(const SharedLibrary& lib)
 /* ************************************************************************ */
 
 /**
- * @brief Create API from shared library.
+ * @brief      Create API from shared library.
  *
- * @param lib Shared library.
+ * @param      lib   Shared library.
  *
- * @return Plugin API.
- *
- * @throw
+ * @return     Plugin API.
  */
 UniquePtr<Api> createApi(const SharedLibrary& lib)
 {

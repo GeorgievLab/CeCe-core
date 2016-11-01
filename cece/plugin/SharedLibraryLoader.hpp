@@ -41,13 +41,14 @@ namespace plugin {
 /* ************************************************************************ */
 
 /**
- * @brief Shared library plugin loader.
+ * @brief      Shared library plugin loader.
  *
- * Open shared libraries are open until object destruction. The reason for
- * this is the plugin uses code from shared library and it must be loaded
- * for whole time. Unloading removes those code from runtime and application
- * will crash. After destruction of this object no plugin code should
- * be called. Standard usage with `Manager` should guarantee that.
+ * @details    Open shared libraries are open until object destruction. The
+ *             reason for this is the plugin uses code from shared library and
+ *             it must be loaded for whole time. Unloading removes those code
+ *             from runtime and application will crash. After destruction of
+ *             this object no plugin code should be called. Standard usage with
+ *             `Manager` should guarantee that.
  */
 class SharedLibraryLoader final : public Loader
 {
@@ -57,11 +58,11 @@ public:
 
 
     /**
-     * @brief Scan given directory to load plugins.
+     * @brief      Scan given directory to load plugins.
      *
-     * @param directory Directory to scan.
+     * @param[in]  directory  Directory to scan.
      *
-     * @return A list of loaded plugins.
+     * @return     A list of loaded plugins.
      */
     DynamicArray<Plugin> loadAll(const FilePath& directory) override;
 

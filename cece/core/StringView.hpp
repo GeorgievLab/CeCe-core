@@ -70,16 +70,16 @@ public:
 
 
     /**
-     * @brief Default constructor.
+     * @brief      Default constructor.
      */
     StringView() = default;
 
 
     /**
-     * @brief Constructor.
+     * @brief      Constructor.
      *
-     * @param ptr Sequence start pointer.
-     * @param len Sequence length.
+     * @param      ptr   Sequence start pointer.
+     * @param      len   Sequence length.
      */
     StringView(const CharType* ptr, LengthType len) noexcept
         : m_ptr(ptr)
@@ -90,9 +90,9 @@ public:
 
 
     /**
-     * @brief Constructor.
+     * @brief      Constructor.
      *
-     * @param ptr Sequence start pointer.
+     * @param      ptr   Sequence start pointer.
      */
     StringView(const CharType* ptr) noexcept
         : m_ptr(ptr)
@@ -103,9 +103,9 @@ public:
 
 
     /**
-     * @brief Constructor.
+     * @brief      Constructor.
      *
-     * @param str String.
+     * @param      str   String.
      */
     StringView(const String& str) noexcept
         : m_ptr(str.c_str())
@@ -116,9 +116,9 @@ public:
 
 
     /**
-     * @brief Constructor.
+     * @brief      Constructor.
      *
-     * @param str String.
+     * @param      str   String.
      */
     StringView(const DynamicArray<CharType>& str) noexcept
         : m_ptr(str.data())
@@ -129,9 +129,11 @@ public:
 
 
     /**
-     * @brief Constructor.
+     * @brief      Constructor.
      *
-     * @param str String.
+     * @param      str   String.
+     *
+     * @tparam     N     Array size.
      */
     template<std::size_t N>
     StringView(const StaticArray<CharType, N>& str) noexcept
@@ -147,20 +149,20 @@ public:
 
 
     /**
-     * @brief Get character at given position.
+     * @brief      Get character at given position.
      *
-     * @param pos Character position.
+     * @param      pos   Character position.
      *
-     * @return
+     * @return     Character at given position.
      */
-    CharType operator[](PositionType pos) const noexcept
+    constexpr CharType operator[](PositionType pos) const noexcept
     {
         return m_ptr[pos];
     }
 
 
     /**
-     * @brief Cast to String.
+     * @brief      Cast to String.
      */
     explicit operator String() const noexcept
     {
@@ -173,33 +175,33 @@ public:
 
 
     /**
-     * @brief Returns if view is empty.
+     * @brief      Returns if view is empty.
      *
-     * @return
+     * @return     True if view is empty, False otherwise.
      */
-    bool isEmpty() const noexcept
+    constexpr bool isEmpty() const noexcept
     {
         return m_length == 0;
     }
 
 
     /**
-     * @brief Returns sequence data.
+     * @brief      Returns sequence data.
      *
-     * @return
+     * @return     A pointer to the sequence data.
      */
-    const CharType* getData() const noexcept
+    constexpr const CharType* getData() const noexcept
     {
         return m_ptr;
     }
 
 
     /**
-     * @brief Returns sequence length.
+     * @brief      Returns view length.
      *
-     * @return
+     * @return     The length of the view.
      */
-    LengthType getLength() const noexcept
+    constexpr LengthType getLength() const noexcept
     {
         return m_length;
     }
@@ -252,6 +254,186 @@ inline bool operator==(const StringView& lhs, const StringView& rhs) noexcept
 inline bool operator!=(const StringView& lhs, const StringView& rhs)
 {
     return !operator==(lhs, rhs);
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Compare operator.
+ *
+ * @param      lhs   Left operand.
+ * @param      rhs   Right operand.
+ *
+ * @return     Result of the relation.
+ */
+inline bool operator<(const StringView& lhs, const StringView& rhs) noexcept
+{
+    return std::strncmp(lhs.getData(), rhs.getData(), std::min(lhs.getLength(), rhs.getLength())) < 0;
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Compare operator.
+ *
+ * @param      lhs   Left operand.
+ * @param      rhs   Right operand.
+ *
+ * @return     Result of the relation.
+ */
+inline bool operator<(const StringView& lhs, const String& rhs) noexcept
+{
+    return operator<(lhs, StringView(rhs));
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Compare operator.
+ *
+ * @param      lhs   Left operand.
+ * @param      rhs   Right operand.
+ *
+ * @return     Result of the relation.
+ */
+inline bool operator<(const String& lhs, const StringView& rhs) noexcept
+{
+    return operator<(StringView(lhs), rhs);
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Compare operator.
+ *
+ * @param      lhs   Left operand.
+ * @param      rhs   Right operand.
+ *
+ * @return     Result of the relation.
+ */
+inline bool operator>(const StringView& lhs, const StringView& rhs) noexcept
+{
+    return operator<(rhs, lhs);
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Compare operator.
+ *
+ * @param      lhs   Left operand.
+ * @param      rhs   Right operand.
+ *
+ * @return     Result of the relation.
+ */
+inline bool operator>(const StringView& lhs, const String& rhs) noexcept
+{
+    return operator>(lhs, StringView(rhs));
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Compare operator.
+ *
+ * @param      lhs   Left operand.
+ * @param      rhs   Right operand.
+ *
+ * @return     Result of the relation.
+ */
+inline bool operator>(const String& lhs, const StringView& rhs) noexcept
+{
+    return operator>(StringView(lhs), rhs);
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Compare operator.
+ *
+ * @param      lhs   Left operand.
+ * @param      rhs   Right operand.
+ *
+ * @return     Result of the relation.
+ */
+inline bool operator<=(const StringView& lhs, const StringView& rhs) noexcept
+{
+    return !operator>(lhs, rhs);
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Compare operator.
+ *
+ * @param      lhs   Left operand.
+ * @param      rhs   Right operand.
+ *
+ * @return     Result of the relation.
+ */
+inline bool operator<=(const StringView& lhs, const String& rhs) noexcept
+{
+    return operator<=(lhs, StringView(rhs));
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Compare operator.
+ *
+ * @param      lhs   Left operand.
+ * @param      rhs   Right operand.
+ *
+ * @return     Result of the relation.
+ */
+inline bool operator<=(const String& lhs, const StringView& rhs) noexcept
+{
+    return operator<=(StringView(lhs), rhs);
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Compare operator.
+ *
+ * @param      lhs   Left operand.
+ * @param      rhs   Right operand.
+ *
+ * @return     Result of the relation.
+ */
+inline bool operator>=(const StringView& lhs, const StringView& rhs) noexcept
+{
+    return !operator<(lhs, rhs);
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Compare operator.
+ *
+ * @param      lhs   Left operand.
+ * @param      rhs   Right operand.
+ *
+ * @return     Result of the relation.
+ */
+inline bool operator>=(const StringView& lhs, const String& rhs) noexcept
+{
+    return operator>=(lhs, StringView(rhs));
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Compare operator.
+ *
+ * @param      lhs   Left operand.
+ * @param      rhs   Right operand.
+ *
+ * @return     Result of the relation.
+ */
+inline bool operator>=(const String& lhs, const StringView& rhs) noexcept
+{
+    return operator>=(StringView(lhs), rhs);
 }
 
 /* ************************************************************************ */

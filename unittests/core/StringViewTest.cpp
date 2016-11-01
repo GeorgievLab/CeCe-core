@@ -67,6 +67,32 @@ TEST(StringView, compare)
         auto view = StringView(str);
         EXPECT_EQ("Hello World!", view);
     }
+
+    {
+        auto v1 = StringView("aa");
+        auto v2 = StringView("aa");
+        EXPECT_EQ(v1, v2);
+        EXPECT_LE(v1, v2);
+        EXPECT_GE(v1, v2);
+    }
+
+    {
+        auto v1 = StringView("a");
+        auto v2 = StringView("b");
+        EXPECT_LT(v1, v2);
+        EXPECT_LE(v1, v2);
+        EXPECT_GE(v2, v1);
+        EXPECT_GT(v2, v1);
+    }
+
+    {
+        auto v1 = StringView("aa");
+        auto v2 = StringView("b");
+        EXPECT_LT(v1, v2);
+        EXPECT_LE(v1, v2);
+        EXPECT_GE(v2, v1);
+        EXPECT_GT(v2, v1);
+    }
 }
 
 /* ************************************************************************ */

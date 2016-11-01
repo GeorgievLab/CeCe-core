@@ -106,7 +106,7 @@ String join(const DynamicArray<StringView>& array) noexcept
 
 /* ************************************************************************ */
 
-ViewPtr<const Api> Context::importPlugin(StringView name)
+ViewPtr<Api> Context::importPlugin(StringView name)
 {
     // Do not add duplicates
     auto it = m_importedPlugins.find(name);
@@ -129,7 +129,7 @@ ViewPtr<const Api> Context::importPlugin(StringView name)
 
 /* ************************************************************************ */
 
-ViewPtr<const Api> Context::removePlugin(StringView name)
+ViewPtr<Api> Context::removePlugin(StringView name)
 {
     // Find plugin
     auto it = m_importedPlugins.find(name);

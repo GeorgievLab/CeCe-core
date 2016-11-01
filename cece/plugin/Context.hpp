@@ -133,8 +133,9 @@ public:
      * @param      name  Plugin name.
      *
      * @return     Imported plugin API.
+     * @throws     RuntimeException  When plugin with given name is not loaded.
      */
-    ViewPtr<const Api> importPlugin(StringView name);
+    ViewPtr<Api> importPlugin(StringView name);
 
 
     /**
@@ -144,60 +145,65 @@ public:
      *
      * @return     Plugin API.
      */
-    ViewPtr<const Api> removePlugin(StringView name);
+    ViewPtr<Api> removePlugin(StringView name);
 
 
     /**
      * @brief      Create a loader.
      *
-     * @param      name  Loader register name.
+     * @param      name  Loader registration name.
      *
-     * @return     A loader.
+     * @return     Pointer to the created loader.
+     * @throws     Exception  When a loader cannot be created.
      */
     UniquePtr<loader::Loader> createLoader(StringView name) const;
 
 
     /**
-     * @brief Create an initializer of given type name.
+     * @brief      Create an initializer.
      *
-     * @param typeName Type of required initializer.
+     * @param      name  Initializer registration name.
      *
-     * @return Pointer to created initializer.
+     * @return     Pointer to the created initializer.
+     * @throws     Exception  When an initializer cannot be created.
      */
-    UniquePtr<init::Initializer> createInitializer(StringView typeName) const;
+    UniquePtr<init::Initializer> createInitializer(StringView name) const;
 
 
     /**
-     * @brief Create a module of given type name.
+     * @brief      Create a module.
      *
-     * @param typeName   Type of required module.
-     * @param simulation Simulation object.
+     * @param      name        Module registration name.
+     * @param      simulation  Simulation object.
      *
-     * @return Pointer to created module.
+     * @return     Pointer to created module.
+     * @throws     Exception  When a module cannot be created.
      */
-    UniquePtr<module::Module> createModule(StringView typeName, simulator::Simulation& simulation) const;
+    UniquePtr<module::Module> createModule(StringView name, simulator::Simulation& simulation) const;
 
 
     /**
-     * @brief Create an object of given type name.
+     * @brief      Create an object.
      *
-     * @param typeName   Type of required object.
-     * @param simulation Simulation object.
-     * @param type       Type of created object.
+     * @param      name        Object registration name.
+     * @param      simulation  Simulation object.
+     * @param      type        Type of created object.
      *
-     * @return Pointer to created object.
+     * @return     Pointer to created object.
+     * @throws     Exception  When an object cannot be created.
      */
-    UniquePtr<object::Object> createObject(StringView typeName, simulator::Simulation& simulation, object::Object::Type type) const;
+    UniquePtr<object::Object> createObject(StringView name, simulator::Simulation& simulation, object::Object::Type type) const;
 
 
     /**
-     * @brief Create a program of given type name.
+     * @brief      Create a program
      *
-     * @param typeName Type of required program.
+     * @param[in]  name  Program registration name.
      *
-     * @return Pointer to created program.
+     * @return     Pointer to created program.
+     * @throws     Exception  When a program cannot be created.
      */
-    UniquePtr<program::Program> createProgram(StringView typeName) const;
+    UniquePtr<program::Program> createProgram(StringView name) const;
 
 
 // Private Data Members

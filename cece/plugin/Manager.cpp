@@ -136,17 +136,22 @@ Manager& Manager::addDirectory(FilePath path)
 
 /* ************************************************************************ */
 
+void Manager::addPlugin(Plugin plugin)
+{
+    // Create repository record
+    plugin.getApi()->onLoad(m_repository.createRecord(plugin.getName()));
+
+    // Store plugin
+    m_plugins.push_back(std::move(plugin));
+}
+
+/* ************************************************************************ */
+
 void Manager::appendPlugins(DynamicArray<Plugin> plugins)
 {
     // Load and store plugins
     for (auto&& plugin : plugins)
-    {
-        // Create repository record
-        plugin.getApi()->onLoad(m_repository.createRecord(plugin.getName()));
-
-        // Store plugin
-        m_plugins.push_back(std::move(plugin));
-    }
+        addPlugin(std::move(plugin));
 }
 
 /* ************************************************************************ */

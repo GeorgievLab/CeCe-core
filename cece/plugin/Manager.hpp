@@ -208,6 +208,16 @@ public:
     Manager& addDirectory(FilePath path);
 
 
+    /**
+     * @brief      Register a custom plugin.
+     *
+     * @details    The function also calls `Api::onLoad` function.
+     *
+     * @param[in]  plugin  The plugin.
+     */
+    void addPlugin(Plugin plugin);
+
+
 // Private Operations
 private:
 

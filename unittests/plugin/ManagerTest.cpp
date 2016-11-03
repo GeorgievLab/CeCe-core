@@ -93,12 +93,36 @@ TEST(Manager, load)
     mgr.addLoader(makeUnique<SharedLibraryLoader>());
     mgr.addDirectory(".");
 
+    // Loader should be able to handle non-existent directory without crash
+    EXPECT_NO_THROW(mgr.addDirectory("non-existent-directory"));
+
     ASSERT_PRED1(pathExists, SharedLibrary::PREFIX + "cece-test-plugin" + SharedLibrary::EXTENSION);
     EXPECT_PRED1(pathExists, SharedLibrary::PREFIX + "cece-invalid-plugin" + SharedLibrary::EXTENSION);
     EXPECT_PRED1(pathExists, SharedLibrary::PREFIX + "cece-old-plugin" + SharedLibrary::EXTENSION);
+    EXPECT_PRED1(pathExists, SharedLibrary::PREFIX + "cece-no-config-plugin" + SharedLibrary::EXTENSION);
+    EXPECT_PRED1(pathExists, SharedLibrary::PREFIX + "cece-no-create-plugin" + SharedLibrary::EXTENSION);
+    EXPECT_PRED1(pathExists, SharedLibrary::PREFIX + "cece-not-render-plugin" + SharedLibrary::EXTENSION);
+    EXPECT_PRED1(pathExists, SharedLibrary::PREFIX + "cece-different-real-plugin" + SharedLibrary::EXTENSION);
+    EXPECT_PRED1(pathExists, SharedLibrary::PREFIX + "cece-throw-plugin" + SharedLibrary::EXTENSION);
+    EXPECT_PRED1(pathExists, SharedLibrary::PREFIX + "cece-no-shared-plugin" + SharedLibrary::EXTENSION);
+    EXPECT_PRED1(pathExists, SharedLibrary::PREFIX + "cece-python-plugin.py");
 
     // Plugins should be loaded
     EXPECT_TRUE(mgr.isLoaded("test-plugin"));
+    EXPECT_FALSE(mgr.isLoaded("invalid-plugin"));
+    EXPECT_FALSE(mgr.isLoaded("old-plugin"));
+    EXPECT_FALSE(mgr.isLoaded("no-config-plugin"));
+    EXPECT_FALSE(mgr.isLoaded("no-create-plugin"));
+    EXPECT_FALSE(mgr.isLoaded("different-real-plugin"));
+    EXPECT_FALSE(mgr.isLoaded("not-render-plugin"));
+    EXPECT_FALSE(mgr.isLoaded("not-thread-safe-plugin"));
+    EXPECT_FALSE(mgr.isLoaded("throw-plugin"));
+    EXPECT_FALSE(mgr.isLoaded("no-shared-plugin"));
+    EXPECT_FALSE(mgr.isLoaded("python-plugin"));
+
+    // Only one plugin loaded
+    EXPECT_EQ(1, mgr.getNames().size());
+    EXPECT_EQ("test-plugin", mgr.getNames()[0]);
 
     // Load test plugin
     auto api = mgr.getApi("test-plugin");
@@ -124,6 +148,12 @@ TEST(Manager, load)
 
     // Plugin cannot be loaded - old API
     EXPECT_EQ(nullptr, mgr.getApi("old-plugin"));
+
+    // Plugin cannot be loaded - missing config
+    EXPECT_EQ(nullptr, mgr.getApi("no-config-plugin"));
+
+    // Plugin cannot be loaded - missing create
+    EXPECT_EQ(nullptr, mgr.getApi("no-create-plugin"));
 }
 
 /* ************************************************************************ */

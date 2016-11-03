@@ -28,6 +28,7 @@ cece_add_test(plugin
         ApiTest.cpp
         PluginTest.cpp
         RepositoryRecordTest.cpp
+        RepositoryTest.cpp
         ManagerTest.cpp
         ContextTest.cpp
 )
@@ -70,8 +71,22 @@ endfunction ()
 # ######################################################################### #
 
 # Test plugin
-add_test_plugin(test-plugin TestPlugin.cpp)
+add_test_plugin(different-real-plugin DifferentRealPlugin.cpp)
 add_test_plugin(invalid-plugin InvalidPlugin.cpp)
+add_test_plugin(no-config-plugin NoConfigPlugin.cpp)
+add_test_plugin(no-create-plugin NoCreatePlugin.cpp)
+add_test_plugin(not-render-plugin NotRenderPlugin.cpp)
+add_test_plugin(not-thread-safe-plugin NotThreadSafePlugin.cpp)
 add_test_plugin(old-plugin OldPlugin.cpp)
+add_test_plugin(test-plugin TestPlugin.cpp)
+add_test_plugin(throw-plugin ThrowPlugin.cpp)
+
+file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_SHARED_LIBRARY_PREFIX}cece-python-plugin.py"
+    CONTENT "print('Hello')\n"
+)
+
+file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_SHARED_LIBRARY_PREFIX}cece-no-shared-plugin${CMAKE_SHARED_LIBRARY_SUFFIX}"
+    CONTENT "I'm no shared library\n"
+)
 
 # ######################################################################### #

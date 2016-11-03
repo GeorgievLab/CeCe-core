@@ -30,6 +30,7 @@
 // C++
 #include <cstddef>
 #include <cstring>
+#include <algorithm>
 
 // CeCe
 #include "cece/core/String.hpp"
@@ -268,7 +269,8 @@ inline bool operator!=(const StringView& lhs, const StringView& rhs)
  */
 inline bool operator<(const StringView& lhs, const StringView& rhs) noexcept
 {
-    return std::strncmp(lhs.getData(), rhs.getData(), std::min(lhs.getLength(), rhs.getLength())) < 0;
+    return std::strncmp(lhs.getData(), rhs.getData(),
+               std::min<decltype(lhs.getLength())>(lhs.getLength(), rhs.getLength())) < 0;
 }
 
 /* ************************************************************************ */

@@ -78,7 +78,7 @@ public:
     /**
      * @brief      Constructor.
      */
-    Manager() noexcept;
+    Manager();
 
 
     /**

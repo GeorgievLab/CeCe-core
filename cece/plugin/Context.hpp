@@ -133,7 +133,7 @@ public:
      * @param      name  Plugin name.
      *
      * @return     Imported plugin API.
-     * @throws     RuntimeException  When plugin with given name is not loaded.
+     * @throws     PluginNotFoundException  When plugin with given name is not loaded.
      */
     ViewPtr<Api> importPlugin(StringView name);
 

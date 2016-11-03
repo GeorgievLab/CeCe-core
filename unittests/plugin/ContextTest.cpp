@@ -181,7 +181,7 @@ TEST(Context, import)
     Context ctx(mgr);
 
     EXPECT_NO_THROW(ctx.importPlugin("test-plugin"));
-    EXPECT_THROW(ctx.importPlugin("old-plugin"), RuntimeException);
+    EXPECT_THROW(ctx.importPlugin("old-plugin"), PluginNotFoundException);
 
     EXPECT_TRUE(ctx.isImported("test-plugin"));
     EXPECT_FALSE(ctx.isImported("old-plugin"));

@@ -78,8 +78,17 @@ InvalidPluginException::InvalidPluginException(FilePath path, String msg) noexce
 
 /* ************************************************************************ */
 
+PluginNotFoundException::PluginNotFoundException(String name) noexcept
+    : Exception("Plugin `" + name + "` not found.")
+    , m_name(std::move(name))
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
 MultipleExtensionsException::MultipleExtensionsException(String kind, String name, DynamicArray<String> plugins) noexcept
-    : Exception("Multiple extensions " + name + "(" + kind + ") found in imported plugins: " + join(plugins))
+    : Exception("Multiple extensions " + name + "(" + kind + ") found in imported plugins: " + join(plugins) + ".")
     , m_name(std::move(name))
     , m_pluginNames(std::move(plugins))
 {
@@ -89,7 +98,7 @@ MultipleExtensionsException::MultipleExtensionsException(String kind, String nam
 /* ************************************************************************ */
 
 ExtensionNotFoundException::ExtensionNotFoundException(String kind, String name, DynamicArray<String> plugins) noexcept
-    : Exception("Extension " + name + "(" + kind + ") found in imported plugins. Found in plugins: " + join(plugins))
+    : Exception("Extension " + name + "(" + kind + ") found in imported plugins. Found in plugins: " + join(plugins) + ".")
     , m_name(std::move(name))
     , m_pluginNames(std::move(plugins))
 {

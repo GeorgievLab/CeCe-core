@@ -127,6 +127,49 @@ public:
 /* ************************************************************************ */
 
 /**
+ * @brief      Expection used when trying to import plugin that doesn't exists.
+ */
+class PluginNotFoundException : public Exception
+{
+
+// Public Ctors & Dtors
+public:
+
+
+    /**
+     * @brief      Constructor.
+     *
+     * @param[in]  name  The plugin name.
+     */
+    explicit PluginNotFoundException(String name) noexcept;
+
+
+// Public Accessors & Mutators
+public:
+
+
+    /**
+     * @brief      Returns plugin name.
+     *
+     * @return     The plugin name.
+     */
+    const String& getName() const noexcept
+    {
+        return m_name;
+    }
+
+
+// Private Data Members
+private:
+
+    /// Plugin name.
+    String m_name;
+
+};
+
+/* ************************************************************************ */
+
+/**
  * @brief      Exception thrown in case of plugin extension multiple definition.
  */
 class MultipleExtensionsException : public Exception

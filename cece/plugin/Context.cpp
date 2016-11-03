@@ -169,7 +169,7 @@ ViewPtr<Api> Context::importPlugin(StringView name)
 
     // Check if plugin is loaded
     if (!m_manager.isLoaded(name))
-        throw RuntimeException("Cannot import plugin `" + String(name) + "`: No plugin with that name is not loaded.");
+        throw PluginNotFoundException(String(name));
 
     // Store name of the imported plugin
     m_importedPlugins.insert(name);

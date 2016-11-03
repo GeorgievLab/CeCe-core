@@ -106,7 +106,7 @@ constexpr unsigned int DIMENSION = 2;
 /**
  * @brief Plugin API version.
  */
-constexpr int PLUGIN_API_VERSION = 4;
+constexpr int PLUGIN_API_VERSION = 5;
 
 /* ************************************************************************ */
 

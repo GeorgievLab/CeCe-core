@@ -113,6 +113,13 @@ generate_export_header(${PROJECT_NAME}
     EXPORT_FILE_NAME "export.hpp"
 )
 
+# Compiler warnings
+if (MSVC)
+    target_compile_options(${PROJECT_NAME} PRIVATE /W4)
+else ()
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wall)
+endif ()
+
 # Export all for MINGW
 if (MINGW)
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--export-all-symbols")

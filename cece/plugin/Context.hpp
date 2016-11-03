@@ -154,7 +154,7 @@ public:
      * @param      name  Loader registration name.
      *
      * @return     Pointer to the created loader.
-     * @throws     Exception  When a loader cannot be created.
+     * @throws     cece::Exception  When a loader cannot be created.
      */
     UniquePtr<loader::Loader> createLoader(StringView name) const;
 
@@ -165,7 +165,11 @@ public:
      * @param      name  Initializer registration name.
      *
      * @return     Pointer to the created initializer.
-     * @throws     Exception  When an initializer cannot be created.
+     * @throws     cece::Exception              When an initializer cannot be created.
+     * @throws     ExtensionNotFoundException   When an initializer is not found in
+     *                                          imported plugins.
+     * @throws     MultipleExtensionsException  When an initializer with same name is
+     *                                          found in multiple plugins.
      */
     UniquePtr<init::Initializer> createInitializer(StringView name) const;
 
@@ -177,7 +181,11 @@ public:
      * @param      simulation  Simulation object.
      *
      * @return     Pointer to created module.
-     * @throws     Exception  When a module cannot be created.
+     * @throws     cece::Exception              When a module cannot be created.
+     * @throws     ExtensionNotFoundException   When a module is not found in imported
+     *                                          plugins.
+     * @throws     MultipleExtensionsException  When a module with same name is found
+     *                                          in multiple plugins.
      */
     UniquePtr<module::Module> createModule(StringView name, simulator::Simulation& simulation) const;
 
@@ -190,7 +198,11 @@ public:
      * @param      type        Type of created object.
      *
      * @return     Pointer to created object.
-     * @throws     Exception  When an object cannot be created.
+     * @throws     cece::Exception              When an object cannot be created.
+     * @throws     ExtensionNotFoundException   When an object is not found in imported
+     *                                          plugins.
+     * @throws     MultipleExtensionsException  When an object with same name is found
+     *                                          in multiple plugins.
      */
     UniquePtr<object::Object> createObject(StringView name, simulator::Simulation& simulation, object::Object::Type type) const;
 
@@ -201,7 +213,11 @@ public:
      * @param[in]  name  Program registration name.
      *
      * @return     Pointer to created program.
-     * @throws     Exception  When a program cannot be created.
+     * @throws     cece::Exception              When a program cannot be created.
+     * @throws     ExtensionNotFoundException   When a program is not found in imported
+     *                                          plugins.
+     * @throws     MultipleExtensionsException  When a program with same name is found
+     *                                          in multiple plugins.
      */
     UniquePtr<program::Program> createProgram(StringView name) const;
 

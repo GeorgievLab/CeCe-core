@@ -31,10 +31,10 @@
 
 // CeCe
 #include "cece/core/Log.hpp"
-#include "cece/core/Exception.hpp"
 #include "cece/plugin/Repository.hpp"
 #include "cece/plugin/Manager.hpp"
 #include "cece/plugin/Api.hpp"
+#include "cece/plugin/Exception.hpp"
 #include "cece/loader/Loader.hpp"
 #include "cece/init/Initializer.hpp"
 #include "cece/module/Module.hpp"
@@ -62,9 +62,9 @@ namespace {
  * @return
  */
 template<typename RecordFn>
-DynamicArray<StringView> getPluginNames(const Repository& repo, RecordFn fn)
+DynamicArray<String> getPluginNames(const Repository& repo, RecordFn fn)
 {
-    DynamicArray<StringView> names;
+    DynamicArray<String> names;
 
     // Foreach repository records
     for (const auto& record : repo.getRecords())
@@ -79,25 +79,75 @@ DynamicArray<StringView> getPluginNames(const Repository& repo, RecordFn fn)
 /* ************************************************************************ */
 
 /**
- * @brief Join strings from array.
+ * @brief      Find repository record
  *
- * @param array
+ * @param[in]  ctx    The context.
+ * @param[out] names  The names
+ * @param[in]  fn     Function used to check the repository record.
  *
- * @return
+ * @tparam     Fn     Type of test function.
+ *
+ * @return     Pointer to found record. Can be nullptr.
  */
-String join(const DynamicArray<StringView>& array) noexcept
+template<typename Fn>
+ViewPtr<const RepositoryRecord> findRecord(const Context& ctx, DynamicArray<String>& names, Fn fn)
 {
-    String res;
+    ViewPtr<const RepositoryRecord> result = nullptr;
 
-    for (auto it = array.begin(); it != array.end(); ++it)
+    // Foreach imported and find repository record
+    for (const auto& plugin : ctx.getImportedPlugins())
     {
-        if (it != array.begin())
-            res += ", ";
+        // Get record
+        const auto& rec = ctx.getRepository().get(plugin);
 
-        res += String(*it);
+        // Exists factory
+        if (fn(rec))
+        {
+            result = &rec;
+            names.push_back(String(plugin));
+        }
     }
 
-    return res;
+    return result;
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Helper function for plugin extension creation.
+ *
+ * @param[in]  ctx      The context.
+ * @param[in]  kind     The kind
+ * @param[in]  name     Extension registration name.
+ * @param[in]  ctor     The extension construct function.
+ * @param[in]  tester   The record test function.
+ *
+ * @tparam     T        Type of returned object.
+ * @tparam     Creator  Type of ctor function.
+ * @tparam     Tester   Type of tester function.
+ *
+ * @return     Pointer to created object.
+ */
+template<typename T, typename Creator, typename Tester>
+UniquePtr<T> createHelper(const Context& ctx, String kind, String name, Creator ctor, Tester tester)
+{
+    DynamicArray<String> plugins;
+
+    // Try to find record
+    auto record = findRecord(ctx, plugins, tester);
+
+    // Multiple imports
+    if (plugins.size() > 1)
+        throw MultipleExtensionsException(std::move(kind), std::move(name), std::move(plugins));
+
+    // Factory manager selected
+    if (record)
+        return ctor(*record);
+
+    // Find in other repositories to give a hint to user
+    plugins = getPluginNames(ctx.getRepository(), tester);
+
+    throw ExtensionNotFoundException(std::move(kind), std::move(name), std::move(plugins));
 }
 
 /* ************************************************************************ */
@@ -163,174 +213,54 @@ UniquePtr<loader::Loader> Context::createLoader(StringView name) const
 
 /* ************************************************************************ */
 
-UniquePtr<init::Initializer> Context::createInitializer(StringView typeName) const
+UniquePtr<init::Initializer> Context::createInitializer(StringView name) const
 {
-    ViewPtr<const RepositoryRecord> resultRecord;
-    DynamicArray<StringView> importedNames;
-
-    // Foreach loaded APIs and find factory
-    for (const auto& plugin : m_importedPlugins)
-    {
-        // Get record
-        const auto& rec = getRepository().get(plugin);
-
-        // Exists factory
-        if (rec.isRegisteredInitializer(typeName))
-        {
-            resultRecord = &rec;
-            importedNames.push_back(plugin);
-        }
-    }
-
-    // Multiple imports
-    if (importedNames.size() > 1)
-    {
-        throw RuntimeException(
-            "Multiple definition of module: " + String(typeName) + ". Module found in imported plugin(s): " + join(importedNames)
-        );
-    }
-
-    // Factory manager selected
-    if (resultRecord)
-        return resultRecord->createInitializer(typeName);
-
-    // Find in other APIs to give a hint to user
-    auto names = getPluginNames(getRepository(), [typeName](const RepositoryRecord& rec) {
-        return rec.isRegisteredInitializer(typeName);
-    });
-
-    throw RuntimeException(
-        "Cannot create initializer: " + String(typeName) + ". Initializer found in plugin(s): " + join(names)
-    );
+    return createHelper<init::Initializer>(*this, "Initializer", String(name),
+        [&](const RepositoryRecord& rec) {
+            return rec.createInitializer(name);
+        },
+        [&](const RepositoryRecord& rec) {
+            return rec.isRegisteredInitializer(name);
+        });
 }
 
 /* ************************************************************************ */
 
-UniquePtr<module::Module> Context::createModule(StringView typeName, simulator::Simulation& simulation) const
+UniquePtr<module::Module> Context::createModule(StringView name, simulator::Simulation& simulation) const
 {
-    ViewPtr<const RepositoryRecord> resultRecord;
-    DynamicArray<StringView> importedNames;
-
-    // Foreach loaded APIs and find factory
-    for (const auto& plugin : m_importedPlugins)
-    {
-        // Get record
-        const auto& rec = getRepository().get(plugin);
-
-        // Exists factory
-        if (rec.isRegisteredModule(typeName))
-        {
-            resultRecord = &rec;
-            importedNames.push_back(plugin);
-        }
-    }
-
-    // Multiple imports
-    if (importedNames.size() > 1)
-    {
-        throw RuntimeException(
-            "Multiple definition of module: " + String(typeName) + ". Module found in imported plugin(s): " + join(importedNames)
-        );
-    }
-
-    // Factory manager selected
-    if (resultRecord)
-        return resultRecord->createModule(typeName, simulation);
-
-    // Find in other APIs to give a hint to user
-    auto names = getPluginNames(getRepository(), [typeName](const RepositoryRecord& rec) {
-        return rec.isRegisteredModule(typeName);
-    });
-
-    throw RuntimeException(
-        "Cannot create module: " + String(typeName) + ". Module found in plugin(s): " + join(names)
-    );
+    return createHelper<module::Module>(*this, "Module", String(name),
+        [&](const RepositoryRecord& rec) {
+            return rec.createModule(name, simulation);
+        },
+        [&](const RepositoryRecord& rec) {
+            return rec.isRegisteredModule(name);
+        });
 }
 
 /* ************************************************************************ */
 
-UniquePtr<object::Object> Context::createObject(StringView typeName, simulator::Simulation& simulation, object::Object::Type type) const
+UniquePtr<object::Object> Context::createObject(StringView name, simulator::Simulation& simulation, object::Object::Type type) const
 {
-    ViewPtr<const RepositoryRecord> resultRecord;
-    DynamicArray<StringView> importedNames;
-
-    // Foreach loaded APIs and find factory
-    for (const auto& plugin : m_importedPlugins)
-    {
-        // Get record
-        const auto& rec = getRepository().get(plugin);
-
-        // Exists factory
-        if (rec.isRegisteredObject(typeName))
-        {
-            resultRecord = &rec;
-            importedNames.push_back(plugin);
-        }
-    }
-
-    // Multiple imports
-    if (importedNames.size() > 1)
-    {
-        throw RuntimeException(
-            "Multiple definition of object: " + String(typeName) + ". Object found in imported plugin(s): " + join(importedNames)
-        );
-    }
-
-    // Factory manager selected
-    if (resultRecord)
-        return resultRecord->createObject(typeName, simulation, type);
-
-    // Find in other APIs to give a hint to user
-    auto names = getPluginNames(getRepository(), [typeName](const RepositoryRecord& rec) {
-        return rec.isRegisteredObject(typeName);
-    });
-
-    throw RuntimeException(
-        "Cannot create object: " + String(typeName) + ". Object found in plugin(s): " + join(names)
-    );
+    return createHelper<object::Object>(*this, "Object", String(name),
+        [&](const RepositoryRecord& rec) {
+            return rec.createObject(name, simulation, type);
+        },
+        [&](const RepositoryRecord& rec) {
+            return rec.isRegisteredObject(name);
+        });
 }
 
 /* ************************************************************************ */
 
-UniquePtr<program::Program> Context::createProgram(StringView typeName) const
+UniquePtr<program::Program> Context::createProgram(StringView name) const
 {
-    ViewPtr<const RepositoryRecord> resultRecord;
-    DynamicArray<StringView> importedNames;
-
-    // Foreach loaded APIs and find factory
-    for (const auto& plugin : m_importedPlugins)
-    {
-        // Get record
-        const auto& rec = getRepository().get(plugin);
-
-        // Exists factory
-        if (rec.isRegisteredProgram(typeName))
-        {
-            resultRecord = &rec;
-            importedNames.push_back(plugin);
-        }
-    }
-
-    // Multiple imports
-    if (importedNames.size() > 1)
-    {
-        throw RuntimeException(
-            "Multiple definition of program: " + String(typeName) + ". Program found in imported plugin(s): " + join(importedNames)
-        );
-    }
-
-    // Factory manager selected
-    if (resultRecord)
-        return resultRecord->createProgram(typeName);
-
-    // Find in other APIs to give a hint to user
-    auto names = getPluginNames(getRepository(), [typeName](const RepositoryRecord& rec) {
-        return rec.isRegisteredProgram(typeName);
-    });
-
-    throw RuntimeException(
-        "Cannot create program: " + String(typeName) + ". Program found in plugin(s): " + join(names)
-    );
+    return createHelper<program::Program>(*this, "Program", String(name),
+        [&](const RepositoryRecord& rec) {
+            return rec.createProgram(name);
+        },
+        [&](const RepositoryRecord& rec) {
+            return rec.isRegisteredProgram(name);
+        });
 }
 
 /* ************************************************************************ */

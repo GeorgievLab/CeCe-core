@@ -27,14 +27,60 @@
 #include "gtest/gtest.h"
 
 // CeCe
+#include "cece/plugin/Api.hpp"
 #include "cece/plugin/Context.hpp"
 #include "cece/plugin/Manager.hpp"
 #include "cece/plugin/SharedLibraryLoader.hpp"
+#include "cece/init/Initializer.hpp"
 
 /* ************************************************************************ */
 
 using namespace cece;
 using namespace cece::plugin;
+
+/* ************************************************************************ */
+
+namespace {
+
+/* ************************************************************************ */
+
+class TestInitializer final : public init::Initializer
+{
+public:
+    using init::Initializer::Initializer;
+
+    void init(simulator::Simulation& simulation) const override
+    {
+        // Nothing to do
+    }
+};
+
+/* ************************************************************************ */
+
+class TestApi1 : public Api
+{
+    void onLoad(RepositoryRecord& repository) override
+    {
+        repository.registerInitializer<TestInitializer>("initializer");
+    }
+};
+
+/* ************************************************************************ */
+
+class TestApi2 : public Api
+{
+    void onLoad(RepositoryRecord& repository) override
+    {
+        repository
+            .registerInitializer<TestInitializer>("initializer")
+            .registerInitializer<TestInitializer>("initializer2")
+        ;
+    }
+};
+
+/* ************************************************************************ */
+
+}
 
 /* ************************************************************************ */
 
@@ -63,6 +109,24 @@ TEST(Context, import)
 
     EXPECT_TRUE(ctx.isImported("test-plugin"));
     EXPECT_FALSE(ctx.isImported("old-plugin"));
+
+    EXPECT_NO_THROW(ctx.createInitializer("initializer"));
+}
+
+/* ************************************************************************ */
+
+TEST(Context, ambiguous)
+{
+    Manager mgr;
+    mgr.addPlugin(Plugin{"plugin1", makeUnique<TestApi1>()});
+    mgr.addPlugin(Plugin{"plugin2", makeUnique<TestApi2>()});
+
+    Context ctx(mgr);
+    ctx.importPlugin("plugin1");
+    ctx.importPlugin("plugin2");
+
+    EXPECT_ANY_THROW(ctx.createInitializer("initializer"));
+    EXPECT_NO_THROW(ctx.createInitializer("initializer2"));
 }
 
 /* ************************************************************************ */

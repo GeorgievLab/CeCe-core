@@ -154,7 +154,8 @@ public:
      * @param      name  Loader registration name.
      *
      * @return     Pointer to the created loader.
-     * @throws     cece::Exception  When a loader cannot be created.
+     * @throws     cece::Exception             When a loader cannot be created.
+     * @throws     ExtensionNotFoundException  When a loader is not found.
      */
     UniquePtr<loader::Loader> createLoader(StringView name) const;
 

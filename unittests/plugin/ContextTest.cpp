@@ -31,7 +31,13 @@
 #include "cece/plugin/Context.hpp"
 #include "cece/plugin/Manager.hpp"
 #include "cece/plugin/SharedLibraryLoader.hpp"
+#include "cece/plugin/Exception.hpp"
+#include "cece/loader/Loader.hpp"
 #include "cece/init/Initializer.hpp"
+#include "cece/module/Module.hpp"
+#include "cece/object/Object.hpp"
+#include "cece/program/Program.hpp"
+#include "cece/simulator/DefaultSimulation.hpp"
 
 /* ************************************************************************ */
 
@@ -44,6 +50,26 @@ namespace {
 
 /* ************************************************************************ */
 
+class TestLoader final : public loader::Loader
+{
+public:
+
+    UniquePtr<simulator::Simulation> fromStream(const plugin::Manager& manager, InStream& is,
+        const FilePath& filename = "<stream>",
+        ViewPtr<const Parameters> parameters = nullptr) const override
+    {
+        return makeUnique<simulator::DefaultSimulation>(manager, filename);
+    }
+
+    void toStream(OutStream& os, const simulator::Simulation& simulation,
+        const FilePath& filename = "<stream>") const override
+    {
+        // Nothing to do
+    }
+};
+
+/* ************************************************************************ */
+
 class TestInitializer final : public init::Initializer
 {
 public:
@@ -52,6 +78,56 @@ public:
     void init(simulator::Simulation& simulation) const override
     {
         // Nothing to do
+    }
+};
+
+/* ************************************************************************ */
+
+class TestModule final : public module::Module
+{
+public:
+    using module::Module::Module;
+};
+
+/* ************************************************************************ */
+
+class TestObject final : public object::Object
+{
+public:
+    using object::Object::Object;
+};
+
+/* ************************************************************************ */
+
+class TestProgram final : public program::Program
+{
+public:
+    using program::Program::Program;
+
+    UniquePtr<Program> clone() const override
+    {
+        return makeUnique<TestProgram>(*this);
+    }
+
+    void call(simulator::Simulation& simulation, object::Object& object, units::Time dt) override
+    {
+        // Nothing to do
+    }
+};
+
+/* ************************************************************************ */
+
+class TestApi0 : public Api
+{
+    void onLoad(RepositoryRecord& repository) override
+    {
+        repository
+            .registerLoader<TestLoader>("loader")
+            .registerInitializer<TestInitializer>("initializer")
+            .registerModule<TestModule>("module")
+            .registerObject<TestObject>("object")
+            .registerProgram<TestProgram>("program")
+        ;
     }
 };
 
@@ -111,6 +187,23 @@ TEST(Context, import)
     EXPECT_FALSE(ctx.isImported("old-plugin"));
 
     EXPECT_NO_THROW(ctx.createInitializer("initializer"));
+
+    ctx.removePlugin("test-plugin");
+    EXPECT_FALSE(ctx.isImported("test-plugin"));
+
+    // Import twice
+    EXPECT_NO_THROW(ctx.importPlugin("test-plugin"));
+    EXPECT_TRUE(ctx.isImported("test-plugin"));
+    EXPECT_NO_THROW(ctx.importPlugin("test-plugin"));
+    EXPECT_TRUE(ctx.isImported("test-plugin"));
+
+    // Remove multiple time
+    EXPECT_NO_THROW(ctx.removePlugin("test-plugin"));
+    EXPECT_FALSE(ctx.isImported("test-plugin"));
+    EXPECT_NO_THROW(ctx.removePlugin("test-plugin"));
+    EXPECT_FALSE(ctx.isImported("test-plugin"));
+    EXPECT_NO_THROW(ctx.removePlugin("test-plugin"));
+    EXPECT_FALSE(ctx.isImported("test-plugin"));
 }
 
 /* ************************************************************************ */
@@ -125,8 +218,46 @@ TEST(Context, ambiguous)
     ctx.importPlugin("plugin1");
     ctx.importPlugin("plugin2");
 
-    EXPECT_ANY_THROW(ctx.createInitializer("initializer"));
+    EXPECT_THROW(ctx.createInitializer("initializer"), MultipleExtensionsException);
     EXPECT_NO_THROW(ctx.createInitializer("initializer2"));
+}
+
+/* ************************************************************************ */
+
+TEST(Context, not_imported)
+{
+    Manager mgr;
+    mgr.addPlugin(Plugin{"plugin1", makeUnique<TestApi1>()});
+    mgr.addPlugin(Plugin{"plugin2", makeUnique<TestApi2>()});
+
+    Context ctx(mgr);
+
+    EXPECT_THROW(ctx.createInitializer("initializer"), ExtensionNotFoundException);
+}
+
+/* ************************************************************************ */
+
+TEST(Context, create)
+{
+    Manager mgr;
+    mgr.addPlugin(Plugin{"plugin", makeUnique<TestApi0>()});
+
+    Context ctx(mgr);
+    ctx.importPlugin("plugin");
+
+    simulator::DefaultSimulation simulation(mgr);
+
+    EXPECT_NO_THROW(ctx.createLoader("loader"));
+    EXPECT_NO_THROW(ctx.createInitializer("initializer"));
+    EXPECT_NO_THROW(ctx.createModule("module", simulation));
+    EXPECT_NO_THROW(ctx.createObject("object", simulation, object::Object::Type::Static));
+    EXPECT_NO_THROW(ctx.createProgram("program"));
+
+    EXPECT_THROW(ctx.createLoader("loader0"), ExtensionNotFoundException);
+    EXPECT_THROW(ctx.createInitializer("initializer0"), ExtensionNotFoundException);
+    EXPECT_THROW(ctx.createModule("module0", simulation), ExtensionNotFoundException);
+    EXPECT_THROW(ctx.createObject("object0", simulation, object::Object::Type::Static), ExtensionNotFoundException);
+    EXPECT_THROW(ctx.createProgram("program0"), ExtensionNotFoundException);
 }
 
 /* ************************************************************************ */

@@ -208,7 +208,8 @@ UniquePtr<loader::Loader> Context::createLoader(StringView name) const
             return record.createLoader(name);
     }
 
-    throw RuntimeException("Unable to find loader '" + String(name) + "'");
+    // Not found in any available plugins
+    throw ExtensionNotFoundException("Loader", String(name), {});
 }
 
 /* ************************************************************************ */

@@ -78,8 +78,8 @@ public:
      * @param[in]  name  Record name.
      *
      * @return     Repository record.
-     * @throws     InvalidArgumentException  In case a record with given name doesn't
-     *                                       exists.
+     * @throws     RepositoryException  In case a record with given name doesn't
+     *                                  exists.
      */
     RepositoryRecord& get(StringView name);
 
@@ -90,8 +90,8 @@ public:
      * @param[in]  name  Record name.
      *
      * @return     Repository record.
-     * @throws     InvalidArgumentException  In case a record with given name doesn't
-     *                                       exists.
+     * @throws     RepositoryException  In case a record with given name doesn't
+     *                                  exists.
      */
     const RepositoryRecord& get(StringView name) const;
 
@@ -102,8 +102,8 @@ public:
      * @param[in]  name  Record name.
      *
      * @return     Repository record.
-     * @throws     InvalidArgumentException  In case a record with given name already
-     *                                       exists.
+     * @throws     RepositoryException  In case a record with given name already
+     *                                  exists.
      */
     RepositoryRecord& createRecord(String name);
 

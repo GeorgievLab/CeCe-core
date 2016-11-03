@@ -31,7 +31,7 @@
 #include "cece/core/Assert.hpp"
 #include "cece/core/Log.hpp"
 #include "cece/core/ViewPtr.hpp"
-#include "cece/core/Exception.hpp"
+#include "cece/plugin/Exception.hpp"
 #include "cece/plugin/definition.hpp"
 #include "cece/plugin/Api.hpp"
 
@@ -69,34 +69,34 @@ void checkConfig(const SharedLibrary& lib)
     auto getConfigFn = lib.getAddr<GetConfigFn>("get_config");
 
     if (!getConfigFn)
-        throw RuntimeException("Shared library `" + path + "` doesn't contains 'get_config' function");
+        throw InvalidPluginException(path, "Doesn't contains 'get_config' function");
 
     // Get configuration
     auto config = getConfigFn();
 
     if (!config)
-        throw RuntimeException("Plugin `" + path + "` returns no config");
+        throw InvalidPluginException(path, "Returns no config");
 
     if (config->apiVersion != config::PLUGIN_API_VERSION)
-        throw RuntimeException("Plugin `" + path + "` is built against different API version than CeCe");
+        throw InvalidPluginException(path, "Built against different API version than CeCe");
 
     if (config->realSize != sizeof(config::RealType))
-        throw RuntimeException("Plugin `" + path + "` is built with different real type than CeCe");
+        throw InvalidPluginException(path, "Built with different real type than CeCe");
 
 #ifdef CECE_RENDER
     if (!config->renderEnabled)
-        throw RuntimeException("Plugin `" + path + "` is built without render support, but CeCe did");
+        throw InvalidPluginException(path, "Built without render support, but CeCe did");
 #else
     if (config->renderEnabled)
-        throw RuntimeException("Plugin `" + path + "` is built with render support, but CeCe didn't");
+        throw InvalidPluginException(path, "Built with render support, but CeCe didn't");
 #endif
 
 #ifdef CECE_THREAD_SAFE
     if (!config->threadSafe)
-        throw RuntimeException("Plugin `" + path + "` is built without thread safety, but CeCe did");
+        throw InvalidPluginException(path, "Built without thread safety, but CeCe did");
 #else
     if (config->threadSafe)
-        throw RuntimeException("Plugin `" + path + "` is built with thread safety, but CeCe didn't");
+        throw InvalidPluginException(path, "Built with thread safety, but CeCe didn't");
 #endif
 }
 
@@ -115,7 +115,7 @@ UniquePtr<Api> createApi(const SharedLibrary& lib)
     auto fn = lib.getAddr<CreateFn>("create");
 
     if (!fn)
-        throw RuntimeException("Shared library `" + lib.getPath().toString() + "` doesn't contains 'create' function");
+        throw InvalidPluginException(lib.getPath(), "Doesn't contains 'create' function");
 
     return UniquePtr<Api>(fn());
 }
@@ -190,9 +190,13 @@ DynamicArray<Plugin> SharedLibraryLoader::loadAll(const FilePath& directory)
             m_libraries.push_back(std::move(lib));
             result.emplace_back(name, std::move(api));
         }
-        catch (const Exception& e)
+        catch (const InvalidPluginException& e)
         {
-            Log::warning("Unable to load plugin `", name, "` @ `", path, "`: ", e.what());
+            Log::warning("Trying to load invalid plugin `", name, "` @ `", path, "`: ", e.what());
+        }
+        catch (...)
+        {
+            Log::warning("Internal plugin error `", name, "` @ `", path);
         }
     }
 

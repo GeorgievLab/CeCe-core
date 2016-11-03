@@ -28,7 +28,7 @@
 
 // CeCe
 #include "cece/core/Assert.hpp"
-#include "cece/core/Exception.hpp"
+#include "cece/plugin/Exception.hpp"
 
 /* ************************************************************************ */
 
@@ -49,7 +49,7 @@ RepositoryRecord& Repository::get(StringView name)
     auto it = m_records.find(String(name));
 
     if (it == m_records.end())
-        throw InvalidArgumentException("Record with name `" + String(name) + "` doesn't exists");
+        throw RepositoryException("Record with name `" + String(name) + "` doesn't exists");
 
     return it->second;
 }
@@ -61,7 +61,7 @@ const RepositoryRecord& Repository::get(StringView name) const
     auto it = m_records.find(String(name));
 
     if (it == m_records.end())
-        throw InvalidArgumentException("Record with name `" + String(name) + "` doesn't exists");
+        throw RepositoryException("Record with name `" + String(name) + "` doesn't exists");
 
     return it->second;
 }
@@ -72,7 +72,7 @@ RepositoryRecord& Repository::createRecord(String name)
 {
     // Try to find existing record
     if (exists(name))
-        throw InvalidArgumentException("Record with name `" + name + "` already exists");
+        throw RepositoryException("Record with name `" + name + "` already exists");
 
     auto pair = m_records.emplace(name, RepositoryRecord{});
     CECE_ASSERT(pair.second);

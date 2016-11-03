@@ -45,6 +45,8 @@ set(SRCS
     SharedLibrary.cpp
     SharedLibraryLoader.hpp
     SharedLibraryLoader.cpp
+    Exception.hpp
+    Exception.cpp
 )
 
 # ######################################################################### #

@@ -27,10 +27,6 @@
 
 /* ************************************************************************ */
 
-#if _WIN32
-#include <windows.h>
-#endif
-
 // CeCe
 #include "cece/export.hpp"
 #include "cece/core/String.hpp"
@@ -61,19 +57,6 @@ public:
 
     /// Library file extension
     static const CECE_EXPORT String EXTENSION;
-
-
-// Public Types
-public:
-
-
-#if _WIN32
-    /// Handle type - Win32.
-    using HandleType = HMODULE;
-#else
-    /// Handle type - POSIX.
-    using HandleType = void*;
-#endif
 
 
 // Public Ctors & Dtors
@@ -188,7 +171,7 @@ private:
     FilePath m_path;
 
     /// Shared library handle.
-    HandleType m_handle = nullptr;
+    void* m_handle = nullptr;
 
 };
 

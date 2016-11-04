@@ -79,7 +79,7 @@ namespace {
  *
  * @return     Library handle.
  */
-SharedLibrary::HandleType openLibrary(const FilePath& path) noexcept
+void* openLibrary(const FilePath& path) noexcept
 {
 #if _WIN32
     String str = path.toString();
@@ -91,7 +91,7 @@ SharedLibrary::HandleType openLibrary(const FilePath& path) noexcept
     SetThreadErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX | SEM_NOOPENFILEERRORBOX, &oldMode);
     auto handle = LoadLibraryW(result.c_str());
     SetThreadErrorMode(oldMode, NULL);
-    return handle;
+    return reinterpret_cast<void*>(handle);
 #else
     // POSIX
     return dlopen(path.c_str(), RTLD_LAZY);
@@ -105,11 +105,11 @@ SharedLibrary::HandleType openLibrary(const FilePath& path) noexcept
  *
  * @param      handle  Library handle.
  */
-void closeLibrary(SharedLibrary::HandleType handle) noexcept
+void closeLibrary(void* handle) noexcept
 {
 #if _WIN32
     // WIN32
-    FreeLibrary(handle);
+    FreeLibrary(reinterpret_cast<HMODULE>(handle));
 #else
     // POSIX
     if (handle)
@@ -126,7 +126,7 @@ void closeLibrary(SharedLibrary::HandleType handle) noexcept
  *
  * @return     Is loaded?
  */
-bool isLoaded(SharedLibrary::HandleType handle) noexcept
+bool isLoaded(void* handle) noexcept
 {
     return handle != nullptr;
 }
@@ -140,7 +140,7 @@ bool isLoaded(SharedLibrary::HandleType handle) noexcept
  *
  * @return     The error message.
  */
-String getError(SharedLibrary::HandleType handle) noexcept
+String getError(void* handle) noexcept
 {
 #if _WIN32
     // Get error message
@@ -209,8 +209,9 @@ SharedLibrary::SharedLibrary(SharedLibrary&& src) noexcept
 
 SharedLibrary& SharedLibrary::operator=(SharedLibrary&& src) noexcept
 {
-    std::swap(m_path, src.m_path);
-    std::swap(m_handle, src.m_handle);
+    using std::swap;
+    swap(m_path, src.m_path);
+    swap(m_handle, src.m_handle);
 
     return *this;
 }
@@ -220,7 +221,9 @@ SharedLibrary& SharedLibrary::operator=(SharedLibrary&& src) noexcept
 void* SharedLibrary::getAddr(StringView name) const noexcept
 {
 #if _WIN32
-    return reinterpret_cast<void*>(reinterpret_cast<std::intptr_t>(GetProcAddress(m_handle, name.getData())));
+    return reinterpret_cast<void*>(reinterpret_cast<std::intptr_t>(
+        GetProcAddress(reinterpret_cast<HMODULE>(m_handle), name.getData())
+    ));
 #else
     // POSIX
     return dlsym(m_handle, name.getData());

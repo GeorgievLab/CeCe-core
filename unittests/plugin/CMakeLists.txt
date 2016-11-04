@@ -80,11 +80,11 @@ add_test_plugin(not-thread-safe-plugin NotThreadSafePlugin.cpp)
 add_test_plugin(old-plugin OldPlugin.cpp)
 add_test_plugin(test-plugin TestPlugin.cpp)
 
-file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_SHARED_LIBRARY_PREFIX}cece-python-plugin.py"
+file(GENERATE OUTPUT "$<TARGET_FILE_DIR:cece-plugin_test>/${CMAKE_SHARED_LIBRARY_PREFIX}cece-python-plugin.py"
     CONTENT "print('Hello')\n"
 )
 
-file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_SHARED_LIBRARY_PREFIX}cece-no-shared-plugin${CMAKE_SHARED_LIBRARY_SUFFIX}"
+file(GENERATE OUTPUT "$<TARGET_FILE_DIR:cece-plugin_test>/${CMAKE_SHARED_LIBRARY_PREFIX}cece-no-shared-plugin${CMAKE_SHARED_LIBRARY_SUFFIX}"
     CONTENT "I'm no shared library\n"
 )
 

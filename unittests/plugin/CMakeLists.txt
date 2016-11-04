@@ -79,7 +79,6 @@ add_test_plugin(not-render-plugin NotRenderPlugin.cpp)
 add_test_plugin(not-thread-safe-plugin NotThreadSafePlugin.cpp)
 add_test_plugin(old-plugin OldPlugin.cpp)
 add_test_plugin(test-plugin TestPlugin.cpp)
-add_test_plugin(throw-plugin ThrowPlugin.cpp)
 
 file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_SHARED_LIBRARY_PREFIX}cece-python-plugin.py"
     CONTENT "print('Hello')\n"

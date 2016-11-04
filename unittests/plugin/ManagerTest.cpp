@@ -103,7 +103,6 @@ TEST(Manager, load)
     EXPECT_PRED1(pathExists, SharedLibrary::PREFIX + "cece-no-create-plugin" + SharedLibrary::EXTENSION);
     EXPECT_PRED1(pathExists, SharedLibrary::PREFIX + "cece-not-render-plugin" + SharedLibrary::EXTENSION);
     EXPECT_PRED1(pathExists, SharedLibrary::PREFIX + "cece-different-real-plugin" + SharedLibrary::EXTENSION);
-    EXPECT_PRED1(pathExists, SharedLibrary::PREFIX + "cece-throw-plugin" + SharedLibrary::EXTENSION);
     EXPECT_PRED1(pathExists, SharedLibrary::PREFIX + "cece-no-shared-plugin" + SharedLibrary::EXTENSION);
     EXPECT_PRED1(pathExists, SharedLibrary::PREFIX + "cece-python-plugin.py");
 
@@ -116,7 +115,6 @@ TEST(Manager, load)
     EXPECT_FALSE(mgr.isLoaded("different-real-plugin"));
     EXPECT_FALSE(mgr.isLoaded("not-render-plugin"));
     EXPECT_FALSE(mgr.isLoaded("not-thread-safe-plugin"));
-    EXPECT_FALSE(mgr.isLoaded("throw-plugin"));
     EXPECT_FALSE(mgr.isLoaded("no-shared-plugin"));
     EXPECT_FALSE(mgr.isLoaded("python-plugin"));
 

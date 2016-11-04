@@ -38,6 +38,6 @@ set(SRCS
 
 dir_pretend(SOURCES object/ ${SRCS})
 
-set(SOURCES_OBJECT ${SOURCES} PARENT_SCOPE)
+set(CECE_SOURCES ${CECE_SOURCES} ${SOURCES} PARENT_SCOPE)
 
 # ######################################################################### #

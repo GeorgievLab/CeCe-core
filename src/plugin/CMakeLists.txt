@@ -41,6 +41,6 @@ set(SRCS
 
 dir_pretend(SOURCES plugin/ ${SRCS})
 
-set(SOURCES_PLUGIN ${SOURCES} PARENT_SCOPE)
+set(CECE_SOURCES ${CECE_SOURCES} ${SOURCES} PARENT_SCOPE)
 
 # ######################################################################### #

@@ -34,6 +34,6 @@ set(SRCS
 
 dir_pretend(SOURCES loader/ ${SRCS})
 
-set(SOURCES_LOADER ${SOURCES} PARENT_SCOPE)
+set(CECE_SOURCES ${CECE_SOURCES} ${SOURCES} PARENT_SCOPE)
 
 # ######################################################################### #

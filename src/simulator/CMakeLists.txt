@@ -37,6 +37,6 @@ set(SRCS
 
 dir_pretend(SOURCES simulator/ ${SRCS})
 
-set(SOURCES_SIMULATOR ${SOURCES} PARENT_SCOPE)
+set(CECE_SOURCES ${CECE_SOURCES} ${SOURCES} PARENT_SCOPE)
 
 # ######################################################################### #

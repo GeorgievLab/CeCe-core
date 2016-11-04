@@ -63,25 +63,8 @@ add_subdirectory(simulator)
 
 # ######################################################################### #
 
-# Sources
-set(SRCS
-    ${SOURCES_CORE}
-    ${SOURCES_CONFIG}
-    ${SOURCES_LOADER}
-    ${SOURCES_INIT}
-    ${SOURCES_MODULE}
-    ${SOURCES_OBJECT}
-    ${SOURCES_PROGRAM}
-    ${SOURCES_PLUGIN}
-    ${SOURCES_SIMULATOR}
-)
-
-if (CECE_RENDER)
-    set(SRCS ${SRCS} ${SOURCES_RENDER})
-endif ()
-
 # Create library
-add_library(${PROJECT_NAME} SHARED ${SRCS})
+add_library(${PROJECT_NAME} SHARED ${CECE_SOURCES})
 
 # ######################################################################### #
 
@@ -136,11 +119,11 @@ if (CECE_RENDER)
     # OpenGL library is required
     find_package(OpenGL REQUIRED)
     target_include_directories(${PROJECT_NAME} PUBLIC ${OPENGL_INCLUDE_DIR})
-    target_link_libraries(${PROJECT_NAME} PUBLIC ${OPENGL_LIBRARIES})
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${OPENGL_LIBRARIES})
 endif ()
 
 if (UNIX AND NOT APPLE)
-    target_link_libraries(${PROJECT_NAME} PUBLIC dl)
+    target_link_libraries(${PROJECT_NAME} PRIVATE dl)
 endif ()
 
 # ######################################################################### #

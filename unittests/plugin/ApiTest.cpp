@@ -130,7 +130,7 @@ TEST(Api, virtualFunctions)
     ASSERT_EQ(base, api);
 
     // No access to those objects, just for passing references to the functions.
-    RepositoryRecord* record;
+    RepositoryRecord* record = nullptr;
     config::Configuration* config = nullptr;
     simulator::Simulation* sim = nullptr;
 

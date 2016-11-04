@@ -56,6 +56,11 @@ if (APPLE)
     set(MACOSX_VERSION_MIN "10.9" CACHE STRING "Minimum version of MacOS X to support")
 endif ()
 
+# Allow to enable code coverage, only for tests and GCC
+if (CMAKE_COMPILER_IS_GNUCXX AND CECE_TESTS_BUILD)
+    option(CECE_COVERAGE "Enable code coverage generation for tests" Off)
+endif ()
+
 # ######################################################################### #
 
 # Build unit tests
@@ -103,6 +108,36 @@ add_subdirectory(src)
 
 if (CECE_TESTS_BUILD)
     add_subdirectory(unittests)
+
+    if (CMAKE_COMPILER_IS_GNUCXX AND CECE_COVERAGE)
+        find_program(LCOV lcov)
+        find_program(GENHTML genhtml)
+
+        if (NOT LCOV)
+            message(FATAL_ERROR "lcov not found!")
+        endif ()
+
+        if (NOT GENHTML)
+            message(FATAL_ERROR "genhtml not found!")
+        endif ()
+
+        # Add custom target for gcov
+        add_custom_target(cece-coverage
+            # Cleanup lcov
+            ${LCOV} --directory . --zerocounters
+
+            # Run tests
+            COMMAND ctest
+
+            # Capturing lcov counters and generating report
+            COMMAND ${LCOV} --directory . --capture --output-file coverage0.info
+            COMMAND ${LCOV} -r coverage0.info  'vendor/*' 'unittests/*' '/usr*' --output-file coverage.info
+            COMMAND ${GENHTML} --demangle-cpp -o coverage coverage.info
+            COMMAND ${CMAKE_COMMAND} -E remove coverage0.info
+
+            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        )
+    endif ()
 endif ()
 
 # ######################################################################### #

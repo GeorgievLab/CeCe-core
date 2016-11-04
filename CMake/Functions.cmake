@@ -51,10 +51,15 @@ function (cece_add_test NAME)
 
     # Libraries
     target_link_libraries(${FULLNAME}
-        cece
-        ${ARG_LIBRARIES}
-        gtest_main
+        PRIVATE cece
+        PRIVATE ${ARG_LIBRARIES}
+        PRIVATE gtest_main
     )
+
+    if (CMAKE_COMPILER_IS_GNUCXX AND CECE_TESTS_BUILD AND CECE_COVERAGE)
+        target_compile_options(${FULLNAME} PRIVATE --coverage)
+        target_link_libraries(${FULLNAME} PRIVATE --coverage)
+    endif ()
 
     # Register test
     add_test(

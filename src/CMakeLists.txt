@@ -109,6 +109,11 @@ if (MINGW)
     set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--export-all-symbols")
 endif ()
 
+if (CMAKE_COMPILER_IS_GNUCXX AND CECE_TESTS_BUILD AND CECE_COVERAGE)
+    target_compile_options(${PROJECT_NAME} PRIVATE --coverage)
+    target_link_libraries(${PROJECT_NAME} PRIVATE --coverage)
+endif ()
+
 # ######################################################################### #
 
 # Link Box2D internally

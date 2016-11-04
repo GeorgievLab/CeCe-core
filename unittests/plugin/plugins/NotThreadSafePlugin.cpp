@@ -39,7 +39,7 @@ CECE_PLUGIN_GET_CONFIG_PROTOTYPE(not_thread_safe_plugin)
         cece::config::PLUGIN_API_VERSION,
         sizeof(cece::config::RealType),
         CECE_RENDER_VALUE,
-        not CECE_THREAD_SAFE_VALUE
+        !CECE_THREAD_SAFE_VALUE
     };
     return &config;
 }

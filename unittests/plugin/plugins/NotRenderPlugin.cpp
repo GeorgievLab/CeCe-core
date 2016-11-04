@@ -38,7 +38,7 @@ CECE_PLUGIN_GET_CONFIG_PROTOTYPE(not_render_plugin)
     static cece::plugin::Config config = {
         cece::config::PLUGIN_API_VERSION,
         sizeof(cece::config::RealType),
-        not CECE_RENDER_VALUE,
+        !CECE_RENDER_VALUE,
         CECE_THREAD_SAFE_VALUE
     };
     return &config;

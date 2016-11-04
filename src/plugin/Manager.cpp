@@ -24,7 +24,7 @@
 /* ************************************************************************ */
 
 // Declaration
-#include "Manager.hpp"
+#include "cece/plugin/Manager.hpp"
 
 // C++
 #include <utility>

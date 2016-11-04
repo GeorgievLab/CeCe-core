@@ -25,27 +25,18 @@
 
 # Sources
 set(SRCS
-    Object.hpp
-    Object.cpp
-    Type.hpp
-    TypeContainer.hpp
-    TypeContainer.cpp
-    Factory.hpp
-    Factory.cpp
-    FactoryManager.hpp
-    FactoryManager.cpp
-    Container.hpp
-    Container.cpp
-    BoundData.hpp
-    BoundData.cpp
-    ContactListener.hpp
-    ContactListener.cpp
+    Simulation.cpp
+    Simulator.cpp
+    TimeMeasurement.cpp
+    Visualization.cpp
+    DefaultSimulation.cpp
+    ConverterBox2D.cpp
 )
 
 # ######################################################################### #
 
-dir_pretend(SOURCES object/ ${SRCS})
+dir_pretend(SOURCES simulator/ ${SRCS})
 
-set(SOURCES_OBJECT ${SOURCES} PARENT_SCOPE)
+set(SOURCES_SIMULATOR ${SOURCES} PARENT_SCOPE)
 
 # ######################################################################### #

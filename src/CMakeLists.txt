@@ -24,7 +24,7 @@
 # ######################################################################### #
 
 # Create config file
-configure_file(config.hpp.in config.hpp)
+configure_file(config.hpp.in cece/config.hpp)
 
 # ######################################################################### #
 
@@ -103,14 +103,14 @@ endif ()
 # Include directories
 target_include_directories(${PROJECT_NAME}
     PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/..
-        ${CMAKE_CURRENT_BINARY_DIR}/..
+        ${CMAKE_CURRENT_SOURCE_DIR}/../include
+        ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 # Generate export header (MSVC)
 include(GenerateExportHeader)
 generate_export_header(${PROJECT_NAME}
-    EXPORT_FILE_NAME "export.hpp"
+    EXPORT_FILE_NAME "cece/export.hpp"
 )
 
 # Compiler warnings

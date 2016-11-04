@@ -25,11 +25,8 @@
 
 # Sources
 set(SRCS
-    Implementation.hpp
     Implementation.cpp
-    Configuration.hpp
     Configuration.cpp
-    MemoryImplementation.hpp
     MemoryImplementation.cpp
 )
 

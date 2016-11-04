@@ -25,22 +25,19 @@
 
 # Sources
 set(SRCS
-    Module.hpp
-    Module.cpp
-    Factory.hpp
+    Object.cpp
+    TypeContainer.cpp
     Factory.cpp
-    FactoryManager.hpp
     FactoryManager.cpp
-    Container.hpp
     Container.cpp
-    ExportModule.hpp
-    ExportModule.cpp
+    BoundData.cpp
+    ContactListener.cpp
 )
 
 # ######################################################################### #
 
-dir_pretend(SOURCES module/ ${SRCS})
+dir_pretend(SOURCES object/ ${SRCS})
 
-set(SOURCES_MODULE ${SOURCES} PARENT_SCOPE)
+set(SOURCES_OBJECT ${SOURCES} PARENT_SCOPE)
 
 # ######################################################################### #

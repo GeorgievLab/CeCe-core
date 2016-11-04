@@ -23,65 +23,19 @@
 #                                                                           #
 # ######################################################################### #
 
-if (!CECE_RENDER)
-    message(WARNING "Cannot build 'render' without CECE_RENDER")
-endif ()
-
-# ######################################################################### #
-
 # Sources
 set(SRCS
-    datatype.hpp
-    Color.hpp
-    Color.cpp
-    errors.hpp
-    errors.cpp
-    Context.hpp
-    Context.cpp
-    Object.hpp
-    Object.cpp
-    Camera.hpp
-    Camera.cpp
-    Buffer.hpp
-    Buffer.cpp
-    GridBase.hpp
-    Grid.hpp
-    Grid.cpp
-    GridVector.hpp
-    GridVector.cpp
-    GridColor.hpp
-    GridColor.cpp
-    GridColorSmooth.hpp
-    GridColorSmooth.cpp
-    GridColorColorMap.hpp
-    GridColorColorMap.cpp
-    Shader.hpp
-    Shader.cpp
-    Program.hpp
-    Program.cpp
-    VertexElement.hpp
-    VertexFormat.hpp
-    Texture.hpp
-    Texture.cpp
-    Circle.hpp
-    Circle.cpp
-    Rectangle.hpp
-    Rectangle.cpp
-    ImageData.hpp
-    Lines.hpp
-    Lines.cpp
-    glext.h
-    State.hpp
-    Image.hpp
-    Image.cpp
-    PhysicsDebugger.hpp
-    PhysicsDebugger.cpp
+    Module.cpp
+    Factory.cpp
+    FactoryManager.cpp
+    Container.cpp
+    ExportModule.cpp
 )
 
 # ######################################################################### #
 
-dir_pretend(SOURCES render/ ${SRCS})
+dir_pretend(SOURCES module/ ${SRCS})
 
-set(SOURCES_RENDER ${SOURCES} PARENT_SCOPE)
+set(SOURCES_MODULE ${SOURCES} PARENT_SCOPE)
 
 # ######################################################################### #

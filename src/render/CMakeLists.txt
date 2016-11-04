@@ -23,20 +23,39 @@
 #                                                                           #
 # ######################################################################### #
 
+if (!CECE_RENDER)
+    message(WARNING "Cannot build 'render' without CECE_RENDER")
+endif ()
+
+# ######################################################################### #
+
 # Sources
 set(SRCS
-    Loader.hpp
-    Loader.cpp
-    Factory.hpp
-    Factory.cpp
-    FactoryManager.hpp
-    FactoryManager.cpp
+    Color.cpp
+    errors.cpp
+    Context.cpp
+    Object.cpp
+    Camera.cpp
+    Buffer.cpp
+    Grid.cpp
+    GridVector.cpp
+    GridColor.cpp
+    GridColorSmooth.cpp
+    GridColorColorMap.cpp
+    Shader.cpp
+    Program.cpp
+    Texture.cpp
+    Circle.cpp
+    Rectangle.cpp
+    Lines.cpp
+    Image.cpp
+    PhysicsDebugger.cpp
 )
 
 # ######################################################################### #
 
-dir_pretend(SOURCES loader/ ${SRCS})
+dir_pretend(SOURCES render/ ${SRCS})
 
-set(SOURCES_LOADER ${SOURCES} PARENT_SCOPE)
+set(SOURCES_RENDER ${SOURCES} PARENT_SCOPE)
 
 # ######################################################################### #

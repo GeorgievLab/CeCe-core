@@ -23,23 +23,31 @@
 #                                                                           #
 # ######################################################################### #
 
-# Sources
 set(SRCS
-    Program.hpp
-    Container.hpp
-    Container.cpp
-    NamedContainer.hpp
-    NamedContainer.cpp
-    Factory.hpp
-    Factory.cpp
-    FactoryManager.hpp
-    FactoryManager.cpp
+    Unit.cpp
+    UnitIo.cpp
+    Units.cpp
+    Vector.cpp
+    VectorUnits.cpp
+    Grid.cpp
+    AlignedAllocator.cpp
+    ExpressionParser.cpp
+    Log.cpp
+    TimeMeasurement.cpp
+    FilePath.cpp
+    CsvFile.cpp
+    DataExport.cpp
+    DataExportCsv.cpp
+    DataExportFactory.cpp
+    DataExportCsvFactory.cpp
+    Parameters.cpp
+    CliColor.cpp
 )
 
 # ######################################################################### #
 
-dir_pretend(SOURCES program/ ${SRCS})
+dir_pretend(SOURCES core/ ${SRCS})
 
-set(SOURCES_PROGRAM ${SOURCES} PARENT_SCOPE)
+set(SOURCES_CORE ${SOURCES} PARENT_SCOPE)
 
 # ######################################################################### #

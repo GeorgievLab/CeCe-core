@@ -23,87 +23,17 @@
 #                                                                           #
 # ######################################################################### #
 
+# Sources
 set(SRCS
-    Macro.hpp
-    constants.hpp
-    fastexp.hpp
-    DynamicArray.hpp
-    StaticArray.hpp
-    StaticMatrix.hpp
-    Unit.hpp
-    Unit.cpp
-    UnitIo.hpp
-    UnitIo.cpp
-    UnitSymbol.hpp
-    Units.hpp
-    Units.cpp
-    UnitsCtors.hpp
-    Vector.hpp
-    Vector.cpp
-    VectorUnits.hpp
-    VectorUnits.cpp
-    Grid.hpp
-    Grid.cpp
-    AlignedAllocator.hpp
-    AlignedAllocator.cpp
-    ExpressionParser.hpp
-    ExpressionParser.cpp
-    Log.hpp
-    Log.cpp
-    TimeMeasurement.hpp
-    TimeMeasurement.cpp
-    String.hpp
-    StringView.hpp
-    FilePath.hpp
-    FilePath.cpp
-    Exception.hpp
-    OutStream.hpp
-    InStream.hpp
-    InOutStream.hpp
-    FileStream.hpp
-    CsvFile.hpp
-    CsvFile.cpp
-    DataExport.hpp
-    DataExport.cpp
-    DataExportCsv.hpp
-    DataExportCsv.cpp
-    DataExportFactory.hpp
-    DataExportFactory.cpp
-    DataExportCsvFactory.hpp
-    DataExportCsvFactory.cpp
-    ValueIterator.hpp
-    Range.hpp
-    VectorRange.hpp
-    IntegerSequence.hpp
-    Tuple.hpp
-    UniquePtr.hpp
-    ViewPtr.hpp
-    ListenerContainer.hpp
-    Zero.hpp
-    StringStream.hpp
-    Tokenizer.hpp
-    Real.hpp
-    Mutex.hpp
-    Pair.hpp
-    SharedPtr.hpp
-    Parameters.hpp
-    Parameters.cpp
-    Factory.hpp
-    FactoryManager.hpp
-    Shape.hpp
-    ShapeToGrid.hpp
-    PtrContainer.hpp
-    PtrNamedContainer.hpp
-    IterationType.hpp
-    IterationRange.hpp
-    CliColor.hpp
-    CliColor.cpp
+    Loader.cpp
+    Factory.cpp
+    FactoryManager.cpp
 )
 
 # ######################################################################### #
 
-dir_pretend(SOURCES core/ ${SRCS})
+dir_pretend(SOURCES loader/ ${SRCS})
 
-set(SOURCES_CORE ${SOURCES} PARENT_SCOPE)
+set(SOURCES_LOADER ${SOURCES} PARENT_SCOPE)
 
 # ######################################################################### #

@@ -25,34 +25,16 @@
 
 # Sources
 set(SRCS
-    Config.hpp
-    definition.hpp
-    Api.hpp
-    Api.cpp
-    Plugin.hpp
-    Plugin.cpp
-    Manager.hpp
-    Manager.cpp
-    RepositoryRecord.hpp
-    RepositoryRecord.cpp
-    Repository.hpp
-    Repository.cpp
-    Context.hpp
-    Context.cpp
-    Loader.hpp
-    Loader.cpp
-    SharedLibrary.hpp
-    SharedLibrary.cpp
-    SharedLibraryLoader.hpp
-    SharedLibraryLoader.cpp
-    Exception.hpp
-    Exception.cpp
+    Container.cpp
+    NamedContainer.cpp
+    Factory.cpp
+    FactoryManager.cpp
 )
 
 # ######################################################################### #
 
-dir_pretend(SOURCES plugin/ ${SRCS})
+dir_pretend(SOURCES program/ ${SRCS})
 
-set(SOURCES_PLUGIN ${SOURCES} PARENT_SCOPE)
+set(SOURCES_PROGRAM ${SOURCES} PARENT_SCOPE)
 
 # ######################################################################### #

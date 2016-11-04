@@ -25,25 +25,22 @@
 
 # Sources
 set(SRCS
-    Simulation.hpp
-    Simulation.cpp
-    Simulator.hpp
-    Simulator.cpp
-    TimeMeasurement.hpp
-    TimeMeasurement.cpp
-    Visualization.hpp
-    Visualization.cpp
-    VisualizationLayer.hpp
-    DefaultSimulation.hpp
-    DefaultSimulation.cpp
-    ConverterBox2D.hpp
-    ConverterBox2D.cpp
+    Api.cpp
+    Plugin.cpp
+    Manager.cpp
+    RepositoryRecord.cpp
+    Repository.cpp
+    Context.cpp
+    Loader.cpp
+    SharedLibrary.cpp
+    SharedLibraryLoader.cpp
+    Exception.cpp
 )
 
 # ######################################################################### #
 
-dir_pretend(SOURCES simulator/ ${SRCS})
+dir_pretend(SOURCES plugin/ ${SRCS})
 
-set(SOURCES_SIMULATOR ${SOURCES} PARENT_SCOPE)
+set(SOURCES_PLUGIN ${SOURCES} PARENT_SCOPE)
 
 # ######################################################################### #

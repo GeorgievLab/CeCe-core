@@ -44,6 +44,14 @@ using namespace cece::plugin;
 
 /* ************************************************************************ */
 
+namespace {
+
+/* ************************************************************************ */
+
+class DummyApi final : public Api {};
+
+/* ************************************************************************ */
+
 class TestApi final : public Api
 {
 
@@ -117,6 +125,29 @@ public:
     mutable bool onRemoveCalled = false;
     mutable bool storeConfigCalled = false;
 };
+
+/* ************************************************************************ */
+
+}
+
+/* ************************************************************************ */
+
+TEST(Api, dummy)
+{
+    // Api with no override can be used
+    auto api = makeUnique<DummyApi>();
+
+    // No access to those objects, just for passing references to the functions.
+    RepositoryRecord* record = nullptr;
+    config::Configuration* config = nullptr;
+    simulator::Simulation* sim = nullptr;
+
+    api->onLoad(*record);
+    api->onUnload(*record);
+    api->onImport(*sim, *config);
+    api->onRemove(*sim);
+    api->storeConfig(*sim, *config);
+}
 
 /* ************************************************************************ */
 

@@ -33,6 +33,7 @@
 
 #ifdef _WIN32
 #  include <windows.h>
+#  include <cwchar>
 #else
 #  include <unistd.h>
 #  include <dirent.h>
@@ -337,6 +338,10 @@ DynamicArray<FilePath> FilePath::openDirectory(const FilePath& dir)
 
     do
     {
+        // Skip '.' & '..'
+        if (!std::wcscmp(ffd.cFileName, L".") || !std::wcscmp(ffd.cFileName, L".."))
+            continue;
+
         entries.push_back(dir / fromWide(ffd.cFileName));
     }
     while (FindNextFileW(hFind, &ffd) != 0);

@@ -37,7 +37,7 @@
 #include "cece/core/StringView.hpp"
 #include "cece/core/UniquePtr.hpp"
 #include "cece/core/ViewPtr.hpp"
-#include "cece/core/FilePath.hpp"
+#include "cece/io/FilePath.hpp"
 #include "cece/core/InOutStream.hpp"
 #include "cece/core/IterationType.hpp"
 
@@ -118,7 +118,7 @@ public:
      *
      * @return
      */
-    virtual const FilePath& getFileName() const noexcept = 0;
+    virtual const io::FilePath& getFileName() const noexcept = 0;
 
 
     /**

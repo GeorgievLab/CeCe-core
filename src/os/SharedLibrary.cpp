@@ -79,7 +79,7 @@ namespace {
  *
  * @return     Library handle.
  */
-void* openLibrary(const FilePath& path) noexcept
+void* openLibrary(const io::FilePath& path) noexcept
 {
 #if _WIN32
     String str = path.toString();
@@ -160,7 +160,7 @@ String getError(void* handle) noexcept
 
 /* ************************************************************************ */
 
-SharedLibrary::SharedLibrary(FilePath path)
+SharedLibrary::SharedLibrary(io::FilePath path)
     : m_path(std::move(path))
     , m_handle(openLibrary(m_path))
 {

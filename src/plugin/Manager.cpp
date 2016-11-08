@@ -118,7 +118,7 @@ Manager& Manager::addLoader(UniquePtr<Loader> loader)
 
 /* ************************************************************************ */
 
-Manager& Manager::addDirectory(FilePath path)
+Manager& Manager::addDirectory(io::FilePath path)
 {
     CECE_ASSERT(!path.isEmpty());
 

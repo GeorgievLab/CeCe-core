@@ -99,7 +99,7 @@ struct DefaultSimulation::ContactListener : public b2ContactListener
 
 /* ************************************************************************ */
 
-DefaultSimulation::DefaultSimulation(const plugin::Manager& manager, FilePath path) noexcept
+DefaultSimulation::DefaultSimulation(const plugin::Manager& manager, io::FilePath path) noexcept
     : m_pluginManager(manager)
     , m_pluginContext(m_pluginManager)
     , m_fileName(std::move(path))

@@ -32,7 +32,7 @@
 #include "cece/core/StringView.hpp"
 #include "cece/core/DynamicArray.hpp"
 #include "cece/core/ViewPtr.hpp"
-#include "cece/core/FilePath.hpp"
+#include "cece/io/FilePath.hpp"
 #include "cece/plugin/Loader.hpp"
 #include "cece/plugin/Repository.hpp"
 
@@ -129,7 +129,7 @@ public:
      *
      * @return     A list of directories.
      */
-    const DynamicArray<FilePath>& getDirectories() const noexcept
+    const DynamicArray<io::FilePath>& getDirectories() const noexcept
     {
         return m_directories;
     }
@@ -187,7 +187,7 @@ public:
      *
      * @return     *this.
      */
-    Manager& addDirectories(DynamicArray<FilePath> directories)
+    Manager& addDirectories(DynamicArray<io::FilePath> directories)
     {
         for (auto&& directory : directories)
             addDirectory(std::move(directory));
@@ -205,7 +205,7 @@ public:
      *
      * @return     *this
      */
-    Manager& addDirectory(FilePath path);
+    Manager& addDirectory(io::FilePath path);
 
 
     /**
@@ -237,7 +237,7 @@ private:
     DynamicArray<UniquePtr<Loader>> m_loaders;
 
     /// Plugins directory paths.
-    DynamicArray<FilePath> m_directories;
+    DynamicArray<io::FilePath> m_directories;
 
     /// List of loaded plugins.
     DynamicArray<Plugin> m_plugins;

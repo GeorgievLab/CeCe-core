@@ -57,7 +57,7 @@ bool ExportModule::isActive(IterationType it) const noexcept
 
 void ExportModule::loadConfig(const config::Configuration& config)
 {
-    setFilePath(config.get<FilePath>("filename"));
+    setFilePath(config.get<io::FilePath>("filename"));
     setActive(parseActive(config.get("active", String{})));
 }
 

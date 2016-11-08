@@ -31,7 +31,7 @@
 #include "cece/export.hpp"
 #include "cece/core/String.hpp"
 #include "cece/core/StringView.hpp"
-#include "cece/core/FilePath.hpp"
+#include "cece/io/FilePath.hpp"
 
 /* ************************************************************************ */
 
@@ -74,7 +74,7 @@ public:
      *
      * @param      path  Path to shared library.
      */
-    explicit SharedLibrary(FilePath path);
+    explicit SharedLibrary(io::FilePath path);
 
 
     /**
@@ -143,7 +143,7 @@ public:
      *
      * @return     Path to shared library.
      */
-    const FilePath& getPath() const noexcept
+    const io::FilePath& getPath() const noexcept
     {
         return m_path;
     }
@@ -189,7 +189,7 @@ public:
 private:
 
     /// Path to library file.
-    FilePath m_path;
+    io::FilePath m_path;
 
     /// Shared library handle.
     void* m_handle = nullptr;

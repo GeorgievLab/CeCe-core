@@ -126,7 +126,7 @@ UniquePtr<Api> createApi(const os::SharedLibrary& lib)
 
 /* ************************************************************************ */
 
-DynamicArray<Plugin> SharedLibraryLoader::loadAll(const FilePath& directory)
+DynamicArray<Plugin> SharedLibraryLoader::loadAll(const io::FilePath& directory)
 {
     static const auto PREFIX = os::SharedLibrary::PREFIX + "cece-";
     static const auto EXTENSION = os::SharedLibrary::EXTENSION;

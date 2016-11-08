@@ -33,6 +33,7 @@
 
 using namespace cece;
 using namespace cece::os;
+using namespace cece::io;
 
 /* ************************************************************************ */
 
@@ -45,8 +46,8 @@ TEST(SharedLibrary, formatName)
 
 TEST(SharedLibrary, ctor)
 {
-    ASSERT_PRED1(pathExists, os::SharedLibrary::formatName("library1"));
-    ASSERT_PRED1(pathExists, FilePath::getCurrent() / os::SharedLibrary::formatName("library1"));
+    ASSERT_PRED1(FilePath::exists, os::SharedLibrary::formatName("library1"));
+    ASSERT_PRED1(FilePath::exists, FilePath::getCurrent() / os::SharedLibrary::formatName("library1"));
 
     // Default
     {
@@ -101,8 +102,8 @@ TEST(SharedLibrary, open)
     SharedLibrary lib;
     EXPECT_FALSE(lib.isOpen());
 
-    ASSERT_PRED1(pathExists, os::SharedLibrary::formatName("library1"));
-    ASSERT_PRED1(pathExists, FilePath::getCurrent() / os::SharedLibrary::formatName("library1"));
+    ASSERT_PRED1(FilePath::exists, os::SharedLibrary::formatName("library1"));
+    ASSERT_PRED1(FilePath::exists, FilePath::getCurrent() / os::SharedLibrary::formatName("library1"));
 
     ASSERT_NO_THROW(lib = SharedLibrary(FilePath::getCurrent() / SharedLibrary::formatName("library1")));
     ASSERT_TRUE(lib.isOpen());

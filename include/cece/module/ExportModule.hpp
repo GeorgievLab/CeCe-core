@@ -32,7 +32,7 @@
 
 // CeCe
 #include "cece/core/String.hpp"
-#include "cece/core/FilePath.hpp"
+#include "cece/io/FilePath.hpp"
 #include "cece/core/UniquePtr.hpp"
 #include "cece/core/CsvFile.hpp"
 #include "cece/core/IterationRange.hpp"
@@ -69,7 +69,7 @@ public:
      *
      * @return
      */
-    const FilePath& getFilePath() const noexcept
+    const io::FilePath& getFilePath() const noexcept
     {
         return m_filePath;
     }
@@ -105,7 +105,7 @@ public:
      *
      * @param filePath
      */
-    void setFilePath(FilePath filePath) noexcept
+    void setFilePath(io::FilePath filePath) noexcept
     {
         m_filePath = std::move(filePath);
     }
@@ -208,7 +208,7 @@ protected:
     UniquePtr<DataExport> m_export;
 
     /// File path.
-    FilePath m_filePath;
+    io::FilePath m_filePath;
 
     /// When is export active.
     DynamicArray<IterationRange> m_active;

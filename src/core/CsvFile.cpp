@@ -36,7 +36,7 @@ inline namespace core {
 
 /* ************************************************************************ */
 
-CsvFile::CsvFile(FilePath path)
+CsvFile::CsvFile(io::FilePath path)
 {
     open(std::move(path));
 }
@@ -57,7 +57,7 @@ void CsvFile::open()
 
 /* ************************************************************************ */
 
-void CsvFile::open(FilePath path)
+void CsvFile::open(io::FilePath path)
 {
     m_path = std::move(path);
     m_file.open(m_path.toString(), std::ios::binary | std::ios::out | std::ios::trunc);

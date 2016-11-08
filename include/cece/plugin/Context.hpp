@@ -28,7 +28,7 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/FilePath.hpp"
+#include "cece/io/FilePath.hpp"
 #include "cece/core/StringView.hpp"
 #include "cece/core/ViewPtr.hpp"
 #include "cece/core/Set.hpp"

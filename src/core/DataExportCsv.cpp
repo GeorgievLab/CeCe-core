@@ -42,7 +42,7 @@ inline namespace core {
 
 /* ************************************************************************ */
 
-DataExportCsv::DataExportCsv(FilePath path)
+DataExportCsv::DataExportCsv(io::FilePath path)
     : m_file(path.append(".csv"))
 {
     // Nothing to do

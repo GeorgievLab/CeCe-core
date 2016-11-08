@@ -68,7 +68,7 @@ String join(const DynamicArray<String>& array) noexcept
 
 /* ************************************************************************ */
 
-InvalidPluginException::InvalidPluginException(FilePath path, String msg) noexcept
+InvalidPluginException::InvalidPluginException(io::FilePath path, String msg) noexcept
     : Exception("Plugin `" + path.toString() + "`: " + msg)
     , m_path(std::move(path))
     , m_errorMessage(std::move(msg))

@@ -23,7 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
+#if _MSC_VER
+#pragma message("Include 'cece/os/SharedLibrary.hpp' instead")
+#else
 #warning "Include 'cece/os/SharedLibrary.hpp' instead"
+#endif
+
 #include "cece/os/SharedLibrary.hpp"
 
 /* ************************************************************************ */

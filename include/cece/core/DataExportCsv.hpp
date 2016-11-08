@@ -30,7 +30,7 @@
 // CeCe
 #include "cece/core/DataExport.hpp"
 #include "cece/core/CsvFile.hpp"
-#include "cece/core/FilePath.hpp"
+#include "cece/io/FilePath.hpp"
 
 /* ************************************************************************ */
 
@@ -54,7 +54,7 @@ public:
      *
      * @param path
      */
-    explicit DataExportCsv(FilePath path);
+    explicit DataExportCsv(io::FilePath path);
 
 
     /**
@@ -72,7 +72,7 @@ public:
      *
      * @return
      */
-    const FilePath& getFilePath() const noexcept
+    const io::FilePath& getFilePath() const noexcept
     {
         return m_file.getPath();
     }

@@ -44,7 +44,7 @@
 #include "cece/core/Map.hpp"
 #include "cece/core/UniquePtr.hpp"
 #include "cece/core/ViewPtr.hpp"
-#include "cece/core/FilePath.hpp"
+#include "cece/io/FilePath.hpp"
 #include "cece/core/Parameters.hpp"
 #include "cece/core/IterationType.hpp"
 #include "cece/plugin/Context.hpp"
@@ -96,7 +96,7 @@ public:
      * @param manager Plugin manager.
      * @param path    Path to simulation file.
      */
-    explicit DefaultSimulation(const plugin::Manager& manager, FilePath path = "<memory>") noexcept;
+    explicit DefaultSimulation(const plugin::Manager& manager, io::FilePath path = "<memory>") noexcept;
 
 
     /**
@@ -224,7 +224,7 @@ public:
      *
      * @return
      */
-    const FilePath& getFileName() const noexcept override
+    const io::FilePath& getFileName() const noexcept override
     {
         return m_fileName;
     }
@@ -797,7 +797,7 @@ private:
     plugin::Context m_pluginContext;
 
     /// Path of simulation file.
-    FilePath m_fileName;
+    io::FilePath m_fileName;
 
     /// If simulation is initialized.
     bool m_initialized = false;

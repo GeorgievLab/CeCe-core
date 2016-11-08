@@ -29,7 +29,7 @@
 
 // CeCe
 #include "cece/core/DynamicArray.hpp"
-#include "cece/core/FilePath.hpp"
+#include "cece/io/FilePath.hpp"
 #include "cece/plugin/Loader.hpp"
 #include "cece/os/SharedLibrary.hpp"
 
@@ -64,7 +64,7 @@ public:
      *
      * @return     A list of loaded plugins.
      */
-    DynamicArray<Plugin> loadAll(const FilePath& directory) override;
+    DynamicArray<Plugin> loadAll(const io::FilePath& directory) override;
 
 
 // Private Data Members

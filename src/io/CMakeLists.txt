@@ -23,29 +23,14 @@
 #                                                                           #
 # ######################################################################### #
 
+# Sources
 set(SRCS
-    Unit.cpp
-    UnitIo.cpp
-    Units.cpp
-    Vector.cpp
-    VectorUnits.cpp
-    Grid.cpp
-    AlignedAllocator.cpp
-    ExpressionParser.cpp
-    Log.cpp
-    TimeMeasurement.cpp
-    CsvFile.cpp
-    DataExport.cpp
-    DataExportCsv.cpp
-    DataExportFactory.cpp
-    DataExportCsvFactory.cpp
-    Parameters.cpp
-    CliColor.cpp
+    FilePath.cpp
 )
 
 # ######################################################################### #
 
-dir_pretend(SOURCES core/ ${SRCS})
+dir_pretend(SOURCES io/ ${SRCS})
 
 set(CECE_SOURCES ${CECE_SOURCES} ${SOURCES} PARENT_SCOPE)
 

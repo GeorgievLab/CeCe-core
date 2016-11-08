@@ -24,10 +24,11 @@
 /* ************************************************************************ */
 
 // Declaration
-#include "cece/core/FilePath.hpp"
+#include "cece/io/FilePath.hpp"
 
 // C++
 #include <cstdlib>
+#include <cstring>
 #include <utility>
 
 #ifdef _WIN32
@@ -45,7 +46,7 @@
 /* ************************************************************************ */
 
 namespace cece {
-inline namespace core {
+namespace io {
 
 /* ************************************************************************ */
 
@@ -189,7 +190,7 @@ FilePath FilePath::getCurrent()
 
 /* ************************************************************************ */
 
-void FilePath::setCurrent(FilePath path)
+void FilePath::setCurrent(const FilePath& path)
 {
 #ifdef _WIN32
     if (!SetCurrentDirectory(path.toString().c_str()))
@@ -202,7 +203,7 @@ void FilePath::setCurrent(FilePath path)
 
 /* ************************************************************************ */
 
-bool isFile(const FilePath& path) noexcept
+bool FilePath::isFile(const FilePath& path) noexcept
 {
 #ifdef _WIN32
     auto str = toWide(path.toString());
@@ -218,7 +219,7 @@ bool isFile(const FilePath& path) noexcept
 
 /* ************************************************************************ */
 
-bool isDirectory(const FilePath& path) noexcept
+bool FilePath::isDirectory(const FilePath& path) noexcept
 {
 #ifdef _WIN32
     auto str = toWide(path.toString());
@@ -236,7 +237,7 @@ bool isDirectory(const FilePath& path) noexcept
 
 /* ************************************************************************ */
 
-bool pathExists(const FilePath& path) noexcept
+bool FilePath::exists(const FilePath& path) noexcept
 {
 #ifdef _WIN32
     auto str = toWide(path.toString());
@@ -249,7 +250,7 @@ bool pathExists(const FilePath& path) noexcept
 
 /* ************************************************************************ */
 
-FilePath tempDirectory()
+FilePath FilePath::getTempDirectory()
 {
     // Based on boost implementation
 
@@ -322,9 +323,8 @@ FilePath tempDirectory()
 
 /* ************************************************************************ */
 
-DynamicArray<FilePath> openDirectory(const FilePath& dir)
+DynamicArray<FilePath> FilePath::openDirectory(const FilePath& dir)
 {
-
 #ifdef _WIN32
     WIN32_FIND_DATAW ffd;
     auto str = toWide(dir.c_str());
@@ -353,8 +353,14 @@ DynamicArray<FilePath> openDirectory(const FilePath& dir)
     DynamicArray<FilePath> entries;
 
     struct dirent* de;
-    while ((de = readdir(d)) != NULL)
+    while ((de = readdir(d)) != nullptr)
+    {
+        // Skip '.' & '..'
+        if (!std::strcmp(de->d_name, ".") || !std::strcmp(de->d_name, ".."))
+            continue;
+
         entries.push_back(dir / de->d_name);
+    }
 
     closedir(d);
 

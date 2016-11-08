@@ -38,7 +38,6 @@ cece_add_test(core
         ParametersTest.cpp
         PtrContainerTest.cpp
         ViewPtrTest.cpp
-        FilePathTest.cpp
 )
 
 # ######################################################################### #

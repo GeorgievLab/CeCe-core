@@ -27,13 +27,14 @@
 #include "gtest/gtest.h"
 
 // CeCe
-#include "cece/core/FilePath.hpp"
+#include "cece/io/FilePath.hpp"
 #include "cece/plugin/Manager.hpp"
 #include "cece/plugin/SharedLibraryLoader.hpp"
 
 /* ************************************************************************ */
 
 using namespace cece;
+using namespace cece::io;
 using namespace cece::plugin;
 
 /* ************************************************************************ */
@@ -96,15 +97,15 @@ TEST(Manager, load)
     // Loader should be able to handle non-existent directory without crash
     EXPECT_NO_THROW(mgr.addDirectory("non-existent-directory"));
 
-    ASSERT_PRED1(pathExists, os::SharedLibrary::formatName("cece-test-plugin"));
-    EXPECT_PRED1(pathExists, os::SharedLibrary::formatName("cece-invalid-plugin"));
-    EXPECT_PRED1(pathExists, os::SharedLibrary::formatName("cece-old-plugin"));
-    EXPECT_PRED1(pathExists, os::SharedLibrary::formatName("cece-no-config-plugin"));
-    EXPECT_PRED1(pathExists, os::SharedLibrary::formatName("cece-no-create-plugin"));
-    EXPECT_PRED1(pathExists, os::SharedLibrary::formatName("cece-not-render-plugin"));
-    EXPECT_PRED1(pathExists, os::SharedLibrary::formatName("cece-different-real-plugin"));
-    EXPECT_PRED1(pathExists, os::SharedLibrary::formatName("cece-no-shared-plugin"));
-    EXPECT_PRED1(pathExists, os::SharedLibrary::PREFIX + "cece-python-plugin.py");
+    ASSERT_PRED1(FilePath::exists, os::SharedLibrary::formatName("cece-test-plugin"));
+    EXPECT_PRED1(FilePath::exists, os::SharedLibrary::formatName("cece-invalid-plugin"));
+    EXPECT_PRED1(FilePath::exists, os::SharedLibrary::formatName("cece-old-plugin"));
+    EXPECT_PRED1(FilePath::exists, os::SharedLibrary::formatName("cece-no-config-plugin"));
+    EXPECT_PRED1(FilePath::exists, os::SharedLibrary::formatName("cece-no-create-plugin"));
+    EXPECT_PRED1(FilePath::exists, os::SharedLibrary::formatName("cece-not-render-plugin"));
+    EXPECT_PRED1(FilePath::exists, os::SharedLibrary::formatName("cece-different-real-plugin"));
+    EXPECT_PRED1(FilePath::exists, os::SharedLibrary::formatName("cece-no-shared-plugin"));
+    EXPECT_PRED1(FilePath::exists, os::SharedLibrary::PREFIX + "cece-python-plugin.py");
 
     // Plugins should be loaded
     EXPECT_TRUE(mgr.isLoaded("test-plugin"));

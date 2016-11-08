@@ -30,7 +30,7 @@
 // CeCe
 #include "cece/core/ViewPtr.hpp"
 #include "cece/core/UniquePtr.hpp"
-#include "cece/core/FilePath.hpp"
+#include "cece/io/FilePath.hpp"
 #include "cece/core/String.hpp"
 #include "cece/core/InStream.hpp"
 #include "cece/core/OutStream.hpp"
@@ -83,7 +83,7 @@ public:
      * @return Pointer to created simulation.
      */
     virtual UniquePtr<simulator::Simulation> fromFile(
-        const plugin::Manager& manager, const FilePath& filename,
+        const plugin::Manager& manager, const io::FilePath& filename,
         ViewPtr<const Parameters> parameters = nullptr) const;
 
 
@@ -97,7 +97,7 @@ public:
      */
     virtual UniquePtr<simulator::Simulation> fromSource(
         const plugin::Manager& manager,
-        const String& source, const FilePath& filename = "<source>",
+        const String& source, const io::FilePath& filename = "<source>",
         ViewPtr<const Parameters> parameters = nullptr) const;
 
 
@@ -108,7 +108,7 @@ public:
      * @param filename   Path to source file.
      */
     virtual void toFile(const simulator::Simulation& simulation,
-        const FilePath& filename) const;
+        const io::FilePath& filename) const;
 
 
     /**
@@ -119,7 +119,7 @@ public:
      * @return Source code.
      */
     virtual String toSource(const simulator::Simulation& simulation,
-        const FilePath& filename = "<source>") const;
+        const io::FilePath& filename = "<source>") const;
 
 
     /**
@@ -134,7 +134,7 @@ public:
      */
     virtual UniquePtr<simulator::Simulation> fromStream(
         const plugin::Manager& manager, InStream& is,
-        const FilePath& filename = "<stream>",
+        const io::FilePath& filename = "<stream>",
         ViewPtr<const Parameters> parameters = nullptr) const = 0;
 
 
@@ -145,7 +145,7 @@ public:
      * @param simulation Source simulation.
      */
     virtual void toStream(OutStream& os, const simulator::Simulation& simulation,
-        const FilePath& filename = "<stream>") const = 0;
+        const io::FilePath& filename = "<stream>") const = 0;
 
 };
 

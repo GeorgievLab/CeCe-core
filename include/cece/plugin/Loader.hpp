@@ -30,7 +30,7 @@
 // CeCe
 #include "cece/core/ViewPtr.hpp"
 #include "cece/core/DynamicArray.hpp"
-#include "cece/core/FilePath.hpp"
+#include "cece/io/FilePath.hpp"
 #include "cece/plugin/Plugin.hpp"
 
 /* ************************************************************************ */
@@ -73,7 +73,7 @@ public:
      *
      * @return     A list of loaded plugins.
      */
-    virtual DynamicArray<Plugin> loadAll(const FilePath& directory) = 0;
+    virtual DynamicArray<Plugin> loadAll(const io::FilePath& directory) = 0;
 
 };
 

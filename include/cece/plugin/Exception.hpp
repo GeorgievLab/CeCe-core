@@ -29,7 +29,7 @@
 
 // CeCe
 #include "cece/core/String.hpp"
-#include "cece/core/FilePath.hpp"
+#include "cece/io/FilePath.hpp"
 #include "cece/core/Exception.hpp"
 #include "cece/core/DynamicArray.hpp"
 
@@ -70,7 +70,7 @@ public:
      * @param[in]  path  The source plugin file path.
      * @param[in]  msg   The error message.
      */
-    explicit InvalidPluginException(FilePath path, String msg) noexcept;
+    explicit InvalidPluginException(io::FilePath path, String msg) noexcept;
 
 
 // Public Accessors & Mutators
@@ -82,7 +82,7 @@ public:
      *
      * @return     The plugin file path.
      */
-    const FilePath& getPath() const noexcept
+    const io::FilePath& getPath() const noexcept
     {
         return m_path;
     }
@@ -103,7 +103,7 @@ public:
 private:
 
     /// Plugin source path.
-    FilePath m_path;
+    io::FilePath m_path;
 
     /// Error message.
     String m_errorMessage;

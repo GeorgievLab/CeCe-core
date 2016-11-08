@@ -34,7 +34,7 @@
 #include "cece/core/Tuple.hpp"
 #include "cece/core/DynamicArray.hpp"
 #include "cece/core/String.hpp"
-#include "cece/core/FilePath.hpp"
+#include "cece/io/FilePath.hpp"
 #include "cece/core/FileStream.hpp"
 #include "cece/core/IntegerSequence.hpp"
 
@@ -66,7 +66,7 @@ public:
      *
      * @param path Path to CSV file.
      */
-    explicit CsvFile(FilePath path);
+    explicit CsvFile(io::FilePath path);
 
 
 // Public Accessors & Mutators
@@ -85,7 +85,7 @@ public:
      *
      * @return
      */
-    const FilePath& getPath() const noexcept
+    const io::FilePath& getPath() const noexcept
     {
         return m_path;
     }
@@ -96,7 +96,7 @@ public:
      *
      * @param filePath
      */
-    void setPath(FilePath path) noexcept
+    void setPath(io::FilePath path) noexcept
     {
         m_path = std::move(path);
     }
@@ -117,7 +117,7 @@ public:
      *
      * @param path Path to CSV file.
      */
-    void open(FilePath path);
+    void open(io::FilePath path);
 
 
     /**
@@ -249,7 +249,7 @@ protected:
 private:
 
     /// File path.
-    FilePath m_path;
+    io::FilePath m_path;
 
     /// File stream.
     FileStream m_file;

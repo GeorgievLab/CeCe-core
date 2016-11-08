@@ -23,30 +23,15 @@
 #                                                                           #
 # ######################################################################### #
 
-set(SRCS
-    Unit.cpp
-    UnitIo.cpp
-    Units.cpp
-    Vector.cpp
-    VectorUnits.cpp
-    Grid.cpp
-    AlignedAllocator.cpp
-    ExpressionParser.cpp
-    Log.cpp
-    TimeMeasurement.cpp
-    CsvFile.cpp
-    DataExport.cpp
-    DataExportCsv.cpp
-    DataExportFactory.cpp
-    DataExportCsvFactory.cpp
-    Parameters.cpp
-    CliColor.cpp
+cece_add_test(io
+    SOURCES
+        FilePathTest.cpp
 )
 
 # ######################################################################### #
 
-dir_pretend(SOURCES core/ ${SRCS})
-
-set(CECE_SOURCES ${CECE_SOURCES} ${SOURCES} PARENT_SCOPE)
+file(GENERATE OUTPUT "$<TARGET_FILE_DIR:cece-io_test>/file1.txt" CONTENT "Hello world!\n")
+file(GENERATE OUTPUT "$<TARGET_FILE_DIR:cece-io_test>/dir1/file2.txt" CONTENT "Hello world!\n")
+file(GENERATE OUTPUT "$<TARGET_FILE_DIR:cece-io_test>/dir1/file3.txt" CONTENT "Hello world!\n")
 
 # ######################################################################### #

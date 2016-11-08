@@ -23,16 +23,39 @@
 #                                                                           #
 # ######################################################################### #
 
-cmake_minimum_required(VERSION 3.1)
+cece_add_test(os
+    SOURCES
+        SharedLibraryTest.cpp
+)
 
 # ######################################################################### #
 
-add_subdirectory(core)
-add_subdirectory(plugin)
-add_subdirectory(os)
+##
+## Helper function which build a test plugin.
+##
+function (add_test_library NAME SOURCE)
+    if (CECE_BUILD_TESTS)
+        return ()
+    endif ()
 
-if (CECE_RENDER)
-    add_subdirectory(render)
-endif ()
+    set(FULLNAME ${NAME})
+
+    # Test plugin
+    add_library(${FULLNAME} SHARED
+        libraries/${SOURCE}
+    )
+
+    # Properties
+    set_target_properties(${FULLNAME} PROPERTIES
+        CXX_STANDARD 11
+        CXX_EXTENSIONS Off
+        CXX_STANDARD_REQUIRED On
+    )
+endfunction ()
+
+# ######################################################################### #
+
+# Test libraries
+add_test_library(library1 Library1.cpp)
 
 # ######################################################################### #

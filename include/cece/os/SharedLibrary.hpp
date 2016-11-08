@@ -128,6 +128,17 @@ public:
 
 
     /**
+     * @brief      Check if library is open.
+     *
+     * @return     True if library is open, False otherwise.
+     */
+    bool isOpen() const noexcept
+    {
+        return m_handle != nullptr;
+    }
+
+
+    /**
      * @brief      Returns library path.
      *
      * @return     Path to shared library.
@@ -162,6 +173,16 @@ public:
     {
         return reinterpret_cast<Signature>(reinterpret_cast<std::intptr_t>(getAddr(name)));
     }
+
+
+    /**
+     * @brief      Format library name according to current platform.
+     *
+     * @param[in]  name  The required library name.
+     *
+     * @return     Platform shared library name.
+     */
+    static String formatName(String name);
 
 
 // Private Data Members

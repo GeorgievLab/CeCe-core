@@ -120,20 +120,6 @@ void closeLibrary(void* handle) noexcept
 /* ************************************************************************ */
 
 /**
- * @brief      Check if library is loaded.
- *
- * @param      handle  Library handle.
- *
- * @return     Is loaded?
- */
-bool isLoaded(void* handle) noexcept
-{
-    return handle != nullptr;
-}
-
-/* ************************************************************************ */
-
-/**
  * @brief      Returns error string.
  *
  * @param[in]  handle  Handle to shared library.
@@ -178,7 +164,7 @@ SharedLibrary::SharedLibrary(FilePath path)
     : m_path(std::move(path))
     , m_handle(openLibrary(m_path))
 {
-    if (!isLoaded(m_handle))
+    if (!isOpen())
         throw RuntimeException("Shared library `" + m_path.toString() + "` cannot be loaded: " + getError(m_handle));
 
     Log::debug("Library loaded `", m_path, "`.");
@@ -188,7 +174,7 @@ SharedLibrary::SharedLibrary(FilePath path)
 
 SharedLibrary::~SharedLibrary()
 {
-    if (isLoaded(m_handle))
+    if (isOpen())
     {
         Log::debug("Closing shared library `", m_path, "`");
         closeLibrary(m_handle);
@@ -228,6 +214,13 @@ void* SharedLibrary::getAddr(StringView name) const noexcept
     // POSIX
     return dlsym(m_handle, name.getData());
 #endif
+}
+
+/* ************************************************************************ */
+
+String SharedLibrary::formatName(String name)
+{
+    return PREFIX + name + EXTENSION;
 }
 
 /* ************************************************************************ */

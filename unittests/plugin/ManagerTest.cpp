@@ -96,14 +96,14 @@ TEST(Manager, load)
     // Loader should be able to handle non-existent directory without crash
     EXPECT_NO_THROW(mgr.addDirectory("non-existent-directory"));
 
-    ASSERT_PRED1(pathExists, os::SharedLibrary::PREFIX + "cece-test-plugin" + os::SharedLibrary::EXTENSION);
-    EXPECT_PRED1(pathExists, os::SharedLibrary::PREFIX + "cece-invalid-plugin" + os::SharedLibrary::EXTENSION);
-    EXPECT_PRED1(pathExists, os::SharedLibrary::PREFIX + "cece-old-plugin" + os::SharedLibrary::EXTENSION);
-    EXPECT_PRED1(pathExists, os::SharedLibrary::PREFIX + "cece-no-config-plugin" + os::SharedLibrary::EXTENSION);
-    EXPECT_PRED1(pathExists, os::SharedLibrary::PREFIX + "cece-no-create-plugin" + os::SharedLibrary::EXTENSION);
-    EXPECT_PRED1(pathExists, os::SharedLibrary::PREFIX + "cece-not-render-plugin" + os::SharedLibrary::EXTENSION);
-    EXPECT_PRED1(pathExists, os::SharedLibrary::PREFIX + "cece-different-real-plugin" + os::SharedLibrary::EXTENSION);
-    EXPECT_PRED1(pathExists, os::SharedLibrary::PREFIX + "cece-no-shared-plugin" + os::SharedLibrary::EXTENSION);
+    ASSERT_PRED1(pathExists, os::SharedLibrary::formatName("cece-test-plugin"));
+    EXPECT_PRED1(pathExists, os::SharedLibrary::formatName("cece-invalid-plugin"));
+    EXPECT_PRED1(pathExists, os::SharedLibrary::formatName("cece-old-plugin"));
+    EXPECT_PRED1(pathExists, os::SharedLibrary::formatName("cece-no-config-plugin"));
+    EXPECT_PRED1(pathExists, os::SharedLibrary::formatName("cece-no-create-plugin"));
+    EXPECT_PRED1(pathExists, os::SharedLibrary::formatName("cece-not-render-plugin"));
+    EXPECT_PRED1(pathExists, os::SharedLibrary::formatName("cece-different-real-plugin"));
+    EXPECT_PRED1(pathExists, os::SharedLibrary::formatName("cece-no-shared-plugin"));
     EXPECT_PRED1(pathExists, os::SharedLibrary::PREFIX + "cece-python-plugin.py");
 
     // Plugins should be loaded

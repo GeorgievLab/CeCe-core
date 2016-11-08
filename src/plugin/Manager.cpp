@@ -31,8 +31,8 @@
 
 // CeCe
 #include "cece/core/Assert.hpp"
-#include "cece/core/Log.hpp"
 #include "cece/core/Exception.hpp"
+#include "cece/log/Log.hpp"
 #include "cece/plugin/Api.hpp"
 
 /* ************************************************************************ */
@@ -102,7 +102,7 @@ Manager& Manager::addLoader(UniquePtr<Loader> loader)
 {
     CECE_ASSERT(loader);
 
-    Log::debug("New plugins loader.");
+    log::Log::debug("New plugins loader.");
 
     m_loaders.push_back(std::move(loader));
 
@@ -122,7 +122,7 @@ Manager& Manager::addDirectory(io::FilePath path)
 {
     CECE_ASSERT(!path.isEmpty());
 
-    Log::debug("New plugins directory: `", path, "`.");
+    log::Log::debug("New plugins directory: `", path, "`.");
 
     // Add directory
     m_directories.push_back(std::move(path));

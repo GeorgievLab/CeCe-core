@@ -30,7 +30,7 @@
 #include <algorithm>
 
 // CeCe
-#include "cece/core/Log.hpp"
+#include "cece/log/Log.hpp"
 #include "cece/plugin/Repository.hpp"
 #include "cece/plugin/Manager.hpp"
 #include "cece/plugin/Api.hpp"
@@ -165,7 +165,7 @@ ViewPtr<Api> Context::importPlugin(StringView name)
     if (it != m_importedPlugins.end())
         return m_manager.getApi(*it);
 
-    Log::info("Importing plugin '", name, "'...");
+    log::Log::info("Importing plugin '", name, "'...");
 
     // Check if plugin is loaded
     if (!m_manager.isLoaded(name))

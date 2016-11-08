@@ -54,6 +54,7 @@ add_subdirectory(program)
 add_subdirectory(plugin)
 add_subdirectory(os)
 add_subdirectory(io)
+add_subdirectory(log)
 
 # Renderer files
 if (CECE_RENDER)

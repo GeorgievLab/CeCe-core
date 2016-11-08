@@ -36,8 +36,8 @@
 // CeCe
 #include "cece/core/Assert.hpp"
 #include "cece/core/UnitIo.hpp"
-#include "cece/core/Log.hpp"
 #include "cece/core/Real.hpp"
+#include "cece/log/Log.hpp"
 #include "cece/io/FileStream.hpp"
 #include "cece/config/Configuration.hpp"
 #include "cece/plugin/Context.hpp"
@@ -335,7 +335,7 @@ void Object::useProgram(StringView name) noexcept
     if (program)
         addProgram(std::move(program));
     else
-        Log::warning("Unable to create program '", name, "'");
+        log::Log::warning("Unable to create program '", name, "'");
 }
 
 /* ************************************************************************ */
@@ -503,7 +503,7 @@ void Object::initShapes()
         switch (type)
         {
         case ShapeType::Undefined:
-            Log::warning("[object] Undefined shape");
+            log::Log::warning("[object] Undefined shape");
             break;
 
         case ShapeType::Circle:

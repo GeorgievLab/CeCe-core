@@ -28,11 +28,11 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/Log.hpp"
 #include "cece/core/IteratorRange.hpp"
 #include "cece/core/Assert.hpp"
 #include "cece/core/Exception.hpp"
 #include "cece/core/StringView.hpp"
+#include "cece/log/Log.hpp"
 
 /* ************************************************************************ */
 
@@ -683,7 +683,7 @@ protected:
     template<typename Message>
     void note(Message&& msg) const noexcept
     {
-        Log::info(msg);
+        log::Log::info(msg);
     }
 
 
@@ -697,7 +697,7 @@ protected:
     template<typename Message>
     void warning(Message&& msg) const noexcept
     {
-        Log::warning(msg);
+        log::Log::warning(msg);
     }
 
 
@@ -711,7 +711,7 @@ protected:
     template<typename Message>
     void error(Message&& msg) const
     {
-        Log::error(msg);
+        log::Log::error(msg);
     }
 
 

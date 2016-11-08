@@ -27,7 +27,7 @@
 #include "cece/module/ExportModule.hpp"
 
 // CeCe
-#include "cece/core/Log.hpp"
+#include "cece/log/Log.hpp"
 #include "cece/io/StringStream.hpp"
 #include "cece/config/Configuration.hpp"
 
@@ -76,14 +76,14 @@ void ExportModule::init()
     // Open CSV file
     m_export = io::DataExport::create(m_filePath.toString());
 
-    Log::info("Exporting data into: ", getFilePath());
+    log::Log::info("Exporting data into: ", getFilePath());
 }
 
 /* ************************************************************************ */
 
 void ExportModule::terminate()
 {
-    Log::info("Data exported into: ", getFilePath());
+    log::Log::info("Data exported into: ", getFilePath());
 
     // Delete exporter
     m_export.reset();

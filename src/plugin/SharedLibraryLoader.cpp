@@ -29,8 +29,8 @@
 // CeCe
 #include "cece/config.hpp"
 #include "cece/core/Assert.hpp"
-#include "cece/core/Log.hpp"
 #include "cece/core/ViewPtr.hpp"
+#include "cece/log/Log.hpp"
 #include "cece/plugin/Exception.hpp"
 #include "cece/plugin/definition.hpp"
 #include "cece/plugin/Api.hpp"
@@ -131,12 +131,12 @@ DynamicArray<Plugin> SharedLibraryLoader::loadAll(const io::FilePath& directory)
     static const auto PREFIX = os::SharedLibrary::PREFIX + "cece-";
     static const auto EXTENSION = os::SharedLibrary::EXTENSION;
 
-    Log::debug("Scanning `", directory, "` for shared library plugins");
+    log::Log::debug("Scanning `", directory, "` for shared library plugins");
 
     // Not a directory
     if (!isDirectory(directory))
     {
-        Log::warning("`", directory, "` is not a directory, skipping...");
+        log::Log::warning("`", directory, "` is not a directory, skipping...");
         return {};
     }
 
@@ -150,7 +150,7 @@ DynamicArray<Plugin> SharedLibraryLoader::loadAll(const io::FilePath& directory)
         // Only files
         if (!isFile(path))
         {
-            Log::debug("Skipping `", path, "`: not a file");
+            log::Log::debug("Skipping `", path, "`: not a file");
             continue;
         }
 
@@ -160,7 +160,7 @@ DynamicArray<Plugin> SharedLibraryLoader::loadAll(const io::FilePath& directory)
         const auto suffixLength = EXTENSION.length();
         const auto suffixStart = filename.length() - suffixLength;
 
-        Log::debug("Checking: `", filename, "`");
+        log::Log::debug("Checking: `", filename, "`");
 
         // Different prefix
         if (filename.substr(0, prefixLength) != PREFIX)
@@ -173,7 +173,7 @@ DynamicArray<Plugin> SharedLibraryLoader::loadAll(const io::FilePath& directory)
         // Plugin name
         const String name = filename.substr(prefixLength, suffixStart - prefixLength);
 
-        Log::debug("Loading plugin: `", name, "` @ `", path, "`");
+        log::Log::debug("Loading plugin: `", name, "` @ `", path, "`");
 
         try
         {
@@ -192,11 +192,11 @@ DynamicArray<Plugin> SharedLibraryLoader::loadAll(const io::FilePath& directory)
         }
         catch (const InvalidPluginException& e)
         {
-            Log::warning("Trying to load invalid plugin `", name, "` @ `", path, "`: ", e.what());
+            log::Log::warning("Trying to load invalid plugin `", name, "` @ `", path, "`: ", e.what());
         }
         catch (...)
         {
-            Log::warning("Internal plugin error `", name, "` @ `", path);
+            log::Log::warning("Internal plugin error `", name, "` @ `", path);
         }
     }
 

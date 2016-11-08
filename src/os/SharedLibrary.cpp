@@ -38,8 +38,8 @@
 #endif
 
 // CeCe
-#include "cece/core/Log.hpp"
 #include "cece/core/Exception.hpp"
+#include "cece/log/Log.hpp"
 
 /* ************************************************************************ */
 
@@ -167,7 +167,7 @@ SharedLibrary::SharedLibrary(io::FilePath path)
     if (!isOpen())
         throw RuntimeException("Shared library `" + m_path.toString() + "` cannot be loaded: " + getError(m_handle));
 
-    Log::debug("Library loaded `", m_path, "`.");
+    log::Log::debug("Library loaded `", m_path, "`.");
 }
 
 /* ************************************************************************ */
@@ -176,9 +176,9 @@ SharedLibrary::~SharedLibrary()
 {
     if (isOpen())
     {
-        Log::debug("Closing shared library `", m_path, "`");
+        log::Log::debug("Closing shared library `", m_path, "`");
         closeLibrary(m_handle);
-        Log::debug("Shared library closed `", m_path, "`");
+        log::Log::debug("Shared library closed `", m_path, "`");
     }
 }
 

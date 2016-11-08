@@ -61,7 +61,7 @@ using GetConfigFn = Config* (*)();
  *
  * @param[in]  lib   The shared library.
  */
-void checkConfig(const SharedLibrary& lib)
+void checkConfig(const os::SharedLibrary& lib)
 {
     auto path = lib.getPath().toString();
 
@@ -109,7 +109,7 @@ void checkConfig(const SharedLibrary& lib)
  *
  * @return     Plugin API.
  */
-UniquePtr<Api> createApi(const SharedLibrary& lib)
+UniquePtr<Api> createApi(const os::SharedLibrary& lib)
 {
     // Get create API function
     auto fn = lib.getAddr<CreateFn>("create");
@@ -128,8 +128,8 @@ UniquePtr<Api> createApi(const SharedLibrary& lib)
 
 DynamicArray<Plugin> SharedLibraryLoader::loadAll(const FilePath& directory)
 {
-    static const auto PREFIX = SharedLibrary::PREFIX + "cece-";
-    static const auto EXTENSION = SharedLibrary::EXTENSION;
+    static const auto PREFIX = os::SharedLibrary::PREFIX + "cece-";
+    static const auto EXTENSION = os::SharedLibrary::EXTENSION;
 
     Log::debug("Scanning `", directory, "` for shared library plugins");
 
@@ -178,7 +178,7 @@ DynamicArray<Plugin> SharedLibraryLoader::loadAll(const FilePath& directory)
         try
         {
             // Open shared library
-            SharedLibrary lib(path);
+            os::SharedLibrary lib(path);
 
             // Check configuration
             checkConfig(lib);

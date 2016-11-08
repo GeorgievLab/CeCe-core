@@ -24,7 +24,7 @@
 /* ************************************************************************ */
 
 // Declaration
-#include "cece/plugin/SharedLibrary.hpp"
+#include "cece/os/SharedLibrary.hpp"
 
 // C++
 #include <cstdint>
@@ -44,7 +44,7 @@
 /* ************************************************************************ */
 
 namespace cece {
-namespace plugin {
+namespace os {
 
 /* ************************************************************************ */
 

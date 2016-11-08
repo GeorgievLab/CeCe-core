@@ -23,15 +23,8 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// CeCe
-#include "cece/export.hpp"
-#include "cece/core/String.hpp"
-#include "cece/core/StringView.hpp"
-#include "cece/core/FilePath.hpp"
+#warning "Include 'cece/os/SharedLibrary.hpp' instead"
+#include "cece/os/SharedLibrary.hpp"
 
 /* ************************************************************************ */
 
@@ -40,140 +33,7 @@ namespace plugin {
 
 /* ************************************************************************ */
 
-/**
- * @brief      Shared library RAII wrapper.
- *
- * @details    It hides OS-specific shared library handling.
- */
-class SharedLibrary final
-{
-
-// Public Constants
-public:
-
-
-    /// Library file prefix
-    static const CECE_EXPORT String PREFIX;
-
-    /// Library file extension
-    static const CECE_EXPORT String EXTENSION;
-
-
-// Public Ctors & Dtors
-public:
-
-
-    /**
-     * @brief      Default constructor.
-     */
-    SharedLibrary() = default;
-
-
-    /**
-     * @brief      Constructor.
-     *
-     * @param      path  Path to shared library.
-     */
-    explicit SharedLibrary(FilePath path);
-
-
-    /**
-     * @brief      Destructor.
-     */
-    ~SharedLibrary();
-
-
-    /**
-     * @brief      Copy constructor.
-     *
-     * @param[in]  src Source object.
-     */
-    SharedLibrary(const SharedLibrary& src) = delete;
-
-
-    /**
-     * @brief      Move constructor.
-     *
-     * @param[in]  src Source object.
-     */
-    SharedLibrary(SharedLibrary&& src) noexcept;
-
-
-// Public Operators
-public:
-
-
-    /**
-     * @brief      Copy assignment operator.
-     *
-     * @param[in]  src   Source object.
-     *
-     * @return     *this.
-     */
-    SharedLibrary& operator=(const SharedLibrary& src) = delete;
-
-
-    /**
-     * @brief      Move assignment operator.
-     *
-     * @param[in]  src   Source object.
-     *
-     * @return     *this.
-     */
-    SharedLibrary& operator=(SharedLibrary&& src) noexcept;
-
-
-// Public Accessors & Mutators
-public:
-
-
-    /**
-     * @brief      Returns library path.
-     *
-     * @return     Path to shared library.
-     */
-    const FilePath& getPath() const noexcept
-    {
-        return m_path;
-    }
-
-
-    /**
-     * @brief      Returns address of required symbol.
-     *
-     * @param[in]  name  Symbol name.
-     *
-     * @return     Pointer to symbol or nullptr.
-     */
-    void* getAddr(StringView name) const noexcept;
-
-
-    /**
-     * @brief      Returns address of required symbol.
-     *
-     * @param[in]  name       Symbol name.
-     *
-     * @tparam     Signature  Type of the symbol.
-     *
-     * @return     Pointer to symbol or nullptr.
-     */
-    template<typename Signature>
-    Signature getAddr(StringView name) const noexcept
-    {
-        return reinterpret_cast<Signature>(reinterpret_cast<std::intptr_t>(getAddr(name)));
-    }
-
-
-// Private Data Members
-private:
-
-    /// Path to library file.
-    FilePath m_path;
-
-    /// Shared library handle.
-    void* m_handle = nullptr;
-
-};
+using os::SharedLibrary;
 
 /* ************************************************************************ */
 

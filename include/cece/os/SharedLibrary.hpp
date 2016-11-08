@@ -28,50 +28,150 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/DynamicArray.hpp"
+#include "cece/export.hpp"
+#include "cece/core/String.hpp"
+#include "cece/core/StringView.hpp"
 #include "cece/core/FilePath.hpp"
-#include "cece/plugin/Loader.hpp"
-#include "cece/os/SharedLibrary.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
-namespace plugin {
+namespace os {
 
 /* ************************************************************************ */
 
 /**
- * @brief      Shared library plugin loader.
+ * @brief      Shared library RAII wrapper.
  *
- * @details    Open shared libraries are open until object destruction. The
- *             reason for this is the plugin uses code from shared library and
- *             it must be loaded for whole time. Unloading removes those code
- *             from runtime and application will crash. After destruction of
- *             this object no plugin code should be called. Standard usage with
- *             `Manager` should guarantee that.
+ * @details    It hides OS-specific shared library handling.
  */
-class SharedLibraryLoader final : public Loader
+class SharedLibrary final
 {
 
-// Public Operations
+// Public Constants
+public:
+
+
+    /// Library file prefix
+    static const CECE_EXPORT String PREFIX;
+
+    /// Library file extension
+    static const CECE_EXPORT String EXTENSION;
+
+
+// Public Ctors & Dtors
 public:
 
 
     /**
-     * @brief      Scan given directory to load plugins.
-     *
-     * @param[in]  directory  Directory to scan.
-     *
-     * @return     A list of loaded plugins.
+     * @brief      Default constructor.
      */
-    DynamicArray<Plugin> loadAll(const FilePath& directory) override;
+    SharedLibrary() = default;
+
+
+    /**
+     * @brief      Constructor.
+     *
+     * @param      path  Path to shared library.
+     */
+    explicit SharedLibrary(FilePath path);
+
+
+    /**
+     * @brief      Destructor.
+     */
+    ~SharedLibrary();
+
+
+    /**
+     * @brief      Copy constructor.
+     *
+     * @param[in]  src Source object.
+     */
+    SharedLibrary(const SharedLibrary& src) = delete;
+
+
+    /**
+     * @brief      Move constructor.
+     *
+     * @param[in]  src Source object.
+     */
+    SharedLibrary(SharedLibrary&& src) noexcept;
+
+
+// Public Operators
+public:
+
+
+    /**
+     * @brief      Copy assignment operator.
+     *
+     * @param[in]  src   Source object.
+     *
+     * @return     *this.
+     */
+    SharedLibrary& operator=(const SharedLibrary& src) = delete;
+
+
+    /**
+     * @brief      Move assignment operator.
+     *
+     * @param[in]  src   Source object.
+     *
+     * @return     *this.
+     */
+    SharedLibrary& operator=(SharedLibrary&& src) noexcept;
+
+
+// Public Accessors & Mutators
+public:
+
+
+    /**
+     * @brief      Returns library path.
+     *
+     * @return     Path to shared library.
+     */
+    const FilePath& getPath() const noexcept
+    {
+        return m_path;
+    }
+
+
+    /**
+     * @brief      Returns address of required symbol.
+     *
+     * @param[in]  name  Symbol name.
+     *
+     * @return     Pointer to symbol or nullptr.
+     */
+    void* getAddr(StringView name) const noexcept;
+
+
+    /**
+     * @brief      Returns address of required symbol.
+     *
+     * @param[in]  name       Symbol name.
+     *
+     * @tparam     Signature  Type of the symbol.
+     *
+     * @return     Pointer to symbol or nullptr.
+     */
+    template<typename Signature>
+    Signature getAddr(StringView name) const noexcept
+    {
+        return reinterpret_cast<Signature>(reinterpret_cast<std::intptr_t>(getAddr(name)));
+    }
 
 
 // Private Data Members
 private:
 
-    /// Loaded libraries.
-    DynamicArray<os::SharedLibrary> m_libraries;
+    /// Path to library file.
+    FilePath m_path;
+
+    /// Shared library handle.
+    void* m_handle = nullptr;
 
 };
 

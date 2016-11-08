@@ -25,20 +25,12 @@
 
 # Sources
 set(SRCS
-    Api.cpp
-    Plugin.cpp
-    Manager.cpp
-    RepositoryRecord.cpp
-    Repository.cpp
-    Context.cpp
-    Loader.cpp
-    SharedLibraryLoader.cpp
-    Exception.cpp
+    SharedLibrary.cpp
 )
 
 # ######################################################################### #
 
-dir_pretend(SOURCES plugin/ ${SRCS})
+dir_pretend(SOURCES os/ ${SRCS})
 
 set(CECE_SOURCES ${CECE_SOURCES} ${SOURCES} PARENT_SCOPE)
 

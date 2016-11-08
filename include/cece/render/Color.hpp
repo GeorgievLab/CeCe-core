@@ -35,8 +35,8 @@
 
 // CeCe
 #include "cece/core/Real.hpp"
-#include "cece/core/InStream.hpp"
-#include "cece/core/OutStream.hpp"
+#include "cece/io/InStream.hpp"
+#include "cece/io/OutStream.hpp"
 
 /* ************************************************************************ */
 
@@ -518,7 +518,7 @@ inline Color operator/(RealType lhs, Color rhs) noexcept
  *
  * @return is.
  */
-InStream& operator>>(InStream& is, Color& color);
+io::InStream& operator>>(io::InStream& is, Color& color);
 
 /* ************************************************************************ */
 
@@ -530,7 +530,7 @@ InStream& operator>>(InStream& is, Color& color);
  *
  * @return os.
  */
-OutStream& operator<<(OutStream& os, const Color& color) noexcept;
+io::OutStream& operator<<(io::OutStream& os, const Color& color) noexcept;
 
 /* ************************************************************************ */
 

@@ -23,12 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// C++
-#include <ostream>
+#if _MSC_VER
+#pragma message("Include 'cece/io/OutStream.hpp' instead")
+#else
+#warning "Include 'cece/io/OutStream.hpp' instead"
+#endif
+#include "cece/io/OutStream.hpp"
 
 /* ************************************************************************ */
 
@@ -37,10 +37,7 @@ inline namespace core {
 
 /* ************************************************************************ */
 
-/**
- * @brief Output stream type.
- */
-using OutStream = std::ostream;
+using io::OutStream;
 
 /* ************************************************************************ */
 

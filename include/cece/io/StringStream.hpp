@@ -23,14 +23,42 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-// Declaration
-#include "cece/core/DataExportFactory.hpp"
-
-// CeCe
-#include "cece/core/DataExport.hpp"
+#pragma once
 
 /* ************************************************************************ */
 
-CECE_FACTORY_INST(DataExport, String)
+// C++
+#include <sstream>
+
+/* ************************************************************************ */
+
+namespace cece {
+namespace io {
+
+/* ************************************************************************ */
+
+/**
+ * @brief Input string stream type.
+ */
+using InStringStream = std::istringstream;
+
+/* ************************************************************************ */
+
+/**
+ * @brief Output string stream type.
+ */
+using OutStringStream = std::ostringstream;
+
+/* ************************************************************************ */
+
+/**
+ * @brief Input/Output string stream type.
+ */
+using StringStream = std::stringstream;
+
+/* ************************************************************************ */
+
+}
+}
 
 /* ************************************************************************ */

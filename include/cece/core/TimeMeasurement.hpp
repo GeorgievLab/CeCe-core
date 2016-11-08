@@ -31,8 +31,8 @@
 #include <chrono>
 
 // CeCe
-#include "cece/core/OutStream.hpp"
 #include "cece/core/String.hpp"
+#include "cece/io/OutStream.hpp"
 
 /* ************************************************************************ */
 
@@ -62,7 +62,7 @@ bool isMeasureTimeEnabled() noexcept;
  *
  * @return
  */
-OutStream* getMeasureTimeOutput() noexcept;
+io::OutStream* getMeasureTimeOutput() noexcept;
 
 /* ************************************************************************ */
 
@@ -71,7 +71,7 @@ OutStream* getMeasureTimeOutput() noexcept;
  *
  * @param output
  */
-void setMeasureTimeOutput(OutStream* output) noexcept;
+void setMeasureTimeOutput(io::OutStream* output) noexcept;
 
 /* ************************************************************************ */
 
@@ -88,7 +88,7 @@ struct DefaultMeasurementOutput
      * @param name Measurement name.
      * @param dt   Measured time.
      */
-    void operator()(OutStream& out, const String& name, Clock::duration dt) const noexcept
+    void operator()(io::OutStream& out, const String& name, Clock::duration dt) const noexcept
     {
         using namespace std::chrono;
         out << name << ";" << duration_cast<microseconds>(dt).count() << "\n";

@@ -37,9 +37,9 @@
 #include "cece/core/StringView.hpp"
 #include "cece/core/UniquePtr.hpp"
 #include "cece/core/ViewPtr.hpp"
-#include "cece/io/FilePath.hpp"
-#include "cece/core/InOutStream.hpp"
 #include "cece/core/IterationType.hpp"
+#include "cece/io/FilePath.hpp"
+#include "cece/io/InOutStream.hpp"
 
 /// @deprecated
 #include "cece/object/Object.hpp"
@@ -207,7 +207,7 @@ public:
      *
      * @return Pointer to resource stream or nullptr.
      */
-    virtual UniquePtr<InOutStream> getResource(StringView name) noexcept = 0;
+    virtual UniquePtr<io::InOutStream> getResource(StringView name) noexcept = 0;
 
 
     /**

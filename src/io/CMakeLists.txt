@@ -26,6 +26,12 @@
 # Sources
 set(SRCS
     FilePath.cpp
+    CliColor.cpp
+    CsvFile.cpp
+    DataExport.cpp
+    DataExportCsv.cpp
+    DataExportFactory.cpp
+    DataExportCsvFactory.cpp
 )
 
 # ######################################################################### #

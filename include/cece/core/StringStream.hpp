@@ -23,12 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// C++
-#include <sstream>
+#if _MSC_VER
+#pragma message("Include 'cece/io/StringStream.hpp' instead")
+#else
+#warning "Include 'cece/io/StringStream.hpp' instead"
+#endif
+#include "cece/io/StringStream.hpp"
 
 /* ************************************************************************ */
 
@@ -37,24 +37,9 @@ inline namespace core {
 
 /* ************************************************************************ */
 
-/**
- * @brief Input string stream type.
- */
-using InStringStream = std::istringstream;
-
-/* ************************************************************************ */
-
-/**
- * @brief Output string stream type.
- */
-using OutStringStream = std::ostringstream;
-
-/* ************************************************************************ */
-
-/**
- * @brief Input/Output string stream type.
- */
-using StringStream = std::stringstream;
+using io::InStringStream;
+using io::OutStringStream;
+using io::StringStream;
 
 /* ************************************************************************ */
 

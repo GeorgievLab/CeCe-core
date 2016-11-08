@@ -23,56 +23,24 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-// Declaration
-#include "cece/core/DataExport.hpp"
+#pragma once
+
+/* ************************************************************************ */
 
 // C++
-#include <utility>
-
-// CeCe
-#include "cece/core/DataExportCsvFactory.hpp"
+#include <iostream>
 
 /* ************************************************************************ */
 
 namespace cece {
-inline namespace core {
+namespace io {
 
 /* ************************************************************************ */
 
-namespace {
-
-/* ************************************************************************ */
-
-DataExportCsvFactory g_defaultFactory;
-
-/* ************************************************************************ */
-
-}
-
-/* ************************************************************************ */
-
-ViewPtr<DataExportFactory> DataExport::s_factory = &g_defaultFactory;
-
-/* ************************************************************************ */
-
-DataExport::~DataExport() = default;
-
-/* ************************************************************************ */
-
-void DataExport::flush()
-{
-    // Nothing to do
-}
-
-/* ************************************************************************ */
-
-UniquePtr<DataExport> DataExport::create(String name)
-{
-    if (!s_factory)
-        return nullptr;
-
-    return s_factory->create(std::move(name));
-}
+/**
+ * @brief Input & output stream type.
+ */
+using InOutStream = std::iostream;
 
 /* ************************************************************************ */
 

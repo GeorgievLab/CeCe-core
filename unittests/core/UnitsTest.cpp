@@ -27,7 +27,7 @@
 #include "gtest/gtest.h"
 
 // CeCe
-#include "cece/core/StringStream.hpp"
+#include "cece/io/StringStream.hpp"
 #include "cece/core/UnitIo.hpp"
 #include "cece/core/UnitSymbol.hpp"
 #include "cece/core/Units.hpp"
@@ -36,6 +36,7 @@
 /* ************************************************************************ */
 
 using namespace cece;
+using namespace cece::io;
 
 /* ************************************************************************ */
 

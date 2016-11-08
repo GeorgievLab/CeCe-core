@@ -23,13 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// CeCe
-#include "cece/core/String.hpp"
-#include "cece/core/Factory.hpp"
+#if _MSC_VER
+#pragma message("Include 'cece/io/DataExportFactory.hpp' instead")
+#else
+#warning "Include 'cece/io/DataExportFactory.hpp' instead"
+#endif
+#include "cece/io/DataExportFactory.hpp"
 
 /* ************************************************************************ */
 
@@ -38,22 +37,11 @@ inline namespace core {
 
 /* ************************************************************************ */
 
-class DataExport;
-
-/* ************************************************************************ */
-
-/**
- * @brief DataExport factory interface.
- */
-using DataExportFactory = Factory<DataExport, String>;
+using io::DataExportFactory;
 
 /* ************************************************************************ */
 
 }
 }
-
-/* ************************************************************************ */
-
-CECE_FACTORY_EXTERN(DataExport, String)
 
 /* ************************************************************************ */

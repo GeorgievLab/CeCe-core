@@ -329,7 +329,7 @@ public:
      *
      * @return Pointer to resource stream or nullptr.
      */
-    UniquePtr<InOutStream> getResource(StringView name) noexcept override;
+    UniquePtr<io::InOutStream> getResource(StringView name) noexcept override;
 
 
     /**

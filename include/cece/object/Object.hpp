@@ -41,10 +41,10 @@
 #include "cece/core/DynamicArray.hpp"
 #include "cece/core/Map.hpp"
 #include "cece/core/StringView.hpp"
-#include "cece/core/InStream.hpp"
-#include "cece/core/OutStream.hpp"
 #include "cece/core/Shape.hpp"
 #include "cece/core/Exception.hpp"
+#include "cece/io/InStream.hpp"
+#include "cece/io/OutStream.hpp"
 #include "cece/program/Program.hpp"
 #include "cece/program/Container.hpp"
 #include "cece/object/BoundData.hpp"
@@ -836,7 +836,7 @@ private:
     units::ForceVector m_force;
 
     /// Outstream for object data
-    UniquePtr<OutStream> m_dataOut;
+    UniquePtr<io::OutStream> m_dataOut;
 
 };
 
@@ -850,7 +850,7 @@ private:
  *
  * @return is.
  */
-inline InStream& operator>>(InStream& is, Object::Type& type)
+inline io::InStream& operator>>(io::InStream& is, Object::Type& type)
 {
     String value;
     is >> value;

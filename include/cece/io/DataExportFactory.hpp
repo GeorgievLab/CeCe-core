@@ -23,29 +23,37 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-// Declaration
-#include "cece/simulator/TimeMeasurement.hpp"
+#pragma once
+
+/* ************************************************************************ */
 
 // CeCe
-#include "cece/simulator/Simulation.hpp"
+#include "cece/core/String.hpp"
+#include "cece/core/Factory.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
-namespace simulator {
+namespace io {
 
 /* ************************************************************************ */
 
-void TimeMeasurement::operator()(io::OutStream& out, StringView name, Clock::duration dt) const noexcept
-{
-    using namespace std::chrono;
-    #pragma omp critical
-    out << name.getData() << ";" << m_simulation->getIteration() << ";" << duration_cast<microseconds>(dt).count() << "\n";
-}
+class DataExport;
+
+/* ************************************************************************ */
+
+/**
+ * @brief DataExport factory interface.
+ */
+using DataExportFactory = Factory<DataExport, String>;
 
 /* ************************************************************************ */
 
 }
 }
+
+/* ************************************************************************ */
+
+CECE_FACTORY_EXTERN(io::DataExport, String)
 
 /* ************************************************************************ */

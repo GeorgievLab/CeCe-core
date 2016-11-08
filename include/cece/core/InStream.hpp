@@ -23,12 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// C++
-#include <istream>
+#if _MSC_VER
+#pragma message("Include 'cece/io/InStream.hpp' instead")
+#else
+#warning "Include 'cece/io/InStream.hpp' instead"
+#endif
+#include "cece/io/InStream.hpp"
 
 /* ************************************************************************ */
 
@@ -37,10 +37,7 @@ inline namespace core {
 
 /* ************************************************************************ */
 
-/**
- * @brief Input stream type.
- */
-using InStream = std::istream;
+using io::InStream;
 
 /* ************************************************************************ */
 

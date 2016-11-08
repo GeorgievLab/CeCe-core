@@ -102,7 +102,7 @@ int parseHex(const char* str)
 
 /* ************************************************************************ */
 
-InStream& operator>>(InStream& is, Color& color)
+io::InStream& operator>>(io::InStream& is, Color& color)
 {
     String str;
     is >> str;
@@ -138,7 +138,7 @@ InStream& operator>>(InStream& is, Color& color)
 
 /* ************************************************************************ */
 
-OutStream& operator<<(OutStream& os, const Color& color) noexcept
+io::OutStream& operator<<(io::OutStream& os, const Color& color) noexcept
 {
     // Store predefined color
     for (const auto& p : g_colors)

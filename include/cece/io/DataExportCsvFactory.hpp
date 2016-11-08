@@ -23,25 +23,44 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-// Declaration
-#include "cece/simulator/TimeMeasurement.hpp"
+#pragma once
+
+/* ************************************************************************ */
 
 // CeCe
-#include "cece/simulator/Simulation.hpp"
+#include "cece/io/DataExportFactory.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
-namespace simulator {
+namespace io {
 
 /* ************************************************************************ */
 
-void TimeMeasurement::operator()(io::OutStream& out, StringView name, Clock::duration dt) const noexcept
+class DataExport;
+
+/* ************************************************************************ */
+
+/**
+ * @brief DataExportCsv factory.
+ */
+class DataExportCsvFactory : public DataExportFactory
 {
-    using namespace std::chrono;
-    #pragma omp critical
-    out << name.getData() << ";" << m_simulation->getIteration() << ";" << duration_cast<microseconds>(dt).count() << "\n";
-}
+
+// Public Operations
+public:
+
+
+    /**
+     * @brief Create an object.
+     *
+     * @param name
+     *
+     * @return Created object pointer.
+     */
+    UniquePtr<DataExport> create(String name) const override;
+
+};
 
 /* ************************************************************************ */
 

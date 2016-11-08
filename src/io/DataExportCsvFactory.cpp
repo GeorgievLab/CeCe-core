@@ -24,46 +24,24 @@
 /* ************************************************************************ */
 
 // Declaration
-#include "cece/core/CsvFile.hpp"
+#include "cece/io/DataExportCsvFactory.hpp"
+
+// C++
+#include <utility>
 
 // CeCe
-#include "cece/core/Exception.hpp"
+#include "cece/io/DataExportCsv.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
-inline namespace core {
+namespace io {
 
 /* ************************************************************************ */
 
-CsvFile::CsvFile(io::FilePath path)
+UniquePtr<DataExport> DataExportCsvFactory::create(String name) const
 {
-    open(std::move(path));
-}
-
-/* ************************************************************************ */
-
-bool CsvFile::isOpen() const noexcept
-{
-    return m_file.is_open();
-}
-
-/* ************************************************************************ */
-
-void CsvFile::open()
-{
-    open(std::move(m_path));
-}
-
-/* ************************************************************************ */
-
-void CsvFile::open(io::FilePath path)
-{
-    m_path = std::move(path);
-    m_file.open(m_path.toString(), std::ios::binary | std::ios::out | std::ios::trunc);
-
-    if (!m_file.is_open())
-        throw RuntimeException("Cannot open file: " + m_path.toString());
+    return makeUnique<DataExportCsv>(std::move(name));
 }
 
 /* ************************************************************************ */

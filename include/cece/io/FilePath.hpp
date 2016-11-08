@@ -33,8 +33,8 @@
 // CeCe
 #include "cece/core/String.hpp"
 #include "cece/core/DynamicArray.hpp"
-#include "cece/core/InStream.hpp"
-#include "cece/core/OutStream.hpp"
+#include "cece/io/InStream.hpp"
+#include "cece/io/OutStream.hpp"
 
 /* ************************************************************************ */
 

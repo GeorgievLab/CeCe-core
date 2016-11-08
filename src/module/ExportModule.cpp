@@ -28,7 +28,7 @@
 
 // CeCe
 #include "cece/core/Log.hpp"
-#include "cece/core/StringStream.hpp"
+#include "cece/io/StringStream.hpp"
 #include "cece/config/Configuration.hpp"
 
 /* ************************************************************************ */
@@ -74,7 +74,7 @@ void ExportModule::storeConfig(config::Configuration& config) const
 void ExportModule::init()
 {
     // Open CSV file
-    m_export = DataExport::create(m_filePath.toString());
+    m_export = io::DataExport::create(m_filePath.toString());
 
     Log::info("Exporting data into: ", getFilePath());
 }
@@ -95,7 +95,7 @@ DynamicArray<IterationRange> ExportModule::parseActive(String str)
 {
     DynamicArray<IterationRange> res;
 
-    InStringStream iss(std::move(str));
+    io::InStringStream iss(std::move(str));
 
     while (true)
     {

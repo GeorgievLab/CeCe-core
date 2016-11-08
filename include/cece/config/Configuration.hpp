@@ -34,7 +34,7 @@
 #include "cece/core/ViewPtr.hpp"
 #include "cece/core/Exception.hpp"
 #include "cece/core/DynamicArray.hpp"
-#include "cece/core/StringStream.hpp"
+#include "cece/io/StringStream.hpp"
 #include "cece/config/Exception.hpp"
 #include "cece/config/Implementation.hpp"
 
@@ -355,7 +355,7 @@ private:
     template<typename T>
     static T castFrom(const String& value)
     {
-        InStringStream is(value);
+        io::InStringStream is(value);
         T res;
         is >> std::noskipws >> std::boolalpha >> res;
         return res;
@@ -372,7 +372,7 @@ private:
     template<typename T>
     static String castTo(T&& value)
     {
-        OutStringStream os;
+        io::OutStringStream os;
         os << value;
         return os.str();
     }

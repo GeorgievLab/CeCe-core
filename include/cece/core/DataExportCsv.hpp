@@ -23,14 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// CeCe
-#include "cece/core/DataExport.hpp"
-#include "cece/core/CsvFile.hpp"
-#include "cece/io/FilePath.hpp"
+#if _MSC_VER
+#pragma message("Include 'cece/io/DataExportCsv.hpp' instead")
+#else
+#warning "Include 'cece/io/DataExportCsv.hpp' instead"
+#endif
+#include "cece/io/DataExportCsv.hpp"
 
 /* ************************************************************************ */
 
@@ -39,85 +37,7 @@ inline namespace core {
 
 /* ************************************************************************ */
 
-/**
- * @brief Data exporting class - to CSV file.
- */
-class DataExportCsv : public DataExport
-{
-
-// Public Ctors & Dtors
-public:
-
-
-    /**
-     * @brief Constructor.
-     *
-     * @param path
-     */
-    explicit DataExportCsv(io::FilePath path);
-
-
-    /**
-     * @brief Destructor.
-     */
-    ~DataExportCsv();
-
-
-// Public Accessors
-public:
-
-
-    /**
-     * @brief Returns path to output file.
-     *
-     * @return
-     */
-    const io::FilePath& getFilePath() const noexcept
-    {
-        return m_file.getPath();
-    }
-
-
-// Public Operations
-public:
-
-
-    /**
-     * @brief Flush output.
-     */
-    void flush() override;
-
-
-// Protected Operations
-protected:
-
-
-    /**
-     * @brief Write data header.
-     *
-     * @param count Number of columns.
-     * @param ...   Column names.
-     */
-    void writeHeaderImpl(int count, ...) override;
-
-
-    /**
-     * @brief Write data record.
-     *
-     * @param count  Number of columns.
-     * @param format Column format string.
-     * @param ...    Column values.
-     */
-    void writeRecordImpl(int count, const char* format, ...) override;
-
-
-// Private Data Members
-protected:
-
-    /// CSV file.
-    CsvFile m_file;
-
-};
+using io::DataExportCsv;
 
 /* ************************************************************************ */
 

@@ -38,8 +38,8 @@
 #include "cece/core/Zero.hpp"
 #include "cece/core/Units.hpp"
 #include "cece/core/StaticArray.hpp"
-#include "cece/core/InStream.hpp"
-#include "cece/core/OutStream.hpp"
+#include "cece/io/InStream.hpp"
+#include "cece/io/OutStream.hpp"
 
 /* ************************************************************************ */
 
@@ -2558,7 +2558,7 @@ cross(const T1& lhs, const BasicVector<T2, 2>& rhs) noexcept
  * @return is.
  */
 template<typename T, unsigned N>
-InStream& operator>>(InStream& is, BasicVector<T, N>& vector)
+io::InStream& operator>>(io::InStream& is, BasicVector<T, N>& vector)
 {
     unsigned i = 0;
 
@@ -2590,7 +2590,7 @@ InStream& operator>>(InStream& is, BasicVector<T, N>& vector)
  * @return os.
  */
 template<typename T, unsigned N>
-OutStream& operator<<(OutStream& os, const BasicVector<T, N>& vector) noexcept
+io::OutStream& operator<<(io::OutStream& os, const BasicVector<T, N>& vector) noexcept
 {
     for (unsigned i = 0; i < N; ++i)
     {

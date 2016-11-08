@@ -36,7 +36,7 @@ inline namespace core {
 
 /* ************************************************************************ */
 
-static OutStream* g_output = &std::cout;
+static io::OutStream* g_output = &std::cout;
 
 /* ************************************************************************ */
 
@@ -51,14 +51,14 @@ bool isMeasureTimeEnabled() noexcept
 
 /* ************************************************************************ */
 
-OutStream* getMeasureTimeOutput() noexcept
+io::OutStream* getMeasureTimeOutput() noexcept
 {
     return g_output;
 }
 
 /* ************************************************************************ */
 
-void setMeasureTimeOutput(OutStream* output) noexcept
+void setMeasureTimeOutput(io::OutStream* output) noexcept
 {
     g_output = output;
 }

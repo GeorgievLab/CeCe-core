@@ -24,96 +24,54 @@
 /* ************************************************************************ */
 
 // Declaration
-#include "cece/core/DataExportCsv.hpp"
+#include "cece/io/DataExport.hpp"
 
 // C++
-#include <cstdarg>
 #include <utility>
-#include <iostream>
 
 // CeCe
-#include "cece/core/DynamicArray.hpp"
-#include "cece/core/StringStream.hpp"
+#include "cece/io/DataExportCsvFactory.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
-inline namespace core {
+namespace io {
 
 /* ************************************************************************ */
 
-DataExportCsv::DataExportCsv(io::FilePath path)
-    : m_file(path.append(".csv"))
+namespace {
+
+/* ************************************************************************ */
+
+DataExportCsvFactory g_defaultFactory;
+
+/* ************************************************************************ */
+
+}
+
+/* ************************************************************************ */
+
+ViewPtr<DataExportFactory> DataExport::s_factory = &g_defaultFactory;
+
+/* ************************************************************************ */
+
+DataExport::~DataExport() = default;
+
+/* ************************************************************************ */
+
+void DataExport::flush()
 {
     // Nothing to do
 }
 
 /* ************************************************************************ */
 
-DataExportCsv::~DataExportCsv() = default;
-
-/* ************************************************************************ */
-
-void DataExportCsv::flush()
+UniquePtr<DataExport> DataExport::create(String name)
 {
-    m_file.flush();
-}
+    if (!s_factory)
+        return nullptr;
 
-/* ************************************************************************ */
-
-void DataExportCsv::writeHeaderImpl(int count, ...)
-{
-    va_list args;
-    va_start(args, count);
-
-    DynamicArray<String> names(count);
-
-    for (int i = 0; i < count; ++i)
-        names[i] = va_arg(args, const char*);
-
-    va_end(args);
-
-    m_file.writeHeaderArray(names);
-}
-
-/* ************************************************************************ */
-
-void DataExportCsv::writeRecordImpl(int count, const char* format, ...)
-{
-    va_list args;
-    va_start(args, format);
-
-    DynamicArray<String> values(count);
-
-    for (int i = 0; i < count; ++i)
-    {
-        switch (format[i])
-        {
-        case DATA_EXPORT_FORMAT_INT:
-            values[i] = toString(va_arg(args, int));
-            break;
-
-        case DATA_EXPORT_FORMAT_LONG:
-            values[i] = toString(va_arg(args, long));
-            break;
-
-        case DATA_EXPORT_FORMAT_DOUBLE:
-        {
-            OutStringStream oss;
-            oss << std::scientific << va_arg(args, double);
-            values[i] = oss.str();
-            break;
-        }
-
-        case DATA_EXPORT_FORMAT_STRING:
-            values[i] = va_arg(args, const char*);
-            break;
-        }
-    }
-
-    va_end(args);
-
-    m_file.writeRecordArray(values);
+    return s_factory->create(std::move(name));
 }
 
 /* ************************************************************************ */

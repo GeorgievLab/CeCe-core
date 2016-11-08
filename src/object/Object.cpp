@@ -38,7 +38,7 @@
 #include "cece/core/UnitIo.hpp"
 #include "cece/core/Log.hpp"
 #include "cece/core/Real.hpp"
-#include "cece/core/FileStream.hpp"
+#include "cece/io/FileStream.hpp"
 #include "cece/config/Configuration.hpp"
 #include "cece/plugin/Context.hpp"
 #include "cece/simulator/Simulation.hpp"
@@ -471,7 +471,7 @@ void Object::configure(const config::Configuration& config, simulator::Simulatio
 
     if (config.has("data-out"))
     {
-        m_dataOut = makeUnique<OutFileStream>(config.get("data-out"));
+        m_dataOut = makeUnique<io::OutFileStream>(config.get("data-out"));
         *m_dataOut << "iteration;totalTime;id;x;y;massX;massY;velX;velY;forceX;forceY;angle;omega\n";
     }
 }

@@ -54,14 +54,14 @@ class TestLoader final : public loader::Loader
 {
 public:
 
-    UniquePtr<simulator::Simulation> fromStream(const plugin::Manager& manager, InStream& is,
+    UniquePtr<simulator::Simulation> fromStream(const plugin::Manager& manager, io::InStream& is,
         const io::FilePath& filename = "<stream>",
         ViewPtr<const Parameters> parameters = nullptr) const override
     {
         return makeUnique<simulator::DefaultSimulation>(manager, filename);
     }
 
-    void toStream(OutStream& os, const simulator::Simulation& simulation,
+    void toStream(io::OutStream& os, const simulator::Simulation& simulation,
         const io::FilePath& filename = "<stream>") const override
     {
         // Nothing to do

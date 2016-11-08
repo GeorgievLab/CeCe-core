@@ -34,10 +34,10 @@
 
 // CeCe
 #include "cece/core/String.hpp"
-#include "cece/core/OutStream.hpp"
-#include "cece/core/InStream.hpp"
 #include "cece/core/StaticArray.hpp"
 #include "cece/core/DynamicArray.hpp"
+#include "cece/io/OutStream.hpp"
+#include "cece/io/InStream.hpp"
 
 /* ************************************************************************ */
 
@@ -448,7 +448,7 @@ inline bool operator>=(const String& lhs, const StringView& rhs) noexcept
  *
  * @return os.
  */
-inline OutStream& operator<<(OutStream& os, const StringView& view) noexcept
+inline io::OutStream& operator<<(io::OutStream& os, const StringView& view) noexcept
 {
     return os.write(view.getData(), view.getLength());
 }
@@ -465,7 +465,7 @@ inline OutStream& operator<<(OutStream& os, const StringView& view) noexcept
  *
  * @return is.
  */
-inline InStream& operator<<(InStream& is, StringView& view) noexcept = delete;
+inline io::InStream& operator<<(io::InStream& is, StringView& view) noexcept = delete;
 
 /* ************************************************************************ */
 

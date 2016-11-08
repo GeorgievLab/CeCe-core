@@ -30,9 +30,9 @@
 // CeCe
 #include "cece/export.hpp"
 #include "cece/core/String.hpp"
-#include "cece/core/OutStream.hpp"
-#include "cece/core/StringStream.hpp"
-#include "cece/core/CliColor.hpp"
+#include "cece/io/OutStream.hpp"
+#include "cece/io/StringStream.hpp"
+#include "cece/io/CliColor.hpp"
 
 /* ************************************************************************ */
 
@@ -108,7 +108,7 @@ public:
          *
          * @param os
          */
-        explicit StreamOutput(OutStream* os) : m_os(os) {}
+        explicit StreamOutput(io::OutStream* os) : m_os(os) {}
 
 
         /**
@@ -132,7 +132,7 @@ public:
     private:
 
         /// Output stream.
-        OutStream* m_os;
+        io::OutStream* m_os;
     };
 
 
@@ -176,7 +176,7 @@ public:
     {
         if (s_output)
         {
-            OutStringStream oss;
+            io::OutStringStream oss;
             message(oss, std::forward<Args>(args)...);
             s_output->write(Type::Info, String{}, oss.str());
         }
@@ -194,7 +194,7 @@ public:
 #ifndef NDEBUG
         if (s_output)
         {
-            OutStringStream oss;
+            io::OutStringStream oss;
             message(oss, std::forward<Args>(args)...);
             s_output->write(Type::Debug, String{}, oss.str());
         }
@@ -212,7 +212,7 @@ public:
     {
         if (s_output)
         {
-            OutStringStream oss;
+            io::OutStringStream oss;
             message(oss, std::forward<Args>(args)...);
             s_output->write(Type::Warning, String{}, oss.str());
         }
@@ -229,7 +229,7 @@ public:
     {
         if (s_error)
         {
-            OutStringStream oss;
+            io::OutStringStream oss;
             message(oss, std::forward<Args>(args)...);
             s_error->write(Type::Error, String{}, oss.str());
         }
@@ -243,7 +243,7 @@ private:
     /**
      * @brief Log message.
      */
-    static void message(OutStream& os)
+    static void message(io::OutStream& os)
     {
         // Nothing to do
     }
@@ -255,7 +255,7 @@ private:
      * @param args
      */
     template<typename Arg, typename... Args>
-    static void message(OutStream& os, Arg&& arg, Args&&... args)
+    static void message(io::OutStream& os, Arg&& arg, Args&&... args)
     {
         os << arg;
         message(os, std::forward<Args>(args)...);

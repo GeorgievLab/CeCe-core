@@ -23,12 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// C++
-#include <fstream>
+#if _MSC_VER
+#pragma message("Include 'cece/io/FileStream.hpp' instead")
+#else
+#warning "Include 'cece/io/FileStream.hpp' instead"
+#endif
+#include "cece/io/FileStream.hpp"
 
 /* ************************************************************************ */
 
@@ -37,24 +37,9 @@ inline namespace core {
 
 /* ************************************************************************ */
 
-/**
- * @brief Input file stream type.
- */
-using InFileStream = std::ifstream;
-
-/* ************************************************************************ */
-
-/**
- * @brief Output file stream type.
- */
-using OutFileStream = std::ofstream;
-
-/* ************************************************************************ */
-
-/**
- * @brief Input/Output file stream type.
- */
-using FileStream = std::fstream;
+using io::InFileStream;
+using io::OutFileStream;
+using io::FileStream;
 
 /* ************************************************************************ */
 

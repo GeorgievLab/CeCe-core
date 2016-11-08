@@ -71,7 +71,7 @@ bool isSymbolChar(char c) noexcept
 
 /* ************************************************************************ */
 
-Value parse(InStream& is)
+Value parse(io::InStream& is)
 {
     String str;
     is >> str;

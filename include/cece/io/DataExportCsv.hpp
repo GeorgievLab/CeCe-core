@@ -23,25 +23,101 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-// Declaration
-#include "cece/simulator/TimeMeasurement.hpp"
+#pragma once
+
+/* ************************************************************************ */
 
 // CeCe
-#include "cece/simulator/Simulation.hpp"
+#include "cece/io/DataExport.hpp"
+#include "cece/io/CsvFile.hpp"
+#include "cece/io/FilePath.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
-namespace simulator {
+namespace io {
 
 /* ************************************************************************ */
 
-void TimeMeasurement::operator()(io::OutStream& out, StringView name, Clock::duration dt) const noexcept
+/**
+ * @brief Data exporting class - to CSV file.
+ */
+class DataExportCsv : public DataExport
 {
-    using namespace std::chrono;
-    #pragma omp critical
-    out << name.getData() << ";" << m_simulation->getIteration() << ";" << duration_cast<microseconds>(dt).count() << "\n";
-}
+
+// Public Ctors & Dtors
+public:
+
+
+    /**
+     * @brief Constructor.
+     *
+     * @param path
+     */
+    explicit DataExportCsv(io::FilePath path);
+
+
+    /**
+     * @brief Destructor.
+     */
+    ~DataExportCsv();
+
+
+// Public Accessors
+public:
+
+
+    /**
+     * @brief Returns path to output file.
+     *
+     * @return
+     */
+    const io::FilePath& getFilePath() const noexcept
+    {
+        return m_file.getPath();
+    }
+
+
+// Public Operations
+public:
+
+
+    /**
+     * @brief Flush output.
+     */
+    void flush() override;
+
+
+// Protected Operations
+protected:
+
+
+    /**
+     * @brief Write data header.
+     *
+     * @param count Number of columns.
+     * @param ...   Column names.
+     */
+    void writeHeaderImpl(int count, ...) override;
+
+
+    /**
+     * @brief Write data record.
+     *
+     * @param count  Number of columns.
+     * @param format Column format string.
+     * @param ...    Column values.
+     */
+    void writeRecordImpl(int count, const char* format, ...) override;
+
+
+// Private Data Members
+protected:
+
+    /// CSV file.
+    CsvFile m_file;
+
+};
 
 /* ************************************************************************ */
 

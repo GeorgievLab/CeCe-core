@@ -41,9 +41,9 @@
 #include "cece/core/Real.hpp"
 #include "cece/core/Log.hpp"
 #include "cece/core/Exception.hpp"
-#include "cece/core/OutStream.hpp"
-#include "cece/core/FileStream.hpp"
 #include "cece/core/UnitIo.hpp"
+#include "cece/io/FileStream.hpp"
+#include "cece/io/OutStream.hpp"
 #include "cece/plugin/Api.hpp"
 #include "cece/plugin/Manager.hpp"
 #include "cece/init/Initializer.hpp"
@@ -126,7 +126,7 @@ DefaultSimulation::~DefaultSimulation()
 
 /* ************************************************************************ */
 
-UniquePtr<InOutStream> DefaultSimulation::getResource(StringView name) noexcept
+UniquePtr<io::InOutStream> DefaultSimulation::getResource(StringView name) noexcept
 {
     // Path to resource
     const auto path = getFileName().getParentPath() / String(name);
@@ -134,12 +134,12 @@ UniquePtr<InOutStream> DefaultSimulation::getResource(StringView name) noexcept
     if (!pathExists(path))
         return nullptr;
 
-    auto file = makeUnique<FileStream>(path.toString(), std::ios::in | std::ios::out | std::ios::binary);
+    auto file = makeUnique<io::FileStream>(path.toString(), std::ios::in | std::ios::out | std::ios::binary);
 
     if (!file->is_open())
         return nullptr;
 
-    return UniquePtr<InOutStream>{file.release()};
+    return UniquePtr<io::InOutStream>{file.release()};
 }
 
 /* ************************************************************************ */

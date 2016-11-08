@@ -23,12 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// CeCe
-#include "cece/core/DataExportFactory.hpp"
+#if _MSC_VER
+#pragma message("Include 'cece/io/DataExportCsvFactory.hpp' instead")
+#else
+#warning "Include 'cece/io/DataExportCsvFactory.hpp' instead"
+#endif
+#include "cece/io/DataExportCsvFactory.hpp"
 
 /* ************************************************************************ */
 
@@ -37,30 +37,7 @@ inline namespace core {
 
 /* ************************************************************************ */
 
-class DataExport;
-
-/* ************************************************************************ */
-
-/**
- * @brief DataExportCsv factory.
- */
-class DataExportCsvFactory : public DataExportFactory
-{
-
-// Public Operations
-public:
-
-
-    /**
-     * @brief Create an object.
-     *
-     * @param name
-     *
-     * @return Created object pointer.
-     */
-    UniquePtr<DataExport> create(String name) const override;
-
-};
+using io::DataExportCsvFactory;
 
 /* ************************************************************************ */
 

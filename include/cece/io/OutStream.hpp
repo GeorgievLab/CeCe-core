@@ -23,25 +23,24 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-// Declaration
-#include "cece/simulator/TimeMeasurement.hpp"
+#pragma once
 
-// CeCe
-#include "cece/simulator/Simulation.hpp"
+/* ************************************************************************ */
+
+// C++
+#include <ostream>
 
 /* ************************************************************************ */
 
 namespace cece {
-namespace simulator {
+namespace io {
 
 /* ************************************************************************ */
 
-void TimeMeasurement::operator()(io::OutStream& out, StringView name, Clock::duration dt) const noexcept
-{
-    using namespace std::chrono;
-    #pragma omp critical
-    out << name.getData() << ";" << m_simulation->getIteration() << ";" << duration_cast<microseconds>(dt).count() << "\n";
-}
+/**
+ * @brief Output stream type.
+ */
+using OutStream = std::ostream;
 
 /* ************************************************************************ */
 

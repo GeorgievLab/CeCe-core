@@ -23,12 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// C++
-#include <iostream>
+#if _MSC_VER
+#pragma message("Include 'cece/io/InOutStream.hpp' instead")
+#else
+#warning "Include 'cece/io/InOutStream.hpp' instead"
+#endif
+#include "cece/io/InOutStream.hpp"
 
 /* ************************************************************************ */
 
@@ -37,10 +37,7 @@ inline namespace core {
 
 /* ************************************************************************ */
 
-/**
- * @brief Input & output stream type.
- */
-using InOutStream = std::iostream;
+using io::InOutStream;
 
 /* ************************************************************************ */
 

@@ -30,10 +30,10 @@
 // CeCe
 #include "cece/core/ViewPtr.hpp"
 #include "cece/core/UniquePtr.hpp"
-#include "cece/io/FilePath.hpp"
 #include "cece/core/String.hpp"
-#include "cece/core/InStream.hpp"
-#include "cece/core/OutStream.hpp"
+#include "cece/io/FilePath.hpp"
+#include "cece/io/InStream.hpp"
+#include "cece/io/OutStream.hpp"
 
 /* ************************************************************************ */
 
@@ -133,7 +133,7 @@ public:
      * @return Created simulation.
      */
     virtual UniquePtr<simulator::Simulation> fromStream(
-        const plugin::Manager& manager, InStream& is,
+        const plugin::Manager& manager, io::InStream& is,
         const io::FilePath& filename = "<stream>",
         ViewPtr<const Parameters> parameters = nullptr) const = 0;
 
@@ -144,7 +144,7 @@ public:
      * @param os         Output stream.
      * @param simulation Source simulation.
      */
-    virtual void toStream(OutStream& os, const simulator::Simulation& simulation,
+    virtual void toStream(io::OutStream& os, const simulator::Simulation& simulation,
         const io::FilePath& filename = "<stream>") const = 0;
 
 };

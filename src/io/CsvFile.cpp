@@ -24,23 +24,46 @@
 /* ************************************************************************ */
 
 // Declaration
-#include "cece/simulator/TimeMeasurement.hpp"
+#include "cece/io/CsvFile.hpp"
 
 // CeCe
-#include "cece/simulator/Simulation.hpp"
+#include "cece/core/Exception.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
-namespace simulator {
+namespace io {
 
 /* ************************************************************************ */
 
-void TimeMeasurement::operator()(io::OutStream& out, StringView name, Clock::duration dt) const noexcept
+CsvFile::CsvFile(io::FilePath path)
 {
-    using namespace std::chrono;
-    #pragma omp critical
-    out << name.getData() << ";" << m_simulation->getIteration() << ";" << duration_cast<microseconds>(dt).count() << "\n";
+    open(std::move(path));
+}
+
+/* ************************************************************************ */
+
+bool CsvFile::isOpen() const noexcept
+{
+    return m_file.is_open();
+}
+
+/* ************************************************************************ */
+
+void CsvFile::open()
+{
+    open(std::move(m_path));
+}
+
+/* ************************************************************************ */
+
+void CsvFile::open(io::FilePath path)
+{
+    m_path = std::move(path);
+    m_file.open(m_path.toString(), std::ios::binary | std::ios::out | std::ios::trunc);
+
+    if (!m_file.is_open())
+        throw RuntimeException("Cannot open file: " + m_path.toString());
 }
 
 /* ************************************************************************ */

@@ -28,63 +28,131 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/ViewPtr.hpp"
-#include "cece/core/StringView.hpp"
-#include "cece/core/TimeMeasurement.hpp"
+#include "cece/export.hpp"
 #include "cece/io/OutStream.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
-namespace simulator {
-
-/* ************************************************************************ */
-
-class Simulation;
+namespace io {
 
 /* ************************************************************************ */
 
 /**
- * @brief Time measurement functor with printing current iteration.
+ * @brief IO stream manipulator for output color.
  */
-struct TimeMeasurement
+class CliColor
 {
-    /// Simulation.
-    ViewPtr<const Simulation> m_simulation;
+
+// Public Enums
+public:
+
+
+    /**
+     * @brief CliColor codes.
+     */
+    enum class Code
+    {
+        FG_DEFAULT          = 39,
+        FG_BLACK            = 30,
+        FG_RED              = 31,
+        FG_GREEN            = 32,
+        FG_YELLOW           = 33,
+        FG_BLUE             = 34,
+        FG_MAGENTA          = 35,
+        FG_CYAN             = 36,
+        FG_LIGHT_GRAY       = 37,
+        FG_DARK_GRAY        = 90,
+        FG_LIGHT_RED        = 91,
+        FG_LIGHT_GREEN      = 92,
+        FG_LIGHT_YELLOW     = 93,
+        FG_LIGHT_BLUE       = 94,
+        FG_LIGHT_MAGENTA    = 95,
+        FG_LIGHT_CYAN       = 96,
+        FG_WHITE            = 97,
+        BG_RED              = 41,
+        BG_GREEN            = 42,
+        BG_BLUE             = 44,
+        BG_DEFAULT          = 49
+    };
+
+
+// Public Constants
+public:
+
+    /**
+     * @brief Predefined foreground colors.
+     */
+    static const CliColor CECE_EXPORT Default;
+    static const CliColor CECE_EXPORT Black;
+    static const CliColor CECE_EXPORT Red;
+    static const CliColor CECE_EXPORT Green;
+    static const CliColor CECE_EXPORT Yellow;
+    static const CliColor CECE_EXPORT Blue;
+    static const CliColor CECE_EXPORT Magenta;
+    static const CliColor CECE_EXPORT Cyan;
+    static const CliColor CECE_EXPORT LightGray;
+    static const CliColor CECE_EXPORT DarkGray;
+    static const CliColor CECE_EXPORT LightRed;
+    static const CliColor CECE_EXPORT LightGreen;
+    static const CliColor CECE_EXPORT LightYellow;
+    static const CliColor CECE_EXPORT LightBlue;
+    static const CliColor CECE_EXPORT LightMagenta;
+    static const CliColor CECE_EXPORT LightCyan;
+    static const CliColor CECE_EXPORT White;
+
+
+// Public Ctors & Dtors
+public:
 
 
     /**
      * @brief Constructor.
      *
-     * @param sim Simulation.
+     * @param code Color code.
      */
-    explicit TimeMeasurement(ViewPtr<const Simulation> sim)
-        : m_simulation(sim)
+    constexpr CliColor(Code code) noexcept
+        : m_code(code)
     {
         // Nothing to do
     }
 
 
+// Public Accessors
+public:
+
+
     /**
-     * @brief Constructor.
+     * @brief Returns color code.
      *
-     * @param sim Simulation
+     * @return
      */
-    explicit TimeMeasurement(const Simulation& sim)
-        : m_simulation(&sim)
+    Code getCode() const noexcept
     {
-        // Nothing to do
+        return m_code;
     }
 
 
+// Public Operations
+public:
+
+
     /**
-     * @brief Functor function.
+     * @brief Output stream operator.
      *
-     * @param out  Output stream.
-     * @param name Measurement name.
-     * @param dt   Measured time.
+     * @param os    Output stream.
+     * @param color Output color.
+     *
+     * @return os
      */
-    void operator()(io::OutStream& out, StringView name, Clock::duration dt) const noexcept;
+    friend OutStream& operator<<(OutStream& os, const CliColor& color) noexcept;
+
+
+// Private Data Members
+private:
+
+    /// Format code.
+    Code m_code;
 
 };
 

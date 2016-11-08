@@ -30,10 +30,10 @@
 // CeCe
 #include "cece/core/String.hpp"
 #include "cece/core/StringView.hpp"
-#include "cece/core/InStream.hpp"
-#include "cece/core/OutStream.hpp"
 #include "cece/core/Unit.hpp"
 #include "cece/core/UnitSymbol.hpp"
+#include "cece/io/InStream.hpp"
+#include "cece/io/OutStream.hpp"
 
 /* ************************************************************************ */
 
@@ -58,7 +58,7 @@ namespace units {
  *
  * @return Result value.
  */
-Value parse(InStream& is);
+Value parse(io::InStream& is);
 
 /* ************************************************************************ */
 
@@ -87,7 +87,7 @@ Value parse(StringView value);
  * @return is.
  */
 template<typename... Nominators, typename... Denominators>
-InStream& operator>>(InStream& is, Unit<List<Nominators...>, List<Denominators...>>& unit)
+io::InStream& operator>>(io::InStream& is, Unit<List<Nominators...>, List<Denominators...>>& unit)
 {
     using Type = Unit<List<Nominators...>, List<Denominators...>>;
     using SymbolType = Symbol<Type>;
@@ -168,7 +168,7 @@ InStream& operator>>(InStream& is, Unit<List<Nominators...>, List<Denominators..
  * @return os.
  */
 template<typename... Nominators, typename... Denominators>
-OutStream& operator<<(OutStream& os, const Unit<List<Nominators...>, List<Denominators...>>& unit) noexcept
+io::OutStream& operator<<(io::OutStream& os, const Unit<List<Nominators...>, List<Denominators...>>& unit) noexcept
 {
     os << unit.value();
 

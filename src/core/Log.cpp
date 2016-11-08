@@ -60,10 +60,10 @@ void Log::StreamOutput::write(Type type, const String& section, const String& ms
     switch (type)
     {
     case Type::Default: break;
-    case Type::Info:    *m_os << CliColor::LightGreen   << "[INFO] "  << CliColor::Default; break;
-    case Type::Warning: *m_os << CliColor::Yellow       << "[WARN] "  << CliColor::Default; break;
-    case Type::Error:   *m_os << CliColor::Red          << "[ERROR] " << CliColor::Default; break;
-    case Type::Debug:   *m_os << CliColor::Green        << "[DEBUG] " << CliColor::Default; break;
+    case Type::Info:    *m_os << io::CliColor::LightGreen   << "[INFO] "  << io::CliColor::Default; break;
+    case Type::Warning: *m_os << io::CliColor::Yellow       << "[WARN] "  << io::CliColor::Default; break;
+    case Type::Error:   *m_os << io::CliColor::Red          << "[ERROR] " << io::CliColor::Default; break;
+    case Type::Debug:   *m_os << io::CliColor::Green        << "[DEBUG] " << io::CliColor::Default; break;
     }
 
     if (!section.empty())

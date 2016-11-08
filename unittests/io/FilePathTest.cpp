@@ -32,7 +32,7 @@
 
 // CeCe
 #include "cece/core/String.hpp"
-#include "cece/core/StringStream.hpp"
+#include "cece/io/StringStream.hpp"
 #include "cece/io/FilePath.hpp"
 
 /* ************************************************************************ */

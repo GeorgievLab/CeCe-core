@@ -34,13 +34,7 @@ set(SRCS
     ExpressionParser.cpp
     Log.cpp
     TimeMeasurement.cpp
-    CsvFile.cpp
-    DataExport.cpp
-    DataExportCsv.cpp
-    DataExportFactory.cpp
-    DataExportCsvFactory.cpp
     Parameters.cpp
-    CliColor.cpp
 )
 
 # ######################################################################### #

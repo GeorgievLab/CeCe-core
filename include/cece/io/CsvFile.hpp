@@ -31,37 +31,53 @@
 #include <utility>
 
 // CeCe
-#include "cece/core/String.hpp"
-#include "cece/core/UniquePtr.hpp"
-#include "cece/core/IterationRange.hpp"
+#include "cece/core/Tuple.hpp"
 #include "cece/core/DynamicArray.hpp"
-#include "cece/io/DataExport.hpp"
+#include "cece/core/String.hpp"
+#include "cece/core/IntegerSequence.hpp"
 #include "cece/io/FilePath.hpp"
-#include "cece/io/CsvFile.hpp"
-#include "cece/module/Module.hpp"
+#include "cece/io/FileStream.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
-namespace module {
+namespace io {
 
 /* ************************************************************************ */
 
 /**
- * @brief Helper module for exporting other module data.
+ * @brief CSV file.
  */
-class ExportModule : public module::Module
+class CsvFile
 {
 
 // Public Ctors & Dtors
 public:
 
 
-    using module::Module::Module;
+    /**
+     * @brief Default constructor.
+     */
+    CsvFile() = default;
 
 
-// Public Accessors
+    /**
+     * @brief Constructor.
+     *
+     * @param path Path to CSV file.
+     */
+    explicit CsvFile(io::FilePath path);
+
+
+// Public Accessors & Mutators
 public:
+
+
+    /**
+     * @brief Returns if file is open.
+     * @return
+     */
+    bool isOpen() const noexcept;
 
 
     /**
@@ -69,35 +85,10 @@ public:
      *
      * @return
      */
-    const io::FilePath& getFilePath() const noexcept
+    const io::FilePath& getPath() const noexcept
     {
-        return m_filePath;
+        return m_path;
     }
-
-
-    /**
-     * @brief Returns when export should be active.
-     *
-     * @return
-     */
-    const DynamicArray<IterationRange>& getActive() const noexcept
-    {
-        return m_active;
-    }
-
-
-    /**
-     * @brief Check if module should be active.
-     *
-     * @param it Iteration number.
-     *
-     * @return
-     */
-    bool isActive(IterationType it) const noexcept;
-
-
-// Public Mutators
-public:
 
 
     /**
@@ -105,20 +96,9 @@ public:
      *
      * @param filePath
      */
-    void setFilePath(io::FilePath filePath) noexcept
+    void setPath(io::FilePath path) noexcept
     {
-        m_filePath = std::move(filePath);
-    }
-
-
-    /**
-     * @brief Set when export should be active.
-     *
-     * @param active
-     */
-    void setActive(DynamicArray<IterationRange> active) noexcept
-    {
-        m_active = std::move(active);
+        m_path = std::move(path);
     }
 
 
@@ -127,35 +107,37 @@ public:
 
 
     /**
-     * @brief Load module configuration.
+     * @brief Open/reopen current CSV file.
+     */
+    void open();
+
+
+    /**
+     * @brief Open CSV file.
      *
-     * @param config Source configuration.
+     * @param path Path to CSV file.
      */
-    void loadConfig(const config::Configuration& config) override;
+    void open(io::FilePath path);
 
 
     /**
-     * @brief Store module configuration.
+     * @brief Close file.
+     */
+    void close() noexcept
+    {
+        m_file.close();
+    }
+
+
+    /**
+     * @brief Write CSV file header.
      *
-     * @param config Destination configuration.
+     * @param args
      */
-    void storeConfig(config::Configuration& config) const override;
-
-
-    /**
-     * @brief Initialize module.
-     */
-    void init() override;
-
-
-    /**
-     * @brief Terminate module.
-     */
-    void terminate() override;
-
-
-// Protected Operations
-protected:
+    void writeHeaderArray(const DynamicArray<String>& values) noexcept
+    {
+        writeLineArray(values);
+    }
 
 
     /**
@@ -166,7 +148,18 @@ protected:
     template<typename... Args>
     void writeHeader(Args&&... args) noexcept
     {
-        m_export->writeHeader(std::forward<Args>(args)...);
+        writeLine(std::forward<Args>(args)...);
+    }
+
+
+    /**
+     * @brief Write CSV record.
+     *
+     * @param args
+     */
+    void writeRecordArray(const DynamicArray<String>& values) noexcept
+    {
+        writeLineArray(values);
     }
 
 
@@ -178,40 +171,88 @@ protected:
     template<typename... Args>
     void writeRecord(Args&&... args) noexcept
     {
-        m_export->writeRecord(std::forward<Args>(args)...);
+        writeLine(std::forward<Args>(args)...);
     }
 
 
     /**
      * @brief Flush output.
      */
-    void flush()
+    void flush() noexcept
     {
-        m_export->flush();
+        m_file.flush();
+    }
+
+
+// Protected Operations
+protected:
+
+
+    /**
+     * @brief Write values.
+     */
+    void writeValues() noexcept
+    {
+        // Nothing
     }
 
 
     /**
-     * @brief Parse active string.
+     * @brief Write values.
      *
-     * @param str Source string
-     *
-     * @return
+     * @param arg
+     * @param args
      */
-    static DynamicArray<IterationRange> parseActive(String str);
+    template<typename Arg, typename... Args>
+    void writeValues(Arg&& arg, Args&&... args) noexcept
+    {
+        m_file << ';' << arg;
+        writeValues(std::forward<Args>(args)...);
+    }
 
 
-// Protected Data Members
-protected:
+    /**
+     * @brief Write CSV line.
+     *
+     * @param values
+     */
+    void writeLineArray(const DynamicArray<String>& values) noexcept
+    {
+        for (auto it = values.begin(); it != values.end(); ++it)
+        {
+            if (it != values.begin())
+                m_file << ';';
 
-    /// Data exporter.
-    UniquePtr<io::DataExport> m_export;
+            m_file << *it;
+        }
+
+        m_file << "\r\n";
+    }
+
+
+    /**
+     * @brief Write CSV line.
+     *
+     * @param arg
+     * @param args
+     */
+    template<typename Arg, typename... Args>
+    void writeLine(Arg&& arg, Args&&... args) noexcept
+    {
+        m_file << arg;
+        writeValues(std::forward<Args>(args)...);
+        m_file << "\r\n";
+    }
+
+
+// Private Data Members
+private:
 
     /// File path.
-    io::FilePath m_filePath;
+    io::FilePath m_path;
 
-    /// When is export active.
-    DynamicArray<IterationRange> m_active;
+    /// File stream.
+    FileStream m_file;
 
 };
 

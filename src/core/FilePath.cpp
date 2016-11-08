@@ -166,6 +166,42 @@ FilePath& FilePath::replaceExtension(const String& ext)
 
 /* ************************************************************************ */
 
+FilePath FilePath::getCurrent()
+{
+#ifdef _WIN32
+    TCHAR buffer[MAX_PATH];
+    auto res = GetCurrentDirectory(MAX_PATH, buffer);
+
+    if (res == 0)
+        throw RuntimeException("Cannot obtain current working directory");
+
+    return buffer;
+#else
+    char buffer[PATH_MAX];
+    const char* res = getcwd(buffer, PATH_MAX);
+
+    if (res == nullptr)
+        throw RuntimeException("Cannot obtain current working directory");
+
+    return res;
+#endif
+}
+
+/* ************************************************************************ */
+
+void FilePath::setCurrent(FilePath path)
+{
+#ifdef _WIN32
+    if (!SetCurrentDirectory(path.toString().c_str()))
+        throw RuntimeException("Cannot change current working directory");
+#else
+    if (chdir(path.m_path.c_str()) < 0)
+        throw RuntimeException("Cannot change current working directory");
+#endif
+}
+
+/* ************************************************************************ */
+
 bool isFile(const FilePath& path) noexcept
 {
 #ifdef _WIN32

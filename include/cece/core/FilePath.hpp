@@ -359,6 +359,22 @@ public:
     }
 
 
+    /**
+     * @brief      Returns current working directory.
+     *
+     * @return     Current working directory.
+     */
+    static FilePath getCurrent();
+
+
+    /**
+     * @brief      Changes current working directory.
+     *
+     * @param[in]  path  The new current path.
+     */
+    static void setCurrent(FilePath path);
+
+
 // Private Data Members
 private:
 

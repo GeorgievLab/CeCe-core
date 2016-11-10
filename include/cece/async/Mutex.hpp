@@ -23,22 +23,31 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#if _MSC_VER
-#pragma message("Include 'cece/async/Mutex.hpp' instead")
-#else
-#warning "Include 'cece/async/Mutex.hpp' instead"
-#endif
-#include "cece/async/Mutex.hpp"
+#pragma once
+
+/* ************************************************************************ */
+
+// C++
+#include <mutex>
 
 /* ************************************************************************ */
 
 namespace cece {
-inline namespace core {
+namespace async {
 
 /* ************************************************************************ */
 
-using async::Mutex;
-using async::MutexGuard;
+/**
+ * @brief Mutex class
+ */
+using Mutex = std::mutex;
+
+/* ************************************************************************ */
+
+/**
+ * @brief Mutex guard.
+ */
+using MutexGuard = std::lock_guard<Mutex>;
 
 /* ************************************************************************ */
 

@@ -29,7 +29,6 @@
 
 // CeCe
 #include "cece/config.hpp"
-#include "cece/core/Atomic.hpp"
 #include "cece/core/Units.hpp"
 #include "cece/core/Vector.hpp"
 #include "cece/core/VectorUnits.hpp"
@@ -40,6 +39,7 @@
 #include "cece/core/IterationType.hpp"
 #include "cece/io/FilePath.hpp"
 #include "cece/io/InOutStream.hpp"
+#include "cece/async/Atomic.hpp"
 
 /// @deprecated
 #include "cece/object/Object.hpp"
@@ -746,7 +746,7 @@ public:
      *
      * @param flag Initialization flag.
      */
-    virtual void initialize(AtomicBool& flag) = 0;
+    virtual void initialize(async::AtomicBool& flag) = 0;
 
 
     /**

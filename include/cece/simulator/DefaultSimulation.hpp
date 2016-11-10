@@ -60,7 +60,7 @@
 #endif
 
 #ifdef CECE_THREAD_SAFE
-#include "cece/core/Mutex.hpp"
+#include "cece/async/Mutex.hpp"
 #endif
 
 /* ************************************************************************ */
@@ -729,7 +729,7 @@ public:
      *
      * @param flag Initialization flag.
      */
-    void initialize(AtomicBool& flag) override;
+    void initialize(async::AtomicBool& flag) override;
 
 
     /**
@@ -852,7 +852,7 @@ private:
 #endif
 
 #ifdef CECE_THREAD_SAFE
-    Mutex m_mutex;
+    async::Mutex m_mutex;
 #endif
 };
 

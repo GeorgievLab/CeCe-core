@@ -23,22 +23,32 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#if _MSC_VER
-#pragma message("Include 'cece/async/Mutex.hpp' instead")
-#else
-#warning "Include 'cece/async/Mutex.hpp' instead"
-#endif
-#include "cece/async/Mutex.hpp"
+#pragma once
+
+/* ************************************************************************ */
+
+// C++
+#include <atomic>
 
 /* ************************************************************************ */
 
 namespace cece {
-inline namespace core {
+namespace async {
 
 /* ************************************************************************ */
 
-using async::Mutex;
-using async::MutexGuard;
+/**
+ * @brief Atomic type.
+ */
+template<typename T>
+using Atomic = std::atomic<T>;
+
+/* ************************************************************************ */
+
+/**
+ * @brief Atomic boolean type.
+ */
+using AtomicBool = std::atomic_bool;
 
 /* ************************************************************************ */
 

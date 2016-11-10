@@ -39,7 +39,7 @@ namespace module {
 
 /* ************************************************************************ */
 
-void Container::init(AtomicBool& flag)
+void Container::init(async::AtomicBool& flag)
 {
     // Update modules
     for (auto& module : getSortedListAsc())

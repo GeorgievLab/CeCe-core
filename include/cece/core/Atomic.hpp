@@ -23,12 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// C++
-#include <atomic>
+#if _MSC_VER
+#pragma message("Include 'cece/async/Atomic.hpp' instead")
+#else
+#warning "Include 'cece/async/Atomic.hpp' instead"
+#endif
+#include "cece/async/Atomic.hpp"
 
 /* ************************************************************************ */
 
@@ -37,18 +37,8 @@ inline namespace core {
 
 /* ************************************************************************ */
 
-/**
- * @brief Atomic type.
- */
-template<typename T>
-using Atomic = std::atomic<T>;
-
-/* ************************************************************************ */
-
-/**
- * @brief Atomic boolean type.
- */
-using AtomicBool = std::atomic_bool;
+using async::Atomic;
+using async::AtomicBool;
 
 /* ************************************************************************ */
 

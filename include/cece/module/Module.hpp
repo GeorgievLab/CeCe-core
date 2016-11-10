@@ -35,7 +35,7 @@
 // CeCe
 #include "cece/export.hpp"
 #include "cece/core/Units.hpp"
-#include "cece/core/Atomic.hpp"
+#include "cece/async/Atomic.hpp"
 
 /* ************************************************************************ */
 
@@ -216,7 +216,7 @@ public:
      * @param flag Continuation flag. If initialization is expensive it should
      *             test this variable in case a termination request is sent.
      */
-    virtual void init(AtomicBool& flag);
+    virtual void init(async::AtomicBool& flag);
 
 
     /**

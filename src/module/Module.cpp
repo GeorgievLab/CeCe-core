@@ -72,7 +72,7 @@ void Module::storeConfig(config::Configuration& config) const
 
 /* ************************************************************************ */
 
-void Module::init(AtomicBool& flag)
+void Module::init(async::AtomicBool& flag)
 {
     // Forward without flag
     init();

@@ -470,7 +470,7 @@ void DefaultSimulation::storeConfig(config::Configuration& config) const
 
 /* ************************************************************************ */
 
-void DefaultSimulation::initialize(AtomicBool& flag)
+void DefaultSimulation::initialize(async::AtomicBool& flag)
 {
     CECE_ASSERT(!isInitialized());
 

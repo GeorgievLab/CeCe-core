@@ -30,6 +30,7 @@ cmake_minimum_required(VERSION 3.1)
 add_subdirectory(core)
 add_subdirectory(io)
 add_subdirectory(os)
+add_subdirectory(unit)
 add_subdirectory(plugin)
 
 if (CECE_RENDER)

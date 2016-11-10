@@ -29,7 +29,7 @@
 
 // CeCe
 #include "cece/core/Real.hpp"
-#include "cece/core/VectorUnits.hpp"
+#include "cece/unit/VectorUnits.hpp"
 
 /* ************************************************************************ */
 
@@ -63,7 +63,7 @@ public:
      *
      * @return
      */
-    const units::PositionVector& getPosition() const noexcept
+    const unit::PositionVector& getPosition() const noexcept
     {
         return m_position;
     }
@@ -89,7 +89,7 @@ public:
      *
      * @param pos
      */
-    void setPosition(units::PositionVector pos) noexcept
+    void setPosition(unit::PositionVector pos) noexcept
     {
         m_position = std::move(pos);
     }
@@ -110,7 +110,7 @@ public:
 private:
 
     /// Camera position.
-    units::PositionVector m_position;
+    unit::PositionVector m_position;
 
     /// Zoom value.
     RealType m_zoom = 1.0;

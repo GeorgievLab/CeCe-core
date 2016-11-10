@@ -28,10 +28,10 @@
 
 // CeCe
 #include "cece/io/StringStream.hpp"
-#include "cece/core/UnitIo.hpp"
-#include "cece/core/UnitSymbol.hpp"
-#include "cece/core/Units.hpp"
-#include "cece/core/UnitsCtors.hpp"
+#include "cece/unit/UnitIo.hpp"
+#include "cece/unit/UnitSymbol.hpp"
+#include "cece/unit/Units.hpp"
+#include "cece/unit/UnitsCtors.hpp"
 
 /* ************************************************************************ */
 
@@ -42,83 +42,83 @@ using namespace cece::io;
 
 TEST(UnitsTest, exponentToCoefficient)
 {
-    EXPECT_FLOAT_EQ(1e0, units::exponentToCoefficient(0));
+    EXPECT_FLOAT_EQ(1e0, unit::exponentToCoefficient(0));
 
-    EXPECT_FLOAT_EQ(1e1, units::exponentToCoefficient(1));
-    EXPECT_FLOAT_EQ(1e2, units::exponentToCoefficient(2));
-    EXPECT_FLOAT_EQ(1e3, units::exponentToCoefficient(3));
-    EXPECT_FLOAT_EQ(1e4, units::exponentToCoefficient(4));
-    EXPECT_FLOAT_EQ(1e5, units::exponentToCoefficient(5));
-    EXPECT_FLOAT_EQ(1e6, units::exponentToCoefficient(6));
-    EXPECT_FLOAT_EQ(1e7, units::exponentToCoefficient(7));
-    EXPECT_FLOAT_EQ(1e8, units::exponentToCoefficient(8));
+    EXPECT_FLOAT_EQ(1e1, unit::exponentToCoefficient(1));
+    EXPECT_FLOAT_EQ(1e2, unit::exponentToCoefficient(2));
+    EXPECT_FLOAT_EQ(1e3, unit::exponentToCoefficient(3));
+    EXPECT_FLOAT_EQ(1e4, unit::exponentToCoefficient(4));
+    EXPECT_FLOAT_EQ(1e5, unit::exponentToCoefficient(5));
+    EXPECT_FLOAT_EQ(1e6, unit::exponentToCoefficient(6));
+    EXPECT_FLOAT_EQ(1e7, unit::exponentToCoefficient(7));
+    EXPECT_FLOAT_EQ(1e8, unit::exponentToCoefficient(8));
 
-    EXPECT_FLOAT_EQ(1e-1, units::exponentToCoefficient(-1));
-    EXPECT_FLOAT_EQ(1e-2, units::exponentToCoefficient(-2));
-    EXPECT_FLOAT_EQ(1e-3, units::exponentToCoefficient(-3));
-    EXPECT_FLOAT_EQ(1e-4, units::exponentToCoefficient(-4));
-    EXPECT_FLOAT_EQ(1e-5, units::exponentToCoefficient(-5));
-    EXPECT_FLOAT_EQ(1e-6, units::exponentToCoefficient(-6));
-    EXPECT_FLOAT_EQ(1e-7, units::exponentToCoefficient(-7));
-    EXPECT_FLOAT_EQ(1e-8, units::exponentToCoefficient(-8));
+    EXPECT_FLOAT_EQ(1e-1, unit::exponentToCoefficient(-1));
+    EXPECT_FLOAT_EQ(1e-2, unit::exponentToCoefficient(-2));
+    EXPECT_FLOAT_EQ(1e-3, unit::exponentToCoefficient(-3));
+    EXPECT_FLOAT_EQ(1e-4, unit::exponentToCoefficient(-4));
+    EXPECT_FLOAT_EQ(1e-5, unit::exponentToCoefficient(-5));
+    EXPECT_FLOAT_EQ(1e-6, unit::exponentToCoefficient(-6));
+    EXPECT_FLOAT_EQ(1e-7, unit::exponentToCoefficient(-7));
+    EXPECT_FLOAT_EQ(1e-8, unit::exponentToCoefficient(-8));
 }
 
 /* ************************************************************************ */
 
 TEST(UnitsTest, lengthValues)
 {
-    EXPECT_EQ(units::m(1), units::mm(1000));
-    EXPECT_EQ(units::m(0.5), units::mm(500));
-    EXPECT_EQ(units::mm(1000), units::m(1));
-    EXPECT_EQ(units::m(1), units::mm(1000));
-    //EXPECT_EQ(units::mm(5), units::um(5000)); // FIXME: float precision issue
-    //EXPECT_EQ(units::um(1), units::mm(0.001)); // FIXME: float precision issue
+    EXPECT_EQ(unit::m(1), unit::mm(1000));
+    EXPECT_EQ(unit::m(0.5), unit::mm(500));
+    EXPECT_EQ(unit::mm(1000), unit::m(1));
+    EXPECT_EQ(unit::m(1), unit::mm(1000));
+    //EXPECT_EQ(unit::mm(5), unit::um(5000)); // FIXME: float precision issue
+    //EXPECT_EQ(unit::um(1), unit::mm(0.001)); // FIXME: float precision issue
 }
 
 /* ************************************************************************ */
 
 TEST(UnitsTest, timeValues)
 {
-    EXPECT_EQ(units::s(1), units::ms(1000));
-    EXPECT_EQ(units::ms(500), units::s(0.5));
+    EXPECT_EQ(unit::s(1), unit::ms(1000));
+    EXPECT_EQ(unit::ms(500), unit::s(0.5));
 }
 
 /* ************************************************************************ */
 
 TEST(UnitsTest, massValues)
 {
-    EXPECT_EQ(units::kg(1), units::g(1000));
-    EXPECT_EQ(units::g(1), units::mg(1000));
-    EXPECT_EQ(units::mg(1), units::ug(1000));
-    EXPECT_EQ(units::ug(1), units::ng(1000));
-    EXPECT_EQ(units::ng(1), units::pg(1000));
+    EXPECT_EQ(unit::kg(1), unit::g(1000));
+    EXPECT_EQ(unit::g(1), unit::mg(1000));
+    EXPECT_EQ(unit::mg(1), unit::ug(1000));
+    EXPECT_EQ(unit::ug(1), unit::ng(1000));
+    EXPECT_EQ(unit::ng(1), unit::pg(1000));
 }
 
 /* ************************************************************************ */
 
 TEST(UnitsTest, multiplication)
 {
-    EXPECT_EQ(units::m(1) * units::m(1), units::m2(1));
-    EXPECT_EQ(units::m(2) * units::m(2), units::m2(4));
-    EXPECT_EQ(units::m(3) * units::m(4), units::m2(12));
-    EXPECT_EQ(units::mm(2) * units::mm(3), units::mm2(6));
+    EXPECT_EQ(unit::m(1) * unit::m(1), unit::m2(1));
+    EXPECT_EQ(unit::m(2) * unit::m(2), unit::m2(4));
+    EXPECT_EQ(unit::m(3) * unit::m(4), unit::m2(12));
+    EXPECT_EQ(unit::mm(2) * unit::mm(3), unit::mm2(6));
 }
 
 /* ************************************************************************ */
 
 TEST(UnitsTest, dividion)
 {
-    EXPECT_FLOAT_EQ(units::m(1) / units::m(1), 1);
-    EXPECT_FLOAT_EQ(units::m(5) / units::m(5), 1);
-    EXPECT_FLOAT_EQ(units::m(6) / units::m(2), 3);
-    EXPECT_EQ(units::m(8) / units::s(2), units::m_s(4));
+    EXPECT_FLOAT_EQ(unit::m(1) / unit::m(1), 1);
+    EXPECT_FLOAT_EQ(unit::m(5) / unit::m(5), 1);
+    EXPECT_FLOAT_EQ(unit::m(6) / unit::m(2), 3);
+    EXPECT_EQ(unit::m(8) / unit::s(2), unit::m_s(4));
 }
 
 /* ************************************************************************ */
 
 TEST(UnitsTest, symbol)
 {
-    using namespace units;
+    using namespace unit;
 
     {
         using type = Unit<List<BaseLength>, List<>>;
@@ -164,19 +164,19 @@ TEST(UnitsTest, istream)
     {
         InStringStream is("0");
 
-        units::Length val;
+        unit::Length val;
         is >> val;
 
-        EXPECT_EQ(units::um(0), val);
+        EXPECT_EQ(unit::um(0), val);
     }
 
     {
         InStringStream is("0um");
 
-        units::Length val;
+        unit::Length val;
         is >> val;
 
-        EXPECT_EQ(units::um(0), val);
+        EXPECT_EQ(unit::um(0), val);
     }
 
 /*
@@ -184,38 +184,38 @@ TEST(UnitsTest, istream)
     {
         InStringStream is("100um");
 
-        units::Length val;
+        unit::Length val;
         is >> val;
 
-        EXPECT_EQ(units::um(100), val);
+        EXPECT_EQ(unit::um(100), val);
     }
 */
 
     {
         InStringStream is("  500ms    ");
 
-        units::Time val;
+        unit::Time val;
         is >> val;
 
-        EXPECT_EQ(units::ms(500), val);
+        EXPECT_EQ(unit::ms(500), val);
     }
 
     {
         InStringStream is("2um2");
 
-        units::Area val;
+        unit::Area val;
         is >> val;
 
-        EXPECT_EQ(units::um2(2), val);
+        EXPECT_EQ(unit::um2(2), val);
     }
 
     {
         InStringStream is("1umol/um3");
 
-        units::MolarConcentration val;
+        unit::MolarConcentration val;
         is >> val;
 
-        EXPECT_EQ(units::umol_um3(1), val);
+        EXPECT_EQ(unit::umol_um3(1), val);
     }
 }
 
@@ -226,10 +226,10 @@ TEST(UnitsTest, abbr)
     {
         InStringStream is("15mM"); // 1mM = 1mol/m3
 
-        units::MolarConcentration val;
+        unit::MolarConcentration val;
         is >> val;
 
-        EXPECT_EQ(units::mol_m3(15), val);
+        EXPECT_EQ(unit::mol_m3(15), val);
     }
 }
 
@@ -240,7 +240,7 @@ TEST(UnitsTest, parse)
     {
         InStringStream is("0");
 
-        units::Value val = units::parse(is);
+        unit::Value val = unit::parse(is);
 
         EXPECT_FLOAT_EQ(0, val);
     }
@@ -248,7 +248,7 @@ TEST(UnitsTest, parse)
     {
         InStringStream is("0um");
 
-        units::Value val = units::parse(is);
+        unit::Value val = unit::parse(is);
 
         EXPECT_FLOAT_EQ(0, val);
     }
@@ -256,49 +256,49 @@ TEST(UnitsTest, parse)
     {
         InStringStream is("100um");
 
-        units::Value val = units::parse(is);
+        unit::Value val = unit::parse(is);
 
-        EXPECT_FLOAT_EQ(units::um(100).value(), val);
+        EXPECT_FLOAT_EQ(unit::um(100).value(), val);
     }
 
     {
         InStringStream is("  500ms    ");
 
-        units::Value val = units::parse(is);
+        unit::Value val = unit::parse(is);
 
-        EXPECT_FLOAT_EQ(units::ms(500).value(), val);
+        EXPECT_FLOAT_EQ(unit::ms(500).value(), val);
     }
 
     {
         InStringStream is("2um2");
 
-        units::Value val = units::parse(is);
+        unit::Value val = unit::parse(is);
 
-        EXPECT_FLOAT_EQ(units::um2(2).value(), val);
+        EXPECT_FLOAT_EQ(unit::um2(2).value(), val);
     }
 
     {
         InStringStream is("1umol/um3");
 
-        units::Value val = units::parse(is);
+        unit::Value val = unit::parse(is);
 
-        EXPECT_FLOAT_EQ(units::umol_um3(1).value(), val);
+        EXPECT_FLOAT_EQ(unit::umol_um3(1).value(), val);
     }
 
     {
         InStringStream is("15mM");
 
-        units::Value val = units::parse(is);
+        unit::Value val = unit::parse(is);
 
-        EXPECT_FLOAT_EQ(units::mM(15).value(), val);
+        EXPECT_FLOAT_EQ(unit::mM(15).value(), val);
     }
 
     {
         InStringStream is("50nM");
 
-        units::Value val = units::parse(is);
+        unit::Value val = unit::parse(is);
 
-        EXPECT_FLOAT_EQ(units::nM(50).value(), val);
+        EXPECT_FLOAT_EQ(unit::nM(50).value(), val);
     }
 }
 

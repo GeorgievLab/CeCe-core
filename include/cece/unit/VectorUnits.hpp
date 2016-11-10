@@ -23,91 +23,84 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-// C++
-#include <sstream>
+#pragma once
 
-// GTest
-#include "gtest/gtest.h"
+/* ************************************************************************ */
 
 // CeCe
-#include "cece/core/UnitIo.hpp"
-#include "cece/core/VectorUnits.hpp"
-#include "cece/core/UnitsCtors.hpp"
+#include "cece/core/Real.hpp"
+#include "cece/core/Vector.hpp"
+#include "cece/unit/Units.hpp"
 
 /* ************************************************************************ */
 
-using namespace cece;
+namespace cece {
+namespace unit {
 
 /* ************************************************************************ */
 
-TEST(VectorUnitsTest, istream)
-{
-    {
-        std::istringstream is("10 20");
+/**
+ * @brief Position vector structure.
+ */
+using PositionVector = Vector<Length>;
 
-        Vector<units::Length> vec;
-        is >> vec;
+/* ************************************************************************ */
 
-        EXPECT_EQ(units::um(10), vec.getX());
-        EXPECT_EQ(units::um(20), vec.getY());
-    }
+/**
+ * @brief Velocity vector structure.
+ */
+using VelocityVector = Vector<Velocity>;
 
-    {
-        std::istringstream is("10um 20um");
+/* ************************************************************************ */
 
-        Vector<units::Length> vec;
-        is >> vec;
+/**
+ * @brief Acceleration vector structure.
+ */
+using AccelerationVector = Vector<Acceleration>;
 
-        EXPECT_EQ(units::um(10), vec.getX());
-        EXPECT_EQ(units::um(20), vec.getY());
-    }
+/* ************************************************************************ */
 
-    {
-        std::istringstream is("10um");
+/**
+ * @brief Force vector structure.
+ */
+using ForceVector = Vector<Force>;
 
-        Vector<units::Length> vec;
-        is >> vec;
+/* ************************************************************************ */
 
-        EXPECT_EQ(units::um(10), vec.getX());
-        EXPECT_EQ(units::um(10), vec.getY());
-    }
+/**
+ * @brief Impulse vector structure.
+ */
+using ImpulseVector = Vector<Impulse>;
 
-    {
-        std::istringstream is("0 10um");
+/* ************************************************************************ */
 
-        Vector<units::Length> vec;
-        is >> vec;
+/**
+ * @brief Scale vector.
+ */
+using ScaleVector = Vector<RealType>;
 
-        EXPECT_EQ(units::um(0), vec.getX());
-        EXPECT_EQ(units::um(10), vec.getY());
-    }
+/* ************************************************************************ */
 
-    {
-        std::istringstream is("0um 10um");
+/**
+ * @brief Size vector.
+ */
+using SizeVector = Vector<Length>;
 
-        Vector<units::Length> vec;
-        is >> vec;
+/* ************************************************************************ */
 
-        EXPECT_EQ(units::um(0), vec.getX());
-        EXPECT_EQ(units::um(10), vec.getY());
-    }
-
-    {
-        std::istringstream is("5um 0");
-
-        Vector<units::Length> vec;
-        is >> vec;
-
-        EXPECT_EQ(units::um(5), vec.getX());
-        EXPECT_EQ(units::um(0), vec.getY());
-    }
 }
 
 /* ************************************************************************ */
 
-TEST(VectorUnitsTest, ostream)
-{
-    //Vector
+extern template class BasicVector<unit::Length, config::DIMENSION>;
+extern template class BasicVector<unit::Velocity, config::DIMENSION>;
+extern template class BasicVector<unit::Acceleration, config::DIMENSION>;
+extern template class BasicVector<unit::Force, config::DIMENSION>;
+extern template class BasicVector<unit::Impulse, config::DIMENSION>;
+extern template class BasicVector<RealType, config::DIMENSION>;
+
+/* ************************************************************************ */
+
 }
 
 /* ************************************************************************ */

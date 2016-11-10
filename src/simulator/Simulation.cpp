@@ -30,7 +30,7 @@
 #include <utility>
 
 // CeCe
-#include "cece/core/UnitIo.hpp"
+#include "cece/unit/UnitIo.hpp"
 #include "cece/plugin/Api.hpp"
 #include "cece/init/Initializer.hpp"
 #include "cece/module/Module.hpp"
@@ -224,8 +224,8 @@ void Simulation::setContactListener(object::ContactListener* listener)
 
 void Simulation::loadConfig(const config::Configuration& config)
 {
-    setWorldSize(config.get<units::SizeVector>("world-size"));
-    setTimeStep(config.get<units::Time>("dt"));
+    setWorldSize(config.get<unit::SizeVector>("world-size"));
+    setTimeStep(config.get<unit::Time>("dt"));
     setIterations(config.get("iterations", getIterations()));
 
 #ifdef CECE_RENDER

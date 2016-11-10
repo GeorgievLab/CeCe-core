@@ -24,21 +24,33 @@
 /* ************************************************************************ */
 
 // Declaration
-#include "cece/core/VectorUnits.hpp"
+#include "cece/unit/Units.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
-inline namespace core {
+namespace unit {
 
 /* ************************************************************************ */
 
-template class BasicVector<units::Length, config::DIMENSION>;
-template class BasicVector<units::Velocity, config::DIMENSION>;
-template class BasicVector<units::Acceleration, config::DIMENSION>;
-template class BasicVector<units::Force, config::DIMENSION>;
-template class BasicVector<units::Impulse, config::DIMENSION>;
-template class BasicVector<RealType, config::DIMENSION>;
+template class Unit<List<>, List<>>;
+template class Unit<List<BaseLength>, List<>>;
+template class Unit<List<BaseMass>, List<>>;
+template class Unit<List<BaseTime>, List<>>;
+template class Unit<List<BaseLength, BaseLength>, List<>>;
+template class Unit<List<BaseLength, BaseLength, BaseLength>, List<>>;
+template class Unit<List<BaseLength>, List<BaseTime>>;
+template class Unit<List<BaseLength>, List<BaseTime, BaseTime>>;
+template class Unit<List<BaseLength, BaseMass>, List<BaseTime, BaseTime>>;
+template class Unit<List<BaseLength, BaseMass>, List<BaseTime>>;
+template class Unit<List<BaseMass>, List<BaseLength, BaseLength, BaseLength>>;
+template class Unit<List<BaseMass>, List<BaseLength, BaseTime>>;
+template class Unit<List<BaseLength, BaseLength>, List<BaseTime>>;
+template class Unit<List<BaseAmountOfSubstance>, List<>>;
+template class Unit<List<BaseAmountOfSubstance>, List<BaseLength, BaseLength, BaseLength>>;
+template class Unit<List<>, List<BaseLength, BaseLength, BaseLength>>;
+template class Unit<List<>, List<BaseTime>>;
+template class Unit<List<BaseLength, BaseLength, BaseLength>, List<BaseTime>>;
 
 /* ************************************************************************ */
 

@@ -29,7 +29,7 @@
 
 // CeCe
 #include "cece/core/UniquePtr.hpp"
-#include "cece/core/Units.hpp"
+#include "cece/unit/Units.hpp"
 
 /* ************************************************************************ */
 
@@ -120,7 +120,7 @@ public:
      * @param object     Object.
      * @param dt         Simulation time step.
      */
-    virtual void call(simulator::Simulation& simulation, object::Object& object, units::Time dt) = 0;
+    virtual void call(simulator::Simulation& simulation, object::Object& object, unit::Time dt) = 0;
 
 
     /**

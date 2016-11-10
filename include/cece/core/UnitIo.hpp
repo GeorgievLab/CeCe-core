@@ -23,166 +23,26 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// CeCe
-#include "cece/core/String.hpp"
-#include "cece/core/StringView.hpp"
-#include "cece/core/Unit.hpp"
-#include "cece/core/UnitSymbol.hpp"
-#include "cece/io/InStream.hpp"
-#include "cece/io/OutStream.hpp"
+#if _MSC_VER
+#pragma message("Include 'cece/unit/UnitIo.hpp' instead")
+#else
+#warning "Include 'cece/unit/UnitIo.hpp' instead"
+#endif
+#include "cece/unit/UnitIo.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
 inline namespace core {
-
-/* ************************************************************************ */
-
 namespace units {
 
 /* ************************************************************************ */
 
-/**
- * @brief Parse units value.
- *
- * This function can handle unit suffix and convert it into proper coefficient.
- *
- * @note Unit prefix is not supported because there is issue with meters:
- * `mg` - it's milligram or metergram?
- *
- * @param is Input stream.
- *
- * @return Result value.
- */
-Value parse(io::InStream& is);
-
-/* ************************************************************************ */
-
-/**
- * @brief Parse units value.
- *
- * This function can handle unit suffix and convert it into proper coefficient.
- *
- * @note Unit prefix is not supported because there is issue with meters:
- * `mg` - it's milligram or metergram?
- *
- * @param value Value to parse.
- *
- * @return Result value.
- */
-Value parse(StringView value);
-
-/* ************************************************************************ */
-
-/**
- * @brief Input stream operator.
- *
- * @param is   Input stream.
- * @param unit Result value.
- *
- * @return is.
- */
-template<typename... Nominators, typename... Denominators>
-io::InStream& operator>>(io::InStream& is, Unit<List<Nominators...>, List<Denominators...>>& unit)
-{
-    using Type = Unit<List<Nominators...>, List<Denominators...>>;
-    using SymbolType = Symbol<Type>;
-
-    // Type symbol
-#if _LIBCPP_VERSION || _MSC_VER
-    // MACOSX use old stdlib that doesnt support constexpr std::array.
-    static const auto typeSymbolNom   = SymbolType::nominators::get();
-    static const auto typeSymbolDenom = SymbolType::denominators::get();
-#else
-    static constexpr auto typeSymbolNom   = SymbolType::nominators::get();
-    static constexpr auto typeSymbolDenom = SymbolType::denominators::get();
-#endif
-
-    Value val;
-    String symbol;
-
-    is >> std::ws >> val;
-
-    // Unable to load unit
-    if (!is)
-        return is;
-
-    // No symbol given
-    if (!(is >> std::noskipws >> symbol))
-    {
-        is.clear();
-
-        // Set value
-        unit = Type{val};
-        return is;
-    }
-
-    // Split symbol to two parts
-    const auto sepPos = symbol.find('/');
-
-    String symbolNom;
-    String symbolDenom;
-
-    // Only nominators
-    if (sepPos == String::npos)
-    {
-        symbolNom = symbol;
-    }
-    else
-    {
-        symbolNom = symbol.substr(0, sepPos);
-        symbolDenom = symbol.substr(sepPos + 1);
-    }
-
-    // Get coefficient exponent
-    const int exponent = 0
-        // Base given by type
-        + Type::exponent
-        // Nominators
-        + calcPrefixExponent(symbolNom, typeSymbolNom, Type::firstCountNom)
-        // Denominators
-        - calcPrefixExponent(symbolDenom, typeSymbolDenom, Type::firstCountDenom)
-    ;
-
-    // Value coefficient
-    const Value coefficient = exponentToCoefficient(exponent);
-
-    // Set unit
-    unit = Type(val * coefficient);
-
-    return is;
-}
-
-/* ************************************************************************ */
-
-/**
- * @brief Output stream operator.
- *
- * @param os   Output stream.
- * @param unit Input value.
- *
- * @return os.
- */
-template<typename... Nominators, typename... Denominators>
-io::OutStream& operator<<(io::OutStream& os, const Unit<List<Nominators...>, List<Denominators...>>& unit) noexcept
-{
-    os << unit.value();
-
-    // TODO: write suffix
-
-    return os;
-}
+using unit::parse;
 
 /* ************************************************************************ */
 
 }
-
-/* ************************************************************************ */
-
 }
 }
 

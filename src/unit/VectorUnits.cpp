@@ -24,7 +24,7 @@
 /* ************************************************************************ */
 
 // Declaration
-#include "cece/core/Units.hpp"
+#include "cece/unit/VectorUnits.hpp"
 
 /* ************************************************************************ */
 
@@ -33,32 +33,12 @@ inline namespace core {
 
 /* ************************************************************************ */
 
-namespace units {
-
-/* ************************************************************************ */
-
-template class Unit<List<>, List<>>;
-template class Unit<List<BaseLength>, List<>>;
-template class Unit<List<BaseMass>, List<>>;
-template class Unit<List<BaseTime>, List<>>;
-template class Unit<List<BaseLength, BaseLength>, List<>>;
-template class Unit<List<BaseLength, BaseLength, BaseLength>, List<>>;
-template class Unit<List<BaseLength>, List<BaseTime>>;
-template class Unit<List<BaseLength>, List<BaseTime, BaseTime>>;
-template class Unit<List<BaseLength, BaseMass>, List<BaseTime, BaseTime>>;
-template class Unit<List<BaseLength, BaseMass>, List<BaseTime>>;
-template class Unit<List<BaseMass>, List<BaseLength, BaseLength, BaseLength>>;
-template class Unit<List<BaseMass>, List<BaseLength, BaseTime>>;
-template class Unit<List<BaseLength, BaseLength>, List<BaseTime>>;
-template class Unit<List<BaseAmountOfSubstance>, List<>>;
-template class Unit<List<BaseAmountOfSubstance>, List<BaseLength, BaseLength, BaseLength>>;
-template class Unit<List<>, List<BaseLength, BaseLength, BaseLength>>;
-template class Unit<List<>, List<BaseTime>>;
-template class Unit<List<BaseLength, BaseLength, BaseLength>, List<BaseTime>>;
-
-/* ************************************************************************ */
-
-}
+template class BasicVector<unit::Length, config::DIMENSION>;
+template class BasicVector<unit::Velocity, config::DIMENSION>;
+template class BasicVector<unit::Acceleration, config::DIMENSION>;
+template class BasicVector<unit::Force, config::DIMENSION>;
+template class BasicVector<unit::Impulse, config::DIMENSION>;
+template class BasicVector<RealType, config::DIMENSION>;
 
 /* ************************************************************************ */
 

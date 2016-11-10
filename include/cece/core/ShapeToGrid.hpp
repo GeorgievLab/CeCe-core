@@ -34,9 +34,9 @@
 // CeCe
 #include "cece/core/Assert.hpp"
 #include "cece/core/Vector.hpp"
-#include "cece/core/Units.hpp"
 #include "cece/core/Shape.hpp"
 #include "cece/core/Real.hpp"
+#include "cece/unit/Units.hpp"
 
 /* ************************************************************************ */
 
@@ -62,7 +62,7 @@ inline namespace core {
  */
 template<typename FnIn, typename FnOut, typename T, typename StepT>
 void mapShapeToGrid(FnIn fnIn, FnOut fnOut, const Shape& shape, const Vector<StepT>& steps,
-    const Vector<T>& center, units::Angle rotation, const Vector<T>& max,
+    const Vector<T>& center, unit::Angle rotation, const Vector<T>& max,
     const Vector<T>& min = {})
 {
     switch (shape.getType())
@@ -101,7 +101,7 @@ void mapShapeToGrid(FnIn fnIn, FnOut fnOut, const Shape& shape, const Vector<Ste
  */
 template<typename OutIt, typename T, typename StepT>
 OutIt mapShapeToGrid(OutIt out, const Shape& shape, const Vector<StepT>& steps,
-    const Vector<T>& center, units::Angle rotation, const Vector<T>& max,
+    const Vector<T>& center, unit::Angle rotation, const Vector<T>& max,
     const Vector<T>& min = {})
 {
     mapShapeToGrid(
@@ -130,7 +130,7 @@ OutIt mapShapeToGrid(OutIt out, const Shape& shape, const Vector<StepT>& steps,
  */
 template<typename FnIn, typename FnOut, typename T, typename StepT>
 void mapShapeToGrid(FnIn fnIn, FnOut fnOut, const ShapeCircle& shape, const Vector<StepT>& steps,
-    const Vector<T>& center, units::Angle rotation, const Vector<T>& max,
+    const Vector<T>& center, unit::Angle rotation, const Vector<T>& max,
     const Vector<T>& min = {})
 {
     // Get signed type
@@ -184,7 +184,7 @@ void mapShapeToGrid(FnIn fnIn, FnOut fnOut, const ShapeCircle& shape, const Vect
  */
 template<typename OutIt, typename T, typename StepT>
 OutIt mapShapeToGrid(OutIt out, const ShapeCircle& shape, const Vector<StepT>& steps,
-    const Vector<T>& center, units::Angle rotation, const Vector<T>& max,
+    const Vector<T>& center, unit::Angle rotation, const Vector<T>& max,
     const Vector<T>& min = {})
 {
     mapShapeToGrid(
@@ -213,7 +213,7 @@ OutIt mapShapeToGrid(OutIt out, const ShapeCircle& shape, const Vector<StepT>& s
  */
 template<typename FnIn, typename FnOut, typename T, typename StepT>
 void mapShapeToGrid(FnIn fnIn, FnOut fnOut, const ShapeRectangle& shape, const Vector<StepT>& steps,
-    const Vector<T>& center, units::Angle rotation, const Vector<T>& max,
+    const Vector<T>& center, unit::Angle rotation, const Vector<T>& max,
     const Vector<T>& min = {})
 {
     // Get signed type
@@ -260,7 +260,7 @@ void mapShapeToGrid(FnIn fnIn, FnOut fnOut, const ShapeRectangle& shape, const V
  */
 template<typename OutIt, typename T, typename StepT>
 OutIt mapShapeToGrid(OutIt out, const ShapeEdges& shape, const Vector<StepT>& steps,
-    const Vector<T>& center, units::Angle rotation, const Vector<T>& max,
+    const Vector<T>& center, unit::Angle rotation, const Vector<T>& max,
     const Vector<T>& min = Zero)
 {
     mapShapeToGrid(
@@ -294,7 +294,7 @@ OutIt mapShapeToGrid(OutIt out, const ShapeEdges& shape, const Vector<StepT>& st
  */
 template<typename FnIn, typename FnOut, typename T, typename StepT>
 void mapShapeToGrid(FnIn fnIn, FnOut fnOut, const ShapeEdges& shape, const Vector<StepT>& steps,
-    const Vector<T>& center, units::Angle rotation, const Vector<T>& max,
+    const Vector<T>& center, unit::Angle rotation, const Vector<T>& max,
     const Vector<T>& min = Zero)
 {
     // Get signed type
@@ -446,7 +446,7 @@ void mapShapeToGrid(FnIn fnIn, FnOut fnOut, const ShapeEdges& shape, const Vecto
  */
 template<typename OutIt, typename T, typename StepT>
 OutIt mapShapeToGrid(OutIt out, const ShapeRectangle& shape, const Vector<StepT>& steps,
-    const Vector<T>& center, units::Angle rotation, const Vector<T>& max,
+    const Vector<T>& center, unit::Angle rotation, const Vector<T>& max,
     const Vector<T>& min = {})
 {
     mapShapeToGrid(

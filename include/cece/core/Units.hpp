@@ -23,218 +23,48 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// CeCe
-#include "cece/core/Unit.hpp"
+#if _MSC_VER
+#pragma message("Include 'cece/unit/Units.hpp' instead")
+#else
+#warning "Include 'cece/unit/Units.hpp' instead"
+#endif
+#include "cece/unit/Units.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
 inline namespace core {
-
-/* ************************************************************************ */
-
 namespace units {
 
 /* ************************************************************************ */
 
-/**
- * @brief Type without units.
- */
-using None = Unit<List<>, List<>>;
-
-/* ************************************************************************ */
-
-/**
- * @brief Class for representing distance (meters).
- */
-using Length = Unit<List<BaseLength>, List<>>;
-
-/* ************************************************************************ */
-
-/**
- * @brief Class for representing mass (kilograms).
- */
-using Mass = Unit<List<BaseMass>, List<>>;
-
-/* ************************************************************************ */
-
-/**
- * @brief Class for representing time (seconds).
- */
-using Time = Unit<List<BaseTime>, List<>>;
-using Duration = Time;
-
-/* ************************************************************************ */
-
-/**
- * @brief Class for representing area.
- */
-using Area = Unit<List<BaseLength, BaseLength>, List<>>;
-
-/* ************************************************************************ */
-
-/**
- * @brief Class for representing volume.
- */
-using Volume = Unit<List<BaseLength, BaseLength, BaseLength>, List<>>;
-
-/* ************************************************************************ */
-
-/**
- * @brief Class for representing velocity (micrometers per second).
- */
-using Velocity = Unit<List<BaseLength>, List<BaseTime>>;
-
-/* ************************************************************************ */
-
-/**
- * @brief Class for representing acceleration (micrometers per second^2).
- */
-using Acceleration = Unit<List<BaseLength>, List<BaseTime, BaseTime>>;
-
-/* ************************************************************************ */
-
-/**
- * @brief Class for representing force (Newton).
- */
-using Force = Unit<List<BaseLength, BaseMass>, List<BaseTime, BaseTime>>;
-
-/* ************************************************************************ */
-
-/**
- * @brief Class for representing impulse.
- */
-using Impulse = Unit<List<BaseLength, BaseMass>, List<BaseTime>>;
-
-/* ************************************************************************ */
-
-/**
- * @brief Class for representing density.
- */
-using Density = Unit<List<BaseMass>, List<BaseLength, BaseLength, BaseLength>>;
-
-/* ************************************************************************ */
-
-/**
- * @brief Class for representing dynamic viscosity.
- */
-using DynamicViscosity = Unit<List<BaseMass>, List<BaseLength, BaseTime>>;
-
-/* ************************************************************************ */
-
-/**
- * @brief Class for representing kinematic viscosity.
- */
-using KinematicViscosity = Unit<List<BaseLength, BaseLength>, List<BaseTime>>;
-
-/* ************************************************************************ */
-
-/**
- * @brief Amount of substance.
- */
-using AmountOfSubstance = Unit<List<BaseAmountOfSubstance>, List<>>;
-
-/* ************************************************************************ */
-
-/**
- * @brief Number concentration.
- */
-using NumberConcentration = Unit<List<>, List<BaseLength, BaseLength, BaseLength>>;
-
-/* ************************************************************************ */
-
-/**
- * @brief Molar concentration.
- */
-using MolarConcentration = Unit<List<BaseAmountOfSubstance>, List<BaseLength, BaseLength, BaseLength>>;
-
-/* ************************************************************************ */
-
-/**
- * @brief Class for representing angle.
- */
-using Angle = Unit<List<>, List<>>;
-
-/* ************************************************************************ */
-
-/**
- * @brief Class for representing angular velocity (radian per second).
- */
-using AngularVelocity = Unit<List<>, List<BaseTime>>;
-
-/* ************************************************************************ */
-
-/**
- * @brief Class for representing probability.
- */
-using Probability = Unit<List<>, List<>>;
-
-/* ************************************************************************ */
-
-/**
- * @brief Volumeric flow rate.
- */
-using VolumericFlow = Unit<List<BaseLength, BaseLength, BaseLength>, List<BaseTime>>;
-
-/* ************************************************************************ */
-
-/**
- * @brief Convert degrees to radians.
- *
- * @param value
- *
- * @return
- */
-inline constexpr Value deg2rad(Value value) noexcept
-{
-    return value * 0.01745329252f;
-}
-
-/* ************************************************************************ */
-
-/**
- * @brief Convert radians to degrees.
- *
- * @param value
- *
- * @return
- */
-inline constexpr Value rad2deg(Value value) noexcept
-{
-    return value * 57.2957795f;
-}
-
-/* ************************************************************************ */
-
-extern template class Unit<List<>, List<>>;
-extern template class Unit<List<BaseLength>, List<>>;
-extern template class Unit<List<BaseMass>, List<>>;
-extern template class Unit<List<BaseTime>, List<>>;
-extern template class Unit<List<BaseLength, BaseLength>, List<>>;
-extern template class Unit<List<BaseLength, BaseLength, BaseLength>, List<>>;
-extern template class Unit<List<BaseLength>, List<BaseTime>>;
-extern template class Unit<List<BaseLength>, List<BaseTime, BaseTime>>;
-extern template class Unit<List<BaseLength, BaseMass>, List<BaseTime, BaseTime>>;
-extern template class Unit<List<BaseLength, BaseMass>, List<BaseTime>>;
-extern template class Unit<List<BaseMass>, List<BaseLength, BaseLength, BaseLength>>;
-extern template class Unit<List<BaseMass>, List<BaseLength, BaseTime>>;
-extern template class Unit<List<BaseLength, BaseLength>, List<BaseTime>>;
-extern template class Unit<List<BaseAmountOfSubstance>, List<>>;
-extern template class Unit<List<BaseAmountOfSubstance>, List<BaseLength, BaseLength, BaseLength>>;
-extern template class Unit<List<>, List<BaseLength, BaseLength, BaseLength>>;
-extern template class Unit<List<>, List<BaseTime>>;
-extern template class Unit<List<BaseLength, BaseLength, BaseLength>, List<BaseTime>>;
+using unit::None;
+using unit::Length;
+using unit::Mass;
+using unit::Time;
+using unit::Duration;
+using unit::Area;
+using unit::Volume;
+using unit::Velocity;
+using unit::Acceleration;
+using unit::Force;
+using unit::Impulse;
+using unit::Density;
+using unit::DynamicViscosity;
+using unit::KinematicViscosity;
+using unit::AmountOfSubstance;
+using unit::NumberConcentration;
+using unit::MolarConcentration;
+using unit::Angle;
+using unit::AngularVelocity;
+using unit::Probability;
+using unit::VolumericFlow;
+using unit::deg2rad;
+using unit::rad2deg;
 
 /* ************************************************************************ */
 
 }
-
-/* ************************************************************************ */
-
 }
 }
 

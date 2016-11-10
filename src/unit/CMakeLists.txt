@@ -24,17 +24,15 @@
 # ######################################################################### #
 
 set(SRCS
-    Vector.cpp
-    Grid.cpp
-    AlignedAllocator.cpp
-    ExpressionParser.cpp
-    TimeMeasurement.cpp
-    Parameters.cpp
+    Unit.cpp
+    UnitIo.cpp
+    Units.cpp
+    VectorUnits.cpp
 )
 
 # ######################################################################### #
 
-dir_pretend(SOURCES core/ ${SRCS})
+dir_pretend(SOURCES unit/ ${SRCS})
 
 set(CECE_SOURCES ${CECE_SOURCES} ${SOURCES} PARENT_SCOPE)
 

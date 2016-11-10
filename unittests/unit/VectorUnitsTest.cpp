@@ -23,33 +23,91 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#if _MSC_VER
-#pragma message("Include 'cece/unit/VectorUnits.hpp' instead")
-#else
-#warning "Include 'cece/unit/VectorUnits.hpp' instead"
-#endif
+// C++
+#include <sstream>
+
+// GTest
+#include "gtest/gtest.h"
+
+// CeCe
+#include "cece/unit/UnitIo.hpp"
 #include "cece/unit/VectorUnits.hpp"
+#include "cece/unit/UnitsCtors.hpp"
 
 /* ************************************************************************ */
 
-namespace cece {
-inline namespace core {
-namespace units {
+using namespace cece;
 
 /* ************************************************************************ */
 
-using unit::PositionVector;
-using unit::VelocityVector;
-using unit::AccelerationVector;
-using unit::ForceVector;
-using unit::ImpulseVector;
-using unit::ScaleVector;
-using unit::SizeVector;
+TEST(VectorUnitsTest, istream)
+{
+    {
+        std::istringstream is("10 20");
 
-/* ************************************************************************ */
+        Vector<unit::Length> vec;
+        is >> vec;
 
+        EXPECT_EQ(unit::um(10), vec.getX());
+        EXPECT_EQ(unit::um(20), vec.getY());
+    }
+
+    {
+        std::istringstream is("10um 20um");
+
+        Vector<unit::Length> vec;
+        is >> vec;
+
+        EXPECT_EQ(unit::um(10), vec.getX());
+        EXPECT_EQ(unit::um(20), vec.getY());
+    }
+
+    {
+        std::istringstream is("10um");
+
+        Vector<unit::Length> vec;
+        is >> vec;
+
+        EXPECT_EQ(unit::um(10), vec.getX());
+        EXPECT_EQ(unit::um(10), vec.getY());
+    }
+
+    {
+        std::istringstream is("0 10um");
+
+        Vector<unit::Length> vec;
+        is >> vec;
+
+        EXPECT_EQ(unit::um(0), vec.getX());
+        EXPECT_EQ(unit::um(10), vec.getY());
+    }
+
+    {
+        std::istringstream is("0um 10um");
+
+        Vector<unit::Length> vec;
+        is >> vec;
+
+        EXPECT_EQ(unit::um(0), vec.getX());
+        EXPECT_EQ(unit::um(10), vec.getY());
+    }
+
+    {
+        std::istringstream is("5um 0");
+
+        Vector<unit::Length> vec;
+        is >> vec;
+
+        EXPECT_EQ(unit::um(5), vec.getX());
+        EXPECT_EQ(unit::um(0), vec.getY());
+    }
 }
-}
+
+/* ************************************************************************ */
+
+TEST(VectorUnitsTest, ostream)
+{
+    //Vector
 }
 
 /* ************************************************************************ */

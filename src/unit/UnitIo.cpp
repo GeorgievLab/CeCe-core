@@ -24,23 +24,19 @@
 /* ************************************************************************ */
 
 // Declaration
-#include "cece/core/UnitIo.hpp"
+#include "cece/unit/UnitIo.hpp"
 
 // C++
 #include <cstdlib>
 
 // CeCe
 #include "cece/core/Exception.hpp"
-#include "cece/core/UnitsCtors.hpp"
+#include "cece/unit/UnitsCtors.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
-inline namespace core {
-
-/* ************************************************************************ */
-
-namespace units {
+namespace unit {
 
 /* ************************************************************************ */
 
@@ -169,7 +165,7 @@ Value parse(StringView str)
 #undef SYMBOL_TEST2
 
     // Special type
-    if (symbol == "/s") return (value / units::s(1)).value();
+    if (symbol == "/s") return (value / unit::s(1)).value();
 
     // Fallback
 
@@ -209,10 +205,6 @@ Value parse(StringView str)
     }
 
     return value * exponentToCoefficient(exponent);
-}
-
-/* ************************************************************************ */
-
 }
 
 /* ************************************************************************ */

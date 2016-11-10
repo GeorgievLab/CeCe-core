@@ -29,10 +29,8 @@ cece_add_test(core
         DynamicArrayTest.cpp
         IteratorRangeTest.cpp
         VectorRangeTest.cpp
-        UnitsTest.cpp
         StringViewTest.cpp
         VectorTest.cpp
-        VectorUnitsTest.cpp
         ExpressionParserTest.cpp
         TokenizerTest.cpp
         ParametersTest.cpp

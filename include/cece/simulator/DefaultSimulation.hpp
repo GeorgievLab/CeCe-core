@@ -36,10 +36,7 @@
 #include <cstddef>
 
 // CeCe
-#include "cece/core/Units.hpp"
-#include "cece/core/UnitsCtors.hpp"
 #include "cece/core/Vector.hpp"
-#include "cece/core/VectorUnits.hpp"
 #include "cece/core/String.hpp"
 #include "cece/core/Map.hpp"
 #include "cece/core/UniquePtr.hpp"
@@ -47,6 +44,9 @@
 #include "cece/io/FilePath.hpp"
 #include "cece/core/Parameters.hpp"
 #include "cece/core/IterationType.hpp"
+#include "cece/unit/Units.hpp"
+#include "cece/unit/UnitsCtors.hpp"
+#include "cece/unit/VectorUnits.hpp"
 #include "cece/plugin/Context.hpp"
 #include "cece/init/Container.hpp"
 #include "cece/module/Container.hpp"
@@ -235,7 +235,7 @@ public:
      *
      * @return
      */
-    const units::SizeVector& getWorldSize() const noexcept override
+    const unit::SizeVector& getWorldSize() const noexcept override
     {
         return m_worldSize;
     }
@@ -279,7 +279,7 @@ public:
      *
      * @return
      */
-    units::Time getTimeStep() const noexcept override
+    unit::Time getTimeStep() const noexcept override
     {
         return m_timeStep;
     }
@@ -290,7 +290,7 @@ public:
      *
      * @return
      */
-    units::Time getTotalTime() const noexcept override
+    unit::Time getTotalTime() const noexcept override
     {
         return m_totalTime;
     }
@@ -437,7 +437,7 @@ public:
      *
      * @return
      */
-    units::AccelerationVector getGravity() const noexcept;
+    unit::AccelerationVector getGravity() const noexcept;
 
 
     /**
@@ -467,7 +467,7 @@ public:
      *
      * @return
      */
-    units::Time getPhysicsEngineTimeStep() const noexcept;
+    unit::Time getPhysicsEngineTimeStep() const noexcept;
 
 
     /**
@@ -475,7 +475,7 @@ public:
      *
      * @return
      */
-    units::Length getMaxObjectTranslation() const noexcept;
+    unit::Length getMaxObjectTranslation() const noexcept;
 
 
 // Public Mutators
@@ -517,7 +517,7 @@ public:
      *
      * @param size Simulation world size.
      */
-    void setWorldSize(units::SizeVector size) noexcept override
+    void setWorldSize(unit::SizeVector size) noexcept override
     {
         m_worldSize = std::move(size);
     }
@@ -528,7 +528,7 @@ public:
      *
      * @param dt Time step.
      */
-    void setTimeStep(units::Time dt) override;
+    void setTimeStep(unit::Time dt) override;
 
 
     /**
@@ -685,7 +685,7 @@ public:
      *
      * @param gravity
      */
-    void setGravity(const units::AccelerationVector& gravity) noexcept;
+    void setGravity(const unit::AccelerationVector& gravity) noexcept;
 
 
     /**
@@ -693,7 +693,7 @@ public:
      *
      * @param dt Time step.
      */
-    void setPhysicsEngineTimeStep(units::Time dt) noexcept;
+    void setPhysicsEngineTimeStep(unit::Time dt) noexcept;
 
 
     /**
@@ -809,13 +809,13 @@ private:
     IterationType m_iterations = 0;
 
     /// Simulation step.
-    units::Time m_timeStep = Zero;
+    unit::Time m_timeStep = Zero;
 
     /// Total simulation time.
-    units::Time m_totalTime = Zero;
+    unit::Time m_totalTime = Zero;
 
     /// World size.
-    units::SizeVector m_worldSize{ units::um(400), units::um(400) };
+    unit::SizeVector m_worldSize{ unit::um(400), unit::um(400) };
 
     /// Simulation parameters.
     Parameters m_parameters;

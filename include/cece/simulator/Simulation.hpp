@@ -29,14 +29,14 @@
 
 // CeCe
 #include "cece/config.hpp"
-#include "cece/core/Units.hpp"
 #include "cece/core/Vector.hpp"
-#include "cece/core/VectorUnits.hpp"
 #include "cece/core/String.hpp"
 #include "cece/core/StringView.hpp"
 #include "cece/core/UniquePtr.hpp"
 #include "cece/core/ViewPtr.hpp"
 #include "cece/core/IterationType.hpp"
+#include "cece/unit/Units.hpp"
+#include "cece/unit/VectorUnits.hpp"
 #include "cece/io/FilePath.hpp"
 #include "cece/io/InOutStream.hpp"
 #include "cece/async/Atomic.hpp"
@@ -126,7 +126,7 @@ public:
      *
      * @return
      */
-    virtual const units::SizeVector& getWorldSize() const noexcept = 0;
+    virtual const unit::SizeVector& getWorldSize() const noexcept = 0;
 
 
     /**
@@ -161,7 +161,7 @@ public:
      *
      * @return
      */
-    virtual units::Time getTimeStep() const noexcept = 0;
+    virtual unit::Time getTimeStep() const noexcept = 0;
 
 
     /**
@@ -169,7 +169,7 @@ public:
      *
      * @return
      */
-    virtual units::Time getTotalTime() const noexcept = 0;
+    virtual unit::Time getTotalTime() const noexcept = 0;
 
 
 #ifdef CECE_RENDER
@@ -416,7 +416,7 @@ public:
      * @return
      * @deprecated
      */
-    virtual units::Length getMaxObjectTranslation() const noexcept = 0;
+    virtual unit::Length getMaxObjectTranslation() const noexcept = 0;
 
 
 // Public Mutators
@@ -466,7 +466,7 @@ public:
      *
      * @param size Simulation world size.
      */
-    virtual void setWorldSize(units::SizeVector size) noexcept = 0;
+    virtual void setWorldSize(unit::SizeVector size) noexcept = 0;
 
 
     /**
@@ -474,7 +474,7 @@ public:
      *
      * @param dt Time step.
      */
-    virtual void setTimeStep(units::Time dt) = 0;
+    virtual void setTimeStep(unit::Time dt) = 0;
 
 
     /**

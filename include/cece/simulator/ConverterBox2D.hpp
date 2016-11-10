@@ -36,9 +36,9 @@
 #include <Box2D/Box2D.h>
 
 // CeCe
-#include "cece/core/Units.hpp"
-#include "cece/core/UnitsCtors.hpp"
-#include "cece/core/VectorUnits.hpp"
+#include "cece/unit/Units.hpp"
+#include "cece/unit/UnitsCtors.hpp"
+#include "cece/unit/VectorUnits.hpp"
 
 /* ************************************************************************ */
 
@@ -66,7 +66,7 @@ public:
      *
      * @return
      */
-    units::Time getTimeStep() const noexcept
+    unit::Time getTimeStep() const noexcept
     {
         return m_timeStep;
     }
@@ -77,7 +77,7 @@ public:
      *
      * @return
      */
-    units::Time getTimeStepBox2D() const noexcept
+    unit::Time getTimeStepBox2D() const noexcept
     {
         return m_timeStepBox2D;
     }
@@ -111,7 +111,7 @@ public:
      *
      * @param timeStep
      */
-    void setTimeStep(units::Time timeStep) noexcept
+    void setTimeStep(unit::Time timeStep) noexcept
     {
         m_timeStep = timeStep;
     }
@@ -122,7 +122,7 @@ public:
      *
      * @param timeStep
      */
-    void setTimeStepBox2D(units::Time timeStep) noexcept
+    void setTimeStepBox2D(unit::Time timeStep) noexcept
     {
         m_timeStepBox2D = timeStep;
     }
@@ -150,7 +150,7 @@ public:
      *
      * @return
      */
-    units::Length convertLength(float32 length) const noexcept;
+    unit::Length convertLength(float32 length) const noexcept;
 
 
     /**
@@ -160,7 +160,7 @@ public:
      *
      * @return
      */
-    float32 convertLength(units::Length length) const noexcept;
+    float32 convertLength(unit::Length length) const noexcept;
 
 
     /**
@@ -170,7 +170,7 @@ public:
      *
      * @return
      */
-    units::PositionVector convertPosition(b2Vec2 position) const noexcept;
+    unit::PositionVector convertPosition(b2Vec2 position) const noexcept;
 
 
     /**
@@ -180,7 +180,7 @@ public:
      *
      * @return
      */
-    b2Vec2 convertPosition(units::PositionVector position) const noexcept;
+    b2Vec2 convertPosition(unit::PositionVector position) const noexcept;
 
 
     /**
@@ -190,7 +190,7 @@ public:
      *
      * @return
      */
-    units::Angle convertAngle(float32 angle) const noexcept;
+    unit::Angle convertAngle(float32 angle) const noexcept;
 
 
     /**
@@ -200,7 +200,7 @@ public:
      *
      * @return
      */
-    float32 convertAngle(units::Angle angle) const noexcept;
+    float32 convertAngle(unit::Angle angle) const noexcept;
 
 
     /**
@@ -210,7 +210,7 @@ public:
      *
      * @return
      */
-    units::VelocityVector convertLinearVelocity(b2Vec2 velocity) const noexcept;
+    unit::VelocityVector convertLinearVelocity(b2Vec2 velocity) const noexcept;
 
 
     /**
@@ -220,7 +220,7 @@ public:
      *
      * @return
      */
-    b2Vec2 convertLinearVelocity(units::VelocityVector velocity) const noexcept;
+    b2Vec2 convertLinearVelocity(unit::VelocityVector velocity) const noexcept;
 
 
     /**
@@ -230,7 +230,7 @@ public:
      *
      * @return
      */
-    units::AngularVelocity convertAngularVelocity(float32 velocity) const noexcept;
+    unit::AngularVelocity convertAngularVelocity(float32 velocity) const noexcept;
 
 
     /**
@@ -240,7 +240,7 @@ public:
      *
      * @return
      */
-    float32 convertAngularVelocity(units::AngularVelocity velocity) const noexcept;
+    float32 convertAngularVelocity(unit::AngularVelocity velocity) const noexcept;
 
 
     /**
@@ -250,7 +250,7 @@ public:
      *
      * @return
      */
-    units::AccelerationVector convertLinearAcceleration(b2Vec2 acceleration) const noexcept;
+    unit::AccelerationVector convertLinearAcceleration(b2Vec2 acceleration) const noexcept;
 
 
     /**
@@ -260,7 +260,7 @@ public:
      *
      * @return
      */
-    b2Vec2 convertLinearAcceleration(units::AccelerationVector acceleration) const noexcept;
+    b2Vec2 convertLinearAcceleration(unit::AccelerationVector acceleration) const noexcept;
 
 
     /**
@@ -270,7 +270,7 @@ public:
      *
      * @return
      */
-    units::Acceleration convertAngularAcceleration(float32 acceleration) const noexcept;
+    unit::Acceleration convertAngularAcceleration(float32 acceleration) const noexcept;
 
 
     /**
@@ -280,7 +280,7 @@ public:
      *
      * @return
      */
-    float32 convertAngularAcceleration(units::Acceleration acceleration) const noexcept;
+    float32 convertAngularAcceleration(unit::Acceleration acceleration) const noexcept;
 
 
     /**
@@ -290,7 +290,7 @@ public:
      *
      * @return
      */
-    units::ForceVector convertForce(b2Vec2 force) const noexcept;
+    unit::ForceVector convertForce(b2Vec2 force) const noexcept;
 
 
     /**
@@ -300,7 +300,7 @@ public:
      *
      * @return
      */
-    b2Vec2 convertForce(units::ForceVector force) const noexcept;
+    b2Vec2 convertForce(unit::ForceVector force) const noexcept;
 
 
     /**
@@ -310,7 +310,7 @@ public:
      *
      * @return
      */
-    units::Force convertTorque(float32 torque) const noexcept;
+    unit::Force convertTorque(float32 torque) const noexcept;
 
 
     /**
@@ -320,7 +320,7 @@ public:
      *
      * @return
      */
-    float32 convertTorque(units::Force torque) const noexcept;
+    float32 convertTorque(unit::Force torque) const noexcept;
 
 
     /**
@@ -330,7 +330,7 @@ public:
      *
      * @return
      */
-    units::ImpulseVector convertLinearImpulse(b2Vec2 impulse) const noexcept;
+    unit::ImpulseVector convertLinearImpulse(b2Vec2 impulse) const noexcept;
 
 
     /**
@@ -340,7 +340,7 @@ public:
      *
      * @return
      */
-    b2Vec2 convertLinearImpulse(units::ImpulseVector impulse) const noexcept;
+    b2Vec2 convertLinearImpulse(unit::ImpulseVector impulse) const noexcept;
 
 
     /**
@@ -350,7 +350,7 @@ public:
      *
      * @return
      */
-    units::Impulse convertAngularImpulse(float32 impulse) const noexcept;
+    unit::Impulse convertAngularImpulse(float32 impulse) const noexcept;
 
 
     /**
@@ -360,7 +360,7 @@ public:
      *
      * @return
      */
-    float32 convertAngularImpulse(units::Impulse impulse) const noexcept;
+    float32 convertAngularImpulse(unit::Impulse impulse) const noexcept;
 
 
     /**
@@ -370,7 +370,7 @@ public:
      *
      * @return
      */
-    units::Mass convertMass(float32 mass) const noexcept;
+    unit::Mass convertMass(float32 mass) const noexcept;
 
 
     /**
@@ -380,7 +380,7 @@ public:
      *
      * @return
      */
-    float32 convertMass(units::Mass mass) const noexcept;
+    float32 convertMass(unit::Mass mass) const noexcept;
 
 
     /**
@@ -390,7 +390,7 @@ public:
      *
      * @return
      */
-    units::Density convertDensity(float32 density) const noexcept;
+    unit::Density convertDensity(float32 density) const noexcept;
 
 
     /**
@@ -400,7 +400,7 @@ public:
      *
      * @return
      */
-    float32 convertDensity(units::Density density) const noexcept;
+    float32 convertDensity(unit::Density density) const noexcept;
 
 
     /**
@@ -408,7 +408,7 @@ public:
      *
      * @return
      */
-    units::Length getMaxObjectTranslation() const noexcept;
+    unit::Length getMaxObjectTranslation() const noexcept;
 
 
     /**
@@ -422,10 +422,10 @@ public:
 private:
 
     /// Box2D time step.
-    units::Time m_timeStepBox2D = units::s(1.0 / 60.0);
+    unit::Time m_timeStepBox2D = unit::s(1.0 / 60.0);
 
     /// Simulation time step
-    units::Time m_timeStep;
+    unit::Time m_timeStep;
 
     /// Length coefficient.
     RealType m_lengthCoefficient = 1;

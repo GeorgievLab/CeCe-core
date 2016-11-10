@@ -36,10 +36,10 @@
 #include "cece/core/Real.hpp"
 #include "cece/core/Assert.hpp"
 #include "cece/core/Zero.hpp"
-#include "cece/core/Units.hpp"
 #include "cece/core/StaticArray.hpp"
 #include "cece/io/InStream.hpp"
 #include "cece/io/OutStream.hpp"
+#include "cece/unit/Units.hpp"
 
 /* ************************************************************************ */
 
@@ -937,7 +937,7 @@ public:
      *
      * @return
      */
-    BasicVector rotated(units::Angle angle) const noexcept
+    BasicVector rotated(unit::Angle angle) const noexcept
     {
         return BasicVector(
             static_cast<T>(getX() * cos(angle.value()) - getY() * sin(angle.value())),

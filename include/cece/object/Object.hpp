@@ -36,13 +36,13 @@
 #include "cece/core/SharedPtr.hpp"
 #include "cece/core/ViewPtr.hpp"
 #include "cece/core/UniquePtr.hpp"
-#include "cece/core/Units.hpp"
-#include "cece/core/VectorUnits.hpp"
 #include "cece/core/DynamicArray.hpp"
 #include "cece/core/Map.hpp"
 #include "cece/core/StringView.hpp"
 #include "cece/core/Shape.hpp"
 #include "cece/core/Exception.hpp"
+#include "cece/unit/Units.hpp"
+#include "cece/unit/VectorUnits.hpp"
 #include "cece/io/InStream.hpp"
 #include "cece/io/OutStream.hpp"
 #include "cece/program/Program.hpp"
@@ -248,7 +248,7 @@ public:
      *
      * @return
      */
-    units::Density getDensity() const noexcept
+    unit::Density getDensity() const noexcept
     {
         return m_density;
     }
@@ -259,7 +259,7 @@ public:
      *
      * @return
      */
-    units::PositionVector getPosition() const noexcept;
+    unit::PositionVector getPosition() const noexcept;
 
 
     /**
@@ -267,7 +267,7 @@ public:
      *
      * @return
      */
-    units::PositionVector getMassCenterPosition() const noexcept;
+    unit::PositionVector getMassCenterPosition() const noexcept;
 
 
     /**
@@ -275,7 +275,7 @@ public:
      *
      * @return
      */
-    units::PositionVector getMassCenterOffset() const noexcept;
+    unit::PositionVector getMassCenterOffset() const noexcept;
 
 
     /**
@@ -285,7 +285,7 @@ public:
      *
      * @return
      */
-    units::PositionVector getWorldPosition(units::PositionVector local) const noexcept;
+    unit::PositionVector getWorldPosition(unit::PositionVector local) const noexcept;
 
 
     /**
@@ -293,7 +293,7 @@ public:
      *
      * @return
      */
-    units::Angle getRotation() const noexcept;
+    unit::Angle getRotation() const noexcept;
 
 
     /**
@@ -301,7 +301,7 @@ public:
      *
      * @return
      */
-    units::VelocityVector getVelocity() const noexcept;
+    unit::VelocityVector getVelocity() const noexcept;
 
 
     /**
@@ -309,7 +309,7 @@ public:
      *
      * @return
      */
-    units::AngularVelocity getAngularVelocity() const noexcept;
+    unit::AngularVelocity getAngularVelocity() const noexcept;
 
 
     /**
@@ -317,7 +317,7 @@ public:
      *
      * @return
      */
-    const units::ForceVector& getForce() const noexcept
+    const unit::ForceVector& getForce() const noexcept
     {
         return m_force;
     }
@@ -328,7 +328,7 @@ public:
      *
      * @return
      */
-    units::Mass getMass() const noexcept;
+    unit::Mass getMass() const noexcept;
 
 
     /**
@@ -384,7 +384,7 @@ public:
      *
      * @return
      */
-    units::Length getMaxTranslation() const noexcept;
+    unit::Length getMaxTranslation() const noexcept;
 
 
     /**
@@ -460,7 +460,7 @@ public:
      *
      * @param density New density value.
      */
-    void setDensity(units::Density density) noexcept
+    void setDensity(unit::Density density) noexcept
     {
         m_density = density;
     }
@@ -471,7 +471,7 @@ public:
      *
      * @param pos
      */
-    void setPosition(units::PositionVector pos) noexcept;
+    void setPosition(unit::PositionVector pos) noexcept;
 
 
     /**
@@ -479,7 +479,7 @@ public:
      *
      * @param angle
      */
-    void setRotation(units::Angle angle) noexcept;
+    void setRotation(unit::Angle angle) noexcept;
 
 
     /**
@@ -487,7 +487,7 @@ public:
      *
      * @param vel
      */
-    void setVelocity(units::VelocityVector vel) noexcept;
+    void setVelocity(unit::VelocityVector vel) noexcept;
 
 
     /**
@@ -495,7 +495,7 @@ public:
      *
      * @param vel
      */
-    void setAngularVelocity(units::AngularVelocity vel) noexcept;
+    void setAngularVelocity(unit::AngularVelocity vel) noexcept;
 
 
     /**
@@ -503,7 +503,7 @@ public:
      *
      * @param force
      */
-    void setForce(units::ForceVector force) noexcept
+    void setForce(unit::ForceVector force) noexcept
     {
         m_force = std::move(force);
     }
@@ -514,7 +514,7 @@ public:
      *
      * @param force
      */
-    void applyForce(const units::ForceVector& force) noexcept;
+    void applyForce(const unit::ForceVector& force) noexcept;
 
 
     /**
@@ -523,7 +523,7 @@ public:
      * @param force
      * @param offset Local offset.
      */
-    void applyForce(const units::ForceVector& force, const units::PositionVector& offset) noexcept;
+    void applyForce(const unit::ForceVector& force, const unit::PositionVector& offset) noexcept;
 
 
     /**
@@ -531,7 +531,7 @@ public:
      *
      * @param impulse
      */
-    void applyLinearImpulse(const units::ImpulseVector& impulse) noexcept
+    void applyLinearImpulse(const unit::ImpulseVector& impulse) noexcept
     {
         applyLinearImpulse(impulse, getMassCenterOffset());
     }
@@ -543,7 +543,7 @@ public:
      * @param impulse
      * @param offset Local offset.
      */
-    void applyLinearImpulse(const units::ImpulseVector& impulse, const units::PositionVector& offset) noexcept;
+    void applyLinearImpulse(const unit::ImpulseVector& impulse, const unit::PositionVector& offset) noexcept;
 
 
     /**
@@ -551,7 +551,7 @@ public:
      *
      * @param impulse
      */
-    void applyAngularImpulse(const units::Impulse& impulse) noexcept;
+    void applyAngularImpulse(const unit::Impulse& impulse) noexcept;
 
 
     /**
@@ -713,7 +713,7 @@ public:
      *
      * @param dt Simulation time step.
      */
-    virtual void update(units::Duration dt);
+    virtual void update(unit::Time dt);
 
 
     /**
@@ -802,7 +802,7 @@ private:
     program::Container m_programs;
 
     /// Object density.
-    units::Density m_density = units::Density(1); // FIXME: use better value
+    unit::Density m_density = unit::Density(1); // FIXME: use better value
 
     /// Object type.
     Type m_type;
@@ -833,7 +833,7 @@ private:
     DynamicArray<UniquePtr<b2Shape>> m_bodyShapes;
 
     /// Box2D doesn't have accessor to force.
-    units::ForceVector m_force;
+    unit::ForceVector m_force;
 
     /// Outstream for object data
     UniquePtr<io::OutStream> m_dataOut;

@@ -84,7 +84,7 @@ public:
         return makeUnique<TestProgram>(*this);
     }
 
-    void call(simulator::Simulation& simulation, object::Object& object, units::Time dt) override
+    void call(simulator::Simulation& simulation, object::Object& object, unit::Time dt) override
     {
         // Nothing to do
     }

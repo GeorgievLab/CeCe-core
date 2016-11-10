@@ -36,7 +36,7 @@
 #include "cece/core/Real.hpp"
 #include "cece/core/constants.hpp"
 #include "cece/core/Tokenizer.hpp"
-#include "cece/core/UnitIo.hpp"
+#include "cece/unit/UnitIo.hpp"
 
 /* ************************************************************************ */
 
@@ -421,7 +421,7 @@ private:
             return coeff * function(local);
         }
         skipWhitespace();
-        return coeff * units::parse(parameters.get(local));
+        return coeff * unit::parse(parameters.get(local));
     }
 
     RealType function(String local)

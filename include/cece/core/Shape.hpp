@@ -28,9 +28,9 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/Units.hpp"
-#include "cece/core/VectorUnits.hpp"
 #include "cece/core/DynamicArray.hpp"
+#include "cece/unit/Units.hpp"
+#include "cece/unit/VectorUnits.hpp"
 
 /* ************************************************************************ */
 
@@ -65,10 +65,10 @@ struct ShapeUndefined {};
 struct ShapeCircle
 {
     /// Shape center.
-    units::PositionVector center;
+    unit::PositionVector center;
 
     /// Circle radius.
-    units::Length radius;
+    unit::Length radius;
 };
 
 /* ************************************************************************ */
@@ -79,10 +79,10 @@ struct ShapeCircle
 struct ShapeRectangle
 {
     /// Shape center.
-    units::PositionVector center;
+    unit::PositionVector center;
 
     /// Rectangle size.
-    units::SizeVector size;
+    unit::SizeVector size;
 };
 
 /* ************************************************************************ */
@@ -93,10 +93,10 @@ struct ShapeRectangle
 struct ShapeEdges
 {
     /// Shape center.
-    units::PositionVector center;
+    unit::PositionVector center;
 
     /// List of edges.
-    DynamicArray<units::PositionVector> edges;
+    DynamicArray<unit::PositionVector> edges;
 };
 
 /* ************************************************************************ */
@@ -263,7 +263,7 @@ public:
      *
      * @return
      */
-    static Shape makeCircle(units::Length radius, units::PositionVector center = Zero) noexcept
+    static Shape makeCircle(unit::Length radius, unit::PositionVector center = Zero) noexcept
     {
         return Shape{ShapeCircle{center, radius}};
     }
@@ -277,7 +277,7 @@ public:
      *
      * @return
      */
-    static Shape makeRectangle(units::SizeVector size, units::PositionVector center = Zero) noexcept
+    static Shape makeRectangle(unit::SizeVector size, unit::PositionVector center = Zero) noexcept
     {
         return Shape{ShapeRectangle{center, size}};
     }
@@ -291,7 +291,7 @@ public:
      *
      * @return
      */
-    static Shape makeEdges(DynamicArray<units::PositionVector> edges, units::PositionVector center = Zero) noexcept
+    static Shape makeEdges(DynamicArray<unit::PositionVector> edges, unit::PositionVector center = Zero) noexcept
     {
         return Shape{ShapeEdges{center, std::move(edges)}};
     }

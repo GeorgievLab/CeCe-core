@@ -40,8 +40,8 @@
 #include "cece/core/Assert.hpp"
 #include "cece/core/Real.hpp"
 #include "cece/core/Exception.hpp"
-#include "cece/core/UnitIo.hpp"
 #include "cece/log/Log.hpp"
+#include "cece/unit/UnitIo.hpp"
 #include "cece/io/FileStream.hpp"
 #include "cece/io/OutStream.hpp"
 #include "cece/plugin/Api.hpp"
@@ -225,21 +225,21 @@ DynamicArray<ViewPtr<object::Object>> DefaultSimulation::getObjects(StringView t
 
 /* ************************************************************************ */
 
-units::AccelerationVector DefaultSimulation::getGravity() const noexcept
+unit::AccelerationVector DefaultSimulation::getGravity() const noexcept
 {
     return ConverterBox2D::getInstance().convertLinearAcceleration(m_world->GetGravity());
 }
 
 /* ************************************************************************ */
 
-units::Time DefaultSimulation::getPhysicsEngineTimeStep() const noexcept
+unit::Time DefaultSimulation::getPhysicsEngineTimeStep() const noexcept
 {
     return ConverterBox2D::getInstance().getTimeStepBox2D();
 }
 
 /* ************************************************************************ */
 
-units::Length DefaultSimulation::getMaxObjectTranslation() const noexcept
+unit::Length DefaultSimulation::getMaxObjectTranslation() const noexcept
 {
     return ConverterBox2D::getInstance().getMaxObjectTranslation();
 }
@@ -274,7 +274,7 @@ void DefaultSimulation::unloadPlugin(StringView name)
 
 /* ************************************************************************ */
 
-void DefaultSimulation::setTimeStep(units::Time dt)
+void DefaultSimulation::setTimeStep(unit::Time dt)
 {
     if (dt == Zero)
         throw InvalidArgumentException("Time step cannot be zero");
@@ -410,14 +410,14 @@ void DefaultSimulation::deleteProgram(StringView name)
 
 /* ************************************************************************ */
 
-void DefaultSimulation::setGravity(const units::AccelerationVector& gravity) noexcept
+void DefaultSimulation::setGravity(const unit::AccelerationVector& gravity) noexcept
 {
     m_world->SetGravity(ConverterBox2D::getInstance().convertLinearAcceleration(gravity));
 }
 
 /* ************************************************************************ */
 
-void DefaultSimulation::setPhysicsEngineTimeStep(units::Time dt) noexcept
+void DefaultSimulation::setPhysicsEngineTimeStep(unit::Time dt) noexcept
 {
     ConverterBox2D::getInstance().setTimeStepBox2D(dt);
 }

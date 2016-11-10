@@ -397,7 +397,7 @@ void Context::matrixIdentity() noexcept
 
 /* ************************************************************************ */
 
-void Context::matrixTranslate(const units::PositionVector& pos) noexcept
+void Context::matrixTranslate(const unit::PositionVector& pos) noexcept
 {
     gl(glTranslatef(
         static_cast<float>(pos.getX().value()), 
@@ -408,7 +408,7 @@ void Context::matrixTranslate(const units::PositionVector& pos) noexcept
 
 /* ************************************************************************ */
 
-void Context::matrixScale(const units::ScaleVector& scale) noexcept
+void Context::matrixScale(const unit::ScaleVector& scale) noexcept
 {
     gl(glScalef(
         static_cast<float>(scale.getX()), 
@@ -419,10 +419,10 @@ void Context::matrixScale(const units::ScaleVector& scale) noexcept
 
 /* ************************************************************************ */
 
-void Context::matrixRotate(units::Angle angle) noexcept
+void Context::matrixRotate(unit::Angle angle) noexcept
 {
     gl(glRotatef(
-        static_cast<float>(units::rad2deg(angle.value())), 
+        static_cast<float>(unit::rad2deg(angle.value())), 
         0.f, 
         0.f, 
         1.f

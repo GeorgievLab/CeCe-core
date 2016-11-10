@@ -40,10 +40,10 @@
 
 // CeCe
 #include "cece/core/Real.hpp"
-#include "cece/core/Units.hpp"
 #include "cece/core/DynamicArray.hpp"
-#include "cece/core/VectorUnits.hpp"
 #include "cece/core/UniquePtr.hpp"
+#include "cece/unit/Units.hpp"
+#include "cece/unit/VectorUnits.hpp"
 #include "cece/render/Camera.hpp"
 #include "cece/render/Program.hpp"
 #include "cece/render/ImageData.hpp"
@@ -299,7 +299,7 @@ public:
      *
      * @param pos Translation vector.
      */
-    void matrixTranslate(const units::PositionVector& pos) noexcept;
+    void matrixTranslate(const unit::PositionVector& pos) noexcept;
 
 
     /**
@@ -307,7 +307,7 @@ public:
      *
      * @param scale Scale vector.
      */
-    void matrixScale(const units::ScaleVector& scale) noexcept;
+    void matrixScale(const unit::ScaleVector& scale) noexcept;
 
 
     /**
@@ -317,7 +317,7 @@ public:
      */
     void matrixScale(RealType scale) noexcept
     {
-        return matrixScale(units::ScaleVector::createSingle(scale));
+        return matrixScale(unit::ScaleVector::createSingle(scale));
     }
 
 
@@ -326,7 +326,7 @@ public:
      *
      * @param angle Angle of the rotation.
      */
-    void matrixRotate(units::Angle angle) noexcept;
+    void matrixRotate(unit::Angle angle) noexcept;
 
 
     /**

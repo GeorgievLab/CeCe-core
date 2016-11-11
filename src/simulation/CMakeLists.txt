@@ -27,10 +27,13 @@
 set(SRCS
     Simulation.cpp
     TimeMeasurement.cpp
-    Visualization.cpp
     DefaultSimulation.cpp
     ConverterBox2D.cpp
 )
+
+if (CECE_RENDER)
+    set(SRCS ${SRCS} Visualization.cpp)
+endif ()
 
 # ######################################################################### #
 

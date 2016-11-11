@@ -34,8 +34,8 @@
 // CeCe
 #include "cece/core/Assert.hpp"
 #include "cece/core/Real.hpp"
-#include "cece/core/constants.hpp"
 #include "cece/core/Tokenizer.hpp"
+#include "cece/math/constants.hpp"
 #include "cece/unit/UnitIo.hpp"
 
 /* ************************************************************************ */
@@ -407,12 +407,12 @@ private:
         if (local == "pi" || local == "PI")
         {
             skipWhitespace();
-            return coeff * constants::PI;
+            return coeff * math::PI;
         }
         if (local == "e" || local == "E")
         {
             skipWhitespace();
-            return coeff * constants::E;
+            return coeff * math::E;
         }
 
         if (!parameters.exists(local))

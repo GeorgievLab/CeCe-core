@@ -33,7 +33,7 @@
 // CeCe
 #include "cece/core/String.hpp"
 #include "cece/core/StaticArray.hpp"
-#include "cece/core/Vector.hpp"
+#include "cece/math/Vector.hpp"
 #include "cece/io/InStream.hpp"
 
 /* ************************************************************************ */

@@ -29,7 +29,7 @@
 
 // CeCe
 #include "cece/core/Real.hpp"
-#include "cece/core/Vector.hpp"
+#include "cece/math/Vector.hpp"
 #include "cece/render/Buffer.hpp"
 #include "cece/render/GridBase.hpp"
 
@@ -62,7 +62,7 @@ public:
      * @param data    Vector data.
      * @param max     Maximum value.
      */
-    GridVector(Context& context, Size size, const Vector<RealType>* data, RealType max = 1);
+    GridVector(Context& context, math::Size size, const math::Vector<RealType>* data, RealType max = 1);
 
 
     /**
@@ -74,8 +74,8 @@ public:
      * @param max     Maximum value.
      */
     template<typename T>
-    GridVector(Context& context, Size size, const Vector<T>* data, RealType max = 1)
-        : GridVector(context, std::move(size), reinterpret_cast<const Vector<RealType>*>(data), max)
+    GridVector(Context& context, math::Size size, const math::Vector<T>* data, RealType max = 1)
+        : GridVector(context, std::move(size), reinterpret_cast<const math::Vector<RealType>*>(data), max)
     {
         static_assert(sizeof(T) == sizeof(RealType), "T must have same size as RealType");
     }
@@ -114,7 +114,7 @@ public:
      * @param size
      * @param data
      */
-    void resize(Size size, const Vector<RealType>* data);
+    void resize(math::Size size, const math::Vector<RealType>* data);
 
 
     /**
@@ -122,7 +122,7 @@ public:
      *
      * @param data
      */
-    void update(const Vector<RealType>* data) noexcept;
+    void update(const math::Vector<RealType>* data) noexcept;
 
 
     /**
@@ -133,10 +133,10 @@ public:
      * @param data
      */
     template<typename T>
-    void update(const Vector<T>* data) noexcept
+    void update(const math::Vector<T>* data) noexcept
     {
         static_assert(sizeof(T) == sizeof(RealType), "T must have same size as RealType");
-        update(reinterpret_cast<const Vector<RealType>*>(data));
+        update(reinterpret_cast<const math::Vector<RealType>*>(data));
     }
 
 

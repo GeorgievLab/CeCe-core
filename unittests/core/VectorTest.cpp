@@ -31,11 +31,12 @@
 #include "gtest/gtest.h"
 
 // CeCe
-#include "cece/core/Vector.hpp"
+#include "cece/math/Vector.hpp"
 
 /* ************************************************************************ */
 
 using namespace cece;
+using namespace cece::math;
 
 /* ************************************************************************ */
 

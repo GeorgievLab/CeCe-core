@@ -37,14 +37,14 @@ Image::Image() = default;
 
 /* ************************************************************************ */
 
-Image::Image(Size size)
+Image::Image(math::Size size)
 {
     resize(std::move(size));
 }
 
 /* ************************************************************************ */
 
-void Image::resize(Size size, const Color& color)
+void Image::resize(math::Size size, const Color& color)
 {
     // Resize color grid
     m_colors.resize(size, color);

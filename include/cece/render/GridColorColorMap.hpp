@@ -67,7 +67,7 @@ public:
      * @param context Rendering context.
      * @param size
      */
-    GridColorColorMap(Context& context, Size size)
+    GridColorColorMap(Context& context, math::Size size)
         : GridColorColorMap(context)
     {
         resize(std::move(size));

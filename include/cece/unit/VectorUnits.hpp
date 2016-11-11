@@ -29,7 +29,7 @@
 
 // CeCe
 #include "cece/core/Real.hpp"
-#include "cece/core/Vector.hpp"
+#include "cece/math/Vector.hpp"
 #include "cece/unit/Units.hpp"
 
 /* ************************************************************************ */
@@ -42,49 +42,49 @@ namespace unit {
 /**
  * @brief Position vector structure.
  */
-using PositionVector = Vector<Length>;
+using PositionVector = math::Vector<Length>;
 
 /* ************************************************************************ */
 
 /**
  * @brief Velocity vector structure.
  */
-using VelocityVector = Vector<Velocity>;
+using VelocityVector = math::Vector<Velocity>;
 
 /* ************************************************************************ */
 
 /**
  * @brief Acceleration vector structure.
  */
-using AccelerationVector = Vector<Acceleration>;
+using AccelerationVector = math::Vector<Acceleration>;
 
 /* ************************************************************************ */
 
 /**
  * @brief Force vector structure.
  */
-using ForceVector = Vector<Force>;
+using ForceVector = math::Vector<Force>;
 
 /* ************************************************************************ */
 
 /**
  * @brief Impulse vector structure.
  */
-using ImpulseVector = Vector<Impulse>;
+using ImpulseVector = math::Vector<Impulse>;
 
 /* ************************************************************************ */
 
 /**
  * @brief Scale vector.
  */
-using ScaleVector = Vector<RealType>;
+using ScaleVector = math::Vector<RealType>;
 
 /* ************************************************************************ */
 
 /**
  * @brief Size vector.
  */
-using SizeVector = Vector<Length>;
+using SizeVector = math::Vector<Length>;
 
 /* ************************************************************************ */
 

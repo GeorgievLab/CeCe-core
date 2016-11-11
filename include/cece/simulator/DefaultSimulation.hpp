@@ -36,14 +36,14 @@
 #include <cstddef>
 
 // CeCe
-#include "cece/core/Vector.hpp"
 #include "cece/core/String.hpp"
 #include "cece/core/Map.hpp"
 #include "cece/core/UniquePtr.hpp"
 #include "cece/core/ViewPtr.hpp"
-#include "cece/io/FilePath.hpp"
 #include "cece/core/Parameters.hpp"
 #include "cece/core/IterationType.hpp"
+#include "cece/math/Vector.hpp"
+#include "cece/io/FilePath.hpp"
 #include "cece/unit/Units.hpp"
 #include "cece/unit/UnitsCtors.hpp"
 #include "cece/unit/VectorUnits.hpp"
@@ -809,10 +809,10 @@ private:
     IterationType m_iterations = 0;
 
     /// Simulation step.
-    unit::Time m_timeStep = Zero;
+    unit::Time m_timeStep = math::Zero;
 
     /// Total simulation time.
-    unit::Time m_totalTime = Zero;
+    unit::Time m_totalTime = math::Zero;
 
     /// World size.
     unit::SizeVector m_worldSize{ unit::um(400), unit::um(400) };

@@ -29,7 +29,7 @@
 // CeCe
 #include "cece/core/IteratorRange.hpp"
 #include "cece/core/ExpressionParser.hpp"
-#include "cece/core/constants.hpp"
+#include "cece/math/constants.hpp"
 
 /* ************************************************************************ */
 
@@ -48,8 +48,8 @@ TEST(ExpressionParser, basic)
     EXPECT_FLOAT_EQ(-3.f, parseExpression("3 * (1 - 2)"));
     EXPECT_FLOAT_EQ(13.f, parseExpression("2 * 5 + 3"));
     EXPECT_FLOAT_EQ(11.f, parseExpression("5 + 2 * 3"));
-    EXPECT_FLOAT_EQ(constants::PI, parseExpression("pi"));
-    EXPECT_FLOAT_EQ(constants::E, parseExpression("e"));
+    EXPECT_FLOAT_EQ(math::PI, parseExpression("pi"));
+    EXPECT_FLOAT_EQ(math::E, parseExpression("e"));
 }
 
 /* ************************************************************************ */

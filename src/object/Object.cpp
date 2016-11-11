@@ -502,11 +502,11 @@ void Object::initShapes()
 
         switch (type)
         {
-        case ShapeType::Undefined:
+        case math::ShapeType::Undefined:
             log::Log::warning("[object] Undefined shape");
             break;
 
-        case ShapeType::Circle:
+        case math::ShapeType::Circle:
         {
             // Create body shape
             auto ptr = makeUnique<b2CircleShape>();
@@ -516,7 +516,7 @@ void Object::initShapes()
             break;
         }
 
-        case ShapeType::Rectangle:
+        case math::ShapeType::Rectangle:
         {
             // Create body shape
             auto ptr = makeUnique<b2PolygonShape>();
@@ -527,7 +527,7 @@ void Object::initShapes()
             break;
         }
 
-        case ShapeType::Edges:
+        case math::ShapeType::Edges:
         {
             DynamicArray<b2Vec2> vertices;
 

@@ -28,9 +28,9 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/Vector.hpp"
 #include "cece/core/Pair.hpp"
 #include "cece/core/DynamicArray.hpp"
+#include "cece/math/Vector.hpp"
 #include "cece/render/Buffer.hpp"
 
 /* ************************************************************************ */
@@ -56,7 +56,7 @@ public:
 
 
     /// Point type
-    using PointType = Vector<float>;
+    using PointType = math::Vector<float>;
 
     /// Line type.
     using LineType = Pair<PointType, PointType>;

@@ -29,12 +29,12 @@
 
 // CeCe
 #include "cece/config.hpp"
-#include "cece/core/Vector.hpp"
 #include "cece/core/String.hpp"
 #include "cece/core/StringView.hpp"
 #include "cece/core/UniquePtr.hpp"
 #include "cece/core/ViewPtr.hpp"
 #include "cece/core/IterationType.hpp"
+#include "cece/math/Vector.hpp"
 #include "cece/unit/Units.hpp"
 #include "cece/unit/VectorUnits.hpp"
 #include "cece/io/FilePath.hpp"

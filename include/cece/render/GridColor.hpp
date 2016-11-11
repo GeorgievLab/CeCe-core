@@ -28,8 +28,8 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/Vector.hpp"
-#include "cece/core/Grid.hpp"
+#include "cece/math/Vector.hpp"
+#include "cece/math/Grid.hpp"
 #include "cece/render/Buffer.hpp"
 #include "cece/render/Color.hpp"
 #include "cece/render/Texture.hpp"
@@ -71,7 +71,7 @@ public:
      * @param context Rendering context.
      * @param size
      */
-    GridColor(Context& context, Size size);
+    GridColor(Context& context, math::Size size);
 
 
 // Public Operators
@@ -84,7 +84,7 @@ public:
      * @param coord Pixel coordinates.
      * @param color Pixel color.
      */
-    Color& operator[](const Coordinate& coord) noexcept
+    Color& operator[](const math::Coordinate& coord) noexcept
     {
         return get(coord);
     }
@@ -96,7 +96,7 @@ public:
      * @param coord Pixel coordinates.
      * @param color Pixel color.
      */
-    const Color& operator[](const Coordinate& coord) const noexcept
+    const Color& operator[](const math::Coordinate& coord) const noexcept
     {
         return get(coord);
     }
@@ -121,7 +121,7 @@ public:
      * @param coord Pixel coordinates.
      * @param color Pixel color.
      */
-    Color& get(const Coordinate& coord) noexcept
+    Color& get(const math::Coordinate& coord) noexcept
     {
         return m_colors[coord];
     }
@@ -133,7 +133,7 @@ public:
      * @param coord Pixel coordinates.
      * @param color Pixel color.
      */
-    const Color& get(const Coordinate& coord) const noexcept
+    const Color& get(const math::Coordinate& coord) const noexcept
     {
         return m_colors[coord];
     }
@@ -149,7 +149,7 @@ public:
      * @param coord Pixel coordinates.
      * @param color Pixel color.
      */
-    void set(const Coordinate& coord, const Color& color) noexcept
+    void set(const math::Coordinate& coord, const Color& color) noexcept
     {
         // Set color
         m_colors[coord] = color;
@@ -191,7 +191,7 @@ public:
      * @param size  New grid size.
      * @param color Background color.
      */
-    void resize(Size size, const Color& color = colors::BLACK);
+    void resize(math::Size size, const Color& color = colors::BLACK);
 
 
     /**
@@ -218,7 +218,7 @@ private:
     Buffer m_buffer;
 
     /// Buffer for storing texture data.
-    Grid<Color> m_colors;
+    math::Grid<Color> m_colors;
 
     /// If colors were updated.
     bool m_colorsUpdated = false;

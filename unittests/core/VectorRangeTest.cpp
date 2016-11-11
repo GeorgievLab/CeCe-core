@@ -27,12 +27,13 @@
 #include "gtest/gtest.h"
 
 // CeCe
-#include "cece/core/VectorRange.hpp"
-#include "cece/core/Vector.hpp"
+#include "cece/math/Vector.hpp"
+#include "cece/math/VectorRange.hpp"
 
 /* ************************************************************************ */
 
 using namespace cece;
+using namespace cece::math;
 
 /* ************************************************************************ */
 

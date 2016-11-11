@@ -31,7 +31,7 @@
 #include <utility>
 
 // CeCe
-#include "cece/core/Vector.hpp"
+#include "cece/math/Vector.hpp"
 
 /* ************************************************************************ */
 
@@ -59,7 +59,7 @@ public:
      *
      * @return
      */
-    const Size& getSize() const noexcept
+    const math::Size& getSize() const noexcept
     {
         return m_size;
     }
@@ -75,7 +75,7 @@ public:
      *
      * @param size
      */
-    void resize(Size size) noexcept
+    void resize(math::Size size) noexcept
     {
         m_size = std::move(size);
     }
@@ -86,7 +86,7 @@ private:
 
 
     /// Grid size.
-    Size m_size;
+    math::Size m_size;
 
 };
 

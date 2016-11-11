@@ -32,7 +32,7 @@
 
 // CeCe
 #include "cece/core/DynamicArray.hpp"
-#include "cece/core/Vector.hpp"
+#include "cece/math/Vector.hpp"
 
 /* ************************************************************************ */
 
@@ -48,7 +48,7 @@ struct ImageData
 {
 
     /// Image size.
-    Size size;
+    math::Size size;
 
     /// Image data.
     DynamicArray<std::uint8_t> data;

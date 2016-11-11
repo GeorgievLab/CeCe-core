@@ -49,7 +49,7 @@ namespace render {
 
 /* ************************************************************************ */
 
-GridVector::GridVector(Context& context, Size size, const Vector<RealType>* data, RealType max)
+GridVector::GridVector(Context& context, math::Size size, const math::Vector<RealType>* data, RealType max)
     : m_buffer(context)
     , m_max(max)
 {
@@ -78,7 +78,7 @@ void GridVector::draw(Context& context) noexcept
 
 /* ************************************************************************ */
 
-void GridVector::resize(Size size, const Vector<RealType>* data)
+void GridVector::resize(math::Size size, const math::Vector<RealType>* data)
 {
     GridBase::resize(std::move(size));
 
@@ -87,12 +87,12 @@ void GridVector::resize(Size size, const Vector<RealType>* data)
 
 /* ************************************************************************ */
 
-void GridVector::update(const Vector<RealType>* data) noexcept
+void GridVector::update(const math::Vector<RealType>* data) noexcept
 {
     const auto size = getSize();
 
-    const auto start = Vector<RealType>::createSingle(-0.5);
-    const Vector<RealType> step = getSize().inversed<RealType>();
+    const auto start = math::Vector<RealType>::createSingle(-0.5);
+    const math::Vector<RealType> step = getSize().inversed<RealType>();
 
     const auto width = size.getWidth();
     const auto height = size.getHeight();
@@ -101,19 +101,19 @@ void GridVector::update(const Vector<RealType>* data) noexcept
     vertices.reserve(2 * width * height);
 
     // Draw grid vectors
-    for (Size::ValueType j = 0; j < height; ++j)
+    for (math::Size::ValueType j = 0; j < height; ++j)
     {
-        for (Size::ValueType i = 0; i < width; ++i)
+        for (math::Size::ValueType i = 0; i < width; ++i)
         {
             // Get vector normalized by max length
             const auto vec = data[i + j * width] / m_max;
-            const Vector<RealType> pos{
+            const math::Vector<RealType> pos{
                 start.getX() + i * step.getX() + step.getX() / RealType(2.0),
                 start.getY() + j * step.getY() + step.getY() / RealType(2.0)
             };
             const RealType gray = std::min<RealType>(vec.getLength(), 1.0);
 
-            const Vector<RealType> dest = pos + vec * step;
+            const math::Vector<RealType> dest = pos + vec * step;
 
             // Source vertex
             vertices.push_back(Vertex{

@@ -34,10 +34,10 @@
 
 // CeCe
 #include "cece/core/Real.hpp"
-#include "cece/core/Zero.hpp"
 #include "cece/core/String.hpp"
 #include "cece/core/StringView.hpp"
 #include "cece/core/StaticArray.hpp"
+#include "cece/math/Zero.hpp"
 
 /* ************************************************************************ */
 
@@ -584,7 +584,7 @@ public:
     /**
      * @brief Zero constructor.
      */
-    constexpr Unit(Zero_t) noexcept
+    constexpr Unit(math::Zero_t) noexcept
         : m_value(0)
     {
         // Nothing to do
@@ -916,10 +916,10 @@ inline constexpr bool operator==(
  */
 template<typename... Nominators, typename... Denominators>
 inline constexpr bool operator==(
-    Unit<List<Nominators...>, List<Denominators...>> lhs, Zero_t rhs
+    Unit<List<Nominators...>, List<Denominators...>> lhs, math::Zero_t rhs
 ) noexcept
 {
-    return lhs == Unit<List<Nominators...>, List<Denominators...>>(Zero);
+    return lhs == Unit<List<Nominators...>, List<Denominators...>>(math::Zero);
 }
 
 /* ************************************************************************ */
@@ -937,10 +937,10 @@ inline constexpr bool operator==(
  */
 template<typename... Nominators, typename... Denominators>
 inline constexpr bool operator==(
-    Zero_t lhs, Unit<List<Nominators...>, List<Denominators...>> rhs
+    math::Zero_t lhs, Unit<List<Nominators...>, List<Denominators...>> rhs
 ) noexcept
 {
-    return Unit<List<Nominators...>, List<Denominators...>>(Zero) == rhs;
+    return Unit<List<Nominators...>, List<Denominators...>>(math::Zero) == rhs;
 }
 
 /* ************************************************************************ */
@@ -980,7 +980,7 @@ inline constexpr bool operator!=(
  */
 template<typename... Nominators, typename... Denominators>
 inline constexpr bool operator!=(
-    Unit<List<Nominators...>, List<Denominators...>> lhs, Zero_t rhs
+    Unit<List<Nominators...>, List<Denominators...>> lhs, math::Zero_t rhs
 ) noexcept
 {
     return !operator==(lhs, rhs);
@@ -1001,7 +1001,7 @@ inline constexpr bool operator!=(
  */
 template<typename... Nominators, typename... Denominators>
 inline constexpr bool operator!=(
-    Zero_t lhs, Unit<List<Nominators...>, List<Denominators...>> rhs
+    math::Zero_t lhs, Unit<List<Nominators...>, List<Denominators...>> rhs
 ) noexcept
 {
     return !operator==(lhs, rhs);
@@ -1044,7 +1044,7 @@ inline constexpr bool operator<(
  */
 template<typename... Nominators, typename... Denominators>
 inline constexpr bool operator<(
-    Unit<List<Nominators...>, List<Denominators...>> lhs, Zero_t
+    Unit<List<Nominators...>, List<Denominators...>> lhs, math::Zero_t
 ) noexcept
 {
     return lhs.value() < 0;
@@ -1065,7 +1065,7 @@ inline constexpr bool operator<(
  */
 template<typename... Nominators, typename... Denominators>
 inline constexpr bool operator<(
-    Zero_t, Unit<List<Nominators...>, List<Denominators...>> rhs
+    math::Zero_t, Unit<List<Nominators...>, List<Denominators...>> rhs
 ) noexcept
 {
     return 0 < rhs.value();
@@ -1108,10 +1108,10 @@ inline constexpr bool operator<=(
  */
 template<typename... Nominators, typename... Denominators>
 inline constexpr bool operator<=(
-    Unit<List<Nominators...>, List<Denominators...>> lhs, Zero_t
+    Unit<List<Nominators...>, List<Denominators...>> lhs, math::Zero_t
 ) noexcept
 {
-    return !operator>(lhs, Zero);
+    return !operator>(lhs, math::Zero);
 }
 
 /* ************************************************************************ */
@@ -1129,10 +1129,10 @@ inline constexpr bool operator<=(
  */
 template<typename... Nominators, typename... Denominators>
 inline constexpr bool operator<=(
-    Zero_t, Unit<List<Nominators...>, List<Denominators...>> rhs
+    math::Zero_t, Unit<List<Nominators...>, List<Denominators...>> rhs
 ) noexcept
 {
-    return !operator>(Zero, rhs);
+    return !operator>(math::Zero, rhs);
 }
 
 /* ************************************************************************ */
@@ -1172,10 +1172,10 @@ inline constexpr bool operator>(
  */
 template<typename... Nominators, typename... Denominators>
 inline constexpr bool operator>(
-    Unit<List<Nominators...>, List<Denominators...>> lhs, Zero_t
+    Unit<List<Nominators...>, List<Denominators...>> lhs, math::Zero_t
 ) noexcept
 {
-    return operator<(Zero, lhs);
+    return operator<(math::Zero, lhs);
 }
 
 /* ************************************************************************ */
@@ -1193,10 +1193,10 @@ inline constexpr bool operator>(
  */
 template<typename... Nominators, typename... Denominators>
 inline constexpr bool operator>(
-    Zero_t, Unit<List<Nominators...>, List<Denominators...>> rhs
+    math::Zero_t, Unit<List<Nominators...>, List<Denominators...>> rhs
 ) noexcept
 {
-    return operator<(rhs, Zero);
+    return operator<(rhs, math::Zero);
 }
 
 /* ************************************************************************ */
@@ -1236,10 +1236,10 @@ inline constexpr bool operator>=(
  */
 template<typename... Nominators, typename... Denominators>
 inline constexpr bool operator>=(
-    Unit<List<Nominators...>, List<Denominators...>> lhs, Zero_t
+    Unit<List<Nominators...>, List<Denominators...>> lhs, math::Zero_t
 ) noexcept
 {
-    return !operator<(lhs, Zero);
+    return !operator<(lhs, math::Zero);
 }
 
 /* ************************************************************************ */
@@ -1257,10 +1257,10 @@ inline constexpr bool operator>=(
  */
 template<typename... Nominators, typename... Denominators>
 inline constexpr bool operator>=(
-    Zero_t, Unit<List<Nominators...>, List<Denominators...>> rhs
+    math::Zero_t, Unit<List<Nominators...>, List<Denominators...>> rhs
 ) noexcept
 {
-    return !operator<(Zero, rhs);
+    return !operator<(math::Zero, rhs);
 }
 
 /* ************************************************************************ */

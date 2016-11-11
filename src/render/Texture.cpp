@@ -87,7 +87,7 @@ Texture::Texture(Context& context, bool filter)
 
 /* ************************************************************************ */
 
-Texture::Texture(Context& context, Size size, const Color& color, bool filter)
+Texture::Texture(Context& context, math::Size size, const Color& color, bool filter)
     : Texture(context, filter)
 {
     // Init texture
@@ -117,7 +117,7 @@ void Texture::clear(const Color& color)
 
 /* ************************************************************************ */
 
-void Texture::resize(Size size, const Color& color)
+void Texture::resize(math::Size size, const Color& color)
 {
     CECE_ASSERT(isInitialized());
 
@@ -146,7 +146,7 @@ void Texture::update(const Color* colors)
 
 /* ************************************************************************ */
 
-void Texture::create(Size size, const Color* colors)
+void Texture::create(math::Size size, const Color* colors)
 {
     CECE_ASSERT(isInitialized());
 
@@ -161,7 +161,7 @@ void Texture::create(Size size, const Color* colors)
 
 /* ************************************************************************ */
 
-void Texture::createGray(Size size, const unsigned char* colors)
+void Texture::createGray(math::Size size, const unsigned char* colors)
 {
     CECE_ASSERT(isInitialized());
 

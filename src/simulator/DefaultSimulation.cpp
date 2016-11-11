@@ -276,7 +276,7 @@ void DefaultSimulation::unloadPlugin(StringView name)
 
 void DefaultSimulation::setTimeStep(unit::Time dt)
 {
-    if (dt == Zero)
+    if (dt == math::Zero)
         throw InvalidArgumentException("Time step cannot be zero");
 
     m_timeStep = dt;
@@ -524,7 +524,7 @@ bool DefaultSimulation::update()
 
     // Clear all stored forces
     for (auto& obj : m_objects)
-        obj->setForce(Zero);
+        obj->setForce(math::Zero);
 
     // Update modules
     updateModules();

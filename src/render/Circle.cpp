@@ -27,7 +27,7 @@
 #include "cece/render/Circle.hpp"
 
 // CeCe
-#include "cece/core/constants.hpp"
+#include "cece/math/constants.hpp"
 #include "cece/render/Color.hpp"
 #include "cece/render/Context.hpp"
 #include "cece/render/VertexFormat.hpp"
@@ -63,7 +63,7 @@ StaticArray<Vertex, VERTEX_COUNT> generateVertices()
 {
     StaticArray<Vertex, VERTEX_COUNT> res;
 
-    constexpr RealType step = 2 * constants::PI / PARTS;
+    constexpr RealType step = 2 * math::PI / PARTS;
 
     res[0] = Vertex{0.f, 0.f};
 
@@ -71,7 +71,7 @@ StaticArray<Vertex, VERTEX_COUNT> generateVertices()
     {
         const RealType angle = step * i;
         res[i] = Vertex{
-            static_cast<float>(std::cos(angle)), 
+            static_cast<float>(std::cos(angle)),
             static_cast<float>(std::sin(angle))
         };
     }

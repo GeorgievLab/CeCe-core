@@ -28,9 +28,9 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/Vector.hpp"
 #include "cece/core/DynamicArray.hpp"
 #include "cece/core/AlignedAllocator.hpp"
+#include "cece/math/Vector.hpp"
 
 /* ************************************************************************ */
 

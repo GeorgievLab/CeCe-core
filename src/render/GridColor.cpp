@@ -66,7 +66,7 @@ GridColor::GridColor(Context& context)
 
 /* ************************************************************************ */
 
-GridColor::GridColor(Context& context, Size size)
+GridColor::GridColor(Context& context, math::Size size)
     : GridColor(context)
 {
     resize(std::move(size));
@@ -107,7 +107,7 @@ void GridColor::draw(Context& context) noexcept
 
 /* ************************************************************************ */
 
-void GridColor::resize(Size size, const Color& color)
+void GridColor::resize(math::Size size, const Color& color)
 {
     GridBase::resize(std::move(size));
 

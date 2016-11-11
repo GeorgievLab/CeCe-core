@@ -39,8 +39,8 @@
 #include "cece/core/DynamicArray.hpp"
 #include "cece/core/Map.hpp"
 #include "cece/core/StringView.hpp"
-#include "cece/core/Shape.hpp"
 #include "cece/core/Exception.hpp"
+#include "cece/math/Shape.hpp"
 #include "cece/unit/Units.hpp"
 #include "cece/unit/VectorUnits.hpp"
 #include "cece/io/InStream.hpp"
@@ -347,7 +347,7 @@ public:
      *
      * @return
      */
-    const DynamicArray<Shape>& getShapes() const noexcept
+    const DynamicArray<math::Shape>& getShapes() const noexcept
     {
         return m_shapes;
     }
@@ -362,7 +362,7 @@ public:
      *
      * @return
      */
-    DynamicArray<Shape>& getMutableShapes() noexcept
+    DynamicArray<math::Shape>& getMutableShapes() noexcept
     {
         return m_shapes;
     }
@@ -559,7 +559,7 @@ public:
      *
      * @param shapes
      */
-    void setShapes(DynamicArray<Shape> shapes) noexcept
+    void setShapes(DynamicArray<math::Shape> shapes) noexcept
     {
         m_shapes = std::move(shapes);
     }
@@ -796,7 +796,7 @@ private:
     IdType m_id;
 
     /// A list of object shapes.
-    DynamicArray<Shape> m_shapes;
+    DynamicArray<math::Shape> m_shapes;
 
     /// Registered object programs.
     program::Container m_programs;

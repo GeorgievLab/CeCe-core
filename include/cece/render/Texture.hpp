@@ -28,7 +28,7 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/Vector.hpp"
+#include "cece/math/Vector.hpp"
 #include "cece/render/Color.hpp"
 
 /* ************************************************************************ */
@@ -79,7 +79,7 @@ public:
      * @param color   Initialization color.
      * @param filter  Min/Mag filter.
      */
-    Texture(Context& context, Size size, const Color& color = colors::BLACK, bool filter = true);
+    Texture(Context& context, math::Size size, const Color& color = colors::BLACK, bool filter = true);
 
 
     /**
@@ -108,7 +108,7 @@ public:
      *
      * @return
      */
-    const Size& getSize() const noexcept
+    const math::Size& getSize() const noexcept
     {
         return m_size;
     }
@@ -144,7 +144,7 @@ public:
      * @param size    Texture size.
      * @param color   Initialization color.
      */
-    void resize(Size size, const Color& color = colors::BLACK);
+    void resize(math::Size size, const Color& color = colors::BLACK);
 
 
     /**
@@ -161,7 +161,7 @@ public:
      * @param size    Texture size.
      * @param color   Initialization color.
      */
-    void create(Size size, const Color* colors);
+    void create(math::Size size, const Color* colors);
 
 
     /**
@@ -170,7 +170,7 @@ public:
      * @param size   Texture size.
      * @param colors Texture colors.
      */
-    void createGray(Size size, const unsigned char* colors);
+    void createGray(math::Size size, const unsigned char* colors);
 
 
 // Private Data Members
@@ -180,7 +180,7 @@ private:
     Id m_id = 0;
 
     /// Texture size.
-    Size m_size;
+    math::Size m_size;
 };
 
 /* ************************************************************************ */

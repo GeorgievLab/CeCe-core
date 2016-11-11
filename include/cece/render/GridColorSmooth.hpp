@@ -67,7 +67,7 @@ public:
      * @param context Rendering context.
      * @param size
      */
-    GridColorSmooth(Context& context, Size size)
+    GridColorSmooth(Context& context, math::Size size)
         : GridColorSmooth(context)
     {
         resize(std::move(size));

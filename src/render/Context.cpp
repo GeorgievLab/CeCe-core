@@ -125,7 +125,7 @@ Context::~Context()
 
 /* ************************************************************************ */
 
-Size Context::getSize() const noexcept
+math::Size Context::getSize() const noexcept
 {
     GLint viewport[4];
     glGetIntegerv(GL_VIEWPORT, viewport);
@@ -133,7 +133,7 @@ Size Context::getSize() const noexcept
     const auto width = viewport[2];
     const auto height = viewport[3];
 
-    return Size(width, height);
+    return math::Size(width, height);
 }
 
 /* ************************************************************************ */
@@ -631,9 +631,9 @@ void Context::draw(PrimitiveType type, unsigned int count, unsigned int offset)
 
 /* ************************************************************************ */
 
-void Context::drawLine(Vector<float> pos, Vector<float> size, const Color& color)
+void Context::drawLine(math::Vector<float> pos, math::Vector<float> size, const Color& color)
 {
-    if (size == Zero)
+    if (size == math::Zero)
         return;
 
     const auto pos2 = pos + size;

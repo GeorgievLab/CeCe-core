@@ -28,7 +28,7 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/Vector.hpp"
+#include "cece/math/Vector.hpp"
 #include "cece/render/Buffer.hpp"
 #include "cece/render/GridBase.hpp"
 
@@ -78,7 +78,7 @@ public:
      *
      * @param size New grid size.
      */
-    void resize(Size size) noexcept;
+    void resize(math::Size size) noexcept;
 
 
 // Private Data Members

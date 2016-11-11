@@ -33,9 +33,9 @@
 
 // CeCe
 #include "cece/core/Assert.hpp"
-#include "cece/core/Vector.hpp"
-#include "cece/core/Shape.hpp"
 #include "cece/core/Real.hpp"
+#include "cece/math/Vector.hpp"
+#include "cece/math/Shape.hpp"
 #include "cece/unit/Units.hpp"
 
 /* ************************************************************************ */

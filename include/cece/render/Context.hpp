@@ -130,7 +130,7 @@ public:
      *
      * @return
      */
-    Size getSize() const noexcept;
+    math::Size getSize() const noexcept;
 
 
     /**
@@ -459,7 +459,7 @@ public:
      * @param size  Line size.
      * @param color Line color.
      */
-    void drawLine(Vector<float> pos, Vector<float> size, const Color& color = colors::WHITE);
+    void drawLine(math::Vector<float> pos, math::Vector<float> size, const Color& color = colors::WHITE);
 
 
     /**

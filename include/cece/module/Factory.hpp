@@ -33,7 +33,7 @@
 
 /* ************************************************************************ */
 
-namespace cece { namespace simulator { class Simulation; } }
+namespace cece { namespace simulation { class Simulation; } }
 
 /* ************************************************************************ */
 
@@ -49,7 +49,7 @@ class Module;
 /**
  * @brief Module factory interface.
  */
-using Factory = factory::Factory<Module, simulator::Simulation&>;
+using Factory = factory::Factory<Module, simulation::Simulation&>;
 
 /* ************************************************************************ */
 
@@ -58,6 +58,6 @@ using Factory = factory::Factory<Module, simulator::Simulation&>;
 
 /* ************************************************************************ */
 
-CECE_FACTORY_EXTERN(module::Module, simulator::Simulation&)
+CECE_FACTORY_EXTERN(module::Module, simulation::Simulation&)
 
 /* ************************************************************************ */

@@ -32,7 +32,7 @@
 
 // CeCe
 #include "cece/Parameters.hpp"
-#include "cece/simulator/Simulation.hpp"
+#include "cece/simulation/Simulation.hpp"
 
 /* ************************************************************************ */
 
@@ -41,7 +41,7 @@ namespace loader {
 
 /* ************************************************************************ */
 
-UniquePtr<simulator::Simulation> Loader::fromFile(
+UniquePtr<simulation::Simulation> Loader::fromFile(
     const plugin::Manager& manager, const io::FilePath& filename,
     ViewPtr<const Parameters> parameters) const
 {
@@ -51,7 +51,7 @@ UniquePtr<simulator::Simulation> Loader::fromFile(
 
 /* ************************************************************************ */
 
-UniquePtr<simulator::Simulation> Loader::fromSource(
+UniquePtr<simulation::Simulation> Loader::fromSource(
     const plugin::Manager& manager, const String& source,
     const io::FilePath& filename, ViewPtr<const Parameters> parameters) const
 {
@@ -61,7 +61,7 @@ UniquePtr<simulator::Simulation> Loader::fromSource(
 
 /* ************************************************************************ */
 
-void Loader::toFile(const simulator::Simulation& simulation, const io::FilePath& filename) const
+void Loader::toFile(const simulation::Simulation& simulation, const io::FilePath& filename) const
 {
     // Write code into file
     std::ofstream file(filename.toString(), std::ios::out);
@@ -70,7 +70,7 @@ void Loader::toFile(const simulator::Simulation& simulation, const io::FilePath&
 
 /* ************************************************************************ */
 
-String Loader::toSource(const simulator::Simulation& simulation, const io::FilePath& filename) const
+String Loader::toSource(const simulation::Simulation& simulation, const io::FilePath& filename) const
 {
     std::ostringstream os(std::ios::out);
     toStream(os, simulation, filename);

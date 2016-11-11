@@ -24,12 +24,12 @@
 /* ************************************************************************ */
 
 // Declaration
-#include "cece/simulator/ConverterBox2D.hpp"
+#include "ConverterBox2D.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
-namespace simulator {
+namespace simulation {
 
 /* ************************************************************************ */
 

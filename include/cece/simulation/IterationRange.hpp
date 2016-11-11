@@ -23,23 +23,111 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-// Declaration
-#include "cece/init/Container.hpp"
+#pragma once
+
+/* ************************************************************************ */
 
 // CeCe
-#include "cece/init/Initializer.hpp"
+#include "cece/simulation/IterationType.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
-namespace init {
+namespace simulation {
 
 /* ************************************************************************ */
 
-void Container::init(simulation::Simulation& simulation) const
+/**
+ * @brief Range of iterations.
+ */
+class IterationRange
 {
-    invoke(&Initializer::init, simulation);
-}
+
+// Public Ctors & Dtors
+public:
+
+
+    /**
+     * @brief Default constructor.
+     */
+    IterationRange() = default;
+
+
+    /**
+     * @brief Constructor.
+     *
+     * @param iteration Single iteration.
+     */
+    IterationRange(IterationType iteration) noexcept
+        : m_first(iteration)
+        , m_last(iteration)
+    {
+        // Nothing to do
+    }
+
+
+    /**
+     * @brief Constructor.
+     *
+     * @param first
+     * @param last
+     */
+    IterationRange(IterationType first, IterationType last) noexcept
+        : m_first(first)
+        , m_last(last)
+    {
+        // Nothing to do
+    }
+
+
+// Public Accessors
+public:
+
+
+    /**
+     * @brief Returns the first iteration number.
+     *
+     * @return
+     */
+    IterationType getFirst() const noexcept
+    {
+        return m_first;
+    }
+
+
+    /**
+     * @brief Returns the last iteration number.
+     *
+     * @return
+     */
+    IterationType getLast() const noexcept
+    {
+        return m_last;
+    }
+
+
+    /**
+     * @brief Check if given iteration is in range.
+     *
+     * @param iteration
+     *
+     * @return
+     */
+    bool inRange(IterationType iteration) const noexcept
+    {
+        return iteration >= m_first && iteration <= m_last;
+    }
+
+
+// Private Data Members
+private:
+
+    // The first iteration number.
+    IterationType m_first{};
+
+    /// The last iteration number.
+    IterationType m_last{};
+};
 
 /* ************************************************************************ */
 

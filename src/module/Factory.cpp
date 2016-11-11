@@ -31,6 +31,6 @@
 
 /* ************************************************************************ */
 
-CECE_FACTORY_INST(module::Module, simulator::Simulation&)
+CECE_FACTORY_INST(module::Module, simulation::Simulation&)
 
 /* ************************************************************************ */

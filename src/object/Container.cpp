@@ -126,7 +126,7 @@ void Container::draw(render::Context& context)
 /* ************************************************************************ */
 
 #ifdef CECE_RENDER
-void Container::drawStoreState(const simulator::Visualization& visualization)
+void Container::drawStoreState(const simulation::Visualization& visualization)
 {
     RenderState& state = m_drawableState.getBack();
     state.objects.clear();

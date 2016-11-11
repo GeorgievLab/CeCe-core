@@ -26,7 +26,6 @@
 # Sources
 set(SRCS
     Simulation.cpp
-    Simulator.cpp
     TimeMeasurement.cpp
     Visualization.cpp
     DefaultSimulation.cpp
@@ -35,7 +34,7 @@ set(SRCS
 
 # ######################################################################### #
 
-dir_pretend(SOURCES simulator/ ${SRCS})
+dir_pretend(SOURCES simulation/ ${SRCS})
 
 set(CECE_SOURCES ${CECE_SOURCES} ${SOURCES} PARENT_SCOPE)
 

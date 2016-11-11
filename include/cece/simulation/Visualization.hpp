@@ -28,40 +28,125 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/UniquePtr.hpp"
-#include "cece/unit/Units.hpp"
+#include "cece/config.hpp"
 
 /* ************************************************************************ */
 
-namespace cece { namespace object { class Object; } }
+#ifdef CECE_RENDER
+
+/* ************************************************************************ */
+
+// C++
+#include <utility>
+
+// CeCe
+#include "cece/StringView.hpp"
+#include "cece/DynamicArray.hpp"
+#include "cece/render/Color.hpp"
+#include "cece/simulation/VisualizationLayer.hpp"
+
+/* ************************************************************************ */
+
 namespace cece { namespace config { class Configuration; } }
-namespace cece { namespace simulation { class Simulation; } }
 
 /* ************************************************************************ */
 
 namespace cece {
-namespace program {
+namespace simulation {
 
 /* ************************************************************************ */
 
 /**
- * @brief Program that can be executed by objects.
- *
- * Programs are allowed to store information bound to specific object.
+ * @brief Class which store information about simulation visualization.
  */
-class Program
+class Visualization
 {
 
-// Public Ctors & Dtors
+
+// Public Accessors
 public:
 
 
     /**
-     * @brief Destructor.
+     * @brief Returns if visualization is enabled.
+     *
+     * @return
      */
-    virtual ~Program()
+    bool isEnabled() const noexcept
     {
-        // Nothing to do
+        return m_enabled;
+    }
+
+
+    /**
+     * @brief Returns if visualization layer is enabled.
+     *
+     * @param name Layer name.
+     * @param def  In case the layer doesn't exists.
+     *
+     * @return If layer is enabled.
+     *
+     * @note In case layer with given name doesn't exists, true is returned.
+     */
+    bool isEnabled(StringView name, bool def = false) const noexcept;
+
+
+    /**
+     * @brief Returns background color.
+     *
+     * @return
+     */
+    const render::Color& getBackgroundColor() const noexcept
+    {
+        return m_backgroundColor;
+    }
+
+
+    /**
+     * @brief Returns available layers.
+     *
+     * @return
+     */
+    DynamicArray<VisualizationLayer>& getLayers() noexcept
+    {
+        return m_layers;
+    }
+
+
+    /**
+     * @brief Returns available layers.
+     *
+     * @return
+     */
+    const DynamicArray<VisualizationLayer>& getLayers() const noexcept
+    {
+        return m_layers;
+    }
+
+
+// Public Mutators
+public:
+
+
+    /**
+     * @brief Enable or disable visualization.
+     *
+     * @param flag
+     */
+    void setEnabled(bool flag) noexcept
+    {
+        m_enabled = flag;
+    }
+
+
+    /**
+     * @brief Set background color.
+     *
+     * @param color
+     */
+    void setBackgroundColor(render::Color color) noexcept
+    {
+        m_backgroundColor = std::move(color);
     }
 
 
@@ -70,69 +155,32 @@ public:
 
 
     /**
-     * @brief Clone program.
+     * @brief Configure visualization.
      *
-     * @return
+     * @param config
      */
-    virtual UniquePtr<Program> clone() const = 0;
+    void loadConfig(const config::Configuration& config);
 
 
     /**
-     * @brief Load program configuration.
+     * @brief Store visualization configuration.
      *
-     * @param simulation Current simulation.
-     * @param config     Source configuration.
+     * @param config
      */
-    virtual void loadConfig(simulation::Simulation& simulation, const config::Configuration& config)
-    {
-        // Nothing to do
-    }
+    void storeConfig(config::Configuration& config) const;
 
 
-    /**
-     * @brief Store program configuration.
-     *
-     * @param simulation Current simulation.
-     * @param config     Output configuration.
-     */
-    virtual void storeConfig(const simulation::Simulation& simulation, config::Configuration& config) const
-    {
-        // Nothing to do
-    }
+// Private Data Members
+private:
 
+    /// If is enabled.
+    bool m_enabled = true;
 
-    /**
-     * @brief Allow to initialize program when is bound to specific object.
-     *
-     * @param simulation Simulation object.
-     * @param object     Object.
-     */
-    virtual void init(simulation::Simulation& simulation, object::Object& object)
-    {
-        // Nothing to do
-    }
+    /// Background (clear) color.
+    render::Color m_backgroundColor = render::colors::WHITE;
 
-
-    /**
-     * @brief Call program for given object.
-     *
-     * @param simulation Simulation object.
-     * @param object     Object.
-     * @param dt         Simulation time step.
-     */
-    virtual void call(simulation::Simulation& simulation, object::Object& object, unit::Time dt) = 0;
-
-
-    /**
-     * @brief Called when the program is unbound from object (or object is being deleted).
-     *
-     * @param simulation Simulation object.
-     * @param object     Object.
-     */
-    virtual void terminate(simulation::Simulation& simulation, object::Object& object)
-    {
-        // Nothing to do
-    }
+    /// Available visualization layers.
+    DynamicArray<VisualizationLayer> m_layers;
 
 };
 
@@ -140,5 +188,9 @@ public:
 
 }
 }
+
+/* ************************************************************************ */
+
+#endif
 
 /* ************************************************************************ */

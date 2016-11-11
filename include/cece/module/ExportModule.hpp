@@ -34,11 +34,11 @@
 #include "cece/String.hpp"
 #include "cece/UniquePtr.hpp"
 #include "cece/DynamicArray.hpp"
-#include "cece/core/IterationRange.hpp"
 #include "cece/io/DataExport.hpp"
 #include "cece/io/FilePath.hpp"
 #include "cece/io/CsvFile.hpp"
 #include "cece/module/Module.hpp"
+#include "cece/simulation/IterationRange.hpp"
 
 /* ************************************************************************ */
 
@@ -80,7 +80,7 @@ public:
      *
      * @return
      */
-    const DynamicArray<IterationRange>& getActive() const noexcept
+    const DynamicArray<simulation::IterationRange>& getActive() const noexcept
     {
         return m_active;
     }
@@ -93,7 +93,7 @@ public:
      *
      * @return
      */
-    bool isActive(IterationType it) const noexcept;
+    bool isActive(simulation::IterationType it) const noexcept;
 
 
 // Public Mutators
@@ -116,7 +116,7 @@ public:
      *
      * @param active
      */
-    void setActive(DynamicArray<IterationRange> active) noexcept
+    void setActive(DynamicArray<simulation::IterationRange> active) noexcept
     {
         m_active = std::move(active);
     }
@@ -198,7 +198,7 @@ protected:
      *
      * @return
      */
-    static DynamicArray<IterationRange> parseActive(String str);
+    static DynamicArray<simulation::IterationRange> parseActive(String str);
 
 
 // Protected Data Members
@@ -211,7 +211,7 @@ protected:
     io::FilePath m_filePath;
 
     /// When is export active.
-    DynamicArray<IterationRange> m_active;
+    DynamicArray<simulation::IterationRange> m_active;
 
 };
 

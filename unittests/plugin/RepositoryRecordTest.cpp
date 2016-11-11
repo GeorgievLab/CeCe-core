@@ -33,7 +33,7 @@
 #include "cece/module/Module.hpp"
 #include "cece/object/Object.hpp"
 #include "cece/program/Program.hpp"
-#include "cece/simulator/DefaultSimulation.hpp"
+#include "cece/simulation/DefaultSimulation.hpp"
 #include "cece/plugin/Repository.hpp"
 #include "cece/plugin/Manager.hpp"
 
@@ -52,14 +52,14 @@ class TestLoader final : public loader::Loader
 {
 public:
 
-    UniquePtr<simulator::Simulation> fromStream(const plugin::Manager& manager, io::InStream& is,
+    UniquePtr<simulation::Simulation> fromStream(const plugin::Manager& manager, io::InStream& is,
         const io::FilePath& filename = "<stream>",
         ViewPtr<const Parameters> parameters = nullptr) const override
     {
-        return makeUnique<simulator::DefaultSimulation>(manager, filename);
+        return makeUnique<simulation::DefaultSimulation>(manager, filename);
     }
 
-    void toStream(io::OutStream& os, const simulator::Simulation& simulation,
+    void toStream(io::OutStream& os, const simulation::Simulation& simulation,
         const io::FilePath& filename = "<stream>") const override
     {
         // Nothing to do
@@ -73,7 +73,7 @@ class TestInitializer final : public init::Initializer
 public:
     using init::Initializer::Initializer;
 
-    void init(simulator::Simulation& simulation) const override
+    void init(simulation::Simulation& simulation) const override
     {
         // Nothing to do
     }
@@ -107,7 +107,7 @@ public:
         return makeUnique<TestProgram>(*this);
     }
 
-    void call(simulator::Simulation& simulation, object::Object& object, unit::Time dt) override
+    void call(simulation::Simulation& simulation, object::Object& object, unit::Time dt) override
     {
         // Nothing to do
     }
@@ -173,7 +173,7 @@ TEST(RepositoryRecord, module)
     EXPECT_FALSE(record.isRegisteredModule("no-module"));
 
     plugin::Manager mgr;
-    simulator::DefaultSimulation simulation(mgr);
+    simulation::DefaultSimulation simulation(mgr);
     auto module = record.createModule("module", simulation);
     ASSERT_NE(nullptr, module);
     EXPECT_EQ(typeid(TestModule), typeid(*module));
@@ -196,7 +196,7 @@ TEST(RepositoryRecord, object)
     EXPECT_FALSE(record.isRegisteredObject("no-object"));
 
     plugin::Manager mgr;
-    simulator::DefaultSimulation simulation(mgr);
+    simulation::DefaultSimulation simulation(mgr);
     auto object = record.createObject("object", simulation, object::Object::Type::Static);
     ASSERT_NE(nullptr, object);
     EXPECT_EQ(typeid(TestObject), typeid(*object));

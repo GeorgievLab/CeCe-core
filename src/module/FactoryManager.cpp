@@ -36,7 +36,7 @@ namespace module {
 
 /* ************************************************************************ */
 
-UniquePtr<Module> FactoryManager::createModule(StringView name, simulator::Simulation& simulation) const
+UniquePtr<Module> FactoryManager::createModule(StringView name, simulation::Simulation& simulation) const
 {
     return createObject<Module>(name, simulation);
 }

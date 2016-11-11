@@ -34,7 +34,7 @@
 /* ************************************************************************ */
 
 namespace cece { namespace object { class Object; } }
-namespace cece { namespace simulator { class Simulation; } }
+namespace cece { namespace simulation { class Simulation; } }
 
 /* ************************************************************************ */
 
@@ -64,7 +64,7 @@ public:
      * @param object     Object.
      * @param dt         Simulation time step.
      */
-    void call(simulator::Simulation& simulation, object::Object& object, unit::Time dt);
+    void call(simulation::Simulation& simulation, object::Object& object, unit::Time dt);
 
 
     /**

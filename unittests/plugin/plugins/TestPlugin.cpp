@@ -50,7 +50,7 @@ class TestInitializer final : public init::Initializer
 public:
     using init::Initializer::Initializer;
 
-    void init(simulator::Simulation& simulation) const override
+    void init(simulation::Simulation& simulation) const override
     {
         // Nothing to do
     }
@@ -84,7 +84,7 @@ public:
         return makeUnique<TestProgram>(*this);
     }
 
-    void call(simulator::Simulation& simulation, object::Object& object, unit::Time dt) override
+    void call(simulation::Simulation& simulation, object::Object& object, unit::Time dt) override
     {
         // Nothing to do
     }

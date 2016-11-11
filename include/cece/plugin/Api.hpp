@@ -29,7 +29,7 @@
 
 namespace cece {
     namespace config    { class Configuration; }
-    namespace simulator { class Simulation; }
+    namespace simulation { class Simulation; }
 }
 
 /* ************************************************************************ */
@@ -108,7 +108,7 @@ public:
      * @param      simulation  The simulation which imports the plugin.
      * @param[in]  config      Plugin import configuration.
      */
-    virtual void onImport(simulator::Simulation& simulation, const config::Configuration& config)
+    virtual void onImport(simulation::Simulation& simulation, const config::Configuration& config)
     {
         // Nothing to do
     }
@@ -119,7 +119,7 @@ public:
      *
      * @param      simulation  The simulation.
      */
-    virtual void onRemove(simulator::Simulation& simulation)
+    virtual void onRemove(simulation::Simulation& simulation)
     {
         // Nothing to do
     }
@@ -131,7 +131,7 @@ public:
      * @param[in]  simulation  Current simulation.
      * @param      config      Output plugin configuration.
      */
-    virtual void storeConfig(const simulator::Simulation& simulation, config::Configuration& config) const
+    virtual void storeConfig(const simulation::Simulation& simulation, config::Configuration& config) const
     {
         // Nothing to do
     }

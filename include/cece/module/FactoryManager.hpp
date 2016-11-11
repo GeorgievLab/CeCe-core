@@ -37,7 +37,7 @@
 
 /* ************************************************************************ */
 
-namespace cece { namespace simulator { class Simulation; } }
+namespace cece { namespace simulation { class Simulation; } }
 
 /* ************************************************************************ */
 
@@ -86,7 +86,7 @@ public:
      *
      * @throw FactoryNotFoundException In case of factory with given name doesn't exists.
      */
-    UniquePtr<Module> createModule(StringView name, simulator::Simulation& simulation) const;
+    UniquePtr<Module> createModule(StringView name, simulation::Simulation& simulation) const;
 
 };
 

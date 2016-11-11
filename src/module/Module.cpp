@@ -36,7 +36,7 @@ namespace module {
 
 /* ************************************************************************ */
 
-Module::Module(simulator::Simulation& simulation)
+Module::Module(simulation::Simulation& simulation)
     : m_simulation(simulation)
 {
     // Nothing to do
@@ -102,7 +102,7 @@ void Module::terminate()
 /* ************************************************************************ */
 
 #ifdef CECE_RENDER
-void Module::draw(const simulator::Visualization&, render::Context& context)
+void Module::draw(const simulation::Visualization&, render::Context& context)
 {
     // Forward
     draw(context);
@@ -121,7 +121,7 @@ void Module::draw(render::Context& context)
 /* ************************************************************************ */
 
 #ifdef CECE_RENDER
-void Module::drawStoreState(const simulator::Visualization&)
+void Module::drawStoreState(const simulation::Visualization&)
 {
     drawStoreState();
 }

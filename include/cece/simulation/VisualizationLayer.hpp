@@ -27,34 +27,33 @@
 
 /* ************************************************************************ */
 
+// CeCe
+#include "cece/config.hpp"
+
+/* ************************************************************************ */
+
+#ifdef CECE_RENDER
+
+/* ************************************************************************ */
+
 // C++
-#include <atomic>
+#include <utility>
 
 // CeCe
 #include "cece/config.hpp"
-#include "cece/UniquePtr.hpp"
-#include "cece/unit/Units.hpp"
-#ifdef CECE_RENDER
-#include "cece/render/Context.hpp"
-#endif
+#include "cece/String.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
-namespace simulator {
-
-/* ************************************************************************ */
-
-class Simulation;
+namespace simulation {
 
 /* ************************************************************************ */
 
 /**
- * @brief Simulator class.
- *
- * Simulator handles simulation of the given (owned) simulation in current thread.
+ * @brief Visualization layer.
  */
-class Simulator final
+class VisualizationLayer
 {
 
 // Public Ctors & Dtors
@@ -62,75 +61,62 @@ public:
 
 
     /**
-     * @brief Destructor.
+     * @brief Default constructor.
      */
-    ~Simulator()
+    VisualizationLayer() = default;
+
+
+    /**
+     * @brief Constructor.
+     *
+     * @param name    Layer name.
+     * @param key     Key name.
+     * @param enabled
+     */
+    explicit VisualizationLayer(String name, String key, bool enabled = false) noexcept
+        : m_name(std::move(name))
+        , m_key(std::move(key))
+        , m_enabled(enabled)
     {
-        stop();
+        // Nothing to do
     }
 
 
-/// Public Accessors
+// Public Accessors
 public:
 
 
     /**
-     * @brief If simulation is running.
+     * @brief Returns layer name.
      *
      * @return
      */
-    bool isRunning() const noexcept
+    const String& getName() const noexcept
     {
-        return m_isRunning;
+        return m_name;
     }
 
 
     /**
-     * @brief Returns current simulation.
-     *
-     * @return A pointer to current simulation or nullptr.
-     */
-    Simulation* getSimulation() const noexcept
-    {
-        return m_simulation.get();
-    }
-
-
-#ifdef CECE_RENDER
-
-    /**
-     * @brief Returns rendering context.
+     * @brief Returns enable/disable key name.
      *
      * @return
      */
-    render::Context& getRenderContext() noexcept
+    const String& getKey() const noexcept
     {
-        return m_renderContext;
+        return m_key;
     }
 
 
     /**
-     * @brief Returns rendering context.
+     * @brief If layer is enabled by default.
      *
      * @return
      */
-    const render::Context& getRenderContext() const noexcept
+    bool isEnabled() const noexcept
     {
-        return m_renderContext;
+        return m_enabled;
     }
-
-
-    /**
-     * @brief Returns if rendering context is initialized.
-     *
-     * @return
-     */
-    bool isDrawInitialized() noexcept
-    {
-        return m_renderContext.isInitialized();
-    }
-
-#endif
 
 
 // Public Mutators
@@ -138,13 +124,13 @@ public:
 
 
     /**
-     * @brief Change current simulation. The old simulation will be deleted.
+     * @brief Enable or disable layout.
      *
-     * @param simulation New simulation.
+     * @return
      */
-    void setSimulation(UniquePtr<Simulation> simulation) noexcept
+    void setEnabled(bool flag) noexcept
     {
-        m_simulation = std::move(simulation);
+        m_enabled = flag;
     }
 
 
@@ -153,71 +139,34 @@ public:
 
 
     /**
-     * @brief Start simulation.
+     * @brief Toggle enable/disable.
      */
-    void start();
-
-
-    /**
-     * @brief Stop simulation.
-     */
-    void stop()
+    void toggle() noexcept
     {
-        m_isRunning = false;
+        m_enabled = !m_enabled;
     }
 
 
-    /**
-     * @brief Update simulation by time step.
-     *
-     * @return If next step can be calculated.
-     */
-    bool update();
-
-
-#ifdef CECE_RENDER
-
-    /**
-     * @brief Initialize simulation for rendering.
-     *
-     * @param clearColor
-     */
-    void drawInit(const render::Color& clearColor = render::colors::WHITE)
-    {
-        m_renderContext.init(clearColor);
-    }
-
-
-    /**
-     * @brief Render simulation.
-     *
-     * @param width
-     * @param height
-     */
-    void draw(unsigned int width, unsigned int height);
-
-#endif
-
-
-// Data Members
+// Private Data Members
 private:
 
-    /// Flag if thread is running
-    std::atomic<bool> m_isRunning{false};
+    /// Layer name.
+    String m_name;
 
-#ifdef CECE_RENDER
-    /// Rendering context.
-    render::Context m_renderContext;
-#endif
+    /// Layer enable/disable key.
+    String m_key;
 
-    /// Current simulation
-    UniquePtr<Simulation> m_simulation;
-
+    /// If layer is enabled by default.
+    bool m_enabled = false;
 };
 
 /* ************************************************************************ */
 
 }
 }
+
+/* ************************************************************************ */
+
+#endif
 
 /* ************************************************************************ */

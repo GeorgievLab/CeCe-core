@@ -35,7 +35,7 @@
 
 /* ************************************************************************ */
 
-namespace cece { namespace simulator { class Simulation; } }
+namespace cece { namespace simulation { class Simulation; } }
 
 /* ************************************************************************ */
 
@@ -51,7 +51,7 @@ namespace object {
 /**
  * @brief Object factory interface.
  */
-using Factory = factory::Factory<Object, simulator::Simulation&, String, Object::Type>;
+using Factory = factory::Factory<Object, simulation::Simulation&, String, Object::Type>;
 
 /* ************************************************************************ */
 
@@ -60,6 +60,6 @@ using Factory = factory::Factory<Object, simulator::Simulation&, String, Object:
 
 /* ************************************************************************ */
 
-CECE_FACTORY_EXTERN(object::Object, simulator::Simulation&, String, object::Object::Type)
+CECE_FACTORY_EXTERN(object::Object, simulation::Simulation&, String, object::Object::Type)
 
 /* ************************************************************************ */

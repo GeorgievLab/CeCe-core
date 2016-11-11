@@ -32,7 +32,7 @@
 
 /* ************************************************************************ */
 
-namespace cece { namespace simulator { class Simulation; } }
+namespace cece { namespace simulation { class Simulation; } }
 namespace cece { namespace init { class Initializer; } }
 
 /* ************************************************************************ */
@@ -57,7 +57,7 @@ public:
      *
      * @param simulation Simulation object.
      */
-    void init(simulator::Simulation& simulation) const;
+    void init(simulation::Simulation& simulation) const;
 
 };
 

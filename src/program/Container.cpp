@@ -36,7 +36,7 @@ namespace program {
 
 /* ************************************************************************ */
 
-void Container::call(simulator::Simulation& simulation, object::Object& object, unit::Time dt)
+void Container::call(simulation::Simulation& simulation, object::Object& object, unit::Time dt)
 {
     // Invoke all stored programs
     invoke(&Program::call, simulation, object, dt);

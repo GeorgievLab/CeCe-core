@@ -24,7 +24,7 @@
 /* ************************************************************************ */
 
 // Declaration
-#include "cece/simulator/DefaultSimulation.hpp"
+#include "cece/simulation/DefaultSimulation.hpp"
 
 // C++
 #include <algorithm>
@@ -49,17 +49,19 @@
 #include "cece/init/Initializer.hpp"
 #include "cece/module/Module.hpp"
 #include "cece/object/ContactListener.hpp"
-#include "cece/simulator/TimeMeasurement.hpp"
-#include "cece/simulator/ConverterBox2D.hpp"
+#include "cece/simulation/TimeMeasurement.hpp"
 
 #ifdef CECE_RENDER
 #  include "cece/render/PhysicsDebugger.hpp"
 #endif
 
+// CeCe private
+#include "../simulation/ConverterBox2D.hpp"
+
 /* ************************************************************************ */
 
 namespace cece {
-namespace simulator {
+namespace simulation {
 
 /* ************************************************************************ */
 
@@ -449,7 +451,7 @@ void DefaultSimulation::loadConfig(const config::Configuration& config)
         // TODO make as simulation local
         ConverterBox2D::getInstance().setLengthCoefficient(config.get<RealType>("length-coefficient"));
 #ifdef CECE_RENDER
-        g_physicsDebugger.setScale(1.0 / simulator::ConverterBox2D::getInstance().getLengthCoefficient());
+        g_physicsDebugger.setScale(1.0 / ConverterBox2D::getInstance().getLengthCoefficient());
 #endif
     }
 

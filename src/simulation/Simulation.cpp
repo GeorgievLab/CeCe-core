@@ -24,7 +24,7 @@
 /* ************************************************************************ */
 
 // Declaration
-#include "cece/simulator/Simulation.hpp"
+#include "cece/simulation/Simulation.hpp"
 
 // C++
 #include <utility>
@@ -37,12 +37,12 @@
 #include "cece/object/Type.hpp"
 #include "cece/object/Object.hpp"
 #include "cece/program/Program.hpp"
-#include "cece/simulator/Visualization.hpp"
+#include "cece/simulation/Visualization.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
-namespace simulator {
+namespace simulation {
 
 /* ************************************************************************ */
 

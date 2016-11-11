@@ -24,26 +24,79 @@
 /* ************************************************************************ */
 
 // Declaration
-#include "cece/init/Container.hpp"
+#include "cece/simulation/Visualization.hpp"
+
+// C++
+#include <algorithm>
 
 // CeCe
-#include "cece/init/Initializer.hpp"
+#include "cece/config/Configuration.hpp"
+
+/* ************************************************************************ */
+
+#ifdef CECE_RENDER
 
 /* ************************************************************************ */
 
 namespace cece {
-namespace init {
+namespace simulation {
 
 /* ************************************************************************ */
 
-void Container::init(simulation::Simulation& simulation) const
+bool Visualization::isEnabled(StringView name, bool def) const noexcept
 {
-    invoke(&Initializer::init, simulation);
+    if (name.getLength() == 0)
+        return def;
+
+    auto it = std::find_if(m_layers.begin(), m_layers.end(), [&](const VisualizationLayer& layer) {
+        return layer.getName() == name;
+    });
+
+    if (it == m_layers.end())
+        return def;
+
+    return it->isEnabled();
+}
+
+/* ************************************************************************ */
+
+void Visualization::loadConfig(const config::Configuration& config)
+{
+    setEnabled(config.get("enabled", isEnabled()));
+    setBackgroundColor(config.get("background", getBackgroundColor()));
+
+    m_layers.clear();
+
+    // Foreach layers
+    for (const auto& layer : config.getConfigurations("layer"))
+    {
+        m_layers.emplace_back(layer.get("name"), layer.get("key", String{}), layer.get("enabled", false));
+    }
+}
+
+/* ************************************************************************ */
+
+void Visualization::storeConfig(config::Configuration& config) const
+{
+    config.set("enabled", isEnabled());
+    config.set("background", getBackgroundColor());
+
+    for (const auto& layer : getLayers())
+    {
+        auto layerConfig = config.addConfiguration("layer");
+        layerConfig.set("name", layer.getName());
+        layerConfig.set("key", layer.getKey());
+        layerConfig.set("enabled", layer.isEnabled());
+    }
 }
 
 /* ************************************************************************ */
 
 }
 }
+
+/* ************************************************************************ */
+
+#endif
 
 /* ************************************************************************ */

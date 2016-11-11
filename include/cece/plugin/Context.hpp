@@ -47,7 +47,7 @@ namespace cece {
     //namespace object    { class Object; }
     namespace object    { class Type; }
     namespace program   { class Program; }
-    namespace simulator { class Simulation; }
+    namespace simulation { class Simulation; }
 }
 
 /* ************************************************************************ */
@@ -188,7 +188,7 @@ public:
      * @throws     MultipleExtensionsException  When a module with same name is found
      *                                          in multiple plugins.
      */
-    UniquePtr<module::Module> createModule(StringView name, simulator::Simulation& simulation) const;
+    UniquePtr<module::Module> createModule(StringView name, simulation::Simulation& simulation) const;
 
 
     /**
@@ -205,7 +205,7 @@ public:
      * @throws     MultipleExtensionsException  When an object with same name is found
      *                                          in multiple plugins.
      */
-    UniquePtr<object::Object> createObject(StringView name, simulator::Simulation& simulation, object::Object::Type type) const;
+    UniquePtr<object::Object> createObject(StringView name, simulation::Simulation& simulation, object::Object::Type type) const;
 
 
     /**

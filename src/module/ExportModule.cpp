@@ -38,7 +38,7 @@ namespace module {
 
 /* ************************************************************************ */
 
-bool ExportModule::isActive(IterationType it) const noexcept
+bool ExportModule::isActive(simulation::IterationType it) const noexcept
 {
     // No limitation
     if (m_active.empty())
@@ -91,22 +91,22 @@ void ExportModule::terminate()
 
 /* ************************************************************************ */
 
-DynamicArray<IterationRange> ExportModule::parseActive(String str)
+DynamicArray<simulation::IterationRange> ExportModule::parseActive(String str)
 {
-    DynamicArray<IterationRange> res;
+    DynamicArray<simulation::IterationRange> res;
 
     io::InStringStream iss(std::move(str));
 
     while (true)
     {
-        IterationType it;
+        simulation::IterationType it;
 
         if (!(iss >> it))
             break;
 
         if (iss.peek() == '-')
         {
-            IterationType itEnd;
+            simulation::IterationType itEnd;
             iss.ignore();
             iss >> itEnd;
 

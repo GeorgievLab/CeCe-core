@@ -35,7 +35,7 @@
 // We don't need access to those objects, just define forward declaration
 namespace cece { namespace config { class Configuration; } }
 namespace cece { namespace plugin { class Repository; } }
-namespace cece { namespace simulator { class Simulation; } }
+namespace cece { namespace simulation { class Simulation; } }
 
 /* ************************************************************************ */
 
@@ -87,7 +87,7 @@ public:
      * @param      simulation  The simulation which imports the plugin.
      * @param[in]  config      Plugin import configuration.
      */
-    void onImport(simulator::Simulation& simulation, const config::Configuration& config) override
+    void onImport(simulation::Simulation& simulation, const config::Configuration& config) override
     {
         onImportCalled = true;
     }
@@ -98,7 +98,7 @@ public:
      *
      * @param      simulation  The simulation.
      */
-    void onRemove(simulator::Simulation& simulation) override
+    void onRemove(simulation::Simulation& simulation) override
     {
         onRemoveCalled = true;
     }
@@ -110,7 +110,7 @@ public:
      * @param simulation Current simulation.
      * @param config     Plugin configuration.
      */
-    void storeConfig(const simulator::Simulation& simulation, config::Configuration& config) const override
+    void storeConfig(const simulation::Simulation& simulation, config::Configuration& config) const override
     {
         storeConfigCalled = true;
     }
@@ -140,7 +140,7 @@ TEST(Api, dummy)
     // No access to those objects, just for passing references to the functions.
     RepositoryRecord* record = nullptr;
     config::Configuration* config = nullptr;
-    simulator::Simulation* sim = nullptr;
+    simulation::Simulation* sim = nullptr;
 
     api->onLoad(*record);
     api->onUnload(*record);
@@ -163,7 +163,7 @@ TEST(Api, virtualFunctions)
     // No access to those objects, just for passing references to the functions.
     RepositoryRecord* record = nullptr;
     config::Configuration* config = nullptr;
-    simulator::Simulation* sim = nullptr;
+    simulation::Simulation* sim = nullptr;
 
     EXPECT_FALSE(api->onLoadCalled);
     base->onLoad(*record);

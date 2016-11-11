@@ -36,7 +36,7 @@
 
 /* ************************************************************************ */
 
-namespace cece { namespace simulator { class Simulation; } }
+namespace cece { namespace simulation { class Simulation; } }
 
 /* ************************************************************************ */
 
@@ -70,7 +70,7 @@ public:
      *
      * @throw ObjectFactoryNotFoundException In case of factory with given name doesn't exists.
      */
-    UniquePtr<Object> createObject(StringView name, simulator::Simulation& simulation, Object::Type type) const;
+    UniquePtr<Object> createObject(StringView name, simulation::Simulation& simulation, Object::Type type) const;
 
 };
 

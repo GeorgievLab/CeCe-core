@@ -39,12 +39,12 @@
 
 /* ************************************************************************ */
 
-namespace cece { namespace simulator { class Simulation; } }
+namespace cece { namespace simulation { class Simulation; } }
 namespace cece { namespace config { class Configuration; } }
 
 #ifdef CECE_RENDER
 namespace cece { namespace render { class Context; } }
-namespace cece { namespace simulator { class Visualization; } }
+namespace cece { namespace simulation { class Visualization; } }
 #endif
 
 /* ************************************************************************ */
@@ -110,7 +110,7 @@ public:
      *
      * @param simulation
      */
-    explicit Module(simulator::Simulation& simulation);
+    explicit Module(simulation::Simulation& simulation);
 
 
     /**
@@ -128,7 +128,7 @@ public:
      *
      * @return
      */
-    simulator::Simulation& getSimulation() const noexcept
+    simulation::Simulation& getSimulation() const noexcept
     {
         return m_simulation;
     }
@@ -244,7 +244,7 @@ public:
      * @param visualization Visualization context.
      * @param context       Rendering context.
      */
-    virtual void draw(const simulator::Visualization& visualization, render::Context& context);
+    virtual void draw(const simulation::Visualization& visualization, render::Context& context);
 
 
     /**
@@ -264,7 +264,7 @@ public:
      * call and are used for rendering.
      * @param visualization Visualization context.
      */
-    virtual void drawStoreState(const simulator::Visualization& visualization);
+    virtual void drawStoreState(const simulation::Visualization& visualization);
 
 
     /**
@@ -292,7 +292,7 @@ public:
 private:
 
     /// Simulation reference.
-    simulator::Simulation& m_simulation;
+    simulation::Simulation& m_simulation;
 
     /// Module update priority.
     PriorityType m_priority = 0;

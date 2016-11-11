@@ -331,7 +331,7 @@ public:
      * @return     A pointer to created module.
      * @throws     Exception  If module cannot be created.
      */
-    UniquePtr<module::Module> createModule(StringView name, simulator::Simulation& simulation) const;
+    UniquePtr<module::Module> createModule(StringView name, simulation::Simulation& simulation) const;
 
 
     /**
@@ -347,7 +347,7 @@ public:
      * @return     A pointer to created module.
      * @throws     Exception  If module cannot be created.
      */
-    UniquePtr<object::Object> createObject(StringView name, simulator::Simulation& simulation, object::Object::Type type) const;
+    UniquePtr<object::Object> createObject(StringView name, simulation::Simulation& simulation, object::Object::Type type) const;
 
 
     /**

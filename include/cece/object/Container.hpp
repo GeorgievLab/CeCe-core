@@ -348,7 +348,7 @@ public:
      * @brief Store objects drawing state.
      * @param visualization Visualization context.
      */
-    void drawStoreState(const simulator::Visualization& visualization);
+    void drawStoreState(const simulation::Visualization& visualization);
 
 
     /**

@@ -37,14 +37,14 @@ Initializer::~Initializer() = default;
 
 /* ************************************************************************ */
 
-void Initializer::loadConfig(simulator::Simulation& simulation, const config::Configuration& config)
+void Initializer::loadConfig(simulation::Simulation& simulation, const config::Configuration& config)
 {
     // Nothing to do
 }
 
 /* ************************************************************************ */
 
-void Initializer::storeConfig(const simulator::Simulation& simulation, config::Configuration& config) const
+void Initializer::storeConfig(const simulation::Simulation& simulation, config::Configuration& config) const
 {
     // Nothing to do
 }

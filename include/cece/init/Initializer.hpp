@@ -27,7 +27,7 @@
 
 /* ************************************************************************ */
 
-namespace cece { namespace simulator { class Simulation; } }
+namespace cece { namespace simulation { class Simulation; } }
 namespace cece { namespace config { class Configuration; } }
 
 /* ************************************************************************ */
@@ -68,7 +68,7 @@ public:
      * @param simulation Current simulation.
      * @param config     Source configuration.
      */
-    virtual void loadConfig(simulator::Simulation& simulation, const config::Configuration& config);
+    virtual void loadConfig(simulation::Simulation& simulation, const config::Configuration& config);
 
 
     /**
@@ -77,7 +77,7 @@ public:
      * @param simulation Current simulation.
      * @param config     Output configuration.
      */
-    virtual void storeConfig(const simulator::Simulation& simulation, config::Configuration& config) const;
+    virtual void storeConfig(const simulation::Simulation& simulation, config::Configuration& config) const;
 
 
     /**
@@ -85,7 +85,7 @@ public:
      *
      * @param simulation Simulation.
      */
-    virtual void init(simulator::Simulation& simulation) const = 0;
+    virtual void init(simulation::Simulation& simulation) const = 0;
 
 };
 

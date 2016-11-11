@@ -72,7 +72,7 @@ void Container::terminate()
 /* ************************************************************************ */
 
 #ifdef CECE_RENDER
-void Container::draw(const simulator::Visualization& visualization, render::Context& context)
+void Container::draw(const simulation::Visualization& visualization, render::Context& context)
 {
     const RenderState& state = m_drawableState.getFront();
 
@@ -93,7 +93,7 @@ void Container::draw(const simulator::Visualization& visualization, render::Cont
 /* ************************************************************************ */
 
 #ifdef CECE_RENDER
-void Container::drawStoreState(const simulator::Visualization& visualization)
+void Container::drawStoreState(const simulation::Visualization& visualization)
 {
     RenderState& state = m_drawableState.getBack();
     state.modules.clear();

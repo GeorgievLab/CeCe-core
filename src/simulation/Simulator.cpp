@@ -24,22 +24,60 @@
 /* ************************************************************************ */
 
 // Declaration
-#include "cece/init/Container.hpp"
+#include "cece/simulator/Simulator.hpp"
+
+// C++
+#include <chrono>
+#ifdef __MINGW32__
+// MinGW has issue with undefined reference to __impl_nanosleep (nanosleep function)
+#undef _GLIBCXX_USE_NANOSLEEP
+#endif
+#include <thread>
 
 // CeCe
-#include "cece/init/Initializer.hpp"
+#include "cece/Assert.hpp"
+#include "cece/simulation/Simulation.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
-namespace init {
+namespace simulator {
 
 /* ************************************************************************ */
 
-void Container::init(simulation::Simulation& simulation) const
+void Simulator::start()
 {
-    invoke(&Initializer::init, simulation);
+    m_isRunning = true;
+
+    while (m_isRunning)
+        update();
 }
+
+/* ************************************************************************ */
+
+bool Simulator::update()
+{
+    CECE_ASSERT(m_simulation);
+    return m_simulation->update();
+}
+
+/* ************************************************************************ */
+
+#ifdef CECE_RENDER
+void Simulator::draw(unsigned int width, unsigned int height)
+{
+    // Delete old objects
+    m_renderContext.deleteReleasedObjects();
+
+    // Start frame
+    m_renderContext.frameBegin(width, height);
+
+    CECE_ASSERT(m_simulation);
+    m_simulation->draw(m_renderContext);
+
+    m_renderContext.frameEnd();
+}
+#endif
 
 /* ************************************************************************ */
 

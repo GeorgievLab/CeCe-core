@@ -39,7 +39,7 @@
 
 namespace cece {
     inline namespace core   { class Parameters; }
-    namespace simulator     { class Simulation; }
+    namespace simulation    { class Simulation; }
     namespace plugin        { class Manager; }
 }
 
@@ -82,7 +82,7 @@ public:
      *
      * @return Pointer to created simulation.
      */
-    virtual UniquePtr<simulator::Simulation> fromFile(
+    virtual UniquePtr<simulation::Simulation> fromFile(
         const plugin::Manager& manager, const io::FilePath& filename,
         ViewPtr<const Parameters> parameters = nullptr) const;
 
@@ -95,7 +95,7 @@ public:
      *
      * @return Pointer to created simulation.
      */
-    virtual UniquePtr<simulator::Simulation> fromSource(
+    virtual UniquePtr<simulation::Simulation> fromSource(
         const plugin::Manager& manager,
         const String& source, const io::FilePath& filename = "<source>",
         ViewPtr<const Parameters> parameters = nullptr) const;
@@ -107,7 +107,7 @@ public:
      * @param simulation Source simulation.
      * @param filename   Path to source file.
      */
-    virtual void toFile(const simulator::Simulation& simulation,
+    virtual void toFile(const simulation::Simulation& simulation,
         const io::FilePath& filename) const;
 
 
@@ -118,7 +118,7 @@ public:
      *
      * @return Source code.
      */
-    virtual String toSource(const simulator::Simulation& simulation,
+    virtual String toSource(const simulation::Simulation& simulation,
         const io::FilePath& filename = "<source>") const;
 
 
@@ -132,7 +132,7 @@ public:
      *
      * @return Created simulation.
      */
-    virtual UniquePtr<simulator::Simulation> fromStream(
+    virtual UniquePtr<simulation::Simulation> fromStream(
         const plugin::Manager& manager, io::InStream& is,
         const io::FilePath& filename = "<stream>",
         ViewPtr<const Parameters> parameters = nullptr) const = 0;
@@ -144,7 +144,7 @@ public:
      * @param os         Output stream.
      * @param simulation Source simulation.
      */
-    virtual void toStream(io::OutStream& os, const simulator::Simulation& simulation,
+    virtual void toStream(io::OutStream& os, const simulation::Simulation& simulation,
         const io::FilePath& filename = "<stream>") const = 0;
 
 };

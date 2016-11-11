@@ -23,12 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// C++
-#include <cstddef>
+#if _MSC_VER
+#pragma message("Include 'cece/simulation/IterationType.hpp' instead")
+#else
+#warning "Include 'cece/simulation/IterationType.hpp' instead"
+#endif
+#include "cece/simulation/IterationType.hpp"
 
 /* ************************************************************************ */
 
@@ -37,10 +37,7 @@ inline namespace core {
 
 /* ************************************************************************ */
 
-/**
- * @brief Type for iteration type.
- */
-using IterationType = std::size_t;
+using simulation::IterationType;
 
 /* ************************************************************************ */
 

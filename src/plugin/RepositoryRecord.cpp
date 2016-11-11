@@ -54,14 +54,14 @@ UniquePtr<init::Initializer> RepositoryRecord::createInitializer(StringView name
 
 /* ************************************************************************ */
 
-UniquePtr<module::Module> RepositoryRecord::createModule(StringView name, simulator::Simulation& simulation) const
+UniquePtr<module::Module> RepositoryRecord::createModule(StringView name, simulation::Simulation& simulation) const
 {
     return m_moduleFactoryManager.createModule(name, simulation);
 }
 
 /* ************************************************************************ */
 
-UniquePtr<object::Object> RepositoryRecord::createObject(StringView name, simulator::Simulation& simulation, object::Object::Type type) const
+UniquePtr<object::Object> RepositoryRecord::createObject(StringView name, simulation::Simulation& simulation, object::Object::Type type) const
 {
     return m_objectFactoryManager.createObject(name, simulation, type);
 }

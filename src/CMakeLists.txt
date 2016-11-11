@@ -70,7 +70,7 @@ if (CECE_RENDER)
 endif ()
 
 # Simulation files
-add_subdirectory(simulator)
+add_subdirectory(simulation)
 
 # ######################################################################### #
 

@@ -23,61 +23,70 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-// Declaration
-#include "cece/simulator/Simulator.hpp"
+#pragma once
 
-// C++
-#include <chrono>
-#ifdef __MINGW32__
-// MinGW has issue with undefined reference to __impl_nanosleep (nanosleep function)
-#undef _GLIBCXX_USE_NANOSLEEP
-#endif
-#include <thread>
+/* ************************************************************************ */
 
 // CeCe
-#include "cece/Assert.hpp"
-#include "cece/simulator/Simulation.hpp"
+#include "cece/ViewPtr.hpp"
+#include "cece/StringView.hpp"
+#include "cece/io/OutStream.hpp"
+#include "cece/perf/TimeMeasurement.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
-namespace simulator {
+namespace simulation {
 
 /* ************************************************************************ */
 
-void Simulator::start()
-{
-    m_isRunning = true;
-
-    while (m_isRunning)
-        update();
-}
+class Simulation;
 
 /* ************************************************************************ */
 
-bool Simulator::update()
+/**
+ * @brief Time measurement functor with printing current iteration.
+ */
+struct TimeMeasurement
 {
-    CECE_ASSERT(m_simulation);
-    return m_simulation->update();
-}
+    /// Simulation.
+    ViewPtr<const Simulation> m_simulation;
 
-/* ************************************************************************ */
 
-#ifdef CECE_RENDER
-void Simulator::draw(unsigned int width, unsigned int height)
-{
-    // Delete old objects
-    m_renderContext.deleteReleasedObjects();
+    /**
+     * @brief Constructor.
+     *
+     * @param sim Simulation.
+     */
+    explicit TimeMeasurement(ViewPtr<const Simulation> sim)
+        : m_simulation(sim)
+    {
+        // Nothing to do
+    }
 
-    // Start frame
-    m_renderContext.frameBegin(width, height);
 
-    CECE_ASSERT(m_simulation);
-    m_simulation->draw(m_renderContext);
+    /**
+     * @brief Constructor.
+     *
+     * @param sim Simulation
+     */
+    explicit TimeMeasurement(const Simulation& sim)
+        : m_simulation(&sim)
+    {
+        // Nothing to do
+    }
 
-    m_renderContext.frameEnd();
-}
-#endif
+
+    /**
+     * @brief Functor function.
+     *
+     * @param out  Output stream.
+     * @param name Measurement name.
+     * @param dt   Measured time.
+     */
+    void operator()(io::OutStream& out, StringView name, perf::Clock::duration dt) const noexcept;
+
+};
 
 /* ************************************************************************ */
 

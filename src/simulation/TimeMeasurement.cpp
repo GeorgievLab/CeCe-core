@@ -24,79 +24,28 @@
 /* ************************************************************************ */
 
 // Declaration
-#include "cece/simulator/Visualization.hpp"
-
-// C++
-#include <algorithm>
+#include "cece/simulation/TimeMeasurement.hpp"
 
 // CeCe
-#include "cece/config/Configuration.hpp"
-
-/* ************************************************************************ */
-
-#ifdef CECE_RENDER
+#include "cece/simulation/Simulation.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
-namespace simulator {
+namespace simulation {
 
 /* ************************************************************************ */
 
-bool Visualization::isEnabled(StringView name, bool def) const noexcept
+void TimeMeasurement::operator()(io::OutStream& out, StringView name, perf::Clock::duration dt) const noexcept
 {
-    if (name.getLength() == 0)
-        return def;
-
-    auto it = std::find_if(m_layers.begin(), m_layers.end(), [&](const VisualizationLayer& layer) {
-        return layer.getName() == name;
-    });
-
-    if (it == m_layers.end())
-        return def;
-
-    return it->isEnabled();
-}
-
-/* ************************************************************************ */
-
-void Visualization::loadConfig(const config::Configuration& config)
-{
-    setEnabled(config.get("enabled", isEnabled()));
-    setBackgroundColor(config.get("background", getBackgroundColor()));
-
-    m_layers.clear();
-
-    // Foreach layers
-    for (const auto& layer : config.getConfigurations("layer"))
-    {
-        m_layers.emplace_back(layer.get("name"), layer.get("key", String{}), layer.get("enabled", false));
-    }
-}
-
-/* ************************************************************************ */
-
-void Visualization::storeConfig(config::Configuration& config) const
-{
-    config.set("enabled", isEnabled());
-    config.set("background", getBackgroundColor());
-
-    for (const auto& layer : getLayers())
-    {
-        auto layerConfig = config.addConfiguration("layer");
-        layerConfig.set("name", layer.getName());
-        layerConfig.set("key", layer.getKey());
-        layerConfig.set("enabled", layer.isEnabled());
-    }
+    using namespace std::chrono;
+    #pragma omp critical
+    out << name.getData() << ";" << m_simulation->getIteration() << ";" << duration_cast<microseconds>(dt).count() << "\n";
 }
 
 /* ************************************************************************ */
 
 }
 }
-
-/* ************************************************************************ */
-
-#endif
 
 /* ************************************************************************ */

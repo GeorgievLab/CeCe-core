@@ -36,7 +36,7 @@ namespace object {
 
 /* ************************************************************************ */
 
-UniquePtr<Object> FactoryManager::createObject(StringView name, simulator::Simulation& simulation, Object::Type type) const
+UniquePtr<Object> FactoryManager::createObject(StringView name, simulation::Simulation& simulation, Object::Type type) const
 {
     return factory::FactoryManager<Factory>::createObject<Object>(name, simulation, String(name), type);
 }

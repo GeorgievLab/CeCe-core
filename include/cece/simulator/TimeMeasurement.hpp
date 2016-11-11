@@ -23,15 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// CeCe
-#include "cece/ViewPtr.hpp"
-#include "cece/StringView.hpp"
-#include "cece/io/OutStream.hpp"
-#include "cece/perf/TimeMeasurement.hpp"
+#if _MSC_VER
+#pragma message("Include 'cece/simulation/TimeMeasurement.hpp' instead")
+#else
+#warning "Include 'cece/simulation/TimeMeasurement.hpp' instead"
+#endif
+#include "cece/simulation/TimeMeasurement.hpp"
 
 /* ************************************************************************ */
 
@@ -40,53 +37,7 @@ namespace simulator {
 
 /* ************************************************************************ */
 
-class Simulation;
-
-/* ************************************************************************ */
-
-/**
- * @brief Time measurement functor with printing current iteration.
- */
-struct TimeMeasurement
-{
-    /// Simulation.
-    ViewPtr<const Simulation> m_simulation;
-
-
-    /**
-     * @brief Constructor.
-     *
-     * @param sim Simulation.
-     */
-    explicit TimeMeasurement(ViewPtr<const Simulation> sim)
-        : m_simulation(sim)
-    {
-        // Nothing to do
-    }
-
-
-    /**
-     * @brief Constructor.
-     *
-     * @param sim Simulation
-     */
-    explicit TimeMeasurement(const Simulation& sim)
-        : m_simulation(&sim)
-    {
-        // Nothing to do
-    }
-
-
-    /**
-     * @brief Functor function.
-     *
-     * @param out  Output stream.
-     * @param name Measurement name.
-     * @param dt   Measured time.
-     */
-    void operator()(io::OutStream& out, StringView name, perf::Clock::duration dt) const noexcept;
-
-};
+using simulation::TimeMeasurement;
 
 /* ************************************************************************ */
 

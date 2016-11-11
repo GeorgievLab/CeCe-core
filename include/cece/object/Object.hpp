@@ -62,8 +62,8 @@ class b2Joint;
 
 namespace cece {
     namespace config    { class Configuration; }
-    namespace simulator { class Simulation; }
-    namespace simulator { class Visualization; }
+    namespace simulation { class Simulation; }
+    namespace simulation { class Visualization; }
 }
 
 /* ************************************************************************ */
@@ -138,7 +138,7 @@ public:
      * @param typeName   Type name of the object.
      * @param type       Object type.
      */
-    explicit Object(simulator::Simulation& simulation, String typeName = "simulator.Object", Type type = Type::Static) noexcept;
+    explicit Object(simulation::Simulation& simulation, String typeName = "simulation.Object", Type type = Type::Static) noexcept;
 
 
     /**
@@ -178,7 +178,7 @@ public:
      *
      * @return
      */
-    simulator::Simulation& getSimulation() noexcept
+    simulation::Simulation& getSimulation() noexcept
     {
         return m_simulation;
     }
@@ -189,7 +189,7 @@ public:
      *
      * @return
      */
-    const simulator::Simulation& getSimulation() const noexcept
+    const simulation::Simulation& getSimulation() const noexcept
     {
         return m_simulation;
     }
@@ -722,7 +722,7 @@ public:
      * @param config
      * @param simulation
      */
-    virtual void configure(const config::Configuration& config, simulator::Simulation& simulation);
+    virtual void configure(const config::Configuration& config, simulation::Simulation& simulation);
 
 
     /**
@@ -738,7 +738,7 @@ public:
      * @param visualization Visualization context.
      * @param context Render context.
      */
-    virtual void draw(const simulator::Visualization& visualization, render::Context& context);
+    virtual void draw(const simulation::Visualization& visualization, render::Context& context);
 
 
     /**
@@ -756,7 +756,7 @@ public:
      * call and are used for rendering.
      * @param visualization Visualization context.
      */
-    virtual void drawStoreState(const simulator::Visualization& visualization);
+    virtual void drawStoreState(const simulation::Visualization& visualization);
 
 
     /**
@@ -784,7 +784,7 @@ public:
 private:
 
     /// Owning simulation.
-    simulator::Simulation& m_simulation;
+    simulation::Simulation& m_simulation;
 
     /// Object real type name.
     String m_realTypeName;

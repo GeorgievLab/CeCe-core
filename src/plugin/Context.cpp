@@ -40,7 +40,7 @@
 #include "cece/module/Module.hpp"
 #include "cece/object/Object.hpp"
 #include "cece/program/Program.hpp"
-#include "cece/simulator/Simulation.hpp"
+#include "cece/simulation/Simulation.hpp"
 
 /* ************************************************************************ */
 
@@ -227,7 +227,7 @@ UniquePtr<init::Initializer> Context::createInitializer(StringView name) const
 
 /* ************************************************************************ */
 
-UniquePtr<module::Module> Context::createModule(StringView name, simulator::Simulation& simulation) const
+UniquePtr<module::Module> Context::createModule(StringView name, simulation::Simulation& simulation) const
 {
     return createHelper<module::Module>(*this, "Module", String(name),
         [&](const RepositoryRecord& rec) {
@@ -240,7 +240,7 @@ UniquePtr<module::Module> Context::createModule(StringView name, simulator::Simu
 
 /* ************************************************************************ */
 
-UniquePtr<object::Object> Context::createObject(StringView name, simulator::Simulation& simulation, object::Object::Type type) const
+UniquePtr<object::Object> Context::createObject(StringView name, simulation::Simulation& simulation, object::Object::Type type) const
 {
     return createHelper<object::Object>(*this, "Object", String(name),
         [&](const RepositoryRecord& rec) {

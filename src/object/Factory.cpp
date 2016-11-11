@@ -31,6 +31,6 @@
 
 /* ************************************************************************ */
 
-CECE_FACTORY_INST(object::Object, simulator::Simulation&, String, object::Object::Type)
+CECE_FACTORY_INST(object::Object, simulation::Simulation&, String, object::Object::Type)
 
 /* ************************************************************************ */

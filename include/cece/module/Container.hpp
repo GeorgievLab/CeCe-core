@@ -42,7 +42,7 @@
 
 #ifdef CECE_RENDER
 namespace cece { namespace render { class Context; } }
-namespace cece { namespace simulator { class Visualization; } }
+namespace cece { namespace simulation { class Visualization; } }
 #endif
 
 /* ************************************************************************ */
@@ -95,14 +95,14 @@ public:
      * @param visualization Visualization context.
      * @param context       Rendering context.
      */
-    void draw(const simulator::Visualization& visualization, render::Context& context);
+    void draw(const simulation::Visualization& visualization, render::Context& context);
 
 
     /**
      * @brief Store modules drawing state.
      * @param visualization Visualization context.
      */
-    void drawStoreState(const simulator::Visualization& visualization);
+    void drawStoreState(const simulation::Visualization& visualization);
 
 
     /**

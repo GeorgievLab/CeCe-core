@@ -92,12 +92,20 @@ using SizeVector = Vector<Length>;
 
 /* ************************************************************************ */
 
+namespace math {
+
+/* ************************************************************************ */
+
 extern template class BasicVector<unit::Length, config::DIMENSION>;
 extern template class BasicVector<unit::Velocity, config::DIMENSION>;
 extern template class BasicVector<unit::Acceleration, config::DIMENSION>;
 extern template class BasicVector<unit::Force, config::DIMENSION>;
 extern template class BasicVector<unit::Impulse, config::DIMENSION>;
 extern template class BasicVector<RealType, config::DIMENSION>;
+
+/* ************************************************************************ */
+
+}
 
 /* ************************************************************************ */
 

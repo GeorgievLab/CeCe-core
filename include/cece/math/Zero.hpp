@@ -23,22 +23,20 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#if _MSC_VER
-#pragma message("Include 'cece/math/ShapeToGrid.hpp' instead")
-#else
-#warning "Include 'cece/math/ShapeToGrid.hpp' instead"
-#endif
-#include "cece/math/ShapeToGrid.hpp"
+#pragma once
 
 /* ************************************************************************ */
 
 namespace cece {
-inline namespace core {
+namespace math {
 
 /* ************************************************************************ */
 
-using math::mapShapeToGrid;
-using math::mapShapeBorderToGrid;
+/**
+ * @brief Special value used by other types to check if value is zero. The idea is
+ * similar with nullptr (nullptr_t).
+ */
+constexpr struct Zero_t {} Zero{};
 
 /* ************************************************************************ */
 

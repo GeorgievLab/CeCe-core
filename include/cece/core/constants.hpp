@@ -23,12 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// CeCe
-#include "cece/core/Real.hpp"
+#if _MSC_VER
+#pragma message("Include 'cece/math/constants.hpp' instead")
+#else
+#warning "Include 'cece/math/constants.hpp' instead"
+#endif
+#include "cece/math/constants.hpp"
 
 /* ************************************************************************ */
 
@@ -38,17 +38,8 @@ namespace constants {
 
 /* ************************************************************************ */
 
-/**
- * @brief PI constant.
- */
-static constexpr RealType PI = 3.14159265359;
-
-/* ************************************************************************ */
-
-/**
- * @brief Euler number constant.
- */
-static constexpr RealType E = 2.718281828459;
+using math::PI;
+using math::E;
 
 /* ************************************************************************ */
 

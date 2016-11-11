@@ -23,7 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
+#if _MSC_VER
+#pragma message("Include 'cece/math/Zero.hpp' instead")
+#else
+#warning "Include 'cece/math/Zero.hpp' instead"
+#endif
+#include "cece/math/Zero.hpp"
 
 /* ************************************************************************ */
 
@@ -32,11 +37,8 @@ inline namespace core {
 
 /* ************************************************************************ */
 
-/**
- * @brief Special value used by other types to check if value is zero. The idea is
- * similar with nullptr (nullptr_t).
- */
-constexpr struct Zero_t {} Zero{};
+using math::Zero;
+using math::Zero_t;
 
 /* ************************************************************************ */
 

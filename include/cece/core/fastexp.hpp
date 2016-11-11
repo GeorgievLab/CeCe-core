@@ -23,13 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// C++
-#include <cmath>
-#include <cstdint>
+#if _MSC_VER
+#pragma message("Include 'cece/math/fastexp.hpp' instead")
+#else
+#warning "Include 'cece/math/fastexp.hpp' instead"
+#endif
+#include "cece/math/fastexp.hpp"
 
 /* ************************************************************************ */
 
@@ -38,37 +37,7 @@ inline namespace core {
 
 /* ************************************************************************ */
 
-/**
- * @brief Fast version of exp function.
- *
- * @param arg
- *
- * @return
- *
- * @see A Fast, Compact Approximation of the Exponential Function
- */
-inline double fastexp(double arg) noexcept
-{
-    union {
-        double d;
-        struct {
-// FIXME: only GCC (and Clang)?
-#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-            int32_t j, i;
-#else
-            int32_t i, j;
-#endif
-        } n;
-    } eco;
-
-    // TODO: replace log(2) by constant
-    const int32_t EXP_A = 1048576 / log(2);
-    constexpr int32_t EXP_C = 60801;
-
-    eco.n.i = EXP_A * arg + (1072693248 - EXP_C);
-
-    return eco.d;
-}
+using math::fastexp;
 
 /* ************************************************************************ */
 

@@ -23,22 +23,31 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#if _MSC_VER
-#pragma message("Include 'cece/math/ShapeToGrid.hpp' instead")
-#else
-#warning "Include 'cece/math/ShapeToGrid.hpp' instead"
-#endif
-#include "cece/math/ShapeToGrid.hpp"
+#pragma once
+
+/* ************************************************************************ */
+
+// CeCe
+#include "cece/core/Real.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
-inline namespace core {
+namespace math {
 
 /* ************************************************************************ */
 
-using math::mapShapeToGrid;
-using math::mapShapeBorderToGrid;
+/**
+ * @brief PI constant.
+ */
+constexpr RealType PI = 3.14159265359;
+
+/* ************************************************************************ */
+
+/**
+ * @brief Euler number constant.
+ */
+constexpr RealType E = 2.718281828459;
 
 /* ************************************************************************ */
 

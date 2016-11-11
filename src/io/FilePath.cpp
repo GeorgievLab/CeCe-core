@@ -82,6 +82,46 @@ String fromWide(const std::wstring& str)
 
 /* ************************************************************************ */
 
+#ifdef _WIN32
+String normalize(String str)
+{
+    // Replace back slashes with forward slashes
+    for (auto& c : str)
+    {
+        if (c == '\\')
+            c = '/';
+    }
+
+    return str;
+}
+#endif
+
+/* ************************************************************************ */
+
+}
+
+/* ************************************************************************ */
+
+FilePath::FilePath(String source)
+#ifdef _WIN32
+    : m_path(normalize(std::move(source)))
+#else
+    : m_path(std::move(source))
+#endif
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+FilePath::FilePath(const char* source)
+#ifdef _WIN32
+    : m_path(normalize(source))
+#else
+    : m_path(source)
+#endif
+{
+    // Nothing to do
 }
 
 /* ************************************************************************ */

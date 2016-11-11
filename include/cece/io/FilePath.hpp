@@ -72,11 +72,7 @@ public:
      *
      * @param      source  The source path.
      */
-    FilePath(String source)
-        : m_path(std::move(source))
-    {
-        // Nothing to do
-    }
+    FilePath(String source);
 
 
     /**
@@ -84,11 +80,7 @@ public:
      *
      * @param      source  The source path.
      */
-    FilePath(const char* source)
-        : m_path(source)
-    {
-        // Nothing to do
-    }
+    FilePath(const char* source);
 
 
 // Public Operators

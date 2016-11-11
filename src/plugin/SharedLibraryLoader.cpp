@@ -27,7 +27,7 @@
 #include "cece/plugin/SharedLibraryLoader.hpp"
 
 // CeCe
-#include "cece/config.hpp"
+#include "cece/common.hpp"
 #include "cece/Assert.hpp"
 #include "cece/ViewPtr.hpp"
 #include "cece/log/Log.hpp"
@@ -77,10 +77,10 @@ void checkConfig(const os::SharedLibrary& lib)
     if (!config)
         throw InvalidPluginException(path, "Returns no config");
 
-    if (config->apiVersion != config::PLUGIN_API_VERSION)
+    if (config->apiVersion != PLUGIN_API_VERSION)
         throw InvalidPluginException(path, "Built against different API version than CeCe");
 
-    if (config->realSize != sizeof(config::RealType))
+    if (config->realSize != sizeof(RealType))
         throw InvalidPluginException(path, "Built with different real type than CeCe");
 
 #ifdef CECE_RENDER

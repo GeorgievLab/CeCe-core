@@ -27,31 +27,42 @@
 
 /* ************************************************************************ */
 
-// CeCe
-#include "cece/common.hpp"
-
-/* ************************************************************************ */
+/**
+ * This file contains CeCe simulator version.
+ */
 
 namespace cece {
-namespace math {
 
 /* ************************************************************************ */
 
 /**
- * @brief PI constant.
+ * @brief CeCe version string.
  */
-constexpr RealType PI = 3.14159265359;
+constexpr auto VERSION_STRING = "${PROJECT_VERSION}";
 
 /* ************************************************************************ */
 
 /**
- * @brief Euler number constant.
+ * @brief CeCe major version.
  */
-constexpr RealType E = 2.718281828459;
+constexpr int VERSION_MAJOR = ${PROJECT_VERSION_MAJOR};
 
 /* ************************************************************************ */
 
-}
+/**
+ * @brief CeCe minor version.
+ */
+constexpr int VERSION_MINOR = ${PROJECT_VERSION_MINOR};
+
+/* ************************************************************************ */
+
+/**
+ * @brief CeCe patch version.
+ */
+constexpr int VERSION_PATCH = ${PROJECT_VERSION_PATCH};
+
+/* ************************************************************************ */
+
 }
 
 /* ************************************************************************ */

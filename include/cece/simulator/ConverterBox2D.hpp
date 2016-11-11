@@ -35,15 +35,11 @@
 
 /* ************************************************************************ */
 
-// CeCe config
-#include "cece/config.hpp"
-
-/* ************************************************************************ */
-
 // Box2D
 #include <Box2D/Box2D.h>
 
 // CeCe
+#include "cece/common.hpp"
 #include "cece/unit/Units.hpp"
 #include "cece/unit/UnitsCtors.hpp"
 #include "cece/unit/VectorUnits.hpp"

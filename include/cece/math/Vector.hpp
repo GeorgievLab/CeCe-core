@@ -32,9 +32,8 @@
 #include <type_traits>
 
 // CeCe
-#include "cece/config.hpp"
+#include "cece/common.hpp"
 #include "cece/Assert.hpp"
-#include "cece/core/Real.hpp"
 #include "cece/StaticArray.hpp"
 #include "cece/math/Zero.hpp"
 #include "cece/io/InStream.hpp"
@@ -1560,7 +1559,7 @@ private:
  * @brief Basic vector.
  */
 template<typename T>
-using Vector = BasicVector<T, config::DIMENSION>;
+using Vector = BasicVector<T, DIMENSION>;
 
 /* ************************************************************************ */
 
@@ -2605,9 +2604,9 @@ io::OutStream& operator<<(io::OutStream& os, const BasicVector<T, N>& vector) no
 
 /* ************************************************************************ */
 
-extern template class BasicVector<RealType, config::DIMENSION>;
-extern template class BasicVector<unsigned int, config::DIMENSION>;
-extern template class BasicVector<int, config::DIMENSION>;
+extern template class BasicVector<RealType, DIMENSION>;
+extern template class BasicVector<unsigned int, DIMENSION>;
+extern template class BasicVector<int, DIMENSION>;
 
 /* ************************************************************************ */
 

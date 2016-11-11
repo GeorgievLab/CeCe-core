@@ -38,7 +38,6 @@
 
 // CeCe
 #include "cece/Assert.hpp"
-#include "cece/core/Real.hpp"
 #include "cece/Exception.hpp"
 #include "cece/log/Log.hpp"
 #include "cece/unit/UnitIo.hpp"

@@ -33,12 +33,12 @@ namespace math {
 
 /* ************************************************************************ */
 
-template class BasicVector<unit::Length, config::DIMENSION>;
-template class BasicVector<unit::Velocity, config::DIMENSION>;
-template class BasicVector<unit::Acceleration, config::DIMENSION>;
-template class BasicVector<unit::Force, config::DIMENSION>;
-template class BasicVector<unit::Impulse, config::DIMENSION>;
-template class BasicVector<RealType, config::DIMENSION>;
+template class BasicVector<unit::Length, DIMENSION>;
+template class BasicVector<unit::Velocity, DIMENSION>;
+template class BasicVector<unit::Acceleration, DIMENSION>;
+template class BasicVector<unit::Force, DIMENSION>;
+template class BasicVector<unit::Impulse, DIMENSION>;
+template class BasicVector<RealType, DIMENSION>;
 
 /* ************************************************************************ */
 

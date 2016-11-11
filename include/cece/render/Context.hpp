@@ -27,19 +27,9 @@
 
 /* ************************************************************************ */
 
-// CeCe config
-#include "cece/config.hpp"
-
-/* ************************************************************************ */
-
-#ifndef CECE_RENDER
-#error Rendering part requires enabled rendering.
-#endif
-
-/* ************************************************************************ */
-
 // CeCe
-#include "cece/core/Real.hpp"
+#define CECE_RENDER_REQUIRE
+#include "cece/common.hpp"
 #include "cece/DynamicArray.hpp"
 #include "cece/UniquePtr.hpp"
 #include "cece/unit/Units.hpp"

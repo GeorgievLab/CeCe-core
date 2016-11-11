@@ -28,7 +28,7 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/Real.hpp"
+#include "cece/common.hpp"
 #include "cece/math/Vector.hpp"
 #include "cece/unit/Units.hpp"
 
@@ -96,12 +96,12 @@ namespace math {
 
 /* ************************************************************************ */
 
-extern template class BasicVector<unit::Length, config::DIMENSION>;
-extern template class BasicVector<unit::Velocity, config::DIMENSION>;
-extern template class BasicVector<unit::Acceleration, config::DIMENSION>;
-extern template class BasicVector<unit::Force, config::DIMENSION>;
-extern template class BasicVector<unit::Impulse, config::DIMENSION>;
-extern template class BasicVector<RealType, config::DIMENSION>;
+extern template class BasicVector<unit::Length, DIMENSION>;
+extern template class BasicVector<unit::Velocity, DIMENSION>;
+extern template class BasicVector<unit::Acceleration, DIMENSION>;
+extern template class BasicVector<unit::Force, DIMENSION>;
+extern template class BasicVector<unit::Impulse, DIMENSION>;
+extern template class BasicVector<RealType, DIMENSION>;
 
 /* ************************************************************************ */
 

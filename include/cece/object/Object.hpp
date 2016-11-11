@@ -31,7 +31,7 @@
 #include <functional>
 
 // CeCe
-#include "cece/config.hpp"
+#include "cece/common.hpp"
 #include "cece/Assert.hpp"
 #include "cece/SharedPtr.hpp"
 #include "cece/ViewPtr.hpp"

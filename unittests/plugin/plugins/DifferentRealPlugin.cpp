@@ -36,7 +36,7 @@ CECE_PLUGIN_DEFINE_CREATE(different_real_plugin, DifferentRealPluginApi)
 CECE_PLUGIN_GET_CONFIG_PROTOTYPE(different_real_plugin)
 {
     static cece::plugin::Config config = {
-        cece::config::PLUGIN_API_VERSION,
+        cece::PLUGIN_API_VERSION,
         16, // 128bit float
         CECE_RENDER_VALUE,
         CECE_THREAD_SAFE_VALUE

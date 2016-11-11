@@ -27,15 +27,11 @@
 
 /* ************************************************************************ */
 
-// CeCe config
-#include "cece/config.hpp"
-
-/* ************************************************************************ */
-
 // C++
 #include <cstddef>
 
 // CeCe
+#include "cece/common.hpp"
 #include "cece/String.hpp"
 #include "cece/Map.hpp"
 #include "cece/UniquePtr.hpp"

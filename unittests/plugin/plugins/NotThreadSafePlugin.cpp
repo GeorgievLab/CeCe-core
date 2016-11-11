@@ -36,8 +36,8 @@ CECE_PLUGIN_DEFINE_CREATE(not_thread_safe_plugin, NotThreadSafePluginApi)
 CECE_PLUGIN_GET_CONFIG_PROTOTYPE(not_thread_safe_plugin)
 {
     static cece::plugin::Config config = {
-        cece::config::PLUGIN_API_VERSION,
-        sizeof(cece::config::RealType),
+        cece::PLUGIN_API_VERSION,
+        sizeof(cece::RealType),
         CECE_RENDER_VALUE,
         !CECE_THREAD_SAFE_VALUE
     };

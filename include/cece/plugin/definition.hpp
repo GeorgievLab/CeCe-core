@@ -28,7 +28,7 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/config.hpp"
+#include "cece/common.hpp"
 #include "cece/plugin/Config.hpp"
 
 /* ************************************************************************ */
@@ -139,16 +139,16 @@
  *
  * @return     Plugin get config function definition.
  */
-#define CECE_PLUGIN_DEFINE_GET_CONFIG(name)                       \
-    CECE_PLUGIN_GET_CONFIG_PROTOTYPE(name)                        \
-    {                                                             \
-        static cece::plugin::Config config = {                    \
-            cece::config::PLUGIN_API_VERSION, /* apiVersion */    \
-            sizeof(cece::config::RealType),   /* realSize */      \
-            CECE_RENDER_VALUE,                /* renderEnabled */ \
-            CECE_THREAD_SAFE_VALUE            /* threadSafe */    \
-        };                                                        \
-        return &config;                                           \
+#define CECE_PLUGIN_DEFINE_GET_CONFIG(name)                                    \
+    CECE_PLUGIN_GET_CONFIG_PROTOTYPE(name)                                     \
+    {                                                                          \
+        static cece::plugin::Config config = {                                 \
+            cece::PLUGIN_API_VERSION, /* apiVersion */                         \
+            sizeof(cece::RealType),   /* realSize */                           \
+            CECE_RENDER_VALUE,        /* renderEnabled */                      \
+            CECE_THREAD_SAFE_VALUE    /* threadSafe */                         \
+        };                                                                     \
+        return &config;                                                        \
     }
 
 /* ************************************************************************ */

@@ -28,7 +28,7 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/config.hpp"
+#include "cece/common.hpp"
 
 /* ************************************************************************ */
 
@@ -42,7 +42,7 @@ inline namespace core {
  *
  * @todo remove
  */
-using RealType = cece::config::RealType;
+using RealType = cece::RealType;
 
 /* ************************************************************************ */
 

@@ -33,9 +33,9 @@ namespace math {
 
 /* ************************************************************************ */
 
-template class BasicVector<RealType, config::DIMENSION>;
-template class BasicVector<unsigned int, config::DIMENSION>;
-template class BasicVector<int, config::DIMENSION>;
+template class BasicVector<RealType, DIMENSION>;
+template class BasicVector<unsigned int, DIMENSION>;
+template class BasicVector<int, DIMENSION>;
 
 /* ************************************************************************ */
 

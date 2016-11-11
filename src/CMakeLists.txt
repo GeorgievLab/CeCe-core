@@ -25,6 +25,7 @@
 
 # Create config file
 configure_file(config.hpp.in cece/config.hpp)
+configure_file(version.hpp.in cece/version.hpp)
 
 # ######################################################################### #
 

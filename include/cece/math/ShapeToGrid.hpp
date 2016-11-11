@@ -32,8 +32,8 @@
 #include <algorithm>
 
 // CeCe
+#include "cece/common.hpp"
 #include "cece/Assert.hpp"
-#include "cece/core/Real.hpp"
 #include "cece/math/Vector.hpp"
 #include "cece/math/Shape.hpp"
 #include "cece/unit/Units.hpp"

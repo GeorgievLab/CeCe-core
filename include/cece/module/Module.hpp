@@ -27,12 +27,8 @@
 
 /* ************************************************************************ */
 
-// CeCe config
-#include "cece/config.hpp"
-
-/* ************************************************************************ */
-
 // CeCe
+#include "cece/common.hpp"
 #include "cece/export.hpp"
 #include "cece/async/Atomic.hpp"
 #include "cece/unit/Units.hpp"

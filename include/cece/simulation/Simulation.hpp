@@ -28,7 +28,7 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/config.hpp"
+#include "cece/common.hpp"
 #include "cece/String.hpp"
 #include "cece/StringView.hpp"
 #include "cece/UniquePtr.hpp"

@@ -36,8 +36,8 @@ CECE_PLUGIN_DEFINE_CREATE(old_plugin, OldPluginApi)
 CECE_PLUGIN_GET_CONFIG_PROTOTYPE(old_plugin)
 {
     static cece::plugin::Config config = {
-        cece::config::PLUGIN_API_VERSION - 1, // Previous API version
-        sizeof(cece::config::RealType),
+        cece::PLUGIN_API_VERSION - 1, // Previous API version
+        sizeof(cece::RealType),
         CECE_RENDER_VALUE,
         CECE_THREAD_SAFE_VALUE
     };

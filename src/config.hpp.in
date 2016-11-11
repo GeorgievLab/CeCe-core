@@ -35,7 +35,6 @@
  */
 
 namespace cece {
-namespace config {
 
 /* ************************************************************************ */
 
@@ -48,6 +47,7 @@ namespace config {
 
 /**
  * @brief Enable renderer errors checking.
+ * @deprecated Private configuration, it doesn't affect others.
  */
 #cmakedefine CECE_RENDER_CHECK_ERRORS
 
@@ -68,34 +68,6 @@ using RealType = ${CECE_REAL_TYPE};
 /* ************************************************************************ */
 
 /**
- * @brief CeCe version string.
- */
-constexpr auto VERSION_STRING = "${PROJECT_VERSION}";
-
-/* ************************************************************************ */
-
-/**
- * @brief CeCe major version.
- */
-constexpr int VERSION_MAJOR = ${PROJECT_VERSION_MAJOR};
-
-/* ************************************************************************ */
-
-/**
- * @brief CeCe minor version.
- */
-constexpr int VERSION_MINOR = ${PROJECT_VERSION_MINOR};
-
-/* ************************************************************************ */
-
-/**
- * @brief CeCe patch version.
- */
-constexpr int VERSION_PATCH = ${PROJECT_VERSION_PATCH};
-
-/* ************************************************************************ */
-
-/**
  * @brief Simulator space dimension - only 2D is supported now.
  * @deprecated
  */
@@ -110,7 +82,6 @@ constexpr int PLUGIN_API_VERSION = 5;
 
 /* ************************************************************************ */
 
-}
 }
 
 /* ************************************************************************ */

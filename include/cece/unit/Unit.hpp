@@ -33,7 +33,7 @@
 #include <type_traits>
 
 // CeCe
-#include "cece/core/Real.hpp"
+#include "cece/common.hpp"
 #include "cece/String.hpp"
 #include "cece/StringView.hpp"
 #include "cece/StaticArray.hpp"

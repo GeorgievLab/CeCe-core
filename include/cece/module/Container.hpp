@@ -28,7 +28,7 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/config.hpp"
+#include "cece/common.hpp"
 #include "cece/ViewPtr.hpp"
 #include "cece/DynamicArray.hpp"
 #include "cece/PtrNamedContainer.hpp"

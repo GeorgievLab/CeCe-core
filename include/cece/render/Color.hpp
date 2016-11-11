@@ -34,7 +34,7 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/Real.hpp"
+#include "cece/common.hpp"
 #include "cece/io/InStream.hpp"
 #include "cece/io/OutStream.hpp"
 

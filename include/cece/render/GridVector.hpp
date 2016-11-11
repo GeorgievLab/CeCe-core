@@ -28,7 +28,7 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/Real.hpp"
+#include "cece/common.hpp"
 #include "cece/math/Vector.hpp"
 #include "cece/render/Buffer.hpp"
 #include "cece/render/GridBase.hpp"

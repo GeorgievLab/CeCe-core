@@ -24,7 +24,7 @@
 /* ************************************************************************ */
 
 // Declaration
-#include "cece/core/ExpressionParser.hpp"
+#include "cece/lang/ExpressionParser.hpp"
 
 // C++
 #include <cstdlib>
@@ -34,14 +34,14 @@
 // CeCe
 #include "cece/core/Assert.hpp"
 #include "cece/core/Real.hpp"
-#include "cece/core/Tokenizer.hpp"
+#include "cece/lang/Tokenizer.hpp"
 #include "cece/math/constants.hpp"
 #include "cece/unit/UnitIo.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
-inline namespace core {
+namespace lang {
 
 /* ************************************************************************ */
 

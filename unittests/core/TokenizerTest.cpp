@@ -32,11 +32,12 @@
 // CeCe
 #include "cece/core/Assert.hpp"
 #include "cece/core/String.hpp"
-#include "cece/core/Tokenizer.hpp"
+#include "cece/lang/Tokenizer.hpp"
 
 /* ************************************************************************ */
 
 using namespace cece;
+using namespace cece::lang;
 
 /* ************************************************************************ */
 

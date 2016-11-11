@@ -23,84 +23,96 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-// GTest
-#include "gtest/gtest.h"
+#pragma once
+
+/* ************************************************************************ */
 
 // CeCe
 #include "cece/core/IteratorRange.hpp"
-#include "cece/math/constants.hpp"
-#include "cece/lang/ExpressionParser.hpp"
+#include "cece/core/Map.hpp"
+#include "cece/core/Real.hpp"
+#include "cece/core/StringView.hpp"
+#include "cece/core/Exception.hpp"
+#include "cece/core/Parameters.hpp"
+#include "cece/lang/Parser.hpp"
 
 /* ************************************************************************ */
 
-using namespace cece;
-using namespace cece::lang;
+namespace cece {
+namespace lang {
 
 /* ************************************************************************ */
 
-TEST(ExpressionParser, basic)
+/**
+ * @brief Define specialized expression parser exception.
+ *
+ * @param className Name of exception class.
+ * @param message   Error message.
+ */
+#define DEFINE_EXPRESSION_EXCEPTION(className, message) \
+    DEFINE_PARSER_EXCEPTION_BASE(className, ExpressionParserException, message)
+
+/* ************************************************************************ */
+
+/**
+ * @brief Base expression parser exception.
+ */
+class ExpressionParserException: public ParserException {};
+
+/* ************************************************************************ */
+
+DEFINE_EXPRESSION_EXCEPTION(EmptyExpressionException, "Cannot parse empty expression");
+DEFINE_EXPRESSION_EXCEPTION(MissingParenthesisException, "Missing closing parethesis");
+DEFINE_EXPRESSION_EXCEPTION(UnknownConstantException, "Unknown constant name");
+DEFINE_EXPRESSION_EXCEPTION(UnknownFunctionException, "Unknown function name");
+
+/* ************************************************************************ */
+
+/**
+ * @brief Parse expression from given range of iterators.
+ *
+ * @param range      Iterator range reference - it is updated.
+ * @param parameters Map of variables.
+ *
+ * @return Result value.
+ */
+RealType parseExpressionRef(IteratorRange<const char*>& range, const Parameters& parameters = Parameters{});
+
+/* ************************************************************************ */
+
+/**
+ * @brief Parse expression from given range of iterators.
+ *
+ * @param range      Iterator range.
+ * @param parameters Map of variables.
+ *
+ * @return Result value.
+ */
+inline RealType parseExpression(IteratorRange<const char*> range, const Parameters& parameters = Parameters{})
 {
-    EXPECT_FLOAT_EQ(15.f, parseExpression("15"));
-    EXPECT_FLOAT_EQ(15.f, parseExpression("15.f"));
-    EXPECT_FLOAT_EQ(10.f, parseExpression("2*5"));
-    EXPECT_FLOAT_EQ(4.f, parseExpression("2*6/3"));
-    EXPECT_FLOAT_EQ(10.f, parseExpression("2 * 5"));
-    EXPECT_FLOAT_EQ(9.f, parseExpression("3 * (1 + 2)"));
-    EXPECT_FLOAT_EQ(-3.f, parseExpression("3 * (1 - 2)"));
-    EXPECT_FLOAT_EQ(13.f, parseExpression("2 * 5 + 3"));
-    EXPECT_FLOAT_EQ(11.f, parseExpression("5 + 2 * 3"));
-    EXPECT_FLOAT_EQ(math::PI, parseExpression("pi"));
-    EXPECT_FLOAT_EQ(math::E, parseExpression("e"));
+    return parseExpressionRef(range, parameters);
 }
 
 /* ************************************************************************ */
 
-TEST(ExpressionParser, functions)
+/**
+ * @brief Parse expression from given range of iterators.
+ *
+ * @param expression Expression string.
+ * @param parameters Map of variables.
+ *
+ * @return Result value.
+ */
+inline RealType parseExpression(const StringView& expression, const Parameters& parameters = Parameters{})
 {
-    EXPECT_FLOAT_EQ(3.f, parseExpression("sqrt(9)"));
-    EXPECT_FLOAT_EQ(10.f, parseExpression("abs(10)"));
-    EXPECT_FLOAT_EQ(10.f, parseExpression("abs(-10)"));
-    EXPECT_FLOAT_EQ(0.f, parseExpression("log(1)"));
-    EXPECT_FLOAT_EQ(0.f, parseExpression("log    (1)"));
-    EXPECT_FLOAT_EQ(0.f, parseExpression("sin(0)"));
-    EXPECT_FLOAT_EQ(2.f, parseExpression("ln(E^2)"));
-    //EXPECT_FLOAT_EQ(0.f, parseExpression("sin(atan(1)*4)"));
-    EXPECT_FLOAT_EQ(1.f, parseExpression("cos(2*pi)"));
+    return parseExpression(makeRange(
+        expression.getData(), expression.getData() + expression.getLength()
+    ), parameters);
 }
 
 /* ************************************************************************ */
 
-TEST(ExpressionParser, variables)
-{
-    EXPECT_FLOAT_EQ(7.f, parseExpression("v1 * v2 + v3", Parameters{{
-        {"v1", "5.0"}, {"v2", "2"}, {"v3", "-3"}
-    }}));
 }
-
-/* ************************************************************************ */
-
-TEST(ExpressionParser, inner)
-{
-    {
-        const char str[] = "15 + 3 hello";
-        auto range = makeRange(str);
-
-        EXPECT_FLOAT_EQ(18.f, parseExpressionRef(range));
-        EXPECT_EQ(str + 7, range.begin());
-    }
-}
-
-/* ************************************************************************ */
-
-TEST(ExpressionParser, invalid)
-{
-    EXPECT_THROW(parseExpression("45-    10 + lol"), UnknownConstantException);
-    EXPECT_THROW(parseExpression("sin()"), UnknownConstantException);
-    EXPECT_THROW(parseExpression(" 9 * cos ( 5"), MissingParenthesisException);
-    EXPECT_THROW(parseExpression(" 9 * cos ( "), UnknownConstantException);
-    EXPECT_THROW(parseExpression("5 + (10 * (6)"), MissingParenthesisException);
-    EXPECT_THROW(parseExpression("\t\b\b\v"), EmptyExpressionException);
-    EXPECT_THROW(parseExpression(" "), EmptyExpressionException);
 }
 
 /* ************************************************************************ */

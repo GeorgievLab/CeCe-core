@@ -42,7 +42,7 @@
 #endif
 
 // CeCe
-#include "cece/core/Exception.hpp"
+#include "cece/Exception.hpp"
 
 /* ************************************************************************ */
 

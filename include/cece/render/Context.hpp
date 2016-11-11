@@ -40,8 +40,8 @@
 
 // CeCe
 #include "cece/core/Real.hpp"
-#include "cece/core/DynamicArray.hpp"
-#include "cece/core/UniquePtr.hpp"
+#include "cece/DynamicArray.hpp"
+#include "cece/UniquePtr.hpp"
 #include "cece/unit/Units.hpp"
 #include "cece/unit/VectorUnits.hpp"
 #include "cece/render/Camera.hpp"

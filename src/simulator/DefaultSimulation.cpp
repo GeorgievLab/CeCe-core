@@ -37,9 +37,9 @@
 #include <Box2D/Box2D.h>
 
 // CeCe
-#include "cece/core/Assert.hpp"
+#include "cece/Assert.hpp"
 #include "cece/core/Real.hpp"
-#include "cece/core/Exception.hpp"
+#include "cece/Exception.hpp"
 #include "cece/log/Log.hpp"
 #include "cece/unit/UnitIo.hpp"
 #include "cece/io/FileStream.hpp"
@@ -533,7 +533,7 @@ bool DefaultSimulation::update()
     updateObjects();
 
     {
-        auto _ = measure_time("sim.physics", TimeMeasurement(this));
+        auto _ = perf::measure_time("sim.physics", TimeMeasurement(this));
 
         m_world->Step(static_cast<float32>(getPhysicsEngineTimeStep().value()), 10, 10);
     }
@@ -630,7 +630,7 @@ void DefaultSimulation::draw(render::Context& context)
 
 void DefaultSimulation::updateModules()
 {
-    auto _ = measure_time("sim.modules", TimeMeasurement(this));
+    auto _ = perf::measure_time("sim.modules", TimeMeasurement(this));
     m_modules.update();
 }
 
@@ -638,7 +638,7 @@ void DefaultSimulation::updateModules()
 
 void DefaultSimulation::updateObjects()
 {
-    auto _ = measure_time("sim.objects", TimeMeasurement(this));
+    auto _ = perf::measure_time("sim.objects", TimeMeasurement(this));
 
     // Update simulations objects
     // Can't use range-for because update can add a new object.

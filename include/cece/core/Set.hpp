@@ -23,12 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// C++
-#include <set>
+#if _MSC_VER
+#pragma message("Include 'cece/Set.hpp' instead")
+#else
+#warning "Include 'cece/Set.hpp' instead"
+#endif
+#include "cece/Set.hpp"
 
 /* ************************************************************************ */
 
@@ -37,13 +37,7 @@ inline namespace core {
 
 /* ************************************************************************ */
 
-/**
- * @brief Ordered array.
- *
- * @tparam T Element type.
- */
-template<typename T>
-using Set = std::set<T>;
+using cece::Set;
 
 /* ************************************************************************ */
 

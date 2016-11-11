@@ -28,7 +28,7 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/DynamicArray.hpp"
+#include "cece/DynamicArray.hpp"
 #include "cece/io/FilePath.hpp"
 #include "cece/plugin/Loader.hpp"
 #include "cece/os/SharedLibrary.hpp"

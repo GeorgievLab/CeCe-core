@@ -28,8 +28,8 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/String.hpp"
-#include "cece/core/Factory.hpp"
+#include "cece/String.hpp"
+#include "cece/factory/Factory.hpp"
 
 /* ************************************************************************ */
 
@@ -45,7 +45,7 @@ class DataExport;
 /**
  * @brief DataExport factory interface.
  */
-using DataExportFactory = Factory<DataExport, String>;
+using DataExportFactory = factory::Factory<DataExport, String>;
 
 /* ************************************************************************ */
 

@@ -27,10 +27,10 @@
 #include "cece/render/Color.hpp"
 
 // CeCe
-#include "cece/core/Assert.hpp"
-#include "cece/core/String.hpp"
-#include "cece/core/Map.hpp"
-#include "cece/core/Exception.hpp"
+#include "cece/Assert.hpp"
+#include "cece/String.hpp"
+#include "cece/Map.hpp"
+#include "cece/Exception.hpp"
 
 /* ************************************************************************ */
 

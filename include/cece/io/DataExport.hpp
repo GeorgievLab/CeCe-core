@@ -32,11 +32,11 @@
 
 // CeCe
 #include "cece/export.hpp"
-#include "cece/core/String.hpp"
-#include "cece/core/StaticArray.hpp"
-#include "cece/core/Tuple.hpp"
-#include "cece/core/ViewPtr.hpp"
-#include "cece/core/IntegerSequence.hpp"
+#include "cece/String.hpp"
+#include "cece/StaticArray.hpp"
+#include "cece/Tuple.hpp"
+#include "cece/ViewPtr.hpp"
+#include "cece/IntegerSequence.hpp"
 #include "cece/io/StringStream.hpp"
 #include "cece/io/DataExportFactory.hpp"
 

@@ -29,7 +29,7 @@
 
 // CeCe
 #include "cece/export.hpp"
-#include "cece/core/String.hpp"
+#include "cece/String.hpp"
 #include "cece/io/OutStream.hpp"
 #include "cece/io/StringStream.hpp"
 #include "cece/io/CliColor.hpp"

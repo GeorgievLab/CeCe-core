@@ -29,10 +29,10 @@
 
 // CeCe
 #include "cece/config.hpp"
-#include "cece/core/String.hpp"
-#include "cece/core/StringView.hpp"
-#include "cece/core/UniquePtr.hpp"
-#include "cece/core/ViewPtr.hpp"
+#include "cece/String.hpp"
+#include "cece/StringView.hpp"
+#include "cece/UniquePtr.hpp"
+#include "cece/ViewPtr.hpp"
 #include "cece/core/IterationType.hpp"
 #include "cece/math/Vector.hpp"
 #include "cece/unit/Units.hpp"

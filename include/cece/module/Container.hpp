@@ -29,9 +29,9 @@
 
 // CeCe
 #include "cece/config.hpp"
-#include "cece/core/ViewPtr.hpp"
-#include "cece/core/DynamicArray.hpp"
-#include "cece/core/PtrNamedContainer.hpp"
+#include "cece/ViewPtr.hpp"
+#include "cece/DynamicArray.hpp"
+#include "cece/PtrNamedContainer.hpp"
 #include "cece/async/Atomic.hpp"
 
 #ifdef CECE_RENDER

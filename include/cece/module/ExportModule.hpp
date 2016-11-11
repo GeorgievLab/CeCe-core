@@ -31,10 +31,10 @@
 #include <utility>
 
 // CeCe
-#include "cece/core/String.hpp"
-#include "cece/core/UniquePtr.hpp"
+#include "cece/String.hpp"
+#include "cece/UniquePtr.hpp"
+#include "cece/DynamicArray.hpp"
 #include "cece/core/IterationRange.hpp"
-#include "cece/core/DynamicArray.hpp"
 #include "cece/io/DataExport.hpp"
 #include "cece/io/FilePath.hpp"
 #include "cece/io/CsvFile.hpp"

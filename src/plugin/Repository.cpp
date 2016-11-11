@@ -27,7 +27,7 @@
 #include "cece/plugin/Repository.hpp"
 
 // CeCe
-#include "cece/core/Assert.hpp"
+#include "cece/Assert.hpp"
 #include "cece/plugin/Exception.hpp"
 
 /* ************************************************************************ */

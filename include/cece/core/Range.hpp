@@ -23,12 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// C++
-#include <type_traits>
+#if _MSC_VER
+#pragma message("Include 'cece/Range.hpp' instead")
+#else
+#warning "Include 'cece/Range.hpp' instead"
+#endif
+#include "cece/Range.hpp"
 
 /* ************************************************************************ */
 
@@ -37,103 +37,7 @@ inline namespace core {
 
 /* ************************************************************************ */
 
-/**
- * @brief Value range class.
- */
-template<typename T>
-class Range
-{
-
-// Public Types
-public:
-
-    /// Value type.
-    using ValueType = T;
-
-    /// Difference type.
-    using DifferenceType = typename std::make_signed<T>::type;
-
-
-// Public Ctors & Dtors
-public:
-
-
-    /**
-     * @brief Constructor.
-     *
-     * @param first
-     * @param last
-     */
-    constexpr Range(ValueType first, ValueType last) noexcept
-        : m_first(first)
-        , m_last(last)
-    {
-        // Nothing to do
-    }
-
-
-// Public Accessors
-public:
-
-
-    /**
-     * @brief Returns if iterator range is empty.
-     *
-     * @return
-     */
-    bool isEmpty() const noexcept
-    {
-        return m_first == m_last;
-    }
-
-
-    /**
-     * @brief Returns range size.
-     *
-     * @return
-     */
-    DifferenceType getSize() const noexcept
-    {
-        return m_last - m_first;
-    }
-
-
-// Public Operations
-public:
-
-
-    /**
-     * @brief Returns the first value.
-     *
-     * @return
-     */
-    constexpr ValueType first() const noexcept
-    {
-        return m_first;
-    }
-
-
-    /**
-     * @brief Returns the last value.
-     *
-     * @return
-     */
-    constexpr ValueType last() const noexcept
-    {
-        return m_last;
-    }
-
-
-// Private Data Members
-private:
-
-    /// The first value.
-    ValueType m_first;
-
-    // The last value.
-    ValueType m_last;
-
-};
+using cece::Range;
 
 /* ************************************************************************ */
 

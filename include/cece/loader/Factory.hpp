@@ -29,7 +29,7 @@
 
 // CeCe
 #include "cece/export.hpp"
-#include "cece/core/Factory.hpp"
+#include "cece/factory/Factory.hpp"
 
 /* ************************************************************************ */
 
@@ -45,7 +45,7 @@ class Loader;
 /**
  * @brief Simulation loader factory interface.
  */
-using Factory = core::Factory<Loader>;
+using Factory = factory::Factory<Loader>;
 
 /* ************************************************************************ */
 

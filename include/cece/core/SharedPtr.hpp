@@ -23,12 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// C++
-#include <memory>
+#if _MSC_VER
+#pragma message("Include 'cece/SharedPtr.hpp' instead")
+#else
+#warning "Include 'cece/SharedPtr.hpp' instead"
+#endif
+#include "cece/SharedPtr.hpp"
 
 /* ************************************************************************ */
 
@@ -37,36 +37,9 @@ inline namespace core {
 
 /* ************************************************************************ */
 
-/**
- * @brief Shared smart pointer class.
- *
- * @tparam T Type of managed object.
- */
-template<typename T>
-using SharedPtr = std::shared_ptr<T>;
-
-/* ************************************************************************ */
-
-/**
- * @brief Weak smart pointer class.
- *
- * @tparam T Type of managed object.
- */
-template<typename T>
-using WeakPtr = std::weak_ptr<T>;
-
-/* ************************************************************************ */
-
-/**
- * @brief Make unique ptr function.
- *
- * @return
- */
-template<typename T, typename... Args>
-SharedPtr<T> makeShared(Args&&... args)
-{
-    return std::make_shared<T>(std::forward<Args>(args)...);
-}
+using cece::SharedPtr;
+using cece::WeakPtr;
+using cece::makeShared;
 
 /* ************************************************************************ */
 

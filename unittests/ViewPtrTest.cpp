@@ -23,115 +23,142 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-// Declaration
-#include "cece/core/Parameters.hpp"
+// GTest
+#include "gtest/gtest.h"
 
-// C++
-#include <algorithm>
-
-/* ************************************************************************ */
-
-namespace cece {
-inline namespace core {
+// CeCe
+#include "cece/ViewPtr.hpp"
 
 /* ************************************************************************ */
 
-namespace {
+using namespace cece;
 
 /* ************************************************************************ */
 
-/**
- * @brief Find parameter in container.
- *
- * @param data
- *
- * @return
- */
-template<typename Container>
-auto find(Container& data, Parameters::KeyViewType name) noexcept -> decltype(&(data.begin()->value))
+TEST(ViewPtrTest, ctorDefault)
 {
-    auto it = std::find_if(data.begin(), data.end(),
-        [&name](const Parameters::Record& p) {
-            return p.name == name;
-        }
-    );
-
-    return it != data.end() ? &(it->value) : nullptr;
+    ViewPtr<int> ptr;
+    EXPECT_EQ(nullptr, ptr);
+    EXPECT_FALSE(ptr);
 }
 
 /* ************************************************************************ */
 
-}
-
-/* ************************************************************************ */
-
-bool Parameters::exists(KeyViewType name) const noexcept
+TEST(ViewPtrTest, ctorRaw)
 {
-    return find(m_data, name) != nullptr;
+    int val = 5;
+
+    ViewPtr<int> ptr(&val);
+    ASSERT_NE(nullptr, ptr);
+    EXPECT_TRUE(ptr);
+    EXPECT_EQ(&val, ptr);
+    EXPECT_EQ(5, *ptr);
 }
 
 /* ************************************************************************ */
 
-Parameters::ValueType Parameters::get(KeyViewType name) const
+TEST(ViewPtrTest, ctorCopy)
 {
-    auto ptr = find(m_data, name);
+    int val = 5;
+    ViewPtr<int> ptr(&val);
 
-    if (ptr)
-        return *ptr;
-
-    throw MissingParameterException("Cannot find parameter: " + String(name));
+    ViewPtr<int> ptrCopy(ptr);
+    EXPECT_NE(nullptr, ptrCopy);
+    EXPECT_EQ(ptr, ptrCopy);
 }
 
 /* ************************************************************************ */
 
-Parameters::ValueType& Parameters::get(KeyViewType name) noexcept
+TEST(ViewPtrTest, ctorCopyChild)
 {
-    auto ptr = find(m_data, name);
+    struct A {};
+    struct B : public A {};
 
-    if (ptr)
-        return *ptr;
+    B val;
+    ViewPtr<B> ptr(&val);
 
-    // Insert
-    m_data.emplace_back(Record{KeyType(name), ValueType{}});
-
-    return m_data.back().value;
+    ViewPtr<A> ptrCopy(ptr);
+    EXPECT_NE(nullptr, ptrCopy);
+    EXPECT_EQ(ptr, ptrCopy);
 }
 
 /* ************************************************************************ */
 
-Parameters::ValueType Parameters::get(KeyViewType name, ValueType def) const noexcept
+TEST(ViewPtrTest, ctorUnique)
 {
-    auto ptr = find(m_data, name);
+    UniquePtr<int> pval{new int{5}};
 
-    if (ptr)
-        return *ptr;
-
-    return def;
+    ViewPtr<int> ptr(pval);
+    EXPECT_NE(nullptr, ptr);
+    EXPECT_EQ(pval, ptr);
 }
 
 /* ************************************************************************ */
 
-void Parameters::set(KeyType name, ValueType value) noexcept
+TEST(ViewPtrTest, ctorUniqueChild)
 {
-    auto ptr = find(m_data, name);
+    struct A {};
+    struct B : public A {};
 
-    if (ptr)
-        *ptr = value;
-    else
-        m_data.emplace_back(Record{name, value});
+    UniquePtr<B> pval{new B};
+
+    ViewPtr<A> ptr(pval);
+    EXPECT_NE(nullptr, ptr);
+    EXPECT_EQ(pval, ptr);
 }
 
 /* ************************************************************************ */
 
-void Parameters::append(const Parameters& parameters) noexcept
+TEST(ViewPtrTest, get)
 {
-    for (const auto& param : parameters.m_data)
-        set(param.name, param.value);
+    int val = 5;
+    ViewPtr<int> ptr(&val);
+    ASSERT_TRUE(ptr);
+    EXPECT_EQ(5, *ptr.get());
 }
 
 /* ************************************************************************ */
 
+TEST(ViewPtrTest, reset)
+{
+    int val1 = 5;
+    int val2 = 3;
+    ViewPtr<int> ptr(&val1);
+    EXPECT_TRUE(ptr);
+    EXPECT_EQ(&val1, ptr);
+
+    ptr.reset(&val2);
+    EXPECT_TRUE(ptr);
+    EXPECT_EQ(&val2, ptr);
+
+    ptr.reset();
+    EXPECT_FALSE(ptr);
+    EXPECT_EQ(nullptr, ptr);
 }
+
+/* ************************************************************************ */
+
+TEST(ViewPtrTest, release)
+{
+    int val = 5;
+    ViewPtr<int> ptr(&val);
+    ASSERT_TRUE(ptr);
+    ptr.release(); // No memory leak
+    ASSERT_FALSE(ptr);
+}
+
+/* ************************************************************************ */
+
+TEST(ViewPtrTest, access)
+{
+    struct A { int val; int value() const { return val; } };
+
+    A val{5};
+
+    ViewPtr<A> ptr(&val);
+    ASSERT_NE(nullptr, ptr);
+    EXPECT_EQ(5, ptr->val);
+    EXPECT_EQ(5, ptr->value());
 }
 
 /* ************************************************************************ */

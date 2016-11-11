@@ -29,8 +29,8 @@
 
 // CeCe
 #include "cece/export.hpp"
-#include "cece/core/Factory.hpp"
-#include "cece/core/String.hpp"
+#include "cece/String.hpp"
+#include "cece/factory/Factory.hpp"
 #include "cece/object/Object.hpp"
 
 /* ************************************************************************ */
@@ -51,7 +51,7 @@ namespace object {
 /**
  * @brief Object factory interface.
  */
-using Factory = Factory<Object, simulator::Simulation&, String, Object::Type>;
+using Factory = factory::Factory<Object, simulator::Simulation&, String, Object::Type>;
 
 /* ************************************************************************ */
 

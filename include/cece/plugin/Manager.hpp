@@ -28,10 +28,10 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/String.hpp"
-#include "cece/core/StringView.hpp"
-#include "cece/core/DynamicArray.hpp"
-#include "cece/core/ViewPtr.hpp"
+#include "cece/String.hpp"
+#include "cece/StringView.hpp"
+#include "cece/DynamicArray.hpp"
+#include "cece/ViewPtr.hpp"
 #include "cece/io/FilePath.hpp"
 #include "cece/plugin/Loader.hpp"
 #include "cece/plugin/Repository.hpp"

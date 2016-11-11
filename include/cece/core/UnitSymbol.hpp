@@ -38,6 +38,11 @@ namespace units {
 
 /* ************************************************************************ */
 
+using unit::Symbol;
+using unit::SymbolLength;
+using unit::SymbolBase;
+using unit::SymbolGroup;
+
 /* ************************************************************************ */
 
 }

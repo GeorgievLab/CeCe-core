@@ -28,8 +28,8 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/String.hpp"
-#include "cece/core/StringView.hpp"
+#include "cece/String.hpp"
+#include "cece/StringView.hpp"
 #include "cece/unit/Unit.hpp"
 #include "cece/unit/UnitSymbol.hpp"
 #include "cece/io/InStream.hpp"

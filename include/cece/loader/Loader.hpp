@@ -28,9 +28,9 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/ViewPtr.hpp"
-#include "cece/core/UniquePtr.hpp"
-#include "cece/core/String.hpp"
+#include "cece/ViewPtr.hpp"
+#include "cece/UniquePtr.hpp"
+#include "cece/String.hpp"
 #include "cece/io/FilePath.hpp"
 #include "cece/io/InStream.hpp"
 #include "cece/io/OutStream.hpp"

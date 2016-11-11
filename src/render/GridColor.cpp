@@ -27,7 +27,7 @@
 #include "cece/render/GridColor.hpp"
 
 // CeCe
-#include "cece/core/StaticArray.hpp"
+#include "cece/StaticArray.hpp"
 #include "cece/render/Context.hpp"
 #include "cece/render/VertexFormat.hpp"
 #include "cece/render/Image.hpp"

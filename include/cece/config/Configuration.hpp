@@ -28,12 +28,12 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/String.hpp"
-#include "cece/core/StringView.hpp"
-#include "cece/core/UniquePtr.hpp"
-#include "cece/core/ViewPtr.hpp"
-#include "cece/core/Exception.hpp"
-#include "cece/core/DynamicArray.hpp"
+#include "cece/String.hpp"
+#include "cece/StringView.hpp"
+#include "cece/UniquePtr.hpp"
+#include "cece/ViewPtr.hpp"
+#include "cece/DynamicArray.hpp"
+#include "cece/Exception.hpp"
 #include "cece/io/StringStream.hpp"
 #include "cece/config/Exception.hpp"
 #include "cece/config/Implementation.hpp"

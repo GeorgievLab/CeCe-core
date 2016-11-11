@@ -23,32 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// CeCe
-#include "cece/core/UniquePtr.hpp"
-
-/* ************************************************************************ */
-
-/**
- * @brief Define extern factory specialization.
- */
-#define CECE_FACTORY(...) \
-    namespace cece { inline namespace core { template class Factory<__VA_ARGS__>; } }
-
-/**
- * @brief Define extern factory specialization.
- */
-#define CECE_FACTORY_EXTERN(...) \
-    namespace cece { inline namespace core { extern template class Factory<__VA_ARGS__>; } }
-
-/**
- * @brief Define extern factory specialization.
- */
-#define CECE_FACTORY_INST(...) \
-    namespace cece { inline namespace core { template class Factory<__VA_ARGS__>; } }
+#if _MSC_VER
+#pragma message("Include 'cece/factory/Factory.hpp' instead")
+#else
+#warning "Include 'cece/factory/Factory.hpp' instead"
+#endif
+#include "cece/factory/Factory.hpp"
 
 /* ************************************************************************ */
 
@@ -57,147 +37,9 @@ inline namespace core {
 
 /* ************************************************************************ */
 
-/**
- * @brief Factory interface template.
- *
- * @tparam T    Type of constructed object.
- * @tparam Args Constructor arguments.
- */
-template<typename T, typename... Args>
-class Factory
-{
-
-// Public Types
-public:
-
-
-    /// Produced type.
-    using type = T;
-
-
-// Public Ctors & Dtors
-public:
-
-
-    /**
-     * @brief Destructor.
-     */
-    virtual ~Factory()
-    {
-        // Nothing to do
-    }
-
-
-// Public Operations
-public:
-
-
-    /**
-     * @brief Create an object.
-     *
-     * @param args Constructor arguments.
-     *
-     * @return Created object pointer.
-     */
-    virtual UniquePtr<T> create(Args... args) const = 0;
-
-};
-
-/* ************************************************************************ */
-
-/**
- * @brief Factory for specific type.
- *
- * @tparam Args
- */
-template<typename... Args>
-class FactoryTyped;
-
-/* ************************************************************************ */
-
-/**
- * @brief Factory for specific type.
- *
- * @tparam T
- * @tparam Base
- * @tparam Args
- */
-template<typename T, typename Base, typename... Args>
-class FactoryTyped<Factory<Base, Args...>, T> : public Factory<Base, Args...>
-{
-
-// Public Operations
-public:
-
-
-    /**
-     * @brief Create an object.
-     *
-     * @param args Constructor arguments.
-     *
-     * @return Created object pointer.
-     */
-    UniquePtr<Base> create(Args... args) const override
-    {
-        return makeUnique<T>(std::forward<Args>(args)...);
-    }
-
-};
-
-/* ************************************************************************ */
-
-/**
- * @brief Factory with callable backend.
- *
- * @tparam ParentFactory
- * @tparam Callable
- * @tparam Base
- * @tparam Args
- */
-template<template<typename, typename...> class ParentFactory, typename Callable, typename Base, typename... Args>
-class FactoryCallable : public ParentFactory<Base, Args...>
-{
-
-// Public Ctors & Dtors
-public:
-
-
-    /**
-     * @brief Constructor.
-     *
-     * @param callable Callable object (functor, function, lambda).
-     */
-    explicit FactoryCallable(Callable callable) noexcept
-        : m_callable(std::move(callable))
-    {
-        // Nothing to do
-    }
-
-
-// Public Operations
-public:
-
-
-    /**
-     * @brief Create an object.
-     *
-     * @param args Constructor arguments.
-     *
-     * @return Created object pointer.
-     */
-    UniquePtr<Base> create(Args... args) const override
-    {
-        return m_callable(std::forward<Args>(args)...);
-    }
-
-
-// Private Data Members
-private:
-
-    /// Callable object.
-    Callable m_callable;
-
-};
+using factory::Factory;
+using factory::FactoryTyped;
+using factory::FactoryCallable;
 
 /* ************************************************************************ */
 

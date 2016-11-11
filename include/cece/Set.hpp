@@ -23,76 +23,29 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-// GTest
-#include "gtest/gtest.h"
-
-// CeCe
-#include "cece/core/String.hpp"
-#include "cece/core/StringView.hpp"
+#pragma once
 
 /* ************************************************************************ */
 
-using namespace cece;
+// C++
+#include <set>
 
 /* ************************************************************************ */
 
-TEST(StringView, construct)
-{
-    {
-        const char* str = "String literal";
-        auto view = StringView(str);
-        EXPECT_EQ(14u, view.getLength());
-        EXPECT_EQ(str, view.getData());
-    }
-
-    {
-        auto str = String("String container");
-        auto view = StringView(str);
-        EXPECT_EQ(16u, view.getLength());
-        EXPECT_EQ(str.c_str(), view.getData());
-    }
-}
+namespace cece {
 
 /* ************************************************************************ */
 
-TEST(StringView, compare)
-{
-    {
-        auto view = StringView("Hello World!");
-        EXPECT_EQ("Hello World!", view);
-    }
+/**
+ * @brief Ordered array.
+ *
+ * @tparam T Element type.
+ */
+template<typename T>
+using Set = std::set<T>;
 
-    {
-        auto str = String("Hello World!");
-        auto view = StringView(str);
-        EXPECT_EQ("Hello World!", view);
-    }
+/* ************************************************************************ */
 
-    {
-        auto v1 = StringView("aa");
-        auto v2 = StringView("aa");
-        EXPECT_EQ(v1, v2);
-        EXPECT_LE(v1, v2);
-        EXPECT_GE(v1, v2);
-    }
-
-    {
-        auto v1 = StringView("a");
-        auto v2 = StringView("b");
-        EXPECT_LT(v1, v2);
-        EXPECT_LE(v1, v2);
-        EXPECT_GE(v2, v1);
-        EXPECT_GT(v2, v1);
-    }
-
-    {
-        auto v1 = StringView("aa");
-        auto v2 = StringView("b");
-        EXPECT_LT(v1, v2);
-        EXPECT_LE(v1, v2);
-        EXPECT_GE(v2, v1);
-        EXPECT_GT(v2, v1);
-    }
 }
 
 /* ************************************************************************ */

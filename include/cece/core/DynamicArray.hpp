@@ -23,12 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// C++
-#include <vector>
+#if _MSC_VER
+#pragma message("Include 'cece/DynamicArray.hpp' instead")
+#else
+#warning "Include 'cece/DynamicArray.hpp' instead"
+#endif
+#include "cece/DynamicArray.hpp"
 
 /* ************************************************************************ */
 
@@ -37,14 +37,7 @@ inline namespace core {
 
 /* ************************************************************************ */
 
-/**
- * @brief Dynamic array.
- *
- * @tparam T
- * @tparam Allocator
- */
-template<typename T, class Allocator = std::allocator<T>>
-using DynamicArray = std::vector<T, Allocator>;
+using cece::DynamicArray;
 
 /* ************************************************************************ */
 

@@ -27,16 +27,12 @@
 
 /* ************************************************************************ */
 
-// CeCe config
-#include "cece/config.hpp"
-
-/* ************************************************************************ */
-
 // C++
 #include <atomic>
 
 // CeCe
-#include "cece/core/UniquePtr.hpp"
+#include "cece/config.hpp"
+#include "cece/UniquePtr.hpp"
 #include "cece/unit/Units.hpp"
 #ifdef CECE_RENDER
 #include "cece/render/Context.hpp"

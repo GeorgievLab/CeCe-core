@@ -31,10 +31,10 @@
 #include <utility>
 
 // CeCe
-#include "cece/core/Tuple.hpp"
-#include "cece/core/DynamicArray.hpp"
-#include "cece/core/String.hpp"
-#include "cece/core/IntegerSequence.hpp"
+#include "cece/Tuple.hpp"
+#include "cece/DynamicArray.hpp"
+#include "cece/String.hpp"
+#include "cece/IntegerSequence.hpp"
 #include "cece/io/FilePath.hpp"
 #include "cece/io/FileStream.hpp"
 

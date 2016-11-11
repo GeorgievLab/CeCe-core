@@ -23,49 +23,59 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-// Declaration
-#include "cece/core/TimeMeasurement.hpp"
+#pragma once
+
+/* ************************************************************************ */
 
 // C++
-#include <iostream>
+#include <memory>
 
 /* ************************************************************************ */
 
 namespace cece {
-inline namespace core {
 
 /* ************************************************************************ */
 
-static io::OutStream* g_output = &std::cout;
+/**
+ * @brief Unique smart pointer class.
+ *
+ * @tparam T       Type of managed object.
+ * @tparam Deleter Deleter object type.
+ */
+template<typename T, class Deleter = std::default_delete<T>>
+using UniquePtr = std::unique_ptr<T, Deleter>;
 
 /* ************************************************************************ */
 
-bool isMeasureTimeEnabled() noexcept
+/**
+ * @brief Make unique ptr function.
+ *
+ * @return
+ */
+template<typename T, typename... Args>
+UniquePtr<T> makeUnique(Args&&... args)
 {
-#ifdef CECE_TIME_MEASUREMENT
-    return true;
-#else
-    return false;
-#endif
+    return UniquePtr<T>(new T{std::forward<Args>(args)...});
 }
 
 /* ************************************************************************ */
 
-io::OutStream* getMeasureTimeOutput() noexcept
+/**
+ * @brief Make unique ptr function for custom ctor & dtor.
+ *
+ * @param value Managed value.
+ * @param dtor  Destructor function.
+ *
+ * @return
+ */
+template<typename T, typename Dtor>
+auto makeUniqueCustom(T* value, Dtor dtor) -> UniquePtr<T, Dtor>
 {
-    return g_output;
+    return UniquePtr<T, Dtor>(value, dtor);
 }
 
 /* ************************************************************************ */
 
-void setMeasureTimeOutput(io::OutStream* output) noexcept
-{
-    g_output = output;
-}
-
-/* ************************************************************************ */
-
-}
 }
 
 /* ************************************************************************ */

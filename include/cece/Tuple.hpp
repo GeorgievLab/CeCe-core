@@ -23,25 +23,85 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-// GTest
-#include "gtest/gtest.h"
-
-// CeCe
-#include "cece/core/DynamicArray.hpp"
+#pragma once
 
 /* ************************************************************************ */
 
-using namespace cece;
+// C++
+#include <tuple>
 
 /* ************************************************************************ */
 
-TEST(DynamicArrayTest, size)
+namespace cece {
+
+/* ************************************************************************ */
+
+/**
+ * @brief Tuple type.
+ *
+ * @tparam Args Arguments type.
+ */
+template<typename... Args>
+using Tuple = std::tuple<Args...>;
+
+/* ************************************************************************ */
+
+/**
+ * @brief Make tuple function.
+ */
+template<typename... Types>
+constexpr auto makeTuple(Types&&... args) -> decltype(std::make_tuple(std::forward<Types>(args)...))
 {
-    DynamicArray<int> array;
-    EXPECT_EQ(0u, array.size());
+    return std::make_tuple(std::forward<Types>(args)...);
+}
 
-    array.resize(10u);
-    EXPECT_EQ(10u, array.size());
+/* ************************************************************************ */
+
+/**
+ * @brief Access function for Tuple.
+ *
+ * @param t Tuple.
+ *
+ * @return
+ */
+template<unsigned I, class... Types>
+constexpr auto getValue(Tuple<Types...>& t) -> decltype(std::get<I>(t))
+{
+   return std::get<I>(t);
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief Access function for Tuple.
+ *
+ * @param t Tuple.
+ *
+ * @return
+ */
+template<unsigned I, class... Types>
+constexpr auto getValue(Tuple<Types...>&& t) -> decltype(std::get<I>(t))
+{
+   return std::get<I>(t);
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief Access function for Tuple.
+ *
+ * @param t Tuple.
+ *
+ * @return
+ */
+template<unsigned I, class... Types>
+constexpr auto getValue(const Tuple<Types...>& t) -> decltype(std::get<I>(t))
+{
+   return std::get<I>(t);
+}
+
+/* ************************************************************************ */
+
 }
 
 /* ************************************************************************ */

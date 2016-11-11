@@ -23,42 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// C++
-#include <type_traits>
-
-// CeCe
-#include "cece/core/String.hpp"
-#include "cece/core/StringView.hpp"
-#include "cece/core/ViewPtr.hpp"
-#include "cece/core/UniquePtr.hpp"
-#include "cece/core/Map.hpp"
-#include "cece/core/DynamicArray.hpp"
-#include "cece/core/Exception.hpp"
-#include "cece/core/Factory.hpp"
-
-/* ************************************************************************ */
-
-/**
- * @brief Define extern factory manager specialization.
- */
-#define CECE_FACTORY_MANAGER(...) \
-    namespace cece { inline namespace core { template class FactoryManager<__VA_ARGS__>; } }
-
-/**
- * @brief Define extern factory manager specialization.
- */
-#define CECE_FACTORY_MANAGER_EXTERN(...) \
-    namespace cece { inline namespace core { extern template class FactoryManager<__VA_ARGS__>; } }
-
-/**
- * @brief Define extern factory manager specialization.
- */
-#define CECE_FACTORY_MANAGER_INST(...) \
-    namespace cece { inline namespace core { template class FactoryManager<__VA_ARGS__>; } }
+#if _MSC_VER
+#pragma message("Include 'cece/factory/FactoryManager.hpp' instead")
+#else
+#warning "Include 'cece/factory/FactoryManager.hpp' instead"
+#endif
+#include "cece/factory/FactoryManager.hpp"
 
 /* ************************************************************************ */
 
@@ -67,165 +37,8 @@ inline namespace core {
 
 /* ************************************************************************ */
 
-/**
- * @brief Exception for access to unregistred object factory.
- */
-class FactoryNotFoundException : public InvalidArgumentException
-{
-    using InvalidArgumentException::InvalidArgumentException;
-};
-
-/* ************************************************************************ */
-
-/**
- * @brief Basic factory manager.
- *
- * @tparam T Factory type.
- */
-template<typename FactoryType>
-class FactoryManager
-{
-
-// Public Accessors
-public:
-
-
-    /**
-     * @brief Returns if factory with given name exists.
-     *
-     * @param name Factory name.
-     *
-     * @return
-     */
-    bool exists(StringView name) const noexcept
-    {
-        auto it = m_factories.find(String(name));
-        return it != m_factories.end();
-    }
-
-
-    /**
-     * @brief Find a factory by name.
-     *
-     * @param name Factory name.
-     *
-     * @return A pointer to factory or nullptr.
-     */
-    ViewPtr<FactoryType> get(StringView name) const noexcept
-    {
-        auto it = m_factories.find(String(name));
-        return it != m_factories.end() ? it->second.get() : nullptr;
-    }
-
-
-    /**
-     * @brief Returns available factory names.
-     *
-     * @return
-     */
-    DynamicArray<String> getNames() const noexcept
-    {
-        DynamicArray<String> names;
-
-        for (const auto& pair : m_factories)
-            names.push_back(pair.first);
-
-        return names;
-    }
-
-
-// Public Mutators
-public:
-
-
-    /**
-     * @brief Register a new factory.
-     *
-     * @param name    Factory name.
-     * @param factory Factory pointer.
-     */
-    void add(String name, UniquePtr<FactoryType> factory) noexcept
-    {
-        m_factories.emplace(std::move(name), std::move(factory));
-    }
-
-
-    /**
-     * @brief Unregister factory.
-     *
-     * @param name Factory name.
-     */
-    void remove(StringView name) noexcept
-    {
-        m_factories.erase(String(name));
-    }
-
-
-    /**
-     * @brief Register a new factory.
-     *
-     * @tparam FactoryTypeInner Type of child factory type.
-     *
-     * @param name Factory name.
-     */
-    template<typename FactoryTypeInner>
-    void create(String name)
-    {
-        static_assert(
-            std::is_base_of<FactoryType, FactoryTypeInner>::value,
-            "FactoryTypeInner is not a base of FactoryType"
-        );
-
-        add(std::move(name), makeUnique<FactoryTypeInner>());
-    }
-
-
-    /**
-     * @brief Register a new factory for specified object type.
-     *
-     * @tparam ObjectType Created object type.
-     *
-     * @param name Factory name.
-     */
-    template<typename ObjectType>
-    void createFor(String name)
-    {
-        create<FactoryTyped<FactoryType, ObjectType>>(std::move(name));
-    }
-
-
-// Protected Operations
-protected:
-
-
-    /**
-     * @brief Create object by name.
-     *
-     * @param name Object name.
-     *
-     * @return Created object.
-     *
-     * @throw FactoryNotFoundException In case of factory with given name doesn't exists.
-     */
-    template<typename T, typename... Args>
-    UniquePtr<T> createObject(StringView name, Args&&... args) const
-    {
-        auto factory = get(name);
-
-        if (factory)
-            return factory->create(std::forward<Args>(args)...);
-
-        throw FactoryNotFoundException("Factory not found: " + String(name));
-    }
-
-
-// Private Data Members
-private:
-
-    /// Registered factories.
-    Map<String, UniquePtr<FactoryType>> m_factories;
-
-};
+using factory::FactoryNotFoundException;
+using factory::FactoryManager;
 
 /* ************************************************************************ */
 

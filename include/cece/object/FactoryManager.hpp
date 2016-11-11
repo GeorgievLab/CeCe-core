@@ -28,10 +28,10 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/String.hpp"
-#include "cece/core/StringView.hpp"
-#include "cece/core/UniquePtr.hpp"
-#include "cece/core/FactoryManager.hpp"
+#include "cece/String.hpp"
+#include "cece/StringView.hpp"
+#include "cece/UniquePtr.hpp"
+#include "cece/factory/FactoryManager.hpp"
 #include "cece/object/Factory.hpp"
 
 /* ************************************************************************ */
@@ -52,7 +52,7 @@ class Object;
 /**
  * @brief Object factory manager.
  */
-class FactoryManager : public core::FactoryManager<Factory>
+class FactoryManager : public factory::FactoryManager<Factory>
 {
 
 // Public Operations

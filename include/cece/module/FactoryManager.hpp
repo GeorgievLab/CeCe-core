@@ -29,10 +29,10 @@
 
 // CeCe
 #include "cece/export.hpp"
-#include "cece/core/String.hpp"
-#include "cece/core/StringView.hpp"
-#include "cece/core/UniquePtr.hpp"
-#include "cece/core/FactoryManager.hpp"
+#include "cece/String.hpp"
+#include "cece/StringView.hpp"
+#include "cece/UniquePtr.hpp"
+#include "cece/factory/FactoryManager.hpp"
 #include "cece/module/Factory.hpp"
 
 /* ************************************************************************ */
@@ -53,7 +53,7 @@ class Module;
 /**
  * @brief Module factory manager.
  */
-class FactoryManager : public core::FactoryManager<Factory>
+class FactoryManager : public factory::FactoryManager<Factory>
 {
 
 // Public Mutators
@@ -68,7 +68,7 @@ public:
     template<typename ModuleType>
     void createForModule(String name)
     {
-        create<FactoryTyped<ModuleType>>(std::move(name));
+        create<factory::FactoryTyped<ModuleType>>(std::move(name));
     }
 
 

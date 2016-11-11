@@ -34,7 +34,7 @@
 #include <Box2D/Box2D.h>
 
 // CeCe
-#include "cece/core/Assert.hpp"
+#include "cece/Assert.hpp"
 #include "cece/core/Real.hpp"
 #include "cece/log/Log.hpp"
 #include "cece/unit/UnitIo.hpp"

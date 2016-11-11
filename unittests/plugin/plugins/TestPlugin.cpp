@@ -24,7 +24,7 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/Exception.hpp"
+#include "cece/Exception.hpp"
 #include "cece/init/Initializer.hpp"
 #include "cece/module/Module.hpp"
 #include "cece/object/Object.hpp"

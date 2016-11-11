@@ -27,7 +27,7 @@
 #include "cece/render/Grid.hpp"
 
 // CeCe
-#include "cece/core/DynamicArray.hpp"
+#include "cece/DynamicArray.hpp"
 #include "cece/render/Context.hpp"
 #include "cece/render/VertexFormat.hpp"
 

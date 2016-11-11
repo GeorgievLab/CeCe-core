@@ -23,94 +23,86 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-// GTest
-#include "gtest/gtest.h"
+// Declaration
+#include "cece/AlignedAllocator.hpp"
+
+// C++
+#include <cstdlib>
+
+#ifdef _WIN32
+#include <malloc.h>
+#endif
 
 // CeCe
-#include "cece/core/IteratorRange.hpp"
-#include "cece/core/DynamicArray.hpp"
+#include "cece/Assert.hpp"
 
 /* ************************************************************************ */
 
-using namespace cece;
+#if defined(__MINGW32__) && !defined(__MINGW64_VERSION_MAJOR)
+#define _aligned_malloc __mingw_aligned_malloc
+#define _aligned_free  __mingw_aligned_free
+#endif
 
 /* ************************************************************************ */
 
-TEST(IteratorRangeTest, size)
+namespace cece {
+
+/* ************************************************************************ */
+
+namespace {
+
+/* ************************************************************************ */
+
+bool is_power_of_two(std::size_t x) noexcept
 {
-    {
-        DynamicArray<int> array;
-        IteratorRange<DynamicArray<int>::iterator> range(std::begin(array), std::end(array));
-        EXPECT_TRUE(range.isEmpty());
-        EXPECT_EQ(0u, range.getSize());
-    }
+    size_t powerOfTwo = 1ul;
 
-    {
-        const char value[] = "Hello world";
-        IteratorRange<const char*> range(std::begin(value), std::end(value));
-        EXPECT_FALSE(range.isEmpty());
-        EXPECT_EQ(sizeof(value), range.getSize());
-    }
+    while (powerOfTwo < x && powerOfTwo < 2147483648ul)
+        powerOfTwo *= 2;
+
+    return (x == powerOfTwo);
 }
 
 /* ************************************************************************ */
 
-TEST(IteratorRangeTest, makeRange)
-{
-    {
-        auto range = makeRange("Hello world!");
-        EXPECT_FALSE(range.isEmpty());
-        EXPECT_EQ(13u, range.getSize());
-    }
-
-    {
-        auto array = DynamicArray<int>{10, 15, 30, 0};
-        auto range = makeRange(array);
-        EXPECT_FALSE(range.isEmpty());
-        EXPECT_EQ(4u, range.getSize());
-    }
 }
 
 /* ************************************************************************ */
 
-TEST(IteratorRangeTest, advance)
+void* allocate_aligned_memory(std::size_t align, std::size_t size)
 {
-    {
-        auto array = DynamicArray<int>{10, 15, 30, 0};
-        auto range = makeRange(array);
-        EXPECT_FALSE(range.isEmpty());
-        ASSERT_EQ(4u, range.getSize());
-        EXPECT_EQ(10, range.front());
-        range.advanceBegin();
-        ASSERT_EQ(3u, range.getSize());
-        EXPECT_EQ(15, range.front());
-        range.advanceBegin();
-        ASSERT_EQ(2u, range.getSize());
-        EXPECT_EQ(30, range.front());
-        range.advanceBegin();
-        ASSERT_EQ(1u, range.getSize());
-        EXPECT_EQ(0, range.front());
-        range.advanceBegin();
-        EXPECT_EQ(0u, range.getSize());
-        EXPECT_TRUE(range.isEmpty());
-    }
+    CECE_ASSERT(align >= sizeof(void*));
+    CECE_ASSERT(is_power_of_two(align));
+
+    if (size == 0)
+        return nullptr;
+
+#ifdef _WIN32
+    void* ptr = _aligned_malloc(size, align);
+#else
+    void* ptr = nullptr;
+    int rc = posix_memalign(&ptr, align, size);
+
+    if (rc != 0)
+        return nullptr;
+#endif
+
+    return ptr;
 }
 
 /* ************************************************************************ */
 
-TEST(IteratorRangeTest, range)
+void deallocate_aligned_memory(void* ptr) noexcept
 {
-    {
-        auto rng = range(1, 10);
-        EXPECT_FALSE(rng.isEmpty());
-        ASSERT_EQ(9u, rng.getSize());
-    }
+#ifdef _WIN32
+    _aligned_free(ptr);
+#else
+    free(ptr);
+#endif
+}
 
-    {
-        auto rng = range(0, 1000000);
-        EXPECT_FALSE(rng.isEmpty());
-        ASSERT_EQ(1000000u, rng.getSize());
-    }
+/* ************************************************************************ */
+
 }
 
 /* ************************************************************************ */

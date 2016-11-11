@@ -28,12 +28,12 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/IteratorRange.hpp"
-#include "cece/core/Map.hpp"
+#include "cece/IteratorRange.hpp"
+#include "cece/Map.hpp"
 #include "cece/core/Real.hpp"
-#include "cece/core/StringView.hpp"
-#include "cece/core/Exception.hpp"
-#include "cece/core/Parameters.hpp"
+#include "cece/StringView.hpp"
+#include "cece/Exception.hpp"
+#include "cece/Parameters.hpp"
 #include "cece/lang/Parser.hpp"
 
 /* ************************************************************************ */

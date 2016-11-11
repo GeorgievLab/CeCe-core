@@ -23,16 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// C++
-#include <chrono>
-
-// CeCe
-#include "cece/core/String.hpp"
-#include "cece/io/OutStream.hpp"
+#if _MSC_VER
+#pragma message("Include 'cece/perf/TimeMeasurement' instead")
+#else
+#warning "Include 'cece/perf/TimeMeasurement.hpp' instead"
+#endif
+#include "cece/perf/TimeMeasurement.hpp"
 
 /* ************************************************************************ */
 
@@ -41,177 +37,13 @@ inline namespace core {
 
 /* ************************************************************************ */
 
-/**
- * @brief Measurement clock.
- */
-using Clock = std::chrono::high_resolution_clock;
-
-/* ************************************************************************ */
-
-/**
- * @brief Returns if measurement is enabled.
- *
- * @return
- */
-bool isMeasureTimeEnabled() noexcept;
-
-/* ************************************************************************ */
-
-/**
- * @brief Returns current output stream to measurement output.
- *
- * @return
- */
-io::OutStream* getMeasureTimeOutput() noexcept;
-
-/* ************************************************************************ */
-
-/**
- * @brief Change output stream to measurement output.
- *
- * @param output
- */
-void setMeasureTimeOutput(io::OutStream* output) noexcept;
-
-/* ************************************************************************ */
-
-/**
- * @brief Default functor for writing measurement output.
- */
-struct DefaultMeasurementOutput
-{
-
-    /**
-     * @brief Functor function.
-     *
-     * @param out  Output stream.
-     * @param name Measurement name.
-     * @param dt   Measured time.
-     */
-    void operator()(io::OutStream& out, const String& name, Clock::duration dt) const noexcept
-    {
-        using namespace std::chrono;
-        out << name << ";" << duration_cast<microseconds>(dt).count() << "\n";
-    }
-};
-
-/* ************************************************************************ */
-
-/**
- * @brief Time measurement class.
- */
-template<typename OutFn>
-class TimeMeasurementBase
-{
-
-// Public Ctors & Dtors
-public:
-
-
-    /**
-     * @brief Constructor.
-     *
-     * @param name Measurement name.
-     * @param out  Output function.
-     */
-    explicit TimeMeasurementBase(String name, OutFn out)
-        : m_name(std::move(name))
-        , m_outFn(std::move(out))
-    {
-        m_start = Clock::now();
-    }
-
-
-    /**
-     * @brief Destructor.
-     */
-    ~TimeMeasurementBase()
-    {
-        if (getMeasureTimeOutput())
-        {
-            auto end = Clock::now();
-            m_outFn(*getMeasureTimeOutput(), m_name, end - m_start);
-        }
-    }
-
-
-// Private Data Members
-private:
-
-    /// Measurement name.
-    String m_name;
-
-    /// Measurement start
-    Clock::time_point m_start;
-
-    /// Output function.
-    OutFn m_outFn;
-};
-
-/* ************************************************************************ */
-
-#ifndef CECE_TIME_MEASUREMENT
-/**
- * @brief Dummy struct for time measurement that doesn't invoke unused variable
- * warnings.
- */
-struct TimeMeasurementDummy
-{
-    TimeMeasurementDummy() noexcept {}
-    ~TimeMeasurementDummy() {}
-};
-#endif
-
-/* ************************************************************************ */
-
-#ifndef CECE_TIME_MEASUREMENT
-/**
- * @brief Dummy function for time measurement.
- *
- * @param args
- *
- * @return
- */
-template<typename... Args>
-inline TimeMeasurementDummy measure_time(Args&&... args) noexcept
-{
-    return {};
-}
-#endif
-
-/* ************************************************************************ */
-
-#ifdef CECE_TIME_MEASUREMENT
-/**
- * @brief Measure time for current statement block.
- *
- * @param name Measurement name.
- * @param fn   Output function.
- *
- * @return
- */
-template<typename Fn>
-inline TimeMeasurementBase<Fn> measure_time(String name, Fn fn) noexcept
-{
-    return TimeMeasurementBase<Fn>{std::move(name), fn};
-}
-#endif
-
-/* ************************************************************************ */
-
-#ifdef CECE_TIME_MEASUREMENT
-/**
- * @brief Measure time for current statement block.
- *
- * @param name Measurement name.
- *
- * @return
- */
-inline TimeMeasurementBase<DefaultMeasurementOutput> measure_time(String name) noexcept
-{
-    return TimeMeasurementBase<DefaultMeasurementOutput>{std::move(name), DefaultMeasurementOutput{}};
-}
-#endif
+using perf::Clock;
+using perf::isMeasureTimeEnabled;
+using perf::getMeasureTimeOutput;
+using perf::setMeasureTimeOutput;
+using perf::DefaultMeasurementOutput;
+using perf::TimeMeasurementBase;
+using perf::measure_time;
 
 /* ************************************************************************ */
 

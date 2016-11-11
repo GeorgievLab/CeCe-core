@@ -27,11 +27,23 @@ cmake_minimum_required(VERSION 3.1)
 
 # ######################################################################### #
 
-add_subdirectory(core)
+cece_add_test(base
+    SOURCES
+        AlignedAllocatorTest.cpp
+        DynamicArrayTest.cpp
+        StringViewTest.cpp
+        ParametersTest.cpp
+        PtrContainerTest.cpp
+        ViewPtrTest.cpp
+        IteratorRangeTest.cpp
+)
+
 add_subdirectory(io)
 add_subdirectory(os)
+add_subdirectory(math)
 add_subdirectory(unit)
 add_subdirectory(plugin)
+add_subdirectory(lang)
 
 if (CECE_RENDER)
     add_subdirectory(render)

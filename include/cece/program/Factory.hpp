@@ -29,7 +29,7 @@
 
 // CeCe
 #include "cece/export.hpp"
-#include "cece/core/Factory.hpp"
+#include "cece/factory/Factory.hpp"
 
 /* ************************************************************************ */
 
@@ -45,7 +45,7 @@ class Program;
 /**
  * @brief Program factory interface.
  */
-using Factory = Factory<Program>;
+using Factory = factory::Factory<Program>;
 
 /* ************************************************************************ */
 

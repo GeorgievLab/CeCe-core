@@ -23,12 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// C++
-#include <array>
+#if _MSC_VER
+#pragma message("Include 'cece/StaticArray.hpp' instead")
+#else
+#warning "Include 'cece/StaticArray.hpp' instead"
+#endif
+#include "cece/StaticArray.hpp"
 
 /* ************************************************************************ */
 
@@ -37,14 +37,7 @@ inline namespace core {
 
 /* ************************************************************************ */
 
-/**
- * @brief Static (stack allocated) array.
- *
- * @tparam T Element type.
- * @tparam N Number of elements.
- */
-template<typename T, std::size_t N>
-using StaticArray = std::array<T, N>;
+using cece::StaticArray;
 
 /* ************************************************************************ */
 

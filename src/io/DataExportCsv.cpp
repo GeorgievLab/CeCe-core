@@ -32,7 +32,7 @@
 #include <iostream>
 
 // CeCe
-#include "cece/core/DynamicArray.hpp"
+#include "cece/DynamicArray.hpp"
 #include "cece/io/StringStream.hpp"
 
 /* ************************************************************************ */

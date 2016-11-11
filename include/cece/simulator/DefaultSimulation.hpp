@@ -36,11 +36,11 @@
 #include <cstddef>
 
 // CeCe
-#include "cece/core/String.hpp"
-#include "cece/core/Map.hpp"
-#include "cece/core/UniquePtr.hpp"
-#include "cece/core/ViewPtr.hpp"
-#include "cece/core/Parameters.hpp"
+#include "cece/String.hpp"
+#include "cece/Map.hpp"
+#include "cece/UniquePtr.hpp"
+#include "cece/ViewPtr.hpp"
+#include "cece/Parameters.hpp"
 #include "cece/core/IterationType.hpp"
 #include "cece/math/Vector.hpp"
 #include "cece/io/FilePath.hpp"

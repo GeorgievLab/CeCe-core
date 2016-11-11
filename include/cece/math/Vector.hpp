@@ -33,9 +33,9 @@
 
 // CeCe
 #include "cece/config.hpp"
+#include "cece/Assert.hpp"
 #include "cece/core/Real.hpp"
-#include "cece/core/Assert.hpp"
-#include "cece/core/StaticArray.hpp"
+#include "cece/StaticArray.hpp"
 #include "cece/math/Zero.hpp"
 #include "cece/io/InStream.hpp"
 #include "cece/io/OutStream.hpp"

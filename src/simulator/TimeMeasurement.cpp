@@ -36,7 +36,7 @@ namespace simulator {
 
 /* ************************************************************************ */
 
-void TimeMeasurement::operator()(io::OutStream& out, StringView name, Clock::duration dt) const noexcept
+void TimeMeasurement::operator()(io::OutStream& out, StringView name, perf::Clock::duration dt) const noexcept
 {
     using namespace std::chrono;
     #pragma omp critical

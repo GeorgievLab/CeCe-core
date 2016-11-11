@@ -31,7 +31,7 @@
 #include <sstream>
 
 // CeCe
-#include "cece/core/Parameters.hpp"
+#include "cece/Parameters.hpp"
 #include "cece/simulator/Simulation.hpp"
 
 /* ************************************************************************ */

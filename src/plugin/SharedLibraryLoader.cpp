@@ -28,8 +28,8 @@
 
 // CeCe
 #include "cece/config.hpp"
-#include "cece/core/Assert.hpp"
-#include "cece/core/ViewPtr.hpp"
+#include "cece/Assert.hpp"
+#include "cece/ViewPtr.hpp"
 #include "cece/log/Log.hpp"
 #include "cece/plugin/Exception.hpp"
 #include "cece/plugin/definition.hpp"

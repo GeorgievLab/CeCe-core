@@ -29,7 +29,7 @@
 
 // CeCe
 #include "cece/export.hpp"
-#include "cece/core/Factory.hpp"
+#include "cece/factory/Factory.hpp"
 
 /* ************************************************************************ */
 
@@ -49,7 +49,7 @@ class Module;
 /**
  * @brief Module factory interface.
  */
-using Factory = Factory<Module, simulator::Simulation&>;
+using Factory = factory::Factory<Module, simulator::Simulation&>;
 
 /* ************************************************************************ */
 

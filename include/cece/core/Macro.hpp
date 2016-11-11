@@ -23,28 +23,11 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-/**
- * @brief Convert argument to string.
- *
- * @param s Argument to convert.
- *
- * @return "s".
- */
-#define STR(s) # s
-
-/* ************************************************************************ */
-
-/**
- * @brief Convert value of argument to string.
- *
- * @param s Macro name.
- *
- * @return Stringified macro value.
- */
-#define XSTR(s) STR(s)
+#if _MSC_VER
+#pragma message("Include 'cece/Macro.hpp' instead")
+#else
+#warning "Include 'cece/Macro.hpp' instead"
+#endif
+#include "cece/Macro.hpp"
 
 /* ************************************************************************ */

@@ -38,7 +38,7 @@
 #endif
 
 // CeCe
-#include "cece/core/Exception.hpp"
+#include "cece/Exception.hpp"
 #include "cece/log/Log.hpp"
 
 /* ************************************************************************ */

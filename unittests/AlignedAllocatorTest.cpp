@@ -24,17 +24,13 @@
 /* ************************************************************************ */
 
 // C++
-#include <algorithm>
+#include <cstdint>
 
 // GTest
 #include "gtest/gtest.h"
 
 // CeCe
-#include "cece/core/UniquePtr.hpp"
-#include "cece/core/String.hpp"
-#include "cece/core/Exception.hpp"
-#include "cece/core/StaticArray.hpp"
-#include "cece/core/PtrContainer.hpp"
+#include "cece/AlignedAllocator.hpp"
 
 /* ************************************************************************ */
 
@@ -42,112 +38,52 @@ using namespace cece;
 
 /* ************************************************************************ */
 
-TEST(PtrContainerTest, ctorEmpty)
+TEST(AlignedAllocatorTest, byte8)
 {
-    PtrContainer<int> data;
-    EXPECT_EQ(0u, data.getCount());
+    for (int i = 0; i < 10000; ++i)
+    {
+        void* ptr = allocate_aligned_memory(8, 100);
+        EXPECT_EQ(0u, reinterpret_cast<uintptr_t>(ptr) & 0x7);
+        deallocate_aligned_memory(ptr);
+    }
 }
 
 /* ************************************************************************ */
 
-TEST(PtrContainerTest, read)
+TEST(AlignedAllocatorTest, byte16)
 {
-    PtrContainer<int> data;
-    data.create(5);
-    EXPECT_EQ(1u, data.getCount());
-
-    EXPECT_EQ(5, *data[0]);
-
-    data.create(0);
-    data.create(566);
-    EXPECT_EQ(3u, data.getCount());
-
-    EXPECT_EQ(5, *data[0]);
-    EXPECT_EQ(0, *data[1]);
-    EXPECT_EQ(566, *data[2]);
+    for (int i = 0; i < 10000; ++i)
+    {
+        void* ptr = allocate_aligned_memory(16, 100);
+        EXPECT_EQ(0u, reinterpret_cast<uintptr_t>(ptr) & 0xF);
+        deallocate_aligned_memory(ptr);
+    }
 }
 
 /* ************************************************************************ */
 
-TEST(PtrContainerTest, get)
+TEST(AlignedAllocatorTest, byte32)
 {
-    PtrContainer<int> data;
-    data.create(0);
-    data.create(3);
-    EXPECT_EQ(2u, data.getCount());
-
-    EXPECT_EQ(0, *data.get(0));
-    EXPECT_EQ(3, *data.get(1));
-    EXPECT_THROW(data.get(2), OutOfRangeException);
+    for (int i = 0; i < 10000; ++i)
+    {
+        void* ptr = allocate_aligned_memory(32, 100);
+        EXPECT_EQ(0u, reinterpret_cast<uintptr_t>(ptr) & 0x1F);
+        deallocate_aligned_memory(ptr);
+    }
 }
 
 /* ************************************************************************ */
 
-TEST(PtrContainerTest, write)
+TEST(AlignedAllocatorTest, allocator)
 {
-    PtrContainer<int> data;
-    data.add(makeUnique<int>(10));
-    EXPECT_EQ(1u, data.getCount());
+    AlignedAllocator<int, 32> allocator;
 
-    EXPECT_EQ(10, *data.get(0));
-}
-
-/* ************************************************************************ */
-
-TEST(PtrContainerTest, remove)
-{
-    PtrContainer<int> data;
-    auto ptr1 = data.create(1);
-    auto ptr2 = data.create(2);
-    auto ptr3 = data.create(3);
-
-    EXPECT_EQ(1, *ptr1);
-    EXPECT_EQ(2, *ptr2);
-    EXPECT_EQ(3, *ptr3);
-    EXPECT_EQ(3u, data.getCount());
-
-    data.remove(ptr2);
-    data.remove(ptr1);
-
-    EXPECT_EQ(1u, data.getCount());
-    EXPECT_EQ(*ptr3, *data.get(0));
-    EXPECT_EQ(3, *data.get(0));
-}
-
-/* ************************************************************************ */
-
-TEST(PtrContainerTest, clear)
-{
-    PtrContainer<int> data;
-    data.create(1);
-    data.create(2);
-    data.create(3);
-    EXPECT_EQ(3u, data.getCount());
-
-    data.clear();
-
-    EXPECT_EQ(0u, data.getCount());
-}
-
-/* ************************************************************************ */
-
-TEST(PtrContainerTest, iterate)
-{
-    const StaticArray<String, 3> names{{"name1", "name2", "name3"}};
-
-    PtrContainer<String> data;
-    ASSERT_EQ(0u, data.getCount());
-
-    for (const auto& name : names)
-        data.create(name);
-
-    // Values
-    EXPECT_TRUE(std::equal(
-        std::begin(data), std::end(data),
-        std::begin(names),
-        [](const UniquePtr<String>& item, const String& name) {
-            return *item == name;
-        }));
+    for (int i = 0; i < 10000; ++i)
+    {
+        auto ptr = allocator.allocate(10);
+        EXPECT_EQ(0u, reinterpret_cast<uintptr_t>(ptr) & 0x1F);
+        allocator.deallocate(ptr, 10);
+    }
 }
 
 /* ************************************************************************ */

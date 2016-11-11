@@ -28,11 +28,11 @@
 /* ************************************************************************ */
 
 // CeCe
+#include "cece/StringView.hpp"
+#include "cece/ViewPtr.hpp"
+#include "cece/Set.hpp"
+#include "cece/Parameters.hpp"
 #include "cece/io/FilePath.hpp"
-#include "cece/core/StringView.hpp"
-#include "cece/core/ViewPtr.hpp"
-#include "cece/core/Set.hpp"
-#include "cece/core/Parameters.hpp"
 #include "cece/plugin/Manager.hpp"
 
 /// @deprecated

@@ -28,9 +28,9 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/String.hpp"
-#include "cece/core/StringView.hpp"
-#include "cece/core/Map.hpp"
+#include "cece/String.hpp"
+#include "cece/StringView.hpp"
+#include "cece/Map.hpp"
 #include "cece/plugin/RepositoryRecord.hpp"
 
 /* ************************************************************************ */

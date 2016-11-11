@@ -28,8 +28,8 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/Pair.hpp"
-#include "cece/core/DynamicArray.hpp"
+#include "cece/Pair.hpp"
+#include "cece/DynamicArray.hpp"
 #include "cece/math/Vector.hpp"
 #include "cece/render/Buffer.hpp"
 

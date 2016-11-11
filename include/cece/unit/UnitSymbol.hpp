@@ -32,8 +32,8 @@
 #include <utility>
 
 // CeCe
-#include "cece/core/StaticArray.hpp"
-#include "cece/core/IntegerSequence.hpp"
+#include "cece/StaticArray.hpp"
+#include "cece/IntegerSequence.hpp"
 #include "cece/unit/Units.hpp"
 
 /* ************************************************************************ */

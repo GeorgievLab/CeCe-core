@@ -30,9 +30,9 @@
 #include "gtest/gtest.h"
 
 // CeCe
-#include "cece/core/String.hpp"
-#include "cece/core/StaticArray.hpp"
-#include "cece/core/Parameters.hpp"
+#include "cece/String.hpp"
+#include "cece/StaticArray.hpp"
+#include "cece/Parameters.hpp"
 
 /* ************************************************************************ */
 

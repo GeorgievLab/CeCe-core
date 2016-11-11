@@ -28,10 +28,10 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/String.hpp"
-#include "cece/core/StringView.hpp"
-#include "cece/core/UniquePtr.hpp"
-#include "cece/core/FactoryManager.hpp"
+#include "cece/String.hpp"
+#include "cece/StringView.hpp"
+#include "cece/UniquePtr.hpp"
+#include "cece/factory/FactoryManager.hpp"
 #include "cece/loader/Factory.hpp"
 
 /* ************************************************************************ */
@@ -48,7 +48,7 @@ class Loader;
 /**
  * @brief Loader factory manager.
  */
-class FactoryManager : public core::FactoryManager<Factory>
+class FactoryManager : public factory::FactoryManager<Factory>
 {
 
 // Public Mutators
@@ -65,7 +65,7 @@ public:
     template<typename LoaderType>
     void createForLoader(String name)
     {
-        create<FactoryTyped<LoaderType>>(std::move(name));
+        create<factory::FactoryTyped<LoaderType>>(std::move(name));
     }
 
 

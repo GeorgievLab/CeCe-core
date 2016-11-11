@@ -23,84 +23,113 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-// GTest
-#include "gtest/gtest.h"
+// Declaration
+#include "cece/Parameters.hpp"
 
-// CeCe
-#include "cece/core/IteratorRange.hpp"
-#include "cece/math/constants.hpp"
-#include "cece/lang/ExpressionParser.hpp"
+// C++
+#include <algorithm>
 
 /* ************************************************************************ */
 
-using namespace cece;
-using namespace cece::lang;
+namespace cece {
 
 /* ************************************************************************ */
 
-TEST(ExpressionParser, basic)
+namespace {
+
+/* ************************************************************************ */
+
+/**
+ * @brief Find parameter in container.
+ *
+ * @param data
+ *
+ * @return
+ */
+template<typename Container>
+auto find(Container& data, Parameters::KeyViewType name) noexcept -> decltype(&(data.begin()->value))
 {
-    EXPECT_FLOAT_EQ(15.f, parseExpression("15"));
-    EXPECT_FLOAT_EQ(15.f, parseExpression("15.f"));
-    EXPECT_FLOAT_EQ(10.f, parseExpression("2*5"));
-    EXPECT_FLOAT_EQ(4.f, parseExpression("2*6/3"));
-    EXPECT_FLOAT_EQ(10.f, parseExpression("2 * 5"));
-    EXPECT_FLOAT_EQ(9.f, parseExpression("3 * (1 + 2)"));
-    EXPECT_FLOAT_EQ(-3.f, parseExpression("3 * (1 - 2)"));
-    EXPECT_FLOAT_EQ(13.f, parseExpression("2 * 5 + 3"));
-    EXPECT_FLOAT_EQ(11.f, parseExpression("5 + 2 * 3"));
-    EXPECT_FLOAT_EQ(math::PI, parseExpression("pi"));
-    EXPECT_FLOAT_EQ(math::E, parseExpression("e"));
+    auto it = std::find_if(data.begin(), data.end(),
+        [&name](const Parameters::Record& p) {
+            return p.name == name;
+        }
+    );
+
+    return it != data.end() ? &(it->value) : nullptr;
 }
 
 /* ************************************************************************ */
 
-TEST(ExpressionParser, functions)
-{
-    EXPECT_FLOAT_EQ(3.f, parseExpression("sqrt(9)"));
-    EXPECT_FLOAT_EQ(10.f, parseExpression("abs(10)"));
-    EXPECT_FLOAT_EQ(10.f, parseExpression("abs(-10)"));
-    EXPECT_FLOAT_EQ(0.f, parseExpression("log(1)"));
-    EXPECT_FLOAT_EQ(0.f, parseExpression("log    (1)"));
-    EXPECT_FLOAT_EQ(0.f, parseExpression("sin(0)"));
-    EXPECT_FLOAT_EQ(2.f, parseExpression("ln(E^2)"));
-    //EXPECT_FLOAT_EQ(0.f, parseExpression("sin(atan(1)*4)"));
-    EXPECT_FLOAT_EQ(1.f, parseExpression("cos(2*pi)"));
 }
 
 /* ************************************************************************ */
 
-TEST(ExpressionParser, variables)
+bool Parameters::exists(KeyViewType name) const noexcept
 {
-    EXPECT_FLOAT_EQ(7.f, parseExpression("v1 * v2 + v3", Parameters{{
-        {"v1", "5.0"}, {"v2", "2"}, {"v3", "-3"}
-    }}));
+    return find(m_data, name) != nullptr;
 }
 
 /* ************************************************************************ */
 
-TEST(ExpressionParser, inner)
+Parameters::ValueType Parameters::get(KeyViewType name) const
 {
-    {
-        const char str[] = "15 + 3 hello";
-        auto range = makeRange(str);
+    auto ptr = find(m_data, name);
 
-        EXPECT_FLOAT_EQ(18.f, parseExpressionRef(range));
-        EXPECT_EQ(str + 7, range.begin());
-    }
+    if (ptr)
+        return *ptr;
+
+    throw MissingParameterException("Cannot find parameter: " + String(name));
 }
 
 /* ************************************************************************ */
 
-TEST(ExpressionParser, invalid)
+Parameters::ValueType& Parameters::get(KeyViewType name) noexcept
 {
-    EXPECT_THROW(parseExpression("45-    10 + lol"), UnknownConstantException);
-    EXPECT_THROW(parseExpression("sin()"), UnknownConstantException);
-    EXPECT_THROW(parseExpression(" 9 * cos ( 5"), MissingParenthesisException);
-    EXPECT_THROW(parseExpression(" 9 * cos ( "), UnknownConstantException);
-    EXPECT_THROW(parseExpression("5 + (10 * (6)"), MissingParenthesisException);
-    EXPECT_THROW(parseExpression("\t\b\b\v"), EmptyExpressionException);
-    EXPECT_THROW(parseExpression(" "), EmptyExpressionException);
+    auto ptr = find(m_data, name);
+
+    if (ptr)
+        return *ptr;
+
+    // Insert
+    m_data.emplace_back(Record{KeyType(name), ValueType{}});
+
+    return m_data.back().value;
+}
+
+/* ************************************************************************ */
+
+Parameters::ValueType Parameters::get(KeyViewType name, ValueType def) const noexcept
+{
+    auto ptr = find(m_data, name);
+
+    if (ptr)
+        return *ptr;
+
+    return def;
+}
+
+/* ************************************************************************ */
+
+void Parameters::set(KeyType name, ValueType value) noexcept
+{
+    auto ptr = find(m_data, name);
+
+    if (ptr)
+        *ptr = value;
+    else
+        m_data.emplace_back(Record{name, value});
+}
+
+/* ************************************************************************ */
+
+void Parameters::append(const Parameters& parameters) noexcept
+{
+    for (const auto& param : parameters.m_data)
+        set(param.name, param.value);
+}
+
+/* ************************************************************************ */
+
 }
 
 /* ************************************************************************ */

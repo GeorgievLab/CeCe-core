@@ -27,9 +27,9 @@
 #include "cece/render/errors.hpp"
 
 // CeCe
-#include "cece/core/Map.hpp"
-#include "cece/core/String.hpp"
-#include "cece/core/Exception.hpp"
+#include "cece/Map.hpp"
+#include "cece/String.hpp"
+#include "cece/Exception.hpp"
 
 /* ************************************************************************ */
 

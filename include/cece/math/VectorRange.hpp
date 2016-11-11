@@ -28,7 +28,7 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/IteratorRange.hpp"
+#include "cece/IteratorRange.hpp"
 #include "cece/math/Vector.hpp"
 
 /* ************************************************************************ */

@@ -31,9 +31,9 @@
 #include <cstdint>
 
 // CeCe
-#include "cece/core/String.hpp"
-#include "cece/core/StringView.hpp"
-#include "cece/core/StaticArray.hpp"
+#include "cece/String.hpp"
+#include "cece/StringView.hpp"
+#include "cece/StaticArray.hpp"
 #include "cece/math/Vector.hpp"
 #include "cece/io/OutStream.hpp"
 

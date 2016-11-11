@@ -30,8 +30,8 @@
 #include "gtest/gtest.h"
 
 // CeCe
-#include "cece/core/Assert.hpp"
-#include "cece/core/String.hpp"
+#include "cece/Assert.hpp"
+#include "cece/String.hpp"
 #include "cece/lang/Tokenizer.hpp"
 
 /* ************************************************************************ */

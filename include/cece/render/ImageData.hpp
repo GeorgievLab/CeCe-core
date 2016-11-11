@@ -31,7 +31,7 @@
 #include <cstdint>
 
 // CeCe
-#include "cece/core/DynamicArray.hpp"
+#include "cece/DynamicArray.hpp"
 #include "cece/math/Vector.hpp"
 
 /* ************************************************************************ */

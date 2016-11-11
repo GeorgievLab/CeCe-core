@@ -37,7 +37,7 @@ def convert(fOut, symbol, code):
     """
     valueCounter = 0;
 
-    fOut.write("#include \"cece/core/StaticArray.hpp\"\n")
+    fOut.write("#include \"cece/StaticArray.hpp\"\n")
     fOut.write("\n");
     fOut.write("// " + datetime.datetime.now().isoformat() + "\n");
     fOut.write("// #" + str(hashlib.md5(code).hexdigest()) + "\n");

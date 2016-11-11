@@ -28,7 +28,7 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/String.hpp"
+#include "cece/String.hpp"
 #include "cece/config/Configuration.hpp"
 
 /* ************************************************************************ */

@@ -27,7 +27,7 @@
 #include "cece/render/Buffer.hpp"
 
 // CeCe
-#include "cece/core/Assert.hpp"
+#include "cece/Assert.hpp"
 #include "cece/render/OpenGL.hpp"
 #include "cece/render/errors.hpp"
 

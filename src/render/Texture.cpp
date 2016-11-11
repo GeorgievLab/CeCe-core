@@ -27,8 +27,8 @@
 #include "cece/render/Texture.hpp"
 
 // CeCe
-#include "cece/core/Assert.hpp"
-#include "cece/core/DynamicArray.hpp"
+#include "cece/Assert.hpp"
+#include "cece/DynamicArray.hpp"
 #include "cece/render/OpenGL.hpp"
 #include "cece/render/errors.hpp"
 

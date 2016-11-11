@@ -28,11 +28,11 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/StringView.hpp"
-#include "cece/core/UniquePtr.hpp"
-#include "cece/core/ViewPtr.hpp"
-#include "cece/core/Pair.hpp"
-#include "cece/core/DynamicArray.hpp"
+#include "cece/StringView.hpp"
+#include "cece/UniquePtr.hpp"
+#include "cece/ViewPtr.hpp"
+#include "cece/Pair.hpp"
+#include "cece/DynamicArray.hpp"
 #include "cece/object/Object.hpp"
 
 #ifdef CECE_RENDER

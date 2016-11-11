@@ -30,7 +30,7 @@
 #include <cstdlib>
 
 // CeCe
-#include "cece/core/Exception.hpp"
+#include "cece/Exception.hpp"
 #include "cece/unit/UnitsCtors.hpp"
 
 /* ************************************************************************ */

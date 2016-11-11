@@ -40,8 +40,8 @@
 #include <utility>
 
 // CeCe
-#include "cece/core/StringView.hpp"
-#include "cece/core/DynamicArray.hpp"
+#include "cece/StringView.hpp"
+#include "cece/DynamicArray.hpp"
 #include "cece/render/Color.hpp"
 #include "cece/simulator/VisualizationLayer.hpp"
 

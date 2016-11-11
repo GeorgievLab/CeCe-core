@@ -28,7 +28,7 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/PtrContainer.hpp"
+#include "cece/PtrContainer.hpp"
 #include "cece/unit/Units.hpp"
 
 /* ************************************************************************ */

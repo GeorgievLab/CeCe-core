@@ -25,17 +25,7 @@
 
 cece_add_test(core
     SOURCES
-        AlignedAllocatorTest.cpp
-        DynamicArrayTest.cpp
-        IteratorRangeTest.cpp
         VectorRangeTest.cpp
-        StringViewTest.cpp
-        VectorTest.cpp
-        ExpressionParserTest.cpp
-        TokenizerTest.cpp
-        ParametersTest.cpp
-        PtrContainerTest.cpp
-        ViewPtrTest.cpp
 )
 
 # ######################################################################### #

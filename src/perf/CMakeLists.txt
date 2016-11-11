@@ -24,14 +24,12 @@
 # ######################################################################### #
 
 set(SRCS
-    AlignedAllocator.cpp
     TimeMeasurement.cpp
-    Parameters.cpp
 )
 
 # ######################################################################### #
 
-dir_pretend(SOURCES core/ ${SRCS})
+dir_pretend(SOURCES perf/ ${SRCS})
 
 set(CECE_SOURCES ${CECE_SOURCES} ${SOURCES} PARENT_SCOPE)
 

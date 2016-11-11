@@ -31,8 +31,8 @@
 #include <utility>
 
 // CeCe
-#include "cece/core/String.hpp"
-#include "cece/core/StringView.hpp"
+#include "cece/String.hpp"
+#include "cece/StringView.hpp"
 #include "cece/loader/FactoryManager.hpp"
 #include "cece/init/FactoryManager.hpp"
 #include "cece/object/FactoryManager.hpp"

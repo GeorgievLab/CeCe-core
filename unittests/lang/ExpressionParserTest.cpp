@@ -27,138 +27,80 @@
 #include "gtest/gtest.h"
 
 // CeCe
-#include "cece/core/ViewPtr.hpp"
+#include "cece/IteratorRange.hpp"
+#include "cece/math/constants.hpp"
+#include "cece/lang/ExpressionParser.hpp"
 
 /* ************************************************************************ */
 
 using namespace cece;
+using namespace cece::lang;
 
 /* ************************************************************************ */
 
-TEST(ViewPtrTest, ctorDefault)
+TEST(ExpressionParser, basic)
 {
-    ViewPtr<int> ptr;
-    EXPECT_EQ(nullptr, ptr);
-    EXPECT_FALSE(ptr);
+    EXPECT_FLOAT_EQ(15.f, parseExpression("15"));
+    EXPECT_FLOAT_EQ(15.f, parseExpression("15.f"));
+    EXPECT_FLOAT_EQ(10.f, parseExpression("2*5"));
+    EXPECT_FLOAT_EQ(4.f, parseExpression("2*6/3"));
+    EXPECT_FLOAT_EQ(10.f, parseExpression("2 * 5"));
+    EXPECT_FLOAT_EQ(9.f, parseExpression("3 * (1 + 2)"));
+    EXPECT_FLOAT_EQ(-3.f, parseExpression("3 * (1 - 2)"));
+    EXPECT_FLOAT_EQ(13.f, parseExpression("2 * 5 + 3"));
+    EXPECT_FLOAT_EQ(11.f, parseExpression("5 + 2 * 3"));
+    EXPECT_FLOAT_EQ(math::PI, parseExpression("pi"));
+    EXPECT_FLOAT_EQ(math::E, parseExpression("e"));
 }
 
 /* ************************************************************************ */
 
-TEST(ViewPtrTest, ctorRaw)
+TEST(ExpressionParser, functions)
 {
-    int val = 5;
-
-    ViewPtr<int> ptr(&val);
-    ASSERT_NE(nullptr, ptr);
-    EXPECT_TRUE(ptr);
-    EXPECT_EQ(&val, ptr);
-    EXPECT_EQ(5, *ptr);
+    EXPECT_FLOAT_EQ(3.f, parseExpression("sqrt(9)"));
+    EXPECT_FLOAT_EQ(10.f, parseExpression("abs(10)"));
+    EXPECT_FLOAT_EQ(10.f, parseExpression("abs(-10)"));
+    EXPECT_FLOAT_EQ(0.f, parseExpression("log(1)"));
+    EXPECT_FLOAT_EQ(0.f, parseExpression("log    (1)"));
+    EXPECT_FLOAT_EQ(0.f, parseExpression("sin(0)"));
+    EXPECT_FLOAT_EQ(2.f, parseExpression("ln(E^2)"));
+    //EXPECT_FLOAT_EQ(0.f, parseExpression("sin(atan(1)*4)"));
+    EXPECT_FLOAT_EQ(1.f, parseExpression("cos(2*pi)"));
 }
 
 /* ************************************************************************ */
 
-TEST(ViewPtrTest, ctorCopy)
+TEST(ExpressionParser, variables)
 {
-    int val = 5;
-    ViewPtr<int> ptr(&val);
-
-    ViewPtr<int> ptrCopy(ptr);
-    EXPECT_NE(nullptr, ptrCopy);
-    EXPECT_EQ(ptr, ptrCopy);
+    EXPECT_FLOAT_EQ(7.f, parseExpression("v1 * v2 + v3", Parameters{{
+        {"v1", "5.0"}, {"v2", "2"}, {"v3", "-3"}
+    }}));
 }
 
 /* ************************************************************************ */
 
-TEST(ViewPtrTest, ctorCopyChild)
+TEST(ExpressionParser, inner)
 {
-    struct A {};
-    struct B : public A {};
+    {
+        const char str[] = "15 + 3 hello";
+        auto range = makeRange(str);
 
-    B val;
-    ViewPtr<B> ptr(&val);
-
-    ViewPtr<A> ptrCopy(ptr);
-    EXPECT_NE(nullptr, ptrCopy);
-    EXPECT_EQ(ptr, ptrCopy);
+        EXPECT_FLOAT_EQ(18.f, parseExpressionRef(range));
+        EXPECT_EQ(str + 7, range.begin());
+    }
 }
 
 /* ************************************************************************ */
 
-TEST(ViewPtrTest, ctorUnique)
+TEST(ExpressionParser, invalid)
 {
-    UniquePtr<int> pval{new int{5}};
-
-    ViewPtr<int> ptr(pval);
-    EXPECT_NE(nullptr, ptr);
-    EXPECT_EQ(pval, ptr);
-}
-
-/* ************************************************************************ */
-
-TEST(ViewPtrTest, ctorUniqueChild)
-{
-    struct A {};
-    struct B : public A {};
-
-    UniquePtr<B> pval{new B};
-
-    ViewPtr<A> ptr(pval);
-    EXPECT_NE(nullptr, ptr);
-    EXPECT_EQ(pval, ptr);
-}
-
-/* ************************************************************************ */
-
-TEST(ViewPtrTest, get)
-{
-    int val = 5;
-    ViewPtr<int> ptr(&val);
-    ASSERT_TRUE(ptr);
-    EXPECT_EQ(5, *ptr.get());
-}
-
-/* ************************************************************************ */
-
-TEST(ViewPtrTest, reset)
-{
-    int val1 = 5;
-    int val2 = 3;
-    ViewPtr<int> ptr(&val1);
-    EXPECT_TRUE(ptr);
-    EXPECT_EQ(&val1, ptr);
-
-    ptr.reset(&val2);
-    EXPECT_TRUE(ptr);
-    EXPECT_EQ(&val2, ptr);
-
-    ptr.reset();
-    EXPECT_FALSE(ptr);
-    EXPECT_EQ(nullptr, ptr);
-}
-
-/* ************************************************************************ */
-
-TEST(ViewPtrTest, release)
-{
-    int val = 5;
-    ViewPtr<int> ptr(&val);
-    ASSERT_TRUE(ptr);
-    ptr.release(); // No memory leak
-    ASSERT_FALSE(ptr);
-}
-
-/* ************************************************************************ */
-
-TEST(ViewPtrTest, access)
-{
-    struct A { int val; int value() const { return val; } };
-
-    A val{5};
-
-    ViewPtr<A> ptr(&val);
-    ASSERT_NE(nullptr, ptr);
-    EXPECT_EQ(5, ptr->val);
-    EXPECT_EQ(5, ptr->value());
+    EXPECT_THROW(parseExpression("45-    10 + lol"), UnknownConstantException);
+    EXPECT_THROW(parseExpression("sin()"), UnknownConstantException);
+    EXPECT_THROW(parseExpression(" 9 * cos ( 5"), MissingParenthesisException);
+    EXPECT_THROW(parseExpression(" 9 * cos ( "), UnknownConstantException);
+    EXPECT_THROW(parseExpression("5 + (10 * (6)"), MissingParenthesisException);
+    EXPECT_THROW(parseExpression("\t\b\b\v"), EmptyExpressionException);
+    EXPECT_THROW(parseExpression(" "), EmptyExpressionException);
 }
 
 /* ************************************************************************ */

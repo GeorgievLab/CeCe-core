@@ -28,8 +28,8 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/IteratorRange.hpp"
-#include "cece/core/Exception.hpp"
+#include "cece/IteratorRange.hpp"
+#include "cece/Exception.hpp"
 #include "cece/log/Log.hpp"
 
 /* ************************************************************************ */

@@ -32,7 +32,7 @@
 #include <algorithm>
 
 // CeCe
-#include "cece/core/Assert.hpp"
+#include "cece/Assert.hpp"
 #include "cece/core/Real.hpp"
 #include "cece/math/Vector.hpp"
 #include "cece/math/Shape.hpp"

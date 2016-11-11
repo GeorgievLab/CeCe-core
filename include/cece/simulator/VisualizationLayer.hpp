@@ -41,7 +41,7 @@
 
 // CeCe
 #include "cece/config.hpp"
-#include "cece/core/String.hpp"
+#include "cece/String.hpp"
 
 /* ************************************************************************ */
 

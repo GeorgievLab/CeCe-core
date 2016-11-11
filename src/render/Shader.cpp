@@ -27,10 +27,10 @@
 #include "cece/render/Shader.hpp"
 
 // CeCe
-#include "cece/core/Assert.hpp"
-#include "cece/core/DynamicArray.hpp"
-#include "cece/core/String.hpp"
-#include "cece/core/Exception.hpp"
+#include "cece/Assert.hpp"
+#include "cece/DynamicArray.hpp"
+#include "cece/String.hpp"
+#include "cece/Exception.hpp"
 #include "cece/render/OpenGL.hpp"
 #include "cece/render/errors.hpp"
 

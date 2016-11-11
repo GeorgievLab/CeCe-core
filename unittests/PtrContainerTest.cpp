@@ -24,67 +24,130 @@
 /* ************************************************************************ */
 
 // C++
-#include <cstdint>
+#include <algorithm>
 
 // GTest
 #include "gtest/gtest.h"
 
 // CeCe
-#include "cece/core/AlignedAllocator.hpp"
+#include "cece/UniquePtr.hpp"
+#include "cece/String.hpp"
+#include "cece/Exception.hpp"
+#include "cece/StaticArray.hpp"
+#include "cece/PtrContainer.hpp"
 
 /* ************************************************************************ */
 
 using namespace cece;
-using namespace cece::core::memory;
 
 /* ************************************************************************ */
 
-TEST(AlignedAllocatorTest, byte8)
+TEST(PtrContainerTest, ctorEmpty)
 {
-    for (int i = 0; i < 10000; ++i)
-    {
-        void* ptr = allocate_aligned_memory(8, 100);
-        EXPECT_EQ(0u, reinterpret_cast<uintptr_t>(ptr) & 0x7);
-        deallocate_aligned_memory(ptr);
-    }
+    PtrContainer<int> data;
+    EXPECT_EQ(0u, data.getCount());
 }
 
 /* ************************************************************************ */
 
-TEST(AlignedAllocatorTest, byte16)
+TEST(PtrContainerTest, read)
 {
-    for (int i = 0; i < 10000; ++i)
-    {
-        void* ptr = allocate_aligned_memory(16, 100);
-        EXPECT_EQ(0u, reinterpret_cast<uintptr_t>(ptr) & 0xF);
-        deallocate_aligned_memory(ptr);
-    }
+    PtrContainer<int> data;
+    data.create(5);
+    EXPECT_EQ(1u, data.getCount());
+
+    EXPECT_EQ(5, *data[0]);
+
+    data.create(0);
+    data.create(566);
+    EXPECT_EQ(3u, data.getCount());
+
+    EXPECT_EQ(5, *data[0]);
+    EXPECT_EQ(0, *data[1]);
+    EXPECT_EQ(566, *data[2]);
 }
 
 /* ************************************************************************ */
 
-TEST(AlignedAllocatorTest, byte32)
+TEST(PtrContainerTest, get)
 {
-    for (int i = 0; i < 10000; ++i)
-    {
-        void* ptr = allocate_aligned_memory(32, 100);
-        EXPECT_EQ(0u, reinterpret_cast<uintptr_t>(ptr) & 0x1F);
-        deallocate_aligned_memory(ptr);
-    }
+    PtrContainer<int> data;
+    data.create(0);
+    data.create(3);
+    EXPECT_EQ(2u, data.getCount());
+
+    EXPECT_EQ(0, *data.get(0));
+    EXPECT_EQ(3, *data.get(1));
+    EXPECT_THROW(data.get(2), OutOfRangeException);
 }
 
 /* ************************************************************************ */
 
-TEST(AlignedAllocatorTest, allocator)
+TEST(PtrContainerTest, write)
 {
-    AlignedAllocator<int, 32> allocator;
+    PtrContainer<int> data;
+    data.add(makeUnique<int>(10));
+    EXPECT_EQ(1u, data.getCount());
 
-    for (int i = 0; i < 10000; ++i)
-    {
-        auto ptr = allocator.allocate(10);
-        EXPECT_EQ(0u, reinterpret_cast<uintptr_t>(ptr) & 0x1F);
-        allocator.deallocate(ptr, 10);
-    }
+    EXPECT_EQ(10, *data.get(0));
+}
+
+/* ************************************************************************ */
+
+TEST(PtrContainerTest, remove)
+{
+    PtrContainer<int> data;
+    auto ptr1 = data.create(1);
+    auto ptr2 = data.create(2);
+    auto ptr3 = data.create(3);
+
+    EXPECT_EQ(1, *ptr1);
+    EXPECT_EQ(2, *ptr2);
+    EXPECT_EQ(3, *ptr3);
+    EXPECT_EQ(3u, data.getCount());
+
+    data.remove(ptr2);
+    data.remove(ptr1);
+
+    EXPECT_EQ(1u, data.getCount());
+    EXPECT_EQ(*ptr3, *data.get(0));
+    EXPECT_EQ(3, *data.get(0));
+}
+
+/* ************************************************************************ */
+
+TEST(PtrContainerTest, clear)
+{
+    PtrContainer<int> data;
+    data.create(1);
+    data.create(2);
+    data.create(3);
+    EXPECT_EQ(3u, data.getCount());
+
+    data.clear();
+
+    EXPECT_EQ(0u, data.getCount());
+}
+
+/* ************************************************************************ */
+
+TEST(PtrContainerTest, iterate)
+{
+    const StaticArray<String, 3> names{{"name1", "name2", "name3"}};
+
+    PtrContainer<String> data;
+    ASSERT_EQ(0u, data.getCount());
+
+    for (const auto& name : names)
+        data.create(name);
+
+    // Values
+    EXPECT_TRUE(std::equal(
+        std::begin(data), std::end(data),
+        std::begin(names),
+        [](const UniquePtr<String>& item, const String& name) {
+            return *item == name;
+        }));
 }
 
 /* ************************************************************************ */

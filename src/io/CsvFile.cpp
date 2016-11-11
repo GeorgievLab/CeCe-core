@@ -27,7 +27,7 @@
 #include "cece/io/CsvFile.hpp"
 
 // CeCe
-#include "cece/core/Exception.hpp"
+#include "cece/Exception.hpp"
 
 /* ************************************************************************ */
 

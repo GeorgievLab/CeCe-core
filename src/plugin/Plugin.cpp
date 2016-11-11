@@ -30,7 +30,7 @@
 #include <utility>
 
 // CeCe
-#include "cece/core/Assert.hpp"
+#include "cece/Assert.hpp"
 
 /* ************************************************************************ */
 

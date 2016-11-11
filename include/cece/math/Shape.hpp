@@ -28,7 +28,7 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/DynamicArray.hpp"
+#include "cece/DynamicArray.hpp"
 #include "cece/unit/Units.hpp"
 #include "cece/unit/VectorUnits.hpp"
 

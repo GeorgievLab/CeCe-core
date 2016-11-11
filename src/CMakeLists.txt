@@ -43,8 +43,12 @@ endfunction ()
 
 # ######################################################################### #
 
+set(CECE_SOURCES
+    Parameters.cpp
+    AlignedAllocator.cpp
+)
+
 # Core files
-add_subdirectory(core)
 add_subdirectory(config)
 add_subdirectory(os)
 add_subdirectory(io)
@@ -52,6 +56,7 @@ add_subdirectory(log)
 add_subdirectory(unit)
 add_subdirectory(math)
 add_subdirectory(lang)
+add_subdirectory(perf)
 add_subdirectory(loader)
 add_subdirectory(init)
 add_subdirectory(module)

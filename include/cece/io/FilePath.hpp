@@ -31,8 +31,8 @@
 #include <utility>
 
 // CeCe
-#include "cece/core/String.hpp"
-#include "cece/core/DynamicArray.hpp"
+#include "cece/String.hpp"
+#include "cece/DynamicArray.hpp"
 #include "cece/io/InStream.hpp"
 #include "cece/io/OutStream.hpp"
 

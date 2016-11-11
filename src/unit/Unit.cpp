@@ -27,8 +27,8 @@
 #include "cece/unit/Unit.hpp"
 
 // CeCe
-#include "cece/core/Map.hpp"
-#include "cece/core/Exception.hpp"
+#include "cece/Map.hpp"
+#include "cece/Exception.hpp"
 
 /* ************************************************************************ */
 

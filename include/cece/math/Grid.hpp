@@ -28,8 +28,8 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/DynamicArray.hpp"
-#include "cece/core/AlignedAllocator.hpp"
+#include "cece/DynamicArray.hpp"
+#include "cece/AlignedAllocator.hpp"
 #include "cece/math/Vector.hpp"
 
 /* ************************************************************************ */

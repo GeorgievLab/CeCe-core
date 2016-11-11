@@ -23,12 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// C++
-#include <tuple>
+#if _MSC_VER
+#pragma message("Include 'cece/Tuple.hpp' instead")
+#else
+#warning "Include 'cece/Tuple.hpp' instead"
+#endif
+#include "cece/Tuple.hpp"
 
 /* ************************************************************************ */
 
@@ -37,69 +37,9 @@ inline namespace core {
 
 /* ************************************************************************ */
 
-/**
- * @brief Tuple type.
- *
- * @tparam Args Arguments type.
- */
-template<typename... Args>
-using Tuple = std::tuple<Args...>;
-
-/* ************************************************************************ */
-
-/**
- * @brief Make tuple function.
- */
-template<typename... Types>
-constexpr auto makeTuple(Types&&... args) -> decltype(std::make_tuple(std::forward<Types>(args)...))
-{
-    return std::make_tuple(std::forward<Types>(args)...);
-}
-
-/* ************************************************************************ */
-
-/**
- * @brief Access function for Tuple.
- *
- * @param t Tuple.
- *
- * @return
- */
-template<unsigned I, class... Types>
-constexpr auto getValue(Tuple<Types...>& t) -> decltype(std::get<I>(t))
-{
-   return std::get<I>(t);
-}
-
-/* ************************************************************************ */
-
-/**
- * @brief Access function for Tuple.
- *
- * @param t Tuple.
- *
- * @return
- */
-template<unsigned I, class... Types>
-constexpr auto getValue(Tuple<Types...>&& t) -> decltype(std::get<I>(t))
-{
-   return std::get<I>(t);
-}
-
-/* ************************************************************************ */
-
-/**
- * @brief Access function for Tuple.
- *
- * @param t Tuple.
- *
- * @return
- */
-template<unsigned I, class... Types>
-constexpr auto getValue(const Tuple<Types...>& t) -> decltype(std::get<I>(t))
-{
-   return std::get<I>(t);
-}
+using cece::Tuple;
+using cece::makeTuple;
+using cece::getValue;
 
 /* ************************************************************************ */
 

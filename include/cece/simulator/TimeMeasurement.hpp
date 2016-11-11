@@ -28,10 +28,10 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/ViewPtr.hpp"
-#include "cece/core/StringView.hpp"
-#include "cece/core/TimeMeasurement.hpp"
+#include "cece/ViewPtr.hpp"
+#include "cece/StringView.hpp"
 #include "cece/io/OutStream.hpp"
+#include "cece/perf/TimeMeasurement.hpp"
 
 /* ************************************************************************ */
 
@@ -84,7 +84,7 @@ struct TimeMeasurement
      * @param name Measurement name.
      * @param dt   Measured time.
      */
-    void operator()(io::OutStream& out, StringView name, Clock::duration dt) const noexcept;
+    void operator()(io::OutStream& out, StringView name, perf::Clock::duration dt) const noexcept;
 
 };
 

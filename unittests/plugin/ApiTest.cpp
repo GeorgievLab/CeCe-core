@@ -27,7 +27,7 @@
 #include "gtest/gtest.h"
 
 // CeCe
-#include "cece/core/ViewPtr.hpp"
+#include "cece/ViewPtr.hpp"
 #include "cece/plugin/Api.hpp"
 
 /* ************************************************************************ */

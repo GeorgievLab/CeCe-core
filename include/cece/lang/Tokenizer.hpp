@@ -28,10 +28,10 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/IteratorRange.hpp"
-#include "cece/core/Assert.hpp"
-#include "cece/core/Exception.hpp"
-#include "cece/core/StringView.hpp"
+#include "cece/Assert.hpp"
+#include "cece/IteratorRange.hpp"
+#include "cece/Exception.hpp"
+#include "cece/StringView.hpp"
 #include "cece/log/Log.hpp"
 
 /* ************************************************************************ */

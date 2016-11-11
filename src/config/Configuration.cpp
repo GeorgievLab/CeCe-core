@@ -30,7 +30,7 @@
 #include <algorithm>
 
 // CeCe
-#include "cece/core/Parameters.hpp"
+#include "cece/Parameters.hpp"
 #include "cece/config/MemoryImplementation.hpp"
 
 /* ************************************************************************ */

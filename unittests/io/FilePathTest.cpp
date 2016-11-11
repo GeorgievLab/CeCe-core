@@ -31,7 +31,7 @@
 #include <cstring>
 
 // CeCe
-#include "cece/core/String.hpp"
+#include "cece/String.hpp"
 #include "cece/io/StringStream.hpp"
 #include "cece/io/FilePath.hpp"
 

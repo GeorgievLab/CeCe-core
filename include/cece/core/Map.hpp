@@ -23,12 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// C++
-#include <map>
+#if _MSC_VER
+#pragma message("Include 'cece/Map.hpp' instead")
+#else
+#warning "Include 'cece/Map.hpp' instead"
+#endif
+#include "cece/Map.hpp"
 
 /* ************************************************************************ */
 
@@ -37,14 +37,7 @@ inline namespace core {
 
 /* ************************************************************************ */
 
-/**
- * @brief Map class.
- *
- * @tparam K
- * @tparam T
- */
-template<typename K, typename T>
-using Map = std::map<K, T>;
+using cece::Map;
 
 /* ************************************************************************ */
 

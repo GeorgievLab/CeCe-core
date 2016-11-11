@@ -32,7 +32,7 @@
 #include <algorithm>
 
 // CeCe
-#include "cece/core/Assert.hpp"
+#include "cece/Assert.hpp"
 #include "cece/core/Real.hpp"
 #include "cece/lang/Tokenizer.hpp"
 #include "cece/math/constants.hpp"

@@ -24,11 +24,11 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/core/String.hpp"
-#include "cece/core/StringView.hpp"
-#include "cece/core/SharedPtr.hpp"
-#include "cece/core/DynamicArray.hpp"
-#include "cece/core/Map.hpp"
+#include "cece/String.hpp"
+#include "cece/StringView.hpp"
+#include "cece/SharedPtr.hpp"
+#include "cece/DynamicArray.hpp"
+#include "cece/Map.hpp"
 #include "cece/config/Implementation.hpp"
 
 /* ************************************************************************ */

@@ -45,7 +45,7 @@ using namespace cece;
 TEST(PtrContainerTest, ctorEmpty)
 {
     PtrContainer<int> data;
-    EXPECT_EQ(0u, data.getCount());
+    EXPECT_EQ(0u, data.size());
 }
 
 /* ************************************************************************ */
@@ -54,13 +54,13 @@ TEST(PtrContainerTest, read)
 {
     PtrContainer<int> data;
     data.create(5);
-    EXPECT_EQ(1u, data.getCount());
+    EXPECT_EQ(1u, data.size());
 
     EXPECT_EQ(5, *data[0]);
 
     data.create(0);
     data.create(566);
-    EXPECT_EQ(3u, data.getCount());
+    EXPECT_EQ(3u, data.size());
 
     EXPECT_EQ(5, *data[0]);
     EXPECT_EQ(0, *data[1]);
@@ -69,16 +69,16 @@ TEST(PtrContainerTest, read)
 
 /* ************************************************************************ */
 
-TEST(PtrContainerTest, get)
+TEST(PtrContainerTest, at)
 {
     PtrContainer<int> data;
     data.create(0);
     data.create(3);
-    EXPECT_EQ(2u, data.getCount());
+    EXPECT_EQ(2u, data.size());
 
-    EXPECT_EQ(0, *data.get(0));
-    EXPECT_EQ(3, *data.get(1));
-    EXPECT_THROW(data.get(2), OutOfRangeException);
+    EXPECT_EQ(0, *data.at(0));
+    EXPECT_EQ(3, *data.at(1));
+    EXPECT_THROW(data.at(2), OutOfRangeException);
 }
 
 /* ************************************************************************ */
@@ -87,9 +87,9 @@ TEST(PtrContainerTest, write)
 {
     PtrContainer<int> data;
     data.add(makeUnique<int>(10));
-    EXPECT_EQ(1u, data.getCount());
+    EXPECT_EQ(1u, data.size());
 
-    EXPECT_EQ(10, *data.get(0));
+    EXPECT_EQ(10, *data.at(0));
 }
 
 /* ************************************************************************ */
@@ -104,14 +104,14 @@ TEST(PtrContainerTest, remove)
     EXPECT_EQ(1, *ptr1);
     EXPECT_EQ(2, *ptr2);
     EXPECT_EQ(3, *ptr3);
-    EXPECT_EQ(3u, data.getCount());
+    EXPECT_EQ(3u, data.size());
 
     data.remove(ptr2);
     data.remove(ptr1);
 
-    EXPECT_EQ(1u, data.getCount());
-    EXPECT_EQ(*ptr3, *data.get(0));
-    EXPECT_EQ(3, *data.get(0));
+    EXPECT_EQ(1u, data.size());
+    EXPECT_EQ(*ptr3, *data.at(0));
+    EXPECT_EQ(3, *data.at(0));
 }
 
 /* ************************************************************************ */
@@ -122,11 +122,11 @@ TEST(PtrContainerTest, clear)
     data.create(1);
     data.create(2);
     data.create(3);
-    EXPECT_EQ(3u, data.getCount());
+    EXPECT_EQ(3u, data.size());
 
     data.clear();
 
-    EXPECT_EQ(0u, data.getCount());
+    EXPECT_EQ(0u, data.size());
 }
 
 /* ************************************************************************ */
@@ -136,7 +136,7 @@ TEST(PtrContainerTest, iterate)
     const StaticArray<String, 3> names{{"name1", "name2", "name3"}};
 
     PtrContainer<String> data;
-    ASSERT_EQ(0u, data.getCount());
+    ASSERT_EQ(0u, data.size());
 
     for (const auto& name : names)
         data.create(name);

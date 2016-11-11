@@ -29,7 +29,8 @@
 
 // C++
 #include <utility>
-#include <algorithm>
+#include <tuple>
+#include <type_traits>
 
 // CeCe
 #include "cece/Assert.hpp"
@@ -37,27 +38,7 @@
 #include "cece/ViewPtr.hpp"
 #include "cece/String.hpp"
 #include "cece/StringView.hpp"
-#include "cece/DynamicArray.hpp"
-
-/* ************************************************************************ */
-
-/**
- * @brief Define pointer named container specialization.
- */
-#define CECE_PTR_NAMED_CONTAINER(...) \
-    namespace cece { inline namespace core { template class PtrNamedContainer<__VA_ARGS__>; } }
-
-/**
- * @brief Define extern pointer named container specialization.
- */
-#define CECE_PTR_NAMED_CONTAINER_EXTERN(...) \
-    namespace cece { inline namespace core { extern template class PtrNamedContainer<__VA_ARGS__>; } }
-
-/**
- * @brief Define pointer named container specialization.
- */
-#define CECE_PTR_NAMED_CONTAINER_INST(...) \
-    namespace cece { inline namespace core { template class PtrNamedContainer<__VA_ARGS__>; } }
+#include "cece/Map.hpp"
 
 /* ************************************************************************ */
 
@@ -69,134 +50,72 @@ namespace cece {
  * @brief Container for named pointers.
  */
 template<typename T>
-class PtrNamedContainer
+class PtrNamedMap : public Map<String, UniquePtr<T>>
 {
+    using Parent = Map<String, UniquePtr<T>>;
 
-// Public Types
+
+// Public Accessors & Mutators
 public:
 
 
-    /// Pointer type.
-    using type = T;
-
-
-// Public Structures
-public:
-
-
-    /**
-     * @brief Container record.
-     */
-    struct Record
-    {
-        /// Object name.
-        String name;
-
-        /// Pointer to object.
-        UniquePtr<T> object;
-
-
-        /**
-         * @brief Implicit cast to view pointer operator.
-         */
-        operator ViewPtr<T>() const noexcept
-        {
-            return object;
-        }
-
-
-        /**
-         * @brief Implicit cast to operator.
-         */
-        operator T*() const noexcept
-        {
-            return object.get();
-        }
-
-
-        /**
-         * @brief Dereference operator.
-         *
-         * @return Reference.
-         */
-        T& operator*() const noexcept
-        {
-            return *object;
-        }
-
-
-        /**
-         * @brief Pointer access operator.
-         *
-         * @return Pointer.
-         */
-        T* operator->() const noexcept
-        {
-            return object.get();
-        }
-    };
-
-
-// Public Operators
-public:
+    using Parent::operator[];
+    using Parent::at;
+    using Parent::begin;
+    using Parent::cbegin;
+    using Parent::end;
+    using Parent::cend;
+    using Parent::rbegin;
+    using Parent::crbegin;
+    using Parent::rend;
+    using Parent::crend;
+    using Parent::empty;
+    using Parent::size;
+    using Parent::max_size;
+    using Parent::clear;
+    using Parent::insert;
+    using Parent::emplace;
+    using Parent::erase;
+    using Parent::count;
+    using Parent::find;
 
 
     /**
-     * @brief Returns object with given name.
+     * @brief      Returns if an object with given name exists.
      *
-     * @param name Object name.
+     * @param      name  Object name.
      *
-     * @return Pointer to object.
-     */
-    ViewPtr<T> operator[](StringView name) const noexcept
-    {
-        return get(name);
-    }
-
-
-// Public Accessors
-public:
-
-
-    /**
-     * @brief Returns a number of stored objects.
-     *
-     * @return
-     */
-    std::size_t getCount() const noexcept
-    {
-        return m_data.size();
-    }
-
-
-    /**
-     * @brief Returns if an object with given name exists.
-     *
-     * @param name Object name.
-     *
-     * @return
+     * @return     If a value exists.
      */
     bool exists(StringView name) const noexcept
     {
-        return find(m_data, name) != nullptr;
+#if __cplusplus >= 201402L
+        return count(name) == 1;
+#else
+        return count(String(name)) == 1;
+#endif
     }
 
 
     /**
-     * @brief Returns object with given value.
+     * @brief      Returns value stored under given key.
      *
-     * @param name Object name.
+     * @param      name  Key name.
      *
-     * @return Pointer to object. Can be nullptr.
+     * @return     Pointer to value. Can be nullptr.
      */
     ViewPtr<T> get(StringView name) const noexcept
     {
-        auto ptr = find(m_data, name);
+#if __cplusplus >= 201402L
+        auto it = find(name);
+#else
+        auto it = find(String(name));
+#endif
 
-        if (ptr)
-            return *ptr;
+        if (it == end())
+            return nullptr;
 
-        return nullptr;
+        return it->second;
     }
 
 
@@ -209,59 +128,20 @@ public:
      *
      * @return Pointer to object. Can be nullptr.
      */
-    template<typename T2>
-    ViewPtr<T2> get(StringView name) const noexcept
+    template<typename U>
+    ViewPtr<U> get(StringView name) const noexcept
     {
-        auto ptr = get(name);
-        if (!ptr)
+#if __cplusplus >= 201402L
+        auto it = find(name);
+#else
+        auto it = find(String(name));
+#endif
+
+        if (it == end())
             return nullptr;
 
-        CECE_ASSERT(dynamic_cast<T2*>(ptr.get()));
-        return static_cast<T2*>(ptr.get());
-    }
-
-
-    /**
-     * @brief Returns begin iterator.
-     *
-     * @return
-     */
-    typename DynamicArray<Record>::const_iterator begin() const noexcept
-    {
-        return m_data.begin();
-    }
-
-
-    /**
-     * @brief Returns begin iterator.
-     *
-     * @return
-     */
-    typename DynamicArray<Record>::const_iterator cbegin() const noexcept
-    {
-        return m_data.cbegin();
-    }
-
-
-    /**
-     * @brief Returns end iterator.
-     *
-     * @return
-     */
-    typename DynamicArray<Record>::const_iterator end() const noexcept
-    {
-        return m_data.end();
-    }
-
-
-    /**
-     * @brief Returns end iterator.
-     *
-     * @return
-     */
-    typename DynamicArray<Record>::const_iterator cend() const noexcept
-    {
-        return m_data.cend();
+        CECE_ASSERT(dynamic_cast<U*>(it->second.get()));
+        return static_cast<U*>(it->second.get());
     }
 
 
@@ -270,59 +150,42 @@ public:
 
 
     /**
-     * @brief Store and object.
+     * @brief      Store a value under specified key.
      *
-     * @param object The object to store.
+     * @param[in]  name   The key name.
+     * @param[in]  value  The value to store.
      *
-     * @return View pointer to stored object.
+     * @return     View pointer to stored object.
      */
-    ViewPtr<T> add(String name, UniquePtr<T> object)
+    ViewPtr<T> add(String name, UniquePtr<T> value)
     {
-        auto ptr = find(m_data, name);
+        auto it = find(name);
 
-        if (ptr)
+        if (it != end())
         {
-            *ptr = std::move(object);
-            return *ptr;
+            it->second = std::move(value);
         }
         else
         {
-            m_data.emplace_back(Record{std::move(name), std::move(object)});
-            return m_data.back().object;
+            std::tie(it, std::ignore) = emplace(std::move(name), std::move(value));
         }
+
+        return it->second;
     }
 
 
     /**
-     * @brief Remove object from container.
+     * @brief      Remove value from container.
      *
-     * @param name Object name.
-     *
-     * @return A pointer to removed object.
+     * @param      name  Key name.
      */
-    UniquePtr<T> remove(StringView name)
+    void remove(StringView name)
     {
-        for (auto itB = m_data.begin(), itE = m_data.end(); itB != itE; ++itB)
-        {
-            if (itB->name == name)
-            {
-                auto ptr = std::move(itB->object);
-                m_data.erase(itB);
-                return ptr;
-            }
-        }
-
-        // Not found
-        return nullptr;
-    }
-
-
-    /**
-     * @brief Clear container.
-     */
-    void clear()
-    {
-        m_data.clear();
+#if __cplusplus >= 201402L
+        erase(name);
+#else
+        erase(String(name));
+#endif
     }
 
 
@@ -331,57 +194,32 @@ protected:
 
 
     /**
-     * @brief Invoke a member function for all stored objects.
+     * @brief      Invoke a member function for all stored values.
      *
-     * @tparam Args A list of member function arguments.
+     * @param[in]  fn         The member function.
      *
-     * @param function A pointer to object's member function that will be
-     *                 called for all stored listeners.
-     * @param args...
+     * @tparam     Fn         { description }
+     * @tparam     Args       A list of member function arguments.
      */
-    template<typename... Args>
-    void invoke(void (T::*fn)(Args...), Args&& ... args) const
+    template<typename Fn, typename... Args>
+    void invoke(Fn fn, Args&&... args) const
     {
+        static_assert(std::is_member_function_pointer<Fn>::value, "Fn is not a member function.");
+
         // Foreach all object
-        for (const auto& object : m_data)
+        for (const auto& p : *this)
         {
             // Call member function with given arguments
-            (object.object.get()->*fn)(std::forward<Args>(args)...);
+            (p.second.get()->*fn)(std::forward<Args>(args)...);
         }
     }
 
-
-// Private Operations
-private:
-
-
-    /**
-     * @brief Find an object in container.
-     *
-     * @param data
-     *
-     * @return
-     */
-    template<typename ContainerType>
-    static auto find(ContainerType& data, StringView name) noexcept -> decltype(&(data.begin()->object))
-    {
-        auto it = std::find_if(data.begin(), data.end(),
-            [&name](const Record& p) {
-                return p.name == name;
-            }
-        );
-
-        return it != data.end() ? &(it->object) : nullptr;
-    }
-
-
-// Private Data Members
-private:
-
-    /// Stored pointers.
-    DynamicArray<Record> m_data;
-
 };
+
+/* ************************************************************************ */
+
+template<typename T>
+using PtrNamedContainer = PtrNamedMap<T>;
 
 /* ************************************************************************ */
 

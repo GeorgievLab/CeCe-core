@@ -30,6 +30,7 @@
 // C++
 #include <utility>
 #include <type_traits>
+#include <algorithm>
 
 // CeCe
 #include "cece/UniquePtr.hpp"
@@ -38,217 +39,101 @@
 
 /* ************************************************************************ */
 
-/**
- * @brief Define pointer container specialization.
- */
-#define CECE_PTR_CONTAINER(...) \
-    namespace cece { template class PtrContainer<__VA_ARGS__>; }
-
-/**
- * @brief Define extern pointer container specialization.
- */
-#define CECE_PTR_CONTAINER_EXTERN(...) \
-    namespace cece { extern template class PtrContainer<__VA_ARGS__>; }
-
-/**
- * @brief Define pointer container specialization.
- */
-#define CECE_PTR_CONTAINER_INST(...) \
-    namespace cece { template class PtrContainer<__VA_ARGS__>; }
-
-/* ************************************************************************ */
-
 namespace cece {
 
 /* ************************************************************************ */
 
 /**
- * @brief Container for pointers.
+ * @brief      Container for pointers.
+ *
+ * @tparam     T     Stored element type.
  */
 template<typename T>
-class PtrContainer
+class PtrDynamicArray : public DynamicArray<UniquePtr<T>>
 {
+    using Parent = DynamicArray<UniquePtr<T>>;
 
-// Public Types
+// Public Ctors & Dtors
 public:
 
 
-    /// Pointer type.
-    using type = T;
+    using Parent::Parent;
 
 
-// Public Operators
+// Public Accessors & Mutators
 public:
 
 
-    /**
-     * @brief Returns n-th object.
-     *
-     * @param pos Required position.
-     *
-     * @return Pointer to object.
-     *
-     * @warning No boundary checking.
-     */
-    ViewPtr<T> operator[](std::size_t pos) const noexcept
-    {
-        return m_data[pos];
-    }
-
-
-// Public Accessors
-public:
-
-
-    /**
-     * @brief Returns a number of stored objects.
-     *
-     * @return
-     */
-    std::size_t getCount() const noexcept
-    {
-        return m_data.size();
-    }
-
-
-    /**
-     * @brief Returns n-th object.
-     *
-     * @param pos Required position.
-     *
-     * @return Pointer to object.
-     */
-    ViewPtr<T> get(std::size_t pos) const
-    {
-        return m_data.at(pos);
-    }
+    using Parent::operator[];
+    using Parent::at;
+    using Parent::back;
+    using Parent::front;
+    using Parent::data;
+    using Parent::begin;
+    using Parent::cbegin;
+    using Parent::end;
+    using Parent::cend;
+    using Parent::rbegin;
+    using Parent::crbegin;
+    using Parent::rend;
+    using Parent::crend;
+    using Parent::empty;
+    using Parent::size;
+    using Parent::max_size;
+    using Parent::reserve;
+    using Parent::capacity;
+    using Parent::shrink_to_fit;
+    using Parent::clear;
+    using Parent::insert;
+    using Parent::emplace;
+    using Parent::erase;
+    using Parent::push_back;
+    using Parent::emplace_back;
+    using Parent::pop_back;
+    using Parent::resize;
 
 
     /**
-     * @brief Returns begin iterator.
+     * @brief      Store a value.
      *
-     * @return
+     * @param      val   The value to store.
+     *
+     * @return     View pointer to stored value.
      */
-    typename DynamicArray<UniquePtr<T>>::const_iterator begin() const noexcept
+    ViewPtr<T> add(UniquePtr<T> val)
     {
-        return m_data.begin();
+        push_back(std::move(val));
+        return back();
     }
 
 
     /**
-     * @brief Returns begin iterator.
+     * @brief      Create and store an object.
      *
-     * @return
+     * @param[in]  args       Construction arguments.
+     *
+     * @tparam     U          Type of constructed object.
+     * @tparam     Args       Construction argument types.
+     *
+     * @return     View pointer to stored object.
      */
-    typename DynamicArray<UniquePtr<T>>::const_iterator cbegin() const noexcept
+    template<typename U = T, typename... Args>
+    ViewPtr<U> create(Args&&... args)
     {
-        return m_data.cbegin();
+        return ViewPtr<U>(add(makeUnique<U>(std::forward<Args>(args)...)));
     }
 
 
     /**
-     * @brief Returns end iterator.
+     * @brief      Remove value from container.
      *
-     * @return
+     * @param      val   The value to remove.
      */
-    typename DynamicArray<UniquePtr<T>>::const_iterator end() const noexcept
+    void remove(ViewPtr<T> val)
     {
-        return m_data.end();
-    }
-
-
-    /**
-     * @brief Returns end iterator.
-     *
-     * @return
-     */
-    typename DynamicArray<UniquePtr<T>>::const_iterator cend() const noexcept
-    {
-        return m_data.cend();
-    }
-
-
-// Public Mutators
-public:
-
-
-    /**
-     * @brief Store an object.
-     *
-     * @param object The object to store.
-     *
-     * @return View pointer to stored object.
-     */
-    ViewPtr<T> add(UniquePtr<T> object)
-    {
-        m_data.push_back(std::move(object));
-        return m_data.back();
-    }
-
-
-    /**
-     * @brief Create and store an object.
-     *
-     * @tparam Args Construction argument types.
-     *
-     * @param args Construction arguments.
-     *
-     * @return View pointer to stored object.
-     */
-    template<typename... Args>
-    ViewPtr<T> create(Args&&... args)
-    {
-        return add(makeUnique<T>(std::forward<Args>(args)...));
-    }
-
-
-    /**
-     * @brief Create and store an object.
-     *
-     * @tparam T2   Type of constructed object.
-     * @tparam Args Construction argument types.
-     *
-     * @param args Construction arguments.
-     *
-     * @return View pointer to stored object.
-     */
-    template<typename T2, typename... Args>
-    ViewPtr<T2> create(Args&&... args)
-    {
-        return add(makeUnique<T2>(std::forward<Args>(args)...));
-    }
-
-
-    /**
-     * @brief Remove object from container.
-     *
-     * @param object The object to remove.
-     *
-     * @return A pointer to removed object.
-     */
-    UniquePtr<T> remove(ViewPtr<T> object)
-    {
-        for (auto itB = m_data.begin(), itE = m_data.end(); itB != itE; ++itB)
-        {
-            if (itB->get() == object.get())
-            {
-                auto ptr = std::move(*itB);
-                m_data.erase(itB);
-                return ptr;
-            }
-        }
-
-        // Not found
-        return nullptr;
-    }
-
-
-    /**
-     * @brief Clear container.
-     */
-    void clear()
-    {
-        m_data.clear();
+        erase(std::remove_if(begin(), end(), [&val](const UniquePtr<T>& ptr) {
+            return ptr.get() == val;
+        }), end());
     }
 
 
@@ -257,35 +142,34 @@ protected:
 
 
     /**
-     * @brief Invoke a member function for all stored objects.
+     * @brief      Invoke a member function for all stored objects.
      *
-     * @tparam Args A list of member function arguments.
+     * @param[in]  fn         The member function.
      *
-     * @param function A pointer to object's member function that will be
-     *                 called for all stored listeners.
-     * @param args...
+     * @tparam     Fn         { description }
+     * @tparam     Args       A list of member function arguments.
      */
-    template<typename Fn, typename... Args1, typename... Args2>
-    void invoke(Fn fn, Args2&&... args) const
+    template<typename Fn, typename... Args>
+    void invoke(Fn fn, Args&&... args) const
     {
         static_assert(std::is_member_function_pointer<Fn>::value, "Fn is not a member function.");
 
         // Foreach all object
-        for (const auto& object : m_data)
+        for (const auto& object : *this)
         {
             // Call member function with given arguments
-            (object.get()->*fn)(std::forward<Args2>(args)...);
+            (object.get()->*fn)(std::forward<Args>(args)...);
         }
     }
-
-
-// Private Data Members
-private:
-
-    /// Stored pointers.
-    DynamicArray<UniquePtr<T>> m_data;
-
 };
+
+/* ************************************************************************ */
+
+/**
+ * @brief PtrDynamicArray alias
+ */
+template<typename T>
+using PtrContainer = PtrDynamicArray<T>;
 
 /* ************************************************************************ */
 

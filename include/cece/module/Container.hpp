@@ -23,27 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// CeCe
-#include "cece/common.hpp"
-#include "cece/ViewPtr.hpp"
-#include "cece/DynamicArray.hpp"
-#include "cece/PtrNamedContainer.hpp"
-#include "cece/async/Atomic.hpp"
-
-#ifdef CECE_RENDER
-#include "cece/render/State.hpp"
+#if _MSC_VER
+#pragma message("Include 'cece/simulation/ModuleContainer.hpp' instead")
+#else
+#warning "Include 'cece/simulation/ModuleContainer.hpp' instead"
 #endif
-
-/* ************************************************************************ */
-
-#ifdef CECE_RENDER
-namespace cece { namespace render { class Context; } }
-namespace cece { namespace simulation { class Visualization; } }
-#endif
+#include "cece/simulation/ModuleContainer.hpp"
 
 /* ************************************************************************ */
 
@@ -52,104 +37,7 @@ namespace module {
 
 /* ************************************************************************ */
 
-class Module;
-
-/* ************************************************************************ */
-
-/**
- * @brief Container for modules.
- *
- * @todo Cache sorted list of modules.
- */
-class Container : public PtrNamedContainer<Module>
-{
-
-// Public Operations
-public:
-
-
-    /**
-     * @brief Initialize all modules.
-     *
-     * @param flag Continuation flag.
-     */
-    void init(async::AtomicBool& flag);
-
-
-    /**
-     * @brief Update all modules.
-     */
-    void update();
-
-
-    /**
-     * @brief Terminate all modules.
-     */
-    void terminate();
-
-
-#ifdef CECE_RENDER
-
-    /**
-     * @brief Render modules sorted by z-order.
-     * @param visualization Visualization context.
-     * @param context       Rendering context.
-     */
-    void draw(const simulation::Visualization& visualization, render::Context& context);
-
-
-    /**
-     * @brief Store modules drawing state.
-     * @param visualization Visualization context.
-     */
-    void drawStoreState(const simulation::Visualization& visualization);
-
-
-    /**
-     * @brief Swap modules drawing state.
-     */
-    void drawSwapState();
-
-#endif
-
-// Protected Operations
-protected:
-
-
-    /**
-     * @brief Returns sorted list of modules by priority.
-     *
-     * @return
-     */
-    DynamicArray<ViewPtr<Module>> getSortedListAsc() const noexcept;
-
-
-    /**
-     * @brief Returns sorted list of modules by priority.
-     *
-     * @return
-     */
-    DynamicArray<ViewPtr<Module>> getSortedListDesc() const noexcept;
-
-// Private Structures
-private:
-
-#ifdef CECE_RENDER
-    struct RenderState
-    {
-        /// Modules to render
-        DynamicArray<ViewPtr<Module>> modules;
-    };
-#endif
-
-// Private Data Members
-private:
-
-#ifdef CECE_RENDER
-    /// Render state.
-    render::State<RenderState> m_drawableState;
-#endif
-};
+using Container = simulation::ModuleContainer;
 
 /* ************************************************************************ */
 

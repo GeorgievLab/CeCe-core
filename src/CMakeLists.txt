@@ -58,11 +58,6 @@ add_subdirectory(unit)
 add_subdirectory(math)
 add_subdirectory(lang)
 add_subdirectory(perf)
-add_subdirectory(loader)
-add_subdirectory(init)
-add_subdirectory(module)
-add_subdirectory(object)
-add_subdirectory(program)
 add_subdirectory(plugin)
 
 # Renderer files

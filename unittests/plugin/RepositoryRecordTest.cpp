@@ -28,11 +28,11 @@
 
 // CeCe
 #include "cece/plugin/RepositoryRecord.hpp"
-#include "cece/loader/Loader.hpp"
-#include "cece/init/Initializer.hpp"
-#include "cece/module/Module.hpp"
-#include "cece/object/Object.hpp"
-#include "cece/program/Program.hpp"
+#include "cece/simulation/Loader.hpp"
+#include "cece/simulation/Initializer.hpp"
+#include "cece/simulation/Module.hpp"
+#include "cece/simulation/Object.hpp"
+#include "cece/simulation/Program.hpp"
 #include "cece/simulation/DefaultSimulation.hpp"
 #include "cece/plugin/Repository.hpp"
 #include "cece/plugin/Manager.hpp"
@@ -48,7 +48,7 @@ namespace {
 
 /* ************************************************************************ */
 
-class TestLoader final : public loader::Loader
+class TestLoader final : public simulation::Loader
 {
 public:
 
@@ -68,10 +68,10 @@ public:
 
 /* ************************************************************************ */
 
-class TestInitializer final : public init::Initializer
+class TestInitializer final : public simulation::Initializer
 {
 public:
-    using init::Initializer::Initializer;
+    using simulation::Initializer::Initializer;
 
     void init(simulation::Simulation& simulation) const override
     {
@@ -81,33 +81,33 @@ public:
 
 /* ************************************************************************ */
 
-class TestModule final : public module::Module
+class TestModule final : public simulation::Module
 {
 public:
-    using module::Module::Module;
+    using simulation::Module::Module;
 };
 
 /* ************************************************************************ */
 
-class TestObject final : public object::Object
+class TestObject final : public simulation::Object
 {
 public:
-    using object::Object::Object;
+    using simulation::Object::Object;
 };
 
 /* ************************************************************************ */
 
-class TestProgram final : public program::Program
+class TestProgram final : public simulation::Program
 {
 public:
-    using program::Program::Program;
+    using simulation::Program::Program;
 
     UniquePtr<Program> clone() const override
     {
         return makeUnique<TestProgram>(*this);
     }
 
-    void call(simulation::Simulation& simulation, object::Object& object, unit::Time dt) override
+    void call(simulation::Simulation& simulation, simulation::Object& object, unit::Time dt) override
     {
         // Nothing to do
     }
@@ -197,12 +197,12 @@ TEST(RepositoryRecord, object)
 
     plugin::Manager mgr;
     simulation::DefaultSimulation simulation(mgr);
-    auto object = record.createObject("object", simulation, object::Object::Type::Static);
+    auto object = record.createObject("object", simulation, simulation::Object::Type::Static);
     ASSERT_NE(nullptr, object);
     EXPECT_EQ(typeid(TestObject), typeid(*object));
 
     EXPECT_ANY_THROW({
-        record.createObject("no-object", simulation, object::Object::Type::Static);
+        record.createObject("no-object", simulation, simulation::Object::Type::Static);
     });
 }
 

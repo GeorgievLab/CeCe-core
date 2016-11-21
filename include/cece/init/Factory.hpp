@@ -23,13 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// CeCe
-#include "cece/export.hpp"
-#include "cece/factory/Factory.hpp"
+#if _MSC_VER
+#pragma message("Include 'cece/simulation/InitializerFactory.hpp' instead")
+#else
+#warning "Include 'cece/simulation/InitializerFactory.hpp' instead"
+#endif
+#include "cece/simulation/InitializerFactory.hpp"
 
 /* ************************************************************************ */
 
@@ -38,22 +37,11 @@ namespace init {
 
 /* ************************************************************************ */
 
-class Initializer;
-
-/* ************************************************************************ */
-
-/**
- * @brief Initializer factory interface.
- */
-using Factory = factory::Factory<Initializer>;
+using Factory = simulation::InitializerFactory;
 
 /* ************************************************************************ */
 
 }
 }
-
-/* ************************************************************************ */
-
-CECE_FACTORY_EXTERN(init::Initializer)
 
 /* ************************************************************************ */

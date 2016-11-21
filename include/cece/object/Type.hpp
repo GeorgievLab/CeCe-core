@@ -23,13 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// CeCe
-#include "cece/String.hpp"
-#include "cece/config/Configuration.hpp"
+#if _MSC_VER
+#pragma message("Include 'cece/simulation/ObjectType.hpp' instead")
+#else
+#warning "Include 'cece/simulation/ObjectType.hpp' instead"
+#endif
+#include "cece/simulation/ObjectType.hpp"
 
 /* ************************************************************************ */
 
@@ -38,26 +37,7 @@ namespace object {
 
 /* ************************************************************************ */
 
-/**
- * @brief Defines user defined object type.
- */
-class Type
-{
-
-// Public Data Members
-public:
-
-
-    /// Object type name.
-    String name;
-
-    /// Basename type name.
-    String baseName;
-
-    /// Object configuration.
-    config::Configuration config;
-
-};
+using Type = simulation::ObjectType;
 
 /* ************************************************************************ */
 

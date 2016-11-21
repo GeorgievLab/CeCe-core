@@ -23,13 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// CeCe
-#include "cece/export.hpp"
-#include "cece/factory/Factory.hpp"
+#if _MSC_VER
+#pragma message("Include 'cece/simulation/LoaderFactory.hpp' instead")
+#else
+#warning "Include 'cece/simulation/LoaderFactory.hpp' instead"
+#endif
+#include "cece/simulation/LoaderFactory.hpp"
 
 /* ************************************************************************ */
 
@@ -38,22 +37,12 @@ namespace loader {
 
 /* ************************************************************************ */
 
-class Loader;
-
-/* ************************************************************************ */
-
-/**
- * @brief Simulation loader factory interface.
- */
-using Factory = factory::Factory<Loader>;
+using simulation::Loader;
+using Factory = simulation::LoaderFactory;
 
 /* ************************************************************************ */
 
 }
 }
-
-/* ************************************************************************ */
-
-CECE_FACTORY_EXTERN(loader::Loader)
 
 /* ************************************************************************ */

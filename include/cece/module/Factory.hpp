@@ -23,17 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// CeCe
-#include "cece/export.hpp"
-#include "cece/factory/Factory.hpp"
-
-/* ************************************************************************ */
-
-namespace cece { namespace simulation { class Simulation; } }
+#if _MSC_VER
+#pragma message("Include 'cece/simulation/ModuleFactory.hpp' instead")
+#else
+#warning "Include 'cece/simulation/ModuleFactory.hpp' instead"
+#endif
+#include "cece/simulation/ModuleFactory.hpp"
 
 /* ************************************************************************ */
 
@@ -42,22 +37,11 @@ namespace module {
 
 /* ************************************************************************ */
 
-class Module;
-
-/* ************************************************************************ */
-
-/**
- * @brief Module factory interface.
- */
-using Factory = factory::Factory<Module, simulation::Simulation&>;
+using Factory = simulation::ModuleFactory;
 
 /* ************************************************************************ */
 
 }
 }
-
-/* ************************************************************************ */
-
-CECE_FACTORY_EXTERN(module::Module, simulation::Simulation&)
 
 /* ************************************************************************ */

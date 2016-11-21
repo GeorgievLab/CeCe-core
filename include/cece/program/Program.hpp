@@ -23,118 +23,21 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// CeCe
-#include "cece/UniquePtr.hpp"
-#include "cece/unit/Units.hpp"
-
-/* ************************************************************************ */
-
-namespace cece { namespace object { class Object; } }
-namespace cece { namespace config { class Configuration; } }
-namespace cece { namespace simulation { class Simulation; } }
+#if _MSC_VER
+#pragma message("Include 'cece/simulation/Program.hpp' instead")
+#else
+#warning "Include 'cece/simulation/Program.hpp' instead"
+#endif
+#include "cece/simulation/Program.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
-namespace program {
+namespace object {
 
 /* ************************************************************************ */
 
-/**
- * @brief Program that can be executed by objects.
- *
- * Programs are allowed to store information bound to specific object.
- */
-class Program
-{
-
-// Public Ctors & Dtors
-public:
-
-
-    /**
-     * @brief Destructor.
-     */
-    virtual ~Program()
-    {
-        // Nothing to do
-    }
-
-
-// Public Operations
-public:
-
-
-    /**
-     * @brief Clone program.
-     *
-     * @return
-     */
-    virtual UniquePtr<Program> clone() const = 0;
-
-
-    /**
-     * @brief Load program configuration.
-     *
-     * @param simulation Current simulation.
-     * @param config     Source configuration.
-     */
-    virtual void loadConfig(simulation::Simulation& simulation, const config::Configuration& config)
-    {
-        // Nothing to do
-    }
-
-
-    /**
-     * @brief Store program configuration.
-     *
-     * @param simulation Current simulation.
-     * @param config     Output configuration.
-     */
-    virtual void storeConfig(const simulation::Simulation& simulation, config::Configuration& config) const
-    {
-        // Nothing to do
-    }
-
-
-    /**
-     * @brief Allow to initialize program when is bound to specific object.
-     *
-     * @param simulation Simulation object.
-     * @param object     Object.
-     */
-    virtual void init(simulation::Simulation& simulation, object::Object& object)
-    {
-        // Nothing to do
-    }
-
-
-    /**
-     * @brief Call program for given object.
-     *
-     * @param simulation Simulation object.
-     * @param object     Object.
-     * @param dt         Simulation time step.
-     */
-    virtual void call(simulation::Simulation& simulation, object::Object& object, unit::Time dt) = 0;
-
-
-    /**
-     * @brief Called when the program is unbound from object (or object is being deleted).
-     *
-     * @param simulation Simulation object.
-     * @param object     Object.
-     */
-    virtual void terminate(simulation::Simulation& simulation, object::Object& object)
-    {
-        // Nothing to do
-    }
-
-};
+using simulation::Program;
 
 /* ************************************************************************ */
 

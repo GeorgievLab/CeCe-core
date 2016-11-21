@@ -23,50 +23,21 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// CeCe
-#include "cece/String.hpp"
-#include "cece/StringView.hpp"
-#include "cece/UniquePtr.hpp"
-#include "cece/factory/FactoryManager.hpp"
-#include "cece/program/Factory.hpp"
+#if _MSC_VER
+#pragma message("Include 'cece/simulation/ProgramFactoryManager.hpp' instead")
+#else
+#warning "Include 'cece/simulation/ProgramFactoryManager.hpp' instead"
+#endif
+#include "cece/simulation/ProgramFactoryManager.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
-namespace program {
+namespace object {
 
 /* ************************************************************************ */
 
-class Program;
-
-/* ************************************************************************ */
-
-/**
- * @brief Program factory manager.
- */
-class FactoryManager : public factory::FactoryManager<Factory>
-{
-
-// Public Operations
-public:
-
-
-    /**
-     * @brief Create a program by name.
-     *
-     * @param name Factory name.
-     *
-     * @return Created program.
-     *
-     * @throw ProgramFactoryNotFoundException In case of factory with given name doesn't exists.
-     */
-    UniquePtr<Program> createProgram(StringView name) const;
-
-};
+using FactoryManager = simulation::ProgramFactoryManager;
 
 /* ************************************************************************ */
 

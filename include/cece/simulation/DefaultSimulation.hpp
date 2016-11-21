@@ -43,11 +43,11 @@
 #include "cece/unit/UnitsCtors.hpp"
 #include "cece/unit/VectorUnits.hpp"
 #include "cece/plugin/Context.hpp"
-#include "cece/init/Container.hpp"
-#include "cece/module/Container.hpp"
-#include "cece/object/Container.hpp"
-#include "cece/object/TypeContainer.hpp"
-#include "cece/program/NamedContainer.hpp"
+#include "cece/simulation/InitializerContainer.hpp"
+#include "cece/simulation/ModuleContainer.hpp"
+#include "cece/simulation/ObjectContainer.hpp"
+#include "cece/simulation/ObjectTypeContainer.hpp"
+#include "cece/simulation/ProgramNamedContainer.hpp"
 #include "cece/simulation/IterationType.hpp"
 #include "cece/simulation/Simulation.hpp"
 
@@ -154,7 +154,7 @@ public:
      *
      * @return
      */
-    module::Container& getModuleContainer() noexcept
+    simulation::ModuleContainer& getModuleContainer() noexcept
     {
         return m_modules;
     }
@@ -165,7 +165,7 @@ public:
      *
      * @return
      */
-    const module::Container& getModuleContainer() const noexcept
+    const simulation::ModuleContainer& getModuleContainer() const noexcept
     {
         return m_modules;
     }
@@ -176,7 +176,7 @@ public:
      *
      * @return
      */
-    object::Container& getObjectContainer() noexcept
+    simulation::ObjectContainer& getObjectContainer() noexcept
     {
         return m_objects;
     }
@@ -187,7 +187,7 @@ public:
      *
      * @return
      */
-    const object::Container& getObjectContainer() const noexcept
+    const simulation::ObjectContainer& getObjectContainer() const noexcept
     {
         return m_objects;
     }
@@ -198,7 +198,7 @@ public:
      *
      * @return
      */
-    program::NamedContainer& getProgramContainer() noexcept
+    simulation::ProgramNamedContainer& getProgramContainer() noexcept
     {
         return m_programs;
     }
@@ -209,7 +209,7 @@ public:
      *
      * @return
      */
-    const program::NamedContainer& getProgramContainer() const noexcept
+    const simulation::ProgramNamedContainer& getProgramContainer() const noexcept
     {
         return m_programs;
     }
@@ -367,7 +367,7 @@ public:
      *
      * @return
      */
-    ViewPtr<module::Module> getModule(StringView name) const noexcept override;
+    ViewPtr<simulation::Module> getModule(StringView name) const noexcept override;
 
 
     /**
@@ -389,7 +389,7 @@ public:
      *
      * @return Pointer to program.
      */
-    UniquePtr<program::Program> getProgram(StringView name) const override;
+    UniquePtr<simulation::Program> getProgram(StringView name) const override;
 
 
     /**
@@ -415,7 +415,7 @@ public:
      *
      * @return
      */
-    DynamicArray<ViewPtr<object::Object>> getObjects() const noexcept override;
+    DynamicArray<ViewPtr<simulation::Object>> getObjects() const noexcept override;
 
 
     /**
@@ -425,7 +425,7 @@ public:
      *
      * @return
      */
-    DynamicArray<ViewPtr<object::Object>> getObjects(StringView type) const noexcept override;
+    DynamicArray<ViewPtr<simulation::Object>> getObjects(StringView type) const noexcept override;
 
 
     /**
@@ -543,7 +543,7 @@ public:
      *
      * @return
      */
-    ViewPtr<init::Initializer> addInitializer(UniquePtr<init::Initializer> initializer) override;
+    ViewPtr<simulation::Initializer> addInitializer(UniquePtr<simulation::Initializer> initializer) override;
 
 
     /**
@@ -553,7 +553,7 @@ public:
      *
      * @return
      */
-    ViewPtr<init::Initializer> createInitializer(StringView type) override;
+    ViewPtr<simulation::Initializer> createInitializer(StringView type) override;
 
 
     /**
@@ -563,7 +563,7 @@ public:
      *
      * @return
      */
-    void deleteInitializer(ViewPtr<init::Initializer> initializer) override;
+    void deleteInitializer(ViewPtr<simulation::Initializer> initializer) override;
 
 
     /**
@@ -574,7 +574,7 @@ public:
      *
      * @return
      */
-    ViewPtr<module::Module> addModule(String name, UniquePtr<module::Module> module) override;
+    ViewPtr<simulation::Module> addModule(String name, UniquePtr<simulation::Module> module) override;
 
 
     /**
@@ -584,7 +584,7 @@ public:
      *
      * @return
      */
-    ViewPtr<module::Module> createModule(StringView type) override;
+    ViewPtr<simulation::Module> createModule(StringView type) override;
 
 
     /**
@@ -614,7 +614,7 @@ public:
      *
      * @return
      */
-    ViewPtr<object::Object> addObject(UniquePtr<object::Object> object) override;
+    ViewPtr<simulation::Object> addObject(UniquePtr<simulation::Object> object) override;
 
 
     /**
@@ -624,7 +624,7 @@ public:
      *
      * @return
      */
-    ViewPtr<object::Object> createObject(StringView type) override;
+    ViewPtr<simulation::Object> createObject(StringView type) override;
 
 
     /**
@@ -635,7 +635,7 @@ public:
      * @return Pointer to created object.
      * @deprecated
      */
-    ViewPtr<object::Object> createObject(StringView type, object::Object::Type state) override;
+    ViewPtr<simulation::Object> createObject(StringView type, simulation::Object::Type state) override;
 
 
     /**
@@ -643,7 +643,7 @@ public:
      *
      * @param object Pointer to deleted object.
      */
-    void deleteObject(ViewPtr<object::Object> object) override;
+    void deleteObject(ViewPtr<simulation::Object> object) override;
 
 
     /**
@@ -654,7 +654,7 @@ public:
      *
      * @return
      */
-    ViewPtr<program::Program> addProgram(String name, UniquePtr<program::Program> program) override;
+    ViewPtr<simulation::Program> addProgram(String name, UniquePtr<simulation::Program> program) override;
 
 
     /**
@@ -665,7 +665,7 @@ public:
      *
      * @return
      */
-    ViewPtr<program::Program> createProgram(String name, StringView type) override;
+    ViewPtr<simulation::Program> createProgram(String name, StringView type) override;
 
 
     /**
@@ -697,7 +697,7 @@ public:
      *
      * @param listener New listener.
      */
-    void setContactListener(object::ContactListener* listener) override;
+    void setContactListener(simulation::ObjectContactListener* listener) override;
 
 
 // Public Operations
@@ -817,13 +817,13 @@ private:
     Parameters m_parameters;
 
     /// A list of simulation initializers.
-    init::Container m_initializers;
+    simulation::InitializerContainer m_initializers;
 
     /// Simulation modules.
-    module::Container m_modules;
+    simulation::ModuleContainer m_modules;
 
     /// Registered object types.
-    object::TypeContainer m_objectTypes;
+    simulation::ObjectTypeContainer m_objectTypes;
 
     /// Box2D world
     UniquePtr<b2World> m_world;
@@ -833,10 +833,10 @@ private:
     UniquePtr<ContactListener> m_contactListener;
 
     /// Simulation objects.
-    object::Container m_objects;
+    simulation::ObjectContainer m_objects;
 
     /// A map of preddefined programs.
-    program::NamedContainer m_programs;
+    simulation::ProgramNamedContainer m_programs;
 
 #ifdef CECE_RENDER
     /// Simulation visualization.

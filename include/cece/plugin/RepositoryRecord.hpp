@@ -33,11 +33,11 @@
 // CeCe
 #include "cece/String.hpp"
 #include "cece/StringView.hpp"
-#include "cece/loader/FactoryManager.hpp"
-#include "cece/init/FactoryManager.hpp"
-#include "cece/object/FactoryManager.hpp"
-#include "cece/module/FactoryManager.hpp"
-#include "cece/program/FactoryManager.hpp"
+#include "cece/simulation/LoaderFactoryManager.hpp"
+#include "cece/simulation/InitializerFactoryManager.hpp"
+#include "cece/simulation/ObjectFactoryManager.hpp"
+#include "cece/simulation/ModuleFactoryManager.hpp"
+#include "cece/simulation/ProgramFactoryManager.hpp"
 
 /* ************************************************************************ */
 
@@ -302,7 +302,7 @@ public:
      * @return     A pointer to created loader.
      * @throws     Exception  If loader cannot be created.
      */
-    UniquePtr<loader::Loader> createLoader(StringView name) const;
+    UniquePtr<simulation::Loader> createLoader(StringView name) const;
 
 
     /**
@@ -316,7 +316,7 @@ public:
      * @return     A pointer to created initializer.
      * @throws     Exception  If initializer cannot be created.
      */
-    UniquePtr<init::Initializer> createInitializer(StringView name) const;
+    UniquePtr<simulation::Initializer> createInitializer(StringView name) const;
 
 
     /**
@@ -331,7 +331,7 @@ public:
      * @return     A pointer to created module.
      * @throws     Exception  If module cannot be created.
      */
-    UniquePtr<module::Module> createModule(StringView name, simulation::Simulation& simulation) const;
+    UniquePtr<simulation::Module> createModule(StringView name, simulation::Simulation& simulation) const;
 
 
     /**
@@ -347,7 +347,7 @@ public:
      * @return     A pointer to created module.
      * @throws     Exception  If module cannot be created.
      */
-    UniquePtr<object::Object> createObject(StringView name, simulation::Simulation& simulation, object::Object::Type type) const;
+    UniquePtr<simulation::Object> createObject(StringView name, simulation::Simulation& simulation, simulation::Object::Type type) const;
 
 
     /**
@@ -361,26 +361,26 @@ public:
      * @return     A pointer to created program.
      * @throws     Exception  If program cannot be created.
      */
-    UniquePtr<program::Program> createProgram(StringView name) const;
+    UniquePtr<simulation::Program> createProgram(StringView name) const;
 
 
 // Private Data Members
 private:
 
     /// Loader factory manager.
-    loader::FactoryManager m_loaderFactoryManager;
+    simulation::LoaderFactoryManager m_loaderFactoryManager;
 
     /// Initializer factory manager.
-    init::FactoryManager m_initFactoryManager;
+    simulation::InitializerFactoryManager m_initFactoryManager;
 
     /// Module factory manager.
-    module::FactoryManager m_moduleFactoryManager;
+    simulation::ModuleFactoryManager m_moduleFactoryManager;
 
     /// Object factory manager.
-    object::FactoryManager m_objectFactoryManager;
+    simulation::ObjectFactoryManager m_objectFactoryManager;
 
     /// Program factory manager.
-    program::FactoryManager m_programFactoryManager;
+    simulation::ProgramFactoryManager m_programFactoryManager;
 
 };
 

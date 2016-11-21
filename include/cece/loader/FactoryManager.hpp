@@ -23,16 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// CeCe
-#include "cece/String.hpp"
-#include "cece/StringView.hpp"
-#include "cece/UniquePtr.hpp"
-#include "cece/factory/FactoryManager.hpp"
-#include "cece/loader/Factory.hpp"
+#if _MSC_VER
+#pragma message("Include 'cece/simulation/LoaderFactoryManager.hpp' instead")
+#else
+#warning "Include 'cece/simulation/LoaderFactoryManager.hpp' instead"
+#endif
+#include "cece/simulation/LoaderFactoryManager.hpp"
 
 /* ************************************************************************ */
 
@@ -41,50 +37,8 @@ namespace loader {
 
 /* ************************************************************************ */
 
-class Loader;
-
-/* ************************************************************************ */
-
-/**
- * @brief Loader factory manager.
- */
-class FactoryManager : public factory::FactoryManager<Factory>
-{
-
-// Public Mutators
-public:
-
-
-    /**
-     * @brief Register a new factory for specified loader.
-     *
-     * @tparam LoaderType Loader type.
-     *
-     * @param name Factory name.
-     */
-    template<typename LoaderType>
-    void createForLoader(String name)
-    {
-        create<factory::FactoryTyped<LoaderType>>(std::move(name));
-    }
-
-
-// Public Operations
-public:
-
-
-    /**
-     * @brief Create loader by name.
-     *
-     * @param name Loader name.
-     *
-     * @return Created loader.
-     *
-     * @throw FactoryNotFoundException In case of factory with given name doesn't exists.
-     */
-    UniquePtr<Loader> createLoader(StringView name) const;
-
-};
+using simulation::Loader;
+using FactoryManager = simulation::LoaderFactoryManager;
 
 /* ************************************************************************ */
 

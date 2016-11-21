@@ -25,10 +25,10 @@
 
 // CeCe
 #include "cece/Exception.hpp"
-#include "cece/init/Initializer.hpp"
-#include "cece/module/Module.hpp"
-#include "cece/object/Object.hpp"
-#include "cece/program/Program.hpp"
+#include "cece/simulation/Initializer.hpp"
+#include "cece/simulation/Module.hpp"
+#include "cece/simulation/Object.hpp"
+#include "cece/simulation/Program.hpp"
 #include "cece/plugin/definition.hpp"
 #include "cece/plugin/Api.hpp"
 #include "cece/plugin/Repository.hpp"
@@ -45,10 +45,10 @@ namespace {
 
 /* ************************************************************************ */
 
-class TestInitializer final : public init::Initializer
+class TestInitializer final : public simulation::Initializer
 {
 public:
-    using init::Initializer::Initializer;
+    using simulation::Initializer::Initializer;
 
     void init(simulation::Simulation& simulation) const override
     {
@@ -58,33 +58,33 @@ public:
 
 /* ************************************************************************ */
 
-class TestModule final : public module::Module
+class TestModule final : public simulation::Module
 {
 public:
-    using module::Module::Module;
+    using simulation::Module::Module;
 };
 
 /* ************************************************************************ */
 
-class TestObject final : public object::Object
+class TestObject final : public simulation::Object
 {
 public:
-    using object::Object::Object;
+    using simulation::Object::Object;
 };
 
 /* ************************************************************************ */
 
-class TestProgram final : public program::Program
+class TestProgram final : public simulation::Program
 {
 public:
-    using program::Program::Program;
+    using simulation::Program::Program;
 
     UniquePtr<Program> clone() const override
     {
         return makeUnique<TestProgram>(*this);
     }
 
-    void call(simulation::Simulation& simulation, object::Object& object, unit::Time dt) override
+    void call(simulation::Simulation& simulation, simulation::Object& object, unit::Time dt) override
     {
         // Nothing to do
     }

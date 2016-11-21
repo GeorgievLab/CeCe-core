@@ -23,58 +23,21 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// CeCe
-#include "cece/PtrContainer.hpp"
-#include "cece/unit/Units.hpp"
-
-/* ************************************************************************ */
-
-namespace cece { namespace object { class Object; } }
-namespace cece { namespace simulation { class Simulation; } }
+#if _MSC_VER
+#pragma message("Include 'cece/simulation/ProgramContainer.hpp' instead")
+#else
+#warning "Include 'cece/simulation/ProgramContainer.hpp' instead"
+#endif
+#include "cece/simulation/ProgramContainer.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
-namespace program {
+namespace object {
 
 /* ************************************************************************ */
 
-class Program;
-
-/* ************************************************************************ */
-
-/**
- * @brief Container for programs.
- */
-class Container : public PtrContainer<Program>
-{
-
-// Public Operations
-public:
-
-
-    /**
-     * @brief Call all programs.
-     *
-     * @param simulation Simulation object.
-     * @param object     Object.
-     * @param dt         Simulation time step.
-     */
-    void call(simulation::Simulation& simulation, object::Object& object, unit::Time dt);
-
-
-    /**
-     * @brief Clone container.
-     *
-     * @return
-     */
-    Container clone() const;
-
-};
+using Container = simulation::ProgramContainer;
 
 /* ************************************************************************ */
 

@@ -23,18 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// CeCe
-#include "cece/String.hpp"
-#include "cece/StringView.hpp"
-#include "cece/UniquePtr.hpp"
-#include "cece/ViewPtr.hpp"
-#include "cece/Pair.hpp"
-#include "cece/DynamicArray.hpp"
-#include "cece/object/Type.hpp"
+#if _MSC_VER
+#pragma message("Include 'cece/simulation/ObjectTypeContainer.hpp' instead")
+#else
+#warning "Include 'cece/simulation/ObjectTypeContainer.hpp' instead"
+#endif
+#include "cece/simulation/ObjectTypeContainer.hpp"
 
 /* ************************************************************************ */
 
@@ -43,100 +37,7 @@ namespace object {
 
 /* ************************************************************************ */
 
-/**
- * @brief Container for object types.
- */
-class TypeContainer
-{
-
-
-// Public Accessors
-public:
-
-
-    /**
-     * @brief Returns if object type with given name exists.
-     *
-     * @param name ObjectType name.
-     *
-     * @return
-     */
-    bool exists(StringView name) const noexcept;
-
-
-    /**
-     * @brief Returns parameter with given value.
-     *
-     * @param name ObjectType name.
-     *
-     * @return Pointer to object type. Can be nullptr.
-     */
-    ViewPtr<const Type> get(StringView name) const noexcept;
-
-
-    /**
-     * @brief Returns begin iterator.
-     *
-     * @return
-     */
-    DynamicArray<Type>::const_iterator begin() const noexcept
-    {
-        return m_types.begin();
-    }
-
-
-    /**
-     * @brief Returns begin iterator.
-     *
-     * @return
-     */
-    DynamicArray<Type>::const_iterator cbegin() const noexcept
-    {
-        return m_types.cbegin();
-    }
-
-
-    /**
-     * @brief Returns end iterator.
-     *
-     * @return
-     */
-    DynamicArray<Type>::const_iterator end() const noexcept
-    {
-        return m_types.end();
-    }
-
-
-    /**
-     * @brief Returns end iterator.
-     *
-     * @return
-     */
-    DynamicArray<Type>::const_iterator cend() const noexcept
-    {
-        return m_types.cend();
-    }
-
-
-// Public Mutators
-public:
-
-
-    /**
-     * @brief Store or replace object type.
-     *
-     * @param type Object type.
-     */
-    void add(Type type);
-
-
-// Private Data Members
-private:
-
-    /// Stored types.
-    DynamicArray<Type> m_types;
-
-};
+using TypeContainer = simulation::ObjectTypeContainer;
 
 /* ************************************************************************ */
 

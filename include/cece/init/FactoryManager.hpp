@@ -23,16 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// CeCe
-#include "cece/String.hpp"
-#include "cece/StringView.hpp"
-#include "cece/UniquePtr.hpp"
-#include "cece/factory/FactoryManager.hpp"
-#include "cece/init/Factory.hpp"
+#if _MSC_VER
+#pragma message("Include 'cece/simulation/InitializerFactoryManager.hpp' instead")
+#else
+#warning "Include 'cece/simulation/InitializerFactoryManager.hpp' instead"
+#endif
+#include "cece/simulation/InitializerFactoryManager.hpp"
 
 /* ************************************************************************ */
 
@@ -41,50 +37,7 @@ namespace init {
 
 /* ************************************************************************ */
 
-class Initializer;
-
-/* ************************************************************************ */
-
-/**
- * @brief Initializer factory manager.
- */
-class FactoryManager : public factory::FactoryManager<Factory>
-{
-
-// Public Mutators
-public:
-
-
-    /**
-     * @brief Register a new factory for specified initializer.
-     *
-     * @tparam InitializerType Initializer type.
-     *
-     * @param name Factory name.
-     */
-    template<typename InitializerType>
-    void createForInitializer(String name)
-    {
-        createFor<InitializerType>(std::move(name));
-    }
-
-
-// Public Operations
-public:
-
-
-    /**
-     * @brief Create an initializer by name.
-     *
-     * @param name Factory name.
-     *
-     * @return Created initializer.
-     *
-     * @throw InitializerFactoryNotFoundException In case of factory with given name doesn't exists.
-     */
-    UniquePtr<Initializer> createInitializer(StringView name) const;
-
-};
+using FactoryManager = simulation::InitializerFactoryManager;
 
 /* ************************************************************************ */
 

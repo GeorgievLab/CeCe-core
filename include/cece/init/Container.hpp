@@ -23,17 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// CeCe
-#include "cece/PtrContainer.hpp"
-
-/* ************************************************************************ */
-
-namespace cece { namespace simulation { class Simulation; } }
-namespace cece { namespace init { class Initializer; } }
+#if _MSC_VER
+#pragma message("Include 'cece/simulation/InitializerContainer.hpp' instead")
+#else
+#warning "Include 'cece/simulation/InitializerContainer.hpp' instead"
+#endif
+#include "cece/simulation/InitializerContainer.hpp"
 
 /* ************************************************************************ */
 
@@ -42,24 +37,7 @@ namespace init {
 
 /* ************************************************************************ */
 
-/**
- * @brief Container for initializers.
- */
-class Container : public PtrContainer<Initializer>
-{
-
-// Public Operations
-public:
-
-
-    /**
-     * @brief Initialize all stored initialzers.
-     *
-     * @param simulation Simulation object.
-     */
-    void init(simulation::Simulation& simulation) const;
-
-};
+using Container = simulation::InitializerContainer;
 
 /* ************************************************************************ */
 

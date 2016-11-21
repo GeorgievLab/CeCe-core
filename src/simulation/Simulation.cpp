@@ -32,11 +32,11 @@
 // CeCe
 #include "cece/unit/UnitIo.hpp"
 #include "cece/plugin/Api.hpp"
-#include "cece/init/Initializer.hpp"
-#include "cece/module/Module.hpp"
-#include "cece/object/Type.hpp"
-#include "cece/object/Object.hpp"
-#include "cece/program/Program.hpp"
+#include "cece/simulation/Initializer.hpp"
+#include "cece/simulation/Module.hpp"
+#include "cece/simulation/ObjectType.hpp"
+#include "cece/simulation/Object.hpp"
+#include "cece/simulation/Program.hpp"
 #include "cece/simulation/Visualization.hpp"
 
 /* ************************************************************************ */
@@ -50,7 +50,7 @@ Simulation::~Simulation() = default;
 
 /* ************************************************************************ */
 
-ViewPtr<module::Module> Simulation::requireModule(StringView name) const
+ViewPtr<simulation::Module> Simulation::requireModule(StringView name) const
 {
     auto module = getModule(name);
 
@@ -62,7 +62,7 @@ ViewPtr<module::Module> Simulation::requireModule(StringView name) const
 
 /* ************************************************************************ */
 
-UniquePtr<program::Program> Simulation::requireProgram(StringView name) const
+UniquePtr<simulation::Program> Simulation::requireProgram(StringView name) const
 {
     auto program = getProgram(name);
 
@@ -89,11 +89,11 @@ std::size_t Simulation::getObjectCount(StringView type) const noexcept
 
 /* ************************************************************************ */
 
-DynamicArray<ViewPtr<object::Object>> Simulation::getObjects(StringView type) const noexcept
+DynamicArray<ViewPtr<simulation::Object>> Simulation::getObjects(StringView type) const noexcept
 {
     const auto& objects = getObjects();
 
-    DynamicArray<ViewPtr<object::Object>> res;
+    DynamicArray<ViewPtr<simulation::Object>> res;
     res.reserve(objects.size());
 
     for (const auto& object : objects)
@@ -123,7 +123,7 @@ ViewPtr<const plugin::Api> Simulation::loadPlugin(const config::Configuration& c
 
 /* ************************************************************************ */
 
-ViewPtr<init::Initializer> Simulation::createInitializer(const config::Configuration& config)
+ViewPtr<simulation::Initializer> Simulation::createInitializer(const config::Configuration& config)
 {
     // Get initializer language/type
     const String name = config.has("language")
@@ -143,7 +143,7 @@ ViewPtr<init::Initializer> Simulation::createInitializer(const config::Configura
 
 /* ************************************************************************ */
 
-ViewPtr<module::Module> Simulation::createModule(const config::Configuration& config)
+ViewPtr<simulation::Module> Simulation::createModule(const config::Configuration& config)
 {
     // Get module language/type/name
     const String name = config.has("language")
@@ -172,7 +172,7 @@ void Simulation::createObjectType(const config::Configuration& config)
 
 /* ************************************************************************ */
 
-ViewPtr<object::Object> Simulation::createObject(const config::Configuration& config)
+ViewPtr<simulation::Object> Simulation::createObject(const config::Configuration& config)
 {
     // Get object type
     //const String type = config.has("type")
@@ -180,7 +180,7 @@ ViewPtr<object::Object> Simulation::createObject(const config::Configuration& co
     //    : config.get("class")
     //;
     const auto type = config.get("class");
-    const auto mode = config.get("type", object::Object::Type::Dynamic);
+    const auto mode = config.get("type", simulation::Object::Type::Dynamic);
 
     // Create object
     auto object = createObject(type, mode);
@@ -195,7 +195,7 @@ ViewPtr<object::Object> Simulation::createObject(const config::Configuration& co
 
 /* ************************************************************************ */
 
-ViewPtr<program::Program> Simulation::createProgram(const config::Configuration& config)
+ViewPtr<simulation::Program> Simulation::createProgram(const config::Configuration& config)
 {
     // Get program language/type
     const String type = config.has("language")
@@ -215,7 +215,7 @@ ViewPtr<program::Program> Simulation::createProgram(const config::Configuration&
 
 /* ************************************************************************ */
 
-void Simulation::setContactListener(object::ContactListener* listener)
+void Simulation::setContactListener(simulation::ObjectContactListener* listener)
 {
     // Nothing to do
 }

@@ -32,11 +32,11 @@
 #include "cece/plugin/Manager.hpp"
 #include "cece/plugin/SharedLibraryLoader.hpp"
 #include "cece/plugin/Exception.hpp"
-#include "cece/loader/Loader.hpp"
-#include "cece/init/Initializer.hpp"
-#include "cece/module/Module.hpp"
-#include "cece/object/Object.hpp"
-#include "cece/program/Program.hpp"
+#include "cece/simulation/Loader.hpp"
+#include "cece/simulation/Initializer.hpp"
+#include "cece/simulation/Module.hpp"
+#include "cece/simulation/Object.hpp"
+#include "cece/simulation/Program.hpp"
 #include "cece/simulation/DefaultSimulation.hpp"
 
 /* ************************************************************************ */
@@ -50,7 +50,7 @@ namespace {
 
 /* ************************************************************************ */
 
-class TestLoader final : public loader::Loader
+class TestLoader final : public simulation::Loader
 {
 public:
 
@@ -70,10 +70,10 @@ public:
 
 /* ************************************************************************ */
 
-class TestInitializer final : public init::Initializer
+class TestInitializer final : public simulation::Initializer
 {
 public:
-    using init::Initializer::Initializer;
+    using simulation::Initializer::Initializer;
 
     void init(simulation::Simulation& simulation) const override
     {
@@ -83,33 +83,33 @@ public:
 
 /* ************************************************************************ */
 
-class TestModule final : public module::Module
+class TestModule final : public simulation::Module
 {
 public:
-    using module::Module::Module;
+    using simulation::Module::Module;
 };
 
 /* ************************************************************************ */
 
-class TestObject final : public object::Object
+class TestObject final : public simulation::Object
 {
 public:
-    using object::Object::Object;
+    using simulation::Object::Object;
 };
 
 /* ************************************************************************ */
 
-class TestProgram final : public program::Program
+class TestProgram final : public simulation::Program
 {
 public:
-    using program::Program::Program;
+    using simulation::Program::Program;
 
     UniquePtr<Program> clone() const override
     {
         return makeUnique<TestProgram>(*this);
     }
 
-    void call(simulation::Simulation& simulation, object::Object& object, unit::Time dt) override
+    void call(simulation::Simulation& simulation, simulation::Object& object, unit::Time dt) override
     {
         // Nothing to do
     }
@@ -250,13 +250,13 @@ TEST(Context, create)
     EXPECT_NO_THROW(ctx.createLoader("loader"));
     EXPECT_NO_THROW(ctx.createInitializer("initializer"));
     EXPECT_NO_THROW(ctx.createModule("module", simulation));
-    EXPECT_NO_THROW(ctx.createObject("object", simulation, object::Object::Type::Static));
+    EXPECT_NO_THROW(ctx.createObject("object", simulation, simulation::Object::Type::Static));
     EXPECT_NO_THROW(ctx.createProgram("program"));
 
     EXPECT_THROW(ctx.createLoader("loader0"), ExtensionNotFoundException);
     EXPECT_THROW(ctx.createInitializer("initializer0"), ExtensionNotFoundException);
     EXPECT_THROW(ctx.createModule("module0", simulation), ExtensionNotFoundException);
-    EXPECT_THROW(ctx.createObject("object0", simulation, object::Object::Type::Static), ExtensionNotFoundException);
+    EXPECT_THROW(ctx.createObject("object0", simulation, simulation::Object::Type::Static), ExtensionNotFoundException);
     EXPECT_THROW(ctx.createProgram("program0"), ExtensionNotFoundException);
 }
 

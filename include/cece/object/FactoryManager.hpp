@@ -23,20 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// CeCe
-#include "cece/String.hpp"
-#include "cece/StringView.hpp"
-#include "cece/UniquePtr.hpp"
-#include "cece/factory/FactoryManager.hpp"
-#include "cece/object/Factory.hpp"
-
-/* ************************************************************************ */
-
-namespace cece { namespace simulation { class Simulation; } }
+#if _MSC_VER
+#pragma message("Include 'cece/simulation/ObjectFactoryManager.hpp' instead")
+#else
+#warning "Include 'cece/simulation/ObjectFactoryManager.hpp' instead"
+#endif
+#include "cece/simulation/ObjectFactoryManager.hpp"
 
 /* ************************************************************************ */
 
@@ -45,34 +37,7 @@ namespace object {
 
 /* ************************************************************************ */
 
-class Object;
-
-/* ************************************************************************ */
-
-/**
- * @brief Object factory manager.
- */
-class FactoryManager : public factory::FactoryManager<Factory>
-{
-
-// Public Operations
-public:
-
-
-    /**
-     * @brief Create an object by name.
-     *
-     * @param name       Factory name.
-     * @param simulation Owning simulation.
-     * @param type       Object type.
-     *
-     * @return Created object.
-     *
-     * @throw ObjectFactoryNotFoundException In case of factory with given name doesn't exists.
-     */
-    UniquePtr<Object> createObject(StringView name, simulation::Simulation& simulation, Object::Type type) const;
-
-};
+using FactoryManager = simulation::ObjectFactoryManager;
 
 /* ************************************************************************ */
 

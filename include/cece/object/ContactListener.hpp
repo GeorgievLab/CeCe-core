@@ -23,7 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
+#if _MSC_VER
+#pragma message("Include 'cece/simulation/ObjectContactListener.hpp' instead")
+#else
+#warning "Include 'cece/simulation/ObjectContactListener.hpp' instead"
+#endif
+#include "cece/simulation/ObjectContactListener.hpp"
 
 /* ************************************************************************ */
 
@@ -32,39 +37,7 @@ namespace object {
 
 /* ************************************************************************ */
 
-class Object;
-
-/* ************************************************************************ */
-
-/**
- * @brief Object contact listener.
- */
-class ContactListener
-{
-
-// Public Ctors & Dtors
-public:
-
-
-    /**
-     * @brief Destructor.
-     */
-    virtual ~ContactListener() = 0;
-
-
-// Public Operations
-public:
-
-
-    /**
-     * @brief When two objects contact.
-     *
-     * @param o1 The first object.
-     * @param o2 The second object.
-     */
-    virtual void onContact(Object& o1, Object& o2) = 0;
-
-};
+using ContactListener = simulation::ObjectContactListener;
 
 /* ************************************************************************ */
 

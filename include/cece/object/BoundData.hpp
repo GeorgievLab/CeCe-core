@@ -23,7 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
+#if _MSC_VER
+#pragma message("Include 'cece/simulation/ObjectBoundData.hpp' instead")
+#else
+#warning "Include 'cece/simulation/ObjectBoundData.hpp' instead"
+#endif
+#include "cece/simulation/ObjectBoundData.hpp"
 
 /* ************************************************************************ */
 
@@ -32,22 +37,7 @@ namespace object {
 
 /* ************************************************************************ */
 
-/**
- * @brief Bound data.
- */
-class BoundData
-{
-
-// Public Ctors & Dtors
-public:
-
-
-    /**
-     * @brief Destructor.
-     */
-    virtual ~BoundData();
-
-};
+using BoundData = simulation::ObjectBoundData;
 
 /* ************************************************************************ */
 

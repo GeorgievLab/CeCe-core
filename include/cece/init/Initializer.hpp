@@ -23,12 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-namespace cece { namespace simulation { class Simulation; } }
-namespace cece { namespace config { class Configuration; } }
+#if _MSC_VER
+#pragma message("Include 'cece/simulation/Initializer.hpp' instead")
+#else
+#warning "Include 'cece/simulation/Initializer.hpp' instead"
+#endif
+#include "cece/simulation/Initializer.hpp"
 
 /* ************************************************************************ */
 
@@ -37,57 +37,7 @@ namespace init {
 
 /* ************************************************************************ */
 
-/**
- * @brief Simulation initialization program.
- *
- * Initializer is invoked before simulation start and it just modify simulation
- * in a way the static description can't (e.g. create a dynamic number of objects).
- * It also doesn't make sense to store any data within initializer because it's
- * invoked only once.
- */
-class Initializer
-{
-
-// Public Ctors & Dtors
-public:
-
-
-    /**
-     * @brief Destructor.
-     */
-    virtual ~Initializer() = 0;
-
-
-// Public Operations
-public:
-
-
-    /**
-     * @brief Load initializer configuration.
-     *
-     * @param simulation Current simulation.
-     * @param config     Source configuration.
-     */
-    virtual void loadConfig(simulation::Simulation& simulation, const config::Configuration& config);
-
-
-    /**
-     * @brief Store initializer configuration.
-     *
-     * @param simulation Current simulation.
-     * @param config     Output configuration.
-     */
-    virtual void storeConfig(const simulation::Simulation& simulation, config::Configuration& config) const;
-
-
-    /**
-     * @brief Invoke initializer.
-     *
-     * @param simulation Simulation.
-     */
-    virtual void init(simulation::Simulation& simulation) const = 0;
-
-};
+using simulation::Initializer;
 
 /* ************************************************************************ */
 

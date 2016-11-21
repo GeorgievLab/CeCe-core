@@ -23,21 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// CeCe
-#include "cece/export.hpp"
-#include "cece/String.hpp"
-#include "cece/StringView.hpp"
-#include "cece/UniquePtr.hpp"
-#include "cece/factory/FactoryManager.hpp"
-#include "cece/module/Factory.hpp"
-
-/* ************************************************************************ */
-
-namespace cece { namespace simulation { class Simulation; } }
+#if _MSC_VER
+#pragma message("Include 'cece/simulation/ModuleFactoryManager.hpp' instead")
+#else
+#warning "Include 'cece/simulation/ModuleFactoryManager.hpp' instead"
+#endif
+#include "cece/simulation/ModuleFactoryManager.hpp"
 
 /* ************************************************************************ */
 
@@ -46,49 +37,7 @@ namespace module {
 
 /* ************************************************************************ */
 
-class Module;
-
-/* ************************************************************************ */
-
-/**
- * @brief Module factory manager.
- */
-class FactoryManager : public factory::FactoryManager<Factory>
-{
-
-// Public Mutators
-public:
-
-
-    /**
-     * @brief Register a new factory for specified module.
-     *
-     * @param name Factory name.
-     */
-    template<typename ModuleType>
-    void createForModule(String name)
-    {
-        create<factory::FactoryTyped<ModuleType>>(std::move(name));
-    }
-
-
-// Public Operations
-public:
-
-
-    /**
-     * @brief Create module by name.
-     *
-     * @param name       Factory name.
-     * @param simulation Owning simulation.
-     *
-     * @return Created module.
-     *
-     * @throw FactoryNotFoundException In case of factory with given name doesn't exists.
-     */
-    UniquePtr<Module> createModule(StringView name, simulation::Simulation& simulation) const;
-
-};
+using FactoryManager = simulation::ModuleFactoryManager;
 
 /* ************************************************************************ */
 

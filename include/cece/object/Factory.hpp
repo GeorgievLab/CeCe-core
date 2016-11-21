@@ -23,19 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// CeCe
-#include "cece/export.hpp"
-#include "cece/String.hpp"
-#include "cece/factory/Factory.hpp"
-#include "cece/object/Object.hpp"
-
-/* ************************************************************************ */
-
-namespace cece { namespace simulation { class Simulation; } }
+#if _MSC_VER
+#pragma message("Include 'cece/simulation/ObjectFactory.hpp' instead")
+#else
+#warning "Include 'cece/simulation/ObjectFactory.hpp' instead"
+#endif
+#include "cece/simulation/ObjectFactory.hpp"
 
 /* ************************************************************************ */
 
@@ -44,22 +37,11 @@ namespace object {
 
 /* ************************************************************************ */
 
-//class Object;
-
-/* ************************************************************************ */
-
-/**
- * @brief Object factory interface.
- */
-using Factory = factory::Factory<Object, simulation::Simulation&, String, Object::Type>;
+using Factory = simulation::ObjectFactory;
 
 /* ************************************************************************ */
 
 }
 }
-
-/* ************************************************************************ */
-
-CECE_FACTORY_EXTERN(object::Object, simulation::Simulation&, String, object::Object::Type)
 
 /* ************************************************************************ */

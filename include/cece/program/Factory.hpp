@@ -23,37 +23,25 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// CeCe
-#include "cece/export.hpp"
-#include "cece/factory/Factory.hpp"
+#if _MSC_VER
+#pragma message("Include 'cece/simulation/ProgramFactory.hpp' instead")
+#else
+#warning "Include 'cece/simulation/ProgramFactory.hpp' instead"
+#endif
+#include "cece/simulation/ProgramFactory.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
-namespace program {
+namespace object {
 
 /* ************************************************************************ */
 
-class Program;
-
-/* ************************************************************************ */
-
-/**
- * @brief Program factory interface.
- */
-using Factory = factory::Factory<Program>;
+using Factory = simulation::ProgramFactory;
 
 /* ************************************************************************ */
 
 }
 }
-
-/* ************************************************************************ */
-
-CECE_FACTORY_EXTERN(program::Program)
 
 /* ************************************************************************ */

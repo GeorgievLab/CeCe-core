@@ -36,17 +36,17 @@
 #include "cece/plugin/Manager.hpp"
 
 /// @deprecated
-#include "cece/object/Object.hpp"
+#include "cece/simulation/Object.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
-    namespace loader    { class Loader; }
-    namespace init      { class Initializer; }
-    namespace module    { class Module; }
-    //namespace object    { class Object; }
-    namespace object    { class Type; }
-    namespace program   { class Program; }
+    namespace simulation { class Loader; }
+    namespace simulation { class Initializer; }
+    namespace simulation { class Module; }
+    //namespace simulation { class Object; }
+    namespace simulation { class ObjectType; }
+    namespace simulation { class Program; }
     namespace simulation { class Simulation; }
 }
 
@@ -157,7 +157,7 @@ public:
      * @throws     cece::Exception             When a loader cannot be created.
      * @throws     ExtensionNotFoundException  When a loader is not found.
      */
-    UniquePtr<loader::Loader> createLoader(StringView name) const;
+    UniquePtr<simulation::Loader> createLoader(StringView name) const;
 
 
     /**
@@ -172,7 +172,7 @@ public:
      * @throws     MultipleExtensionsException  When an initializer with same name is
      *                                          found in multiple plugins.
      */
-    UniquePtr<init::Initializer> createInitializer(StringView name) const;
+    UniquePtr<simulation::Initializer> createInitializer(StringView name) const;
 
 
     /**
@@ -188,7 +188,7 @@ public:
      * @throws     MultipleExtensionsException  When a module with same name is found
      *                                          in multiple plugins.
      */
-    UniquePtr<module::Module> createModule(StringView name, simulation::Simulation& simulation) const;
+    UniquePtr<simulation::Module> createModule(StringView name, simulation::Simulation& simulation) const;
 
 
     /**
@@ -205,7 +205,7 @@ public:
      * @throws     MultipleExtensionsException  When an object with same name is found
      *                                          in multiple plugins.
      */
-    UniquePtr<object::Object> createObject(StringView name, simulation::Simulation& simulation, object::Object::Type type) const;
+    UniquePtr<simulation::Object> createObject(StringView name, simulation::Simulation& simulation, simulation::Object::Type type) const;
 
 
     /**
@@ -220,7 +220,7 @@ public:
      * @throws     MultipleExtensionsException  When a program with same name is found
      *                                          in multiple plugins.
      */
-    UniquePtr<program::Program> createProgram(StringView name) const;
+    UniquePtr<simulation::Program> createProgram(StringView name) const;
 
 
 // Private Data Members

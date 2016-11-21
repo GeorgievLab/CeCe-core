@@ -35,11 +35,11 @@
 #include "cece/plugin/Manager.hpp"
 #include "cece/plugin/Api.hpp"
 #include "cece/plugin/Exception.hpp"
-#include "cece/loader/Loader.hpp"
-#include "cece/init/Initializer.hpp"
-#include "cece/module/Module.hpp"
-#include "cece/object/Object.hpp"
-#include "cece/program/Program.hpp"
+#include "cece/simulation/Loader.hpp"
+#include "cece/simulation/Initializer.hpp"
+#include "cece/simulation/Module.hpp"
+#include "cece/simulation/Object.hpp"
+#include "cece/simulation/Program.hpp"
 #include "cece/simulation/Simulation.hpp"
 
 /* ************************************************************************ */
@@ -196,7 +196,7 @@ ViewPtr<Api> Context::removePlugin(StringView name)
 
 /* ************************************************************************ */
 
-UniquePtr<loader::Loader> Context::createLoader(StringView name) const
+UniquePtr<simulation::Loader> Context::createLoader(StringView name) const
 {
     // Foreach repository records and find loader with given name
     for (const auto& item : getRepository().getRecords())
@@ -214,9 +214,9 @@ UniquePtr<loader::Loader> Context::createLoader(StringView name) const
 
 /* ************************************************************************ */
 
-UniquePtr<init::Initializer> Context::createInitializer(StringView name) const
+UniquePtr<simulation::Initializer> Context::createInitializer(StringView name) const
 {
-    return createHelper<init::Initializer>(*this, "Initializer", String(name),
+    return createHelper<simulation::Initializer>(*this, "Initializer", String(name),
         [&](const RepositoryRecord& rec) {
             return rec.createInitializer(name);
         },
@@ -227,9 +227,9 @@ UniquePtr<init::Initializer> Context::createInitializer(StringView name) const
 
 /* ************************************************************************ */
 
-UniquePtr<module::Module> Context::createModule(StringView name, simulation::Simulation& simulation) const
+UniquePtr<simulation::Module> Context::createModule(StringView name, simulation::Simulation& simulation) const
 {
-    return createHelper<module::Module>(*this, "Module", String(name),
+    return createHelper<simulation::Module>(*this, "Module", String(name),
         [&](const RepositoryRecord& rec) {
             return rec.createModule(name, simulation);
         },
@@ -240,9 +240,9 @@ UniquePtr<module::Module> Context::createModule(StringView name, simulation::Sim
 
 /* ************************************************************************ */
 
-UniquePtr<object::Object> Context::createObject(StringView name, simulation::Simulation& simulation, object::Object::Type type) const
+UniquePtr<simulation::Object> Context::createObject(StringView name, simulation::Simulation& simulation, simulation::Object::Type type) const
 {
-    return createHelper<object::Object>(*this, "Object", String(name),
+    return createHelper<simulation::Object>(*this, "Object", String(name),
         [&](const RepositoryRecord& rec) {
             return rec.createObject(name, simulation, type);
         },
@@ -253,9 +253,9 @@ UniquePtr<object::Object> Context::createObject(StringView name, simulation::Sim
 
 /* ************************************************************************ */
 
-UniquePtr<program::Program> Context::createProgram(StringView name) const
+UniquePtr<simulation::Program> Context::createProgram(StringView name) const
 {
-    return createHelper<program::Program>(*this, "Program", String(name),
+    return createHelper<simulation::Program>(*this, "Program", String(name),
         [&](const RepositoryRecord& rec) {
             return rec.createProgram(name);
         },

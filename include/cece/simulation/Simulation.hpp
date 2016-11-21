@@ -42,7 +42,7 @@
 #include "cece/simulation/IterationType.hpp"
 
 /// @deprecated
-#include "cece/object/Object.hpp"
+#include "cece/simulation/Object.hpp"
 
 /* ************************************************************************ */
 
@@ -52,11 +52,11 @@ namespace cece {
 
     namespace config { class Configuration; }
     namespace plugin { class Api; }
-    namespace init { class Initializer; }
-    namespace module { class Module; }
-    //namespace object { class Object; }
-    namespace object { class ContactListener; }
-    namespace object { class Type; }
+    namespace simulation { class Initializer; }
+    namespace simulation { class Module; }
+    //namespace simulation { class Object; }
+    namespace simulation { class ObjectContactListener; }
+    namespace simulation { class ObjectType; }
     namespace program { class Program; }
 
 #ifdef CECE_RENDER
@@ -263,7 +263,7 @@ public:
      *
      * @return Pointer to module or nullptr.
      */
-    virtual ViewPtr<module::Module> getModule(StringView name) const noexcept = 0;
+    virtual ViewPtr<simulation::Module> getModule(StringView name) const noexcept = 0;
 
 
     /**
@@ -297,7 +297,7 @@ public:
      *
      * @throw RuntimeException In case module is not found.
      */
-    virtual ViewPtr<module::Module> requireModule(StringView name) const;
+    virtual ViewPtr<simulation::Module> requireModule(StringView name) const;
 
 
     /**
@@ -339,7 +339,7 @@ public:
      *
      * @return Pointer to program or nullptr.
      */
-    virtual UniquePtr<program::Program> getProgram(StringView name) const = 0;
+    virtual UniquePtr<simulation::Program> getProgram(StringView name) const = 0;
 
 
     /**
@@ -353,7 +353,7 @@ public:
      *
      * @throw RuntimeException In case program is not found.
      */
-    virtual UniquePtr<program::Program> requireProgram(StringView name) const;
+    virtual UniquePtr<simulation::Program> requireProgram(StringView name) const;
 
 
     /**
@@ -379,7 +379,7 @@ public:
      *
      * @return
      */
-    virtual DynamicArray<ViewPtr<object::Object>> getObjects() const noexcept = 0;
+    virtual DynamicArray<ViewPtr<simulation::Object>> getObjects() const noexcept = 0;
 
 
     /**
@@ -389,7 +389,7 @@ public:
      *
      * @return
      */
-    virtual DynamicArray<ViewPtr<object::Object>> getObjects(StringView type) const noexcept;
+    virtual DynamicArray<ViewPtr<simulation::Object>> getObjects(StringView type) const noexcept;
 
 
     /**
@@ -493,7 +493,7 @@ public:
      *
      * @return Added initializer.
      */
-    virtual ViewPtr<init::Initializer> addInitializer(UniquePtr<init::Initializer> initializer) = 0;
+    virtual ViewPtr<simulation::Initializer> addInitializer(UniquePtr<simulation::Initializer> initializer) = 0;
 
 
     /**
@@ -515,7 +515,7 @@ public:
      *
      * @return Pointer to created initializer.
      */
-    virtual ViewPtr<init::Initializer> createInitializer(StringView type) = 0;
+    virtual ViewPtr<simulation::Initializer> createInitializer(StringView type) = 0;
 
 
     /**
@@ -525,7 +525,7 @@ public:
      *
      * @return Pointer to created initializer.
      */
-    virtual ViewPtr<init::Initializer> createInitializer(const config::Configuration& config);
+    virtual ViewPtr<simulation::Initializer> createInitializer(const config::Configuration& config);
 
 
     /**
@@ -533,7 +533,7 @@ public:
      *
      * @param initializer Initializer to delete.
      */
-    virtual void deleteInitializer(ViewPtr<init::Initializer> initializer) = 0;
+    virtual void deleteInitializer(ViewPtr<simulation::Initializer> initializer) = 0;
 
 
     /**
@@ -544,7 +544,7 @@ public:
      *
      * @return Pointer to added module.
      */
-    virtual ViewPtr<module::Module> addModule(String name, UniquePtr<module::Module> module) = 0;
+    virtual ViewPtr<simulation::Module> addModule(String name, UniquePtr<simulation::Module> module) = 0;
 
 
     /**
@@ -570,7 +570,7 @@ public:
      *
      * @return Pointer to created module.
      */
-    virtual ViewPtr<module::Module> createModule(StringView type) = 0;
+    virtual ViewPtr<simulation::Module> createModule(StringView type) = 0;
 
 
     /**
@@ -580,7 +580,7 @@ public:
      *
      * @return Pointer to created module.
      */
-    virtual ViewPtr<module::Module> createModule(const config::Configuration& config);
+    virtual ViewPtr<simulation::Module> createModule(const config::Configuration& config);
 
 
     /**
@@ -616,7 +616,7 @@ public:
      *
      * @return Pointer to added object.
      */
-    virtual ViewPtr<object::Object> addObject(UniquePtr<object::Object> object) = 0;
+    virtual ViewPtr<simulation::Object> addObject(UniquePtr<simulation::Object> object) = 0;
 
 
     /**
@@ -640,7 +640,7 @@ public:
      *
      * @return Pointer to created object.
      */
-    virtual ViewPtr<object::Object> createObject(StringView type) = 0;
+    virtual ViewPtr<simulation::Object> createObject(StringView type) = 0;
 
 
     /**
@@ -651,7 +651,7 @@ public:
      * @return Pointer to created object.
      * @deprecated
      */
-    virtual ViewPtr<object::Object> createObject(StringView type, object::Object::Type state) = 0;
+    virtual ViewPtr<simulation::Object> createObject(StringView type, simulation::Object::Type state) = 0;
 
 
     /**
@@ -662,7 +662,7 @@ public:
      *
      * @return Pointer to created object.
      */
-    virtual ViewPtr<object::Object> createObject(const config::Configuration& config);
+    virtual ViewPtr<simulation::Object> createObject(const config::Configuration& config);
 
 
     /**
@@ -670,7 +670,7 @@ public:
      *
      * @param object Pointer to deleted object.
      */
-    virtual void deleteObject(ViewPtr<object::Object> object) = 0;
+    virtual void deleteObject(ViewPtr<simulation::Object> object) = 0;
 
 
     /**
@@ -681,7 +681,7 @@ public:
      *
      * @return Pointer to added program.
      */
-    virtual ViewPtr<program::Program> addProgram(String name, UniquePtr<program::Program> program) = 0;
+    virtual ViewPtr<simulation::Program> addProgram(String name, UniquePtr<simulation::Program> program) = 0;
 
 
     /**
@@ -692,7 +692,7 @@ public:
      *
      * @return Pointer to created program.
      */
-    virtual ViewPtr<program::Program> createProgram(String name, StringView type) = 0;
+    virtual ViewPtr<simulation::Program> createProgram(String name, StringView type) = 0;
 
 
     /**
@@ -702,7 +702,7 @@ public:
      *
      * @return Pointer to created program.
      */
-    virtual ViewPtr<program::Program> createProgram(const config::Configuration& config);
+    virtual ViewPtr<simulation::Program> createProgram(const config::Configuration& config);
 
 
     /**
@@ -718,7 +718,7 @@ public:
      *
      * @param listener New listener.
      */
-    virtual void setContactListener(object::ContactListener* listener);
+    virtual void setContactListener(simulation::ObjectContactListener* listener);
 
 
 // Public Operations

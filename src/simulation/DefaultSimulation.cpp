@@ -45,9 +45,9 @@
 #include "cece/io/OutStream.hpp"
 #include "cece/plugin/Api.hpp"
 #include "cece/plugin/Manager.hpp"
-#include "cece/init/Initializer.hpp"
-#include "cece/module/Module.hpp"
-#include "cece/object/ContactListener.hpp"
+#include "cece/simulation/Initializer.hpp"
+#include "cece/simulation/Module.hpp"
+#include "cece/simulation/ObjectContactListener.hpp"
 #include "cece/simulation/TimeMeasurement.hpp"
 
 #ifdef CECE_RENDER
@@ -82,7 +82,7 @@ render::PhysicsDebugger g_physicsDebugger;
 
 struct DefaultSimulation::ContactListener : public b2ContactListener
 {
-    object::ContactListener* m_listener;
+    simulation::ObjectContactListener* m_listener;
 
     void BeginContact(b2Contact* contact) override
     {
@@ -91,8 +91,8 @@ struct DefaultSimulation::ContactListener : public b2ContactListener
 
         auto body1 = contact->GetFixtureA()->GetBody();
         auto body2 = contact->GetFixtureB()->GetBody();
-        auto o1 = static_cast<object::Object*>(body1->GetUserData());
-        auto o2 = static_cast<object::Object*>(body2->GetUserData());
+        auto o1 = static_cast<simulation::Object*>(body1->GetUserData());
+        auto o2 = static_cast<simulation::Object*>(body2->GetUserData());
 
         m_listener->onContact(*o1, *o2);
     }
@@ -166,7 +166,7 @@ bool DefaultSimulation::hasModule(StringView name) const noexcept
 
 /* ************************************************************************ */
 
-ViewPtr<module::Module> DefaultSimulation::getModule(StringView name) const noexcept
+ViewPtr<simulation::Module> DefaultSimulation::getModule(StringView name) const noexcept
 {
     return m_modules.get(name);
 }
@@ -180,7 +180,7 @@ bool DefaultSimulation::hasProgram(StringView name) const noexcept
 
 /* ************************************************************************ */
 
-UniquePtr<program::Program> DefaultSimulation::getProgram(StringView name) const
+UniquePtr<simulation::Program> DefaultSimulation::getProgram(StringView name) const
 {
     auto program = m_programs.get(name);
 
@@ -206,9 +206,9 @@ std::size_t DefaultSimulation::getObjectCount(StringView type) const noexcept
 
 /* ************************************************************************ */
 
-DynamicArray<ViewPtr<object::Object>> DefaultSimulation::getObjects() const noexcept
+DynamicArray<ViewPtr<simulation::Object>> DefaultSimulation::getObjects() const noexcept
 {
-    DynamicArray<ViewPtr<object::Object>> objects;
+    DynamicArray<ViewPtr<simulation::Object>> objects;
     objects.reserve(m_objects.getCount());
 
     for (const auto& object : m_objects)
@@ -219,7 +219,7 @@ DynamicArray<ViewPtr<object::Object>> DefaultSimulation::getObjects() const noex
 
 /* ************************************************************************ */
 
-DynamicArray<ViewPtr<object::Object>> DefaultSimulation::getObjects(StringView type) const noexcept
+DynamicArray<ViewPtr<simulation::Object>> DefaultSimulation::getObjects(StringView type) const noexcept
 {
     return m_objects.getByType(type);
 }
@@ -294,35 +294,35 @@ void DefaultSimulation::setParameter(String name, String value)
 
 /* ************************************************************************ */
 
-ViewPtr<init::Initializer> DefaultSimulation::addInitializer(UniquePtr<init::Initializer> initializer)
+ViewPtr<simulation::Initializer> DefaultSimulation::addInitializer(UniquePtr<simulation::Initializer> initializer)
 {
     return m_initializers.add(std::move(initializer));
 }
 
 /* ************************************************************************ */
 
-ViewPtr<init::Initializer> DefaultSimulation::createInitializer(StringView type)
+ViewPtr<simulation::Initializer> DefaultSimulation::createInitializer(StringView type)
 {
     return addInitializer(m_pluginContext.createInitializer(type));
 }
 
 /* ************************************************************************ */
 
-void DefaultSimulation::deleteInitializer(ViewPtr<init::Initializer> initializer)
+void DefaultSimulation::deleteInitializer(ViewPtr<simulation::Initializer> initializer)
 {
     m_initializers.remove(initializer);
 }
 
 /* ************************************************************************ */
 
-ViewPtr<module::Module> DefaultSimulation::addModule(String name, UniquePtr<module::Module> module)
+ViewPtr<simulation::Module> DefaultSimulation::addModule(String name, UniquePtr<simulation::Module> module)
 {
     return m_modules.add(std::move(name), std::move(module));
 }
 
 /* ************************************************************************ */
 
-ViewPtr<module::Module> DefaultSimulation::createModule(StringView type)
+ViewPtr<simulation::Module> DefaultSimulation::createModule(StringView type)
 {
     return addModule(String(type), m_pluginContext.createModule(type, *this));
 }
@@ -338,7 +338,7 @@ void DefaultSimulation::deleteModule(StringView name)
 
 void DefaultSimulation::addObjectType(String name, String parent, const config::Configuration& config)
 {
-    return m_objectTypes.add(object::Type{
+    return m_objectTypes.add(simulation::ObjectType{
         std::move(name),
         std::move(parent),
         config.toMemory()
@@ -347,21 +347,21 @@ void DefaultSimulation::addObjectType(String name, String parent, const config::
 
 /* ************************************************************************ */
 
-ViewPtr<object::Object> DefaultSimulation::addObject(UniquePtr<object::Object> object)
+ViewPtr<simulation::Object> DefaultSimulation::addObject(UniquePtr<simulation::Object> object)
 {
     return m_objects.add(std::move(object));
 }
 
 /* ************************************************************************ */
 
-ViewPtr<object::Object> DefaultSimulation::createObject(StringView type)
+ViewPtr<simulation::Object> DefaultSimulation::createObject(StringView type)
 {
-    return createObject(type, object::Object::Type::Dynamic);
+    return createObject(type, simulation::Object::Type::Dynamic);
 }
 
 /* ************************************************************************ */
 
-ViewPtr<object::Object> DefaultSimulation::createObject(StringView type, object::Object::Type state)
+ViewPtr<simulation::Object> DefaultSimulation::createObject(StringView type, simulation::Object::Type state)
 {
     // Look in object types
     if (m_objectTypes.exists(type))
@@ -383,21 +383,21 @@ ViewPtr<object::Object> DefaultSimulation::createObject(StringView type, object:
 
 /* ************************************************************************ */
 
-void DefaultSimulation::deleteObject(ViewPtr<object::Object> object)
+void DefaultSimulation::deleteObject(ViewPtr<simulation::Object> object)
 {
     m_objects.deleteObject(object);
 }
 
 /* ************************************************************************ */
 
-ViewPtr<program::Program> DefaultSimulation::addProgram(String name, UniquePtr<program::Program> program)
+ViewPtr<simulation::Program> DefaultSimulation::addProgram(String name, UniquePtr<simulation::Program> program)
 {
     return m_programs.add(std::move(name), std::move(program));
 }
 
 /* ************************************************************************ */
 
-ViewPtr<program::Program> DefaultSimulation::createProgram(String name, StringView type)
+ViewPtr<simulation::Program> DefaultSimulation::createProgram(String name, StringView type)
 {
     return addProgram(std::move(name), m_pluginContext.createProgram(type));
 }
@@ -425,7 +425,7 @@ void DefaultSimulation::setPhysicsEngineTimeStep(unit::Time dt) noexcept
 
 /* ************************************************************************ */
 
-void DefaultSimulation::setContactListener(object::ContactListener* listener)
+void DefaultSimulation::setContactListener(simulation::ObjectContactListener* listener)
 {
     if (listener)
     {
@@ -643,7 +643,7 @@ void DefaultSimulation::updateObjects()
 
     // Update simulations objects
     // Can't use range-for because update can add a new object.
-    for (object::Container::SizeType i = 0u; i < m_objects.getCount(); ++i)
+    for (simulation::ObjectContainer::SizeType i = 0u; i < m_objects.getCount(); ++i)
     {
         auto obj = m_objects[i];
 
@@ -662,7 +662,7 @@ void DefaultSimulation::detectDeserters()
     for (auto& obj : m_objects)
     {
         // Ignore static objects
-        if (obj->getType() == object::Object::Type::Static)
+        if (obj->getType() == simulation::Object::Type::Static)
             continue;
 
         // Get object position

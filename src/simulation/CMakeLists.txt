@@ -29,6 +29,29 @@ set(SRCS
     TimeMeasurement.cpp
     DefaultSimulation.cpp
     ConverterBox2D.cpp
+    Loader.cpp
+    LoaderFactory.cpp
+    LoaderFactoryManager.cpp
+    Module.cpp
+    ModuleFactory.cpp
+    ModuleFactoryManager.cpp
+    ModuleContainer.cpp
+    ExportModule.cpp
+    Initializer.cpp
+    InitializerContainer.cpp
+    InitializerFactory.cpp
+    InitializerFactoryManager.cpp
+    Object.cpp
+    ObjectTypeContainer.cpp
+    ObjectFactory.cpp
+    ObjectFactoryManager.cpp
+    ObjectContainer.cpp
+    ObjectBoundData.cpp
+    ObjectContactListener.cpp
+    ProgramContainer.cpp
+    ProgramNamedContainer.cpp
+    ProgramFactory.cpp
+    ProgramFactoryManager.cpp
 )
 
 if (CECE_RENDER)

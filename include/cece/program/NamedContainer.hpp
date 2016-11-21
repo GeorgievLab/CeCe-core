@@ -23,31 +23,21 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// CeCe
-#include "cece/PtrNamedContainer.hpp"
+#if _MSC_VER
+#pragma message("Include 'cece/simulation/ProgramNamedContainer.hpp' instead")
+#else
+#warning "Include 'cece/simulation/ProgramNamedContainer.hpp' instead"
+#endif
+#include "cece/simulation/ProgramNamedContainer.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
-namespace program {
+namespace object {
 
 /* ************************************************************************ */
 
-class Program;
-
-/* ************************************************************************ */
-
-/**
- * @brief Container for named programs.
- */
-class NamedContainer : public PtrNamedContainer<Program>
-{
-
-};
+using NamedContainer = simulation::ProgramNamedContainer;
 
 /* ************************************************************************ */
 

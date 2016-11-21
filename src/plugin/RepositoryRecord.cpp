@@ -27,11 +27,11 @@
 #include "cece/plugin/RepositoryRecord.hpp"
 
 // CeCe
-#include "cece/loader/Loader.hpp"
-#include "cece/init/Initializer.hpp"
-#include "cece/module/Module.hpp"
-#include "cece/object/Object.hpp"
-#include "cece/program/Program.hpp"
+#include "cece/simulation/Loader.hpp"
+#include "cece/simulation/Initializer.hpp"
+#include "cece/simulation/Module.hpp"
+#include "cece/simulation/Object.hpp"
+#include "cece/simulation/Program.hpp"
 
 /* ************************************************************************ */
 
@@ -40,35 +40,35 @@ namespace plugin {
 
 /* ************************************************************************ */
 
-UniquePtr<loader::Loader> RepositoryRecord::createLoader(StringView name) const
+UniquePtr<simulation::Loader> RepositoryRecord::createLoader(StringView name) const
 {
     return m_loaderFactoryManager.createLoader(name);
 }
 
 /* ************************************************************************ */
 
-UniquePtr<init::Initializer> RepositoryRecord::createInitializer(StringView name) const
+UniquePtr<simulation::Initializer> RepositoryRecord::createInitializer(StringView name) const
 {
     return m_initFactoryManager.createInitializer(name);
 }
 
 /* ************************************************************************ */
 
-UniquePtr<module::Module> RepositoryRecord::createModule(StringView name, simulation::Simulation& simulation) const
+UniquePtr<simulation::Module> RepositoryRecord::createModule(StringView name, simulation::Simulation& simulation) const
 {
     return m_moduleFactoryManager.createModule(name, simulation);
 }
 
 /* ************************************************************************ */
 
-UniquePtr<object::Object> RepositoryRecord::createObject(StringView name, simulation::Simulation& simulation, object::Object::Type type) const
+UniquePtr<simulation::Object> RepositoryRecord::createObject(StringView name, simulation::Simulation& simulation, simulation::Object::Type type) const
 {
     return m_objectFactoryManager.createObject(name, simulation, type);
 }
 
 /* ************************************************************************ */
 
-UniquePtr<program::Program> RepositoryRecord::createProgram(StringView name) const
+UniquePtr<simulation::Program> RepositoryRecord::createProgram(StringView name) const
 {
     return m_programFactoryManager.createProgram(name);
 }

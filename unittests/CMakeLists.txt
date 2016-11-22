@@ -35,6 +35,7 @@ cece_add_test(base
         MapTest.cpp
         StringMapTest.cpp
         PtrStringMapTest.cpp
+        StringTest.cpp
         StringViewTest.cpp
         ParametersTest.cpp
         ViewPtrTest.cpp

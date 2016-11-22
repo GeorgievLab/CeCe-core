@@ -47,6 +47,7 @@ endfunction ()
 set(CECE_SOURCES
     Parameters.cpp
     AlignedAllocator.cpp
+    String.cpp
 )
 
 # Core files

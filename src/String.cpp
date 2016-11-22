@@ -23,12 +23,16 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
+// Declaration
+#include "cece/String.hpp"
 
 // C++
-#include <string>
+#include <cstdio>
+#include <limits>
+
+// CeCe
+#include "cece/Assert.hpp"
+#include "cece/Exception.hpp"
 
 /* ************************************************************************ */
 
@@ -36,135 +40,119 @@ namespace cece {
 
 /* ************************************************************************ */
 
-/**
- * @brief      String type.
- */
-using String = std::string;
+String toString(int value) noexcept
+{
+    char buffer[std::numeric_limits<int>::digits10];
+    const int count = std::snprintf(buffer, sizeof buffer, "%d", value);
+    CECE_ASSERT(count > 0);
+    return String(buffer, count);
+}
 
 /* ************************************************************************ */
 
-/**
- * @brief      Converts integer value to string.
- *
- * @param      value  Input value.
- *
- * @return     String value.
- */
-String toString(int value) noexcept;
+String toString(long value) noexcept
+{
+    char buffer[std::numeric_limits<long>::digits10];
+    const int count = std::snprintf(buffer, sizeof buffer, "%ld", value);
+    CECE_ASSERT(count > 0);
+    return String(buffer, count);
+}
 
 /* ************************************************************************ */
 
-/**
- * @brief      Converts long value to string.
- *
- * @param      value  Input value.
- *
- * @return     String value.
- */
-String toString(long value) noexcept;
+String toString(long long value) noexcept
+{
+    char buffer[std::numeric_limits<long long>::digits10];
+    const int count = std::snprintf(buffer, sizeof buffer, "%lld", value);
+    CECE_ASSERT(count > 0);
+    return String(buffer, count);
+}
 
 /* ************************************************************************ */
 
-/**
- * @brief      Converts long long value to string.
- *
- * @param      value  Input value.
- *
- * @return     String value.
- */
-String toString(long long value) noexcept;
+String toString(unsigned value) noexcept
+{
+    char buffer[std::numeric_limits<unsigned>::digits10];
+    const int count = std::snprintf(buffer, sizeof buffer, "%u", value);
+    CECE_ASSERT(count > 0);
+    return String(buffer, count);
+}
 
 /* ************************************************************************ */
 
-/**
- * @brief      Converts unsigned value to string.
- *
- * @param      value  Input value.
- *
- * @return     String value.
- */
-String toString(unsigned value) noexcept;
+String toString(unsigned long value) noexcept
+{
+    char buffer[std::numeric_limits<unsigned long>::digits10];
+    const int count = std::snprintf(buffer, sizeof buffer, "%lu", value);
+    CECE_ASSERT(count > 0);
+    return String(buffer, count);
+}
 
 /* ************************************************************************ */
 
-/**
- * @brief      Converts unsigned long value to string.
- *
- * @param      value  Input value.
- *
- * @return     String value.
- */
-String toString(unsigned long value) noexcept;
+String toString(unsigned long long value) noexcept
+{
+    char buffer[std::numeric_limits<unsigned long long>::digits10];
+    const int count = std::snprintf(buffer, sizeof buffer, "%llu", value);
+    CECE_ASSERT(count > 0);
+    return String(buffer, count);
+}
 
 /* ************************************************************************ */
 
-/**
- * @brief      Converts unsigned long long value to string.
- *
- * @param      value  Input value.
- *
- * @return     String value.
- */
-String toString(unsigned long long value) noexcept;
+String toString(float value) noexcept
+{
+    char buffer[std::numeric_limits<float>::max_digits10];
+    const int count = std::snprintf(buffer, sizeof buffer, "%f", value);
+    CECE_ASSERT(count > 0);
+    return String(buffer, count);
+}
 
 /* ************************************************************************ */
 
-/**
- * @brief      Converts float value to string.
- *
- * @param      value  Input value.
- *
- * @return     String value.
- */
-String toString(float value) noexcept;
+String toString(double value) noexcept
+{
+    char buffer[std::numeric_limits<double>::max_digits10];
+    const int count = std::snprintf(buffer, sizeof buffer, "%f", value);
+    CECE_ASSERT(count > 0);
+    return String(buffer, count);
+}
 
 /* ************************************************************************ */
 
-/**
- * @brief      Converts double value to string.
- *
- * @param      value  Input value.
- *
- * @return     String value.
- */
-String toString(double value) noexcept;
+String toString(long double value) noexcept
+{
+    char buffer[std::numeric_limits<long double>::max_digits10];
+    const int count = std::snprintf(buffer, sizeof buffer, "%Lf", value);
+    CECE_ASSERT(count > 0);
+    return String(buffer, count);
+}
 
 /* ************************************************************************ */
 
-/**
- * @brief      Converts long double value to string.
- *
- * @param      value  Input value.
- *
- * @return     String value.
- */
-String toString(long double value) noexcept;
+int str2i(const String& value)
+{
+    char* end;
+    int val = std::strtol(value.c_str(), &end, 10);
+
+    if (value.empty() || end != value.c_str() + value.size())
+        throw InvalidArgumentException("Cannot convert '" + value + "' to int");
+
+    return val;
+}
 
 /* ************************************************************************ */
 
-/**
- * @brief      Converts string value to integer.
- *
- * @param      value  Input value.
- *
- * @return     Parsed value.
- *
- * @throws     InvalidArgumentException  String cannot be converted.
- */
-int str2i(const String& value);
+float str2f(const String& value)
+{
+    char* end;
+    float val = std::strtof(value.c_str(), &end);
 
-/* ************************************************************************ */
+    if (value.empty() || end != value.c_str() + value.size())
+        throw InvalidArgumentException("Cannot convert '" + value + "' to float");
 
-/**
- * @brief      Converts string value to integer.
- *
- * @param      value  Input value.
- *
- * @return     Parsed value.
- *
- * @throws     InvalidArgumentException  String cannot be converted.
- */
-float str2f(const String& value);
+    return val;
+}
 
 /* ************************************************************************ */
 

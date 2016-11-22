@@ -23,89 +23,67 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
+// GTest
+#include "gtest/gtest.h"
+
+// CeCe
+#include "cece/UniquePtr.hpp"
+#include "cece/ViewPtr.hpp"
 
 /* ************************************************************************ */
 
-// C++
-#include <memory>
+using namespace cece;
 
 /* ************************************************************************ */
 
-namespace cece {
-
-/* ************************************************************************ */
-
-template<typename T>
-class ViewPtr;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Unique smart pointer class.
- *
- * @tparam     T        Type of managed object.
- * @tparam     Deleter  Deleter object type.
- */
-template<typename T, class Deleter = std::default_delete<T>>
-using UniquePtr = std::unique_ptr<T, Deleter>;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Make unique ptr function.
- *
- * @param[in]  args       A list of construction arguments.
- *
- * @tparam     T          Type of created object.
- * @tparam     Args       Construction argument types.
- *
- * @return     Unique pointer.
- */
-template<typename T, typename... Args>
-UniquePtr<T> makeUnique(Args&&... args)
+TEST(UniquePtr, ctor)
 {
-    return UniquePtr<T>(new T{std::forward<Args>(args)...});
+    {
+        UniquePtr<int> ptr;
+        EXPECT_EQ(nullptr, ptr);
+    }
+
+    {
+        UniquePtr<int> ptr(new int{5});
+        ASSERT_NE(nullptr, ptr);
+        EXPECT_EQ(5, *ptr);
+    }
 }
 
 /* ************************************************************************ */
 
-/**
- * @brief      Make unique ptr function for custom ctor & dtor.
- *
- * @param      value  Managed value.
- * @param      dtor   Destructor function.
- *
- * @tparam     T      Value type.
- * @tparam     Dtor   Destructor type.
- *
- * @return     Unique pointer.
- */
-template<typename T, typename Dtor>
-UniquePtr<T, Dtor> makeUniqueResource(T* value, Dtor dtor)
+TEST(UniquePtr, makeUnique)
 {
-    return UniquePtr<T, Dtor>(value, dtor);
+    {
+        auto ptr = makeUnique<int>(5);
+        ::testing::StaticAssertTypeEq<decltype(ptr), UniquePtr<int>>();
+        ASSERT_NE(nullptr, ptr);
+        EXPECT_EQ(5, *ptr);
+    }
 }
 
 /* ************************************************************************ */
 
-/**
- * @brief      Create a view from unique pointer.
- *
- * @param[in]  ptr   The unique pointer.
- *
- * @tparam     T     Object type.
- *
- * @return     View pointer.
- */
-template<typename T>
-ViewPtr<T> makeView(const UniquePtr<T>& ptr) noexcept
+TEST(UniquePtr, makeUniqueResource)
 {
-    return ViewPtr<T>(ptr.get());
+    {
+        auto ptr = makeUniqueResource<int>((int*) malloc(sizeof(int)), free);
+        ASSERT_NE(nullptr, ptr);
+    }
 }
 
 /* ************************************************************************ */
 
+TEST(UniquePtr, makeView)
+{
+    {
+        auto ptr = makeUnique<int>(10);
+        auto view = makeView(ptr);
+        ASSERT_NE(nullptr, ptr);
+        EXPECT_EQ(view.get(), ptr.get());
+        EXPECT_EQ(10, *ptr);
+        EXPECT_EQ(10, *view);
+    }
 }
 
 /* ************************************************************************ */

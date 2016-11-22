@@ -36,10 +36,15 @@ namespace cece {
 
 /* ************************************************************************ */
 
+template<typename T>
+class ViewPtr;
+
+/* ************************************************************************ */
+
 /**
- * @brief Shared smart pointer class.
+ * @brief      Shared smart pointer class.
  *
- * @tparam T Type of managed object.
+ * @tparam     T     Type of managed object.
  */
 template<typename T>
 using SharedPtr = std::shared_ptr<T>;
@@ -47,9 +52,9 @@ using SharedPtr = std::shared_ptr<T>;
 /* ************************************************************************ */
 
 /**
- * @brief Weak smart pointer class.
+ * @brief      Weak smart pointer class.
  *
- * @tparam T Type of managed object.
+ * @tparam     T     Type of managed object.
  */
 template<typename T>
 using WeakPtr = std::weak_ptr<T>;
@@ -57,14 +62,36 @@ using WeakPtr = std::weak_ptr<T>;
 /* ************************************************************************ */
 
 /**
- * @brief Make unique ptr function.
+ * @brief      Make unique ptr function.
  *
- * @return
+ * @param[in]  args       Construction arguments.
+ *
+ * @tparam     T          Object type.
+ * @tparam     Args       Object construction argument types.
+ *
+ * @return     Shared pointer.
  */
 template<typename T, typename... Args>
 SharedPtr<T> makeShared(Args&&... args)
 {
     return std::make_shared<T>(std::forward<Args>(args)...);
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Create a view from shared pointer.
+ *
+ * @param[in]  ptr   The shared pointer.
+ *
+ * @tparam     T     Object type.
+ *
+ * @return     View pointer.
+ */
+template<typename T>
+ViewPtr<T> makeView(const SharedPtr<T>& ptr) noexcept
+{
+    return ViewPtr<T>(ptr.get());
 }
 
 /* ************************************************************************ */

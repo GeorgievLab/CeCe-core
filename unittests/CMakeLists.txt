@@ -38,6 +38,8 @@ cece_add_test(base
         StringTest.cpp
         StringViewTest.cpp
         ParametersTest.cpp
+        UniquePtrTest.cpp
+        SharedPtrTest.cpp
         ViewPtrTest.cpp
         IteratorRangeTest.cpp
 )

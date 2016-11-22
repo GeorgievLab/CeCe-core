@@ -28,6 +28,7 @@
 
 // C++
 #include <cstdio>
+#include <cstdlib>
 #include <limits>
 
 // CeCe

@@ -31,9 +31,12 @@ cece_add_test(base
     SOURCES
         AlignedAllocatorTest.cpp
         DynamicArrayTest.cpp
+        PtrDynamicArrayTest.cpp
+        MapTest.cpp
+        StringMapTest.cpp
+        PtrStringMapTest.cpp
         StringViewTest.cpp
         ParametersTest.cpp
-        PtrContainerTest.cpp
         ViewPtrTest.cpp
         IteratorRangeTest.cpp
 )

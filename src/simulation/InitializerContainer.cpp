@@ -38,7 +38,8 @@ namespace simulation {
 
 void InitializerContainer::init(Simulation& simulation) const
 {
-    invoke(&Initializer::init, simulation);
+    for (const auto& val : *this)
+        val->init(simulation);
 }
 
 /* ************************************************************************ */

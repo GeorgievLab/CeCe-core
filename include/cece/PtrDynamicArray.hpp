@@ -28,7 +28,14 @@
 /* ************************************************************************ */
 
 // C++
-#include <vector>
+#include <utility>
+#include <type_traits>
+#include <algorithm>
+
+// CeCe
+#include "cece/UniquePtr.hpp"
+#include "cece/ViewPtr.hpp"
+#include "cece/DynamicArray.hpp"
 
 /* ************************************************************************ */
 
@@ -37,19 +44,18 @@ namespace cece {
 /* ************************************************************************ */
 
 /**
- * @brief      An array with dynamic allocation.
+ * @brief      An array with dynamic allocation for unique pointers.
  *
- * @tparam     T          Element type.
+ * @tparam     T          Type the pointer points to.
  * @tparam     Allocator  Array allocator type.
  */
-template<typename T, class Allocator = std::allocator<T>>
-class DynamicArray : protected std::vector<T, Allocator>
+template<typename T, class Allocator = std::allocator<UniquePtr<T>>>
+class PtrDynamicArray : protected DynamicArray<UniquePtr<T>, Allocator>
 {
-    using Parent = std::vector<T, Allocator>;
+    using Parent = DynamicArray<UniquePtr<T>, Allocator>;
 
 // Public Types
 public:
-
 
     using value_type = typename Parent::value_type;
     using allocator_type = typename Parent::allocator_type;
@@ -105,6 +111,50 @@ public:
     using Parent::emplace_back;
     using Parent::pop_back;
     using Parent::resize;
+
+
+    /**
+     * @brief      Store a value.
+     *
+     * @param      val   The value to store.
+     *
+     * @return     View pointer to stored value.
+     */
+    ViewPtr<T> add(UniquePtr<T> val)
+    {
+        push_back(std::move(val));
+        return back();
+    }
+
+
+    /**
+     * @brief      Create and store an object.
+     *
+     * @param[in]  args       Construction arguments.
+     *
+     * @tparam     U          Type of constructed object.
+     * @tparam     Args       Construction argument types.
+     *
+     * @return     View pointer to stored object.
+     */
+    template<typename U = T, typename... Args>
+    ViewPtr<U> create(Args&&... args)
+    {
+        return ViewPtr<U>(add(makeUnique<U>(std::forward<Args>(args)...)));
+    }
+
+
+    /**
+     * @brief      Remove value from container.
+     *
+     * @param      val   The value to remove.
+     */
+    void remove(ViewPtr<T> val)
+    {
+        erase(std::remove_if(begin(), end(), [&val](const UniquePtr<T>& ptr) {
+            return ptr.get() == val;
+        }), end());
+    }
 
 };
 

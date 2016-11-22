@@ -23,18 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-// C++
-#include <algorithm>
-
 // GTest
 #include "gtest/gtest.h"
 
 // CeCe
-#include "cece/UniquePtr.hpp"
-#include "cece/String.hpp"
 #include "cece/Exception.hpp"
-#include "cece/StaticArray.hpp"
-#include "cece/PtrContainer.hpp"
+#include "cece/PtrStringMap.hpp"
 
 /* ************************************************************************ */
 
@@ -42,112 +36,98 @@ using namespace cece;
 
 /* ************************************************************************ */
 
-TEST(PtrContainerTest, ctorEmpty)
+TEST(PtrStringMapTest, ctors)
 {
-    PtrContainer<int> data;
-    EXPECT_EQ(0u, data.getCount());
+    {
+        PtrStringMap<int> data;
+        EXPECT_EQ(0u, data.size());
+        EXPECT_TRUE(data.empty());
+    }
+
+    {
+        PtrStringMap<int> data;
+        data.create("one", 1);
+        data.create("two", 2);
+        EXPECT_EQ(2u, data.size());
+        EXPECT_FALSE(data.empty());
+    }
 }
 
 /* ************************************************************************ */
 
-TEST(PtrContainerTest, read)
+TEST(PtrStringMapTest, add)
 {
-    PtrContainer<int> data;
-    data.create(5);
-    EXPECT_EQ(1u, data.getCount());
+    PtrStringMap<int> data;
+    data.add("one", makeUnique<int>(1));
+    data.add("two", makeUnique<int>(2));
+    EXPECT_EQ(2u, data.size());
 
-    EXPECT_EQ(5, *data[0]);
+    EXPECT_TRUE(data.exists("one"));
+    EXPECT_TRUE(data.exists("two"));
+    EXPECT_FALSE(data.exists("three"));
 
-    data.create(0);
-    data.create(566);
-    EXPECT_EQ(3u, data.getCount());
-
-    EXPECT_EQ(5, *data[0]);
-    EXPECT_EQ(0, *data[1]);
-    EXPECT_EQ(566, *data[2]);
+    // Replace
+    data.add("one", makeUnique<int>(3));
+    EXPECT_EQ(2u, data.size());
+    EXPECT_TRUE(data.exists("one"));
 }
 
 /* ************************************************************************ */
 
-TEST(PtrContainerTest, get)
+TEST(PtrStringMapTest, exists)
 {
-    PtrContainer<int> data;
-    data.create(0);
-    data.create(3);
-    EXPECT_EQ(2u, data.getCount());
+    PtrStringMap<int> data;
+    data.create("one", 1);
+    data.create("two", 2);
+    EXPECT_EQ(2u, data.size());
 
-    EXPECT_EQ(0, *data.get(0));
-    EXPECT_EQ(3, *data.get(1));
-    EXPECT_THROW(data.get(2), OutOfRangeException);
+    EXPECT_TRUE(data.exists("one"));
+    EXPECT_TRUE(data.exists("two"));
+    EXPECT_FALSE(data.exists("three"));
 }
 
 /* ************************************************************************ */
 
-TEST(PtrContainerTest, write)
+TEST(PtrStringMapTest, at)
 {
-    PtrContainer<int> data;
-    data.add(makeUnique<int>(10));
-    EXPECT_EQ(1u, data.getCount());
+    PtrStringMap<int> data;
+    data.create("one", 1);
+    data.create("two", 2);
+    EXPECT_EQ(2u, data.size());
 
-    EXPECT_EQ(10, *data.get(0));
+    EXPECT_EQ(1, *data.at("one"));
+    EXPECT_EQ(2, *data.at("two"));
+    EXPECT_THROW(data.at("three"), OutOfRangeException);
 }
 
 /* ************************************************************************ */
 
-TEST(PtrContainerTest, remove)
+TEST(PtrStringMapTest, get)
 {
-    PtrContainer<int> data;
-    auto ptr1 = data.create(1);
-    auto ptr2 = data.create(2);
-    auto ptr3 = data.create(3);
+    PtrStringMap<int> data;
+    data.create("one", 1);
+    data.create("two", 2);
+    EXPECT_EQ(2u, data.size());
 
-    EXPECT_EQ(1, *ptr1);
-    EXPECT_EQ(2, *ptr2);
-    EXPECT_EQ(3, *ptr3);
-    EXPECT_EQ(3u, data.getCount());
-
-    data.remove(ptr2);
-    data.remove(ptr1);
-
-    EXPECT_EQ(1u, data.getCount());
-    EXPECT_EQ(*ptr3, *data.get(0));
-    EXPECT_EQ(3, *data.get(0));
+    ASSERT_NE(nullptr, data.get("one"));
+    EXPECT_EQ(1, *data.get("one"));
+    ASSERT_NE(nullptr, data.get("two"));
+    EXPECT_EQ(2, *data.get("two"));
+    EXPECT_EQ(nullptr, data.get("three"));
 }
 
 /* ************************************************************************ */
 
-TEST(PtrContainerTest, clear)
+TEST(PtrStringMapTest, remove)
 {
-    PtrContainer<int> data;
-    data.create(1);
-    data.create(2);
-    data.create(3);
-    EXPECT_EQ(3u, data.getCount());
+    PtrStringMap<int> data;
+    data.add("one", makeUnique<int>(1));
+    data.add("two", makeUnique<int>(2));
+    EXPECT_EQ(2u, data.size());
 
-    data.clear();
+    data.remove("one");
 
-    EXPECT_EQ(0u, data.getCount());
-}
-
-/* ************************************************************************ */
-
-TEST(PtrContainerTest, iterate)
-{
-    const StaticArray<String, 3> names{{"name1", "name2", "name3"}};
-
-    PtrContainer<String> data;
-    ASSERT_EQ(0u, data.getCount());
-
-    for (const auto& name : names)
-        data.create(name);
-
-    // Values
-    EXPECT_TRUE(std::equal(
-        std::begin(data), std::end(data),
-        std::begin(names),
-        [](const UniquePtr<String>& item, const String& name) {
-            return *item == name;
-        }));
+    EXPECT_EQ(1u, data.size());
 }
 
 /* ************************************************************************ */

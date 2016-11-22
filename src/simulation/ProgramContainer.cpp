@@ -39,7 +39,8 @@ namespace simulation {
 void ProgramContainer::call(Simulation& simulation, Object& object, unit::Time dt)
 {
     // Invoke all stored programs
-    invoke(&Program::call, simulation, object, dt);
+    for (auto& val : *this)
+        val->call(simulation, object, dt);
 }
 
 /* ************************************************************************ */

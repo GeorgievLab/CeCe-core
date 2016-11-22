@@ -98,11 +98,11 @@ void ModuleContainer::drawStoreState(const simulation::Visualization& visualizat
     RenderState& state = m_drawableState.getBack();
     state.modules.clear();
 
-    for (auto& module : *this)
+    for (auto& p : *this)
     {
-        module->drawStoreState(visualization);
+        p.second->drawStoreState(visualization);
         // Store module to draw
-        state.modules.push_back(module);
+        state.modules.push_back(p.second);
     }
 }
 #endif
@@ -112,8 +112,8 @@ void ModuleContainer::drawStoreState(const simulation::Visualization& visualizat
 #ifdef CECE_RENDER
 void ModuleContainer::drawSwapState()
 {
-    for (auto& module : *this)
-        module->drawSwapState();
+    for (auto& p : *this)
+        p.second->drawSwapState();
 
     m_drawableState.swap();
 }
@@ -126,8 +126,8 @@ DynamicArray<ViewPtr<Module>> ModuleContainer::getSortedListAsc() const noexcept
     DynamicArray<ViewPtr<Module>> modules;
 
     // Copy modules (view pointer)
-    for (const auto& module : *this)
-        modules.push_back(module);
+    for (const auto& p : *this)
+        modules.push_back(p.second);
 
     // Sort modules by priority. Cannot be precomputed, because priority can change in previous iteration
     std::sort(modules.begin(), modules.end(),
@@ -145,8 +145,8 @@ DynamicArray<ViewPtr<Module>> ModuleContainer::getSortedListDesc() const noexcep
     DynamicArray<ViewPtr<Module>> modules;
 
     // Copy modules (view pointer)
-    for (const auto& module : *this)
-        modules.push_back(module);
+    for (const auto& p : *this)
+        modules.push_back(p.second);
 
     // Sort modules by priority. Cannot be precomputed, because priority can change in previous iteration
     std::sort(modules.begin(), modules.end(),

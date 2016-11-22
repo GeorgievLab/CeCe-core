@@ -37,13 +37,49 @@ namespace cece {
 /* ************************************************************************ */
 
 /**
- * @brief Map class.
+ * @brief      Container for mapping key to value.
  *
- * @tparam K
- * @tparam T
+ * @tparam     K     Key type.
+ * @tparam     T     Value type.
  */
 template<typename K, typename T>
-using Map = std::map<K, T>;
+class Map : protected std::map<K, T>
+{
+    using Parent = std::map<K, T>;
+
+
+// Public Ctors & Dtors
+public:
+
+
+    using Parent::Parent;
+
+
+// Public Accessors & Mutators
+public:
+
+    using Parent::operator=;
+    using Parent::operator[];
+    using Parent::at;
+    using Parent::begin;
+    using Parent::cbegin;
+    using Parent::end;
+    using Parent::cend;
+    using Parent::rbegin;
+    using Parent::crbegin;
+    using Parent::rend;
+    using Parent::crend;
+    using Parent::empty;
+    using Parent::size;
+    using Parent::max_size;
+    using Parent::clear;
+    using Parent::insert;
+    using Parent::emplace;
+    using Parent::erase;
+    using Parent::count;
+    using Parent::find;
+
+};
 
 /* ************************************************************************ */
 

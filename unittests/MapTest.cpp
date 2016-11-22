@@ -23,30 +23,46 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
+// GTest
+#include "gtest/gtest.h"
+
+// CeCe
+#include "cece/Exception.hpp"
+#include "cece/Map.hpp"
 
 /* ************************************************************************ */
 
-// C++
-#include <array>
+using namespace cece;
 
 /* ************************************************************************ */
 
-namespace cece {
+TEST(MapTest, ctors)
+{
+    {
+        Map<int, int> data;
+        EXPECT_EQ(0u, data.size());
+        EXPECT_TRUE(data.empty());
+    }
+
+    {
+        Map<int, int> data{{1, 2}, {2, 3}};
+        EXPECT_EQ(2u, data.size());
+        EXPECT_FALSE(data.empty());
+    }
+}
 
 /* ************************************************************************ */
 
-/**
- * @brief      Static (stack allocated) array.
- *
- * @tparam     T     Element type.
- * @tparam     N     Number of elements.
- */
-template<typename T, std::size_t N>
-using StaticArray = std::array<T, N>;
+TEST(MapTest, at)
+{
+    Map<int, int> data;
+    data.emplace(0, 0);
+    data.emplace(1, 3);
+    EXPECT_EQ(2u, data.size());
 
-/* ************************************************************************ */
-
+    EXPECT_EQ(0, data.at(0));
+    EXPECT_EQ(3, data.at(1));
+    EXPECT_THROW(data.at(2), OutOfRangeException);
 }
 
 /* ************************************************************************ */

@@ -28,7 +28,7 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/PtrContainer.hpp"
+#include "cece/PtrDynamicArray.hpp"
 #include "cece/unit/Units.hpp"
 
 /* ************************************************************************ */
@@ -50,7 +50,7 @@ class Program;
 /**
  * @brief Container for programs.
  */
-class ProgramContainer : public PtrContainer<Program>
+class ProgramContainer : public PtrDynamicArray<Program>
 {
 
 // Public Operations

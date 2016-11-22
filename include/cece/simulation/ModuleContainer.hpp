@@ -31,7 +31,7 @@
 #include "cece/common.hpp"
 #include "cece/ViewPtr.hpp"
 #include "cece/DynamicArray.hpp"
-#include "cece/PtrNamedContainer.hpp"
+#include "cece/PtrStringMap.hpp"
 #include "cece/async/Atomic.hpp"
 
 #ifdef CECE_RENDER
@@ -61,7 +61,7 @@ class Module;
  *
  * @todo Cache sorted list of modules.
  */
-class ModuleContainer : public PtrNamedContainer<Module>
+class ModuleContainer : public PtrStringMap<Module>
 {
 
 // Public Operations

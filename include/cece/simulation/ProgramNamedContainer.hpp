@@ -28,7 +28,7 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/PtrNamedContainer.hpp"
+#include "cece/PtrStringMap.hpp"
 
 /* ************************************************************************ */
 
@@ -44,7 +44,7 @@ class Program;
 /**
  * @brief Container for named programs.
  */
-class ProgramNamedContainer : public PtrNamedContainer<Program>
+class ProgramNamedContainer : public PtrStringMap<Program>
 {
 
 };

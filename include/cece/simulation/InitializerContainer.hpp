@@ -28,7 +28,7 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/PtrContainer.hpp"
+#include "cece/PtrDynamicArray.hpp"
 
 /* ************************************************************************ */
 
@@ -45,7 +45,7 @@ namespace simulation {
 /**
  * @brief Container for initializers.
  */
-class InitializerContainer : public PtrContainer<Initializer>
+class InitializerContainer : public PtrDynamicArray<Initializer>
 {
 
 // Public Operations

@@ -23,137 +23,131 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
+// C++
+#include <algorithm>
 
-/* ************************************************************************ */
+// GTest
+#include "gtest/gtest.h"
 
 // CeCe
-#include "cece/common.hpp"
-#include "cece/ViewPtr.hpp"
-#include "cece/DynamicArray.hpp"
-#include "cece/PtrStringMap.hpp"
-#include "cece/async/Atomic.hpp"
-
-#ifdef CECE_RENDER
-#include "cece/render/State.hpp"
-#endif
+#include "cece/UniquePtr.hpp"
+#include "cece/String.hpp"
+#include "cece/Exception.hpp"
+#include "cece/StaticArray.hpp"
+#include "cece/PtrDynamicArray.hpp"
 
 /* ************************************************************************ */
 
-#ifdef CECE_RENDER
-namespace cece { namespace render { class Context; } }
-namespace cece { namespace simulation { class Visualization; } }
-#endif
+using namespace cece;
 
 /* ************************************************************************ */
 
-namespace cece {
-namespace module {
-
-/* ************************************************************************ */
-
-class Module;
-
-/* ************************************************************************ */
-
-/**
- * @brief Container for modules.
- *
- * @todo Cache sorted list of modules.
- */
-class Container : public PtrStringMap<Module>
+TEST(PtrDynamicArrayTest, ctorEmpty)
 {
-
-// Public Operations
-public:
-
-
-    /**
-     * @brief Initialize all modules.
-     *
-     * @param flag Continuation flag.
-     */
-    void init(async::AtomicBool& flag);
-
-
-    /**
-     * @brief Update all modules.
-     */
-    void update();
-
-
-    /**
-     * @brief Terminate all modules.
-     */
-    void terminate();
-
-
-#ifdef CECE_RENDER
-
-    /**
-     * @brief Render modules sorted by z-order.
-     * @param visualization Visualization context.
-     * @param context       Rendering context.
-     */
-    void draw(const simulation::Visualization& visualization, render::Context& context);
-
-
-    /**
-     * @brief Store modules drawing state.
-     * @param visualization Visualization context.
-     */
-    void drawStoreState(const simulation::Visualization& visualization);
-
-
-    /**
-     * @brief Swap modules drawing state.
-     */
-    void drawSwapState();
-
-#endif
-
-// Protected Operations
-protected:
-
-
-    /**
-     * @brief Returns sorted list of modules by priority.
-     *
-     * @return
-     */
-    DynamicArray<ViewPtr<Module>> getSortedListAsc() const noexcept;
-
-
-    /**
-     * @brief Returns sorted list of modules by priority.
-     *
-     * @return
-     */
-    DynamicArray<ViewPtr<Module>> getSortedListDesc() const noexcept;
-
-// Private Structures
-private:
-
-#ifdef CECE_RENDER
-    struct RenderState
-    {
-        /// Modules to render
-        DynamicArray<ViewPtr<Module>> modules;
-    };
-#endif
-
-// Private Data Members
-private:
-
-#ifdef CECE_RENDER
-    /// Render state.
-    render::State<RenderState> m_drawableState;
-#endif
-};
+    PtrDynamicArray<int> data;
+    EXPECT_EQ(0u, data.size());
+}
 
 /* ************************************************************************ */
 
+TEST(PtrDynamicArrayTest, read)
+{
+    PtrDynamicArray<int> data;
+    data.create(5);
+    EXPECT_EQ(1u, data.size());
+
+    EXPECT_EQ(5, *data[0]);
+
+    data.create(0);
+    data.create(566);
+    EXPECT_EQ(3u, data.size());
+
+    EXPECT_EQ(5, *data[0]);
+    EXPECT_EQ(0, *data[1]);
+    EXPECT_EQ(566, *data[2]);
 }
+
+/* ************************************************************************ */
+
+TEST(PtrDynamicArrayTest, at)
+{
+    PtrDynamicArray<int> data;
+    data.create(0);
+    data.create(3);
+    EXPECT_EQ(2u, data.size());
+
+    EXPECT_EQ(0, *data.at(0));
+    EXPECT_EQ(3, *data.at(1));
+    EXPECT_THROW(data.at(2), OutOfRangeException);
+}
+
+/* ************************************************************************ */
+
+TEST(PtrDynamicArrayTest, write)
+{
+    PtrDynamicArray<int> data;
+    data.add(makeUnique<int>(10));
+    EXPECT_EQ(1u, data.size());
+
+    EXPECT_EQ(10, *data.at(0));
+}
+
+/* ************************************************************************ */
+
+TEST(PtrDynamicArrayTest, remove)
+{
+    PtrDynamicArray<int> data;
+    auto ptr1 = data.create(1);
+    auto ptr2 = data.create(2);
+    auto ptr3 = data.create(3);
+
+    EXPECT_EQ(1, *ptr1);
+    EXPECT_EQ(2, *ptr2);
+    EXPECT_EQ(3, *ptr3);
+    EXPECT_EQ(3u, data.size());
+
+    data.remove(ptr2);
+    data.remove(ptr1);
+
+    EXPECT_EQ(1u, data.size());
+    EXPECT_EQ(*ptr3, *data.at(0));
+    EXPECT_EQ(3, *data.at(0));
+}
+
+/* ************************************************************************ */
+
+TEST(PtrDynamicArrayTest, clear)
+{
+    PtrDynamicArray<int> data;
+    data.create(1);
+    data.create(2);
+    data.create(3);
+    EXPECT_EQ(3u, data.size());
+
+    data.clear();
+
+    EXPECT_EQ(0u, data.size());
+}
+
+/* ************************************************************************ */
+
+TEST(PtrDynamicArrayTest, iterate)
+{
+    const StaticArray<String, 3> names{{"name1", "name2", "name3"}};
+
+    PtrDynamicArray<String> data;
+    ASSERT_EQ(0u, data.size());
+
+    for (const auto& name : names)
+        data.create(name);
+
+    // Values
+    EXPECT_TRUE(std::equal(
+        std::begin(data), std::end(data),
+        std::begin(names),
+        [](const UniquePtr<String>& item, const String& name) {
+            return *item == name;
+        }));
 }
 
 /* ************************************************************************ */

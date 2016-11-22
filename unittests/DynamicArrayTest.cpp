@@ -35,9 +35,158 @@ using namespace cece;
 
 /* ************************************************************************ */
 
-TEST(DynamicArrayTest, size)
+struct Integer
 {
-    DynamicArray<int> array;
+    int value;
+
+    Integer() : Integer(0) {}
+    Integer(int val) : value(val) {}
+};
+
+/* ************************************************************************ */
+
+inline bool operator==(Integer lhs, int rhs) { return lhs.value == rhs; }
+inline bool operator!=(Integer lhs, int rhs) { return lhs.value != rhs; }
+inline bool operator==(Integer lhs, Integer rhs) { return lhs.value == rhs.value; }
+inline bool operator!=(Integer lhs, Integer rhs) { return lhs.value != rhs.value; }
+inline bool operator==(int lhs, Integer rhs) { return lhs == rhs.value; }
+inline bool operator!=(int lhs, Integer rhs) { return lhs != rhs.value; }
+
+/* ************************************************************************ */
+
+template <class T>
+class DynamicArrayTest : public ::testing::Test {};
+
+/* ************************************************************************ */
+
+using TestTypes = ::testing::Types<char, unsigned char, int, unsigned int, Integer>;
+TYPED_TEST_CASE(DynamicArrayTest, TestTypes);
+
+/* ************************************************************************ */
+
+TYPED_TEST(DynamicArrayTest, ctors)
+{
+    {
+        DynamicArray<TypeParam> array;
+        EXPECT_EQ(0u, array.size());
+        EXPECT_TRUE(array.empty());
+    }
+
+    {
+        DynamicArray<TypeParam> array(5u, TypeParam(1));
+        EXPECT_EQ(5u, array.size());
+        EXPECT_FALSE(array.empty());
+
+        EXPECT_EQ(1, array[0]);
+        EXPECT_EQ(1, array[1]);
+        EXPECT_EQ(1, array[2]);
+        EXPECT_EQ(1, array[3]);
+        EXPECT_EQ(1, array[4]);
+    }
+
+    {
+        DynamicArray<TypeParam> array({1, 2, 3, 4});
+        EXPECT_EQ(4u, array.size());
+        EXPECT_FALSE(array.empty());
+
+        EXPECT_EQ(1, array[0]);
+        EXPECT_EQ(2, array[1]);
+        EXPECT_EQ(3, array[2]);
+        EXPECT_EQ(4, array[3]);
+    }
+
+    {
+        const TypeParam src[4] = {1, 2, 3, 4};
+
+        DynamicArray<TypeParam> array(std::begin(src), std::end(src));
+        EXPECT_EQ(4u, array.size());
+        EXPECT_FALSE(array.empty());
+
+        EXPECT_EQ(1, array[0]);
+        EXPECT_EQ(2, array[1]);
+        EXPECT_EQ(3, array[2]);
+        EXPECT_EQ(4, array[3]);
+    }
+}
+
+/* ************************************************************************ */
+
+TYPED_TEST(DynamicArrayTest, access)
+{
+    {
+        DynamicArray<TypeParam> array({1, 2, 3, 4});
+        EXPECT_EQ(4u, array.size());
+        EXPECT_FALSE(array.empty());
+
+        EXPECT_EQ(1, array[0]);
+        EXPECT_EQ(2, array[1]);
+        EXPECT_EQ(3, array[2]);
+        EXPECT_EQ(4, array[3]);
+    }
+
+    {
+        DynamicArray<TypeParam> array({1, 2, 3, 4});
+        EXPECT_EQ(4u, array.size());
+        EXPECT_FALSE(array.empty());
+
+        EXPECT_EQ(1, array.at(0));
+        EXPECT_EQ(2, array.at(1));
+        EXPECT_EQ(3, array.at(2));
+        EXPECT_EQ(4, array.at(3));
+        EXPECT_ANY_THROW(array.at(4));
+    }
+
+    {
+        DynamicArray<TypeParam> a1({1, 2, 3, 4});
+        EXPECT_EQ(4u, a1.size());
+        EXPECT_FALSE(a1.empty());
+
+        DynamicArray<TypeParam> a2(a1);
+        EXPECT_EQ(4u, a2.size());
+        EXPECT_FALSE(a2.empty());
+    }
+
+    {
+        DynamicArray<TypeParam> a1({1, 2, 3, 4});
+        EXPECT_EQ(4u, a1.size());
+        EXPECT_FALSE(a1.empty());
+
+        DynamicArray<TypeParam> a2(std::move(a1));
+        EXPECT_EQ(4u, a2.size());
+        EXPECT_FALSE(a2.empty());
+    }
+}
+
+/* ************************************************************************ */
+
+TYPED_TEST(DynamicArrayTest, assign)
+{
+    {
+        DynamicArray<TypeParam> a1({1, 2, 3, 4});
+        EXPECT_EQ(4u, a1.size());
+        EXPECT_FALSE(a1.empty());
+
+        DynamicArray<TypeParam> a2 = a1;
+        EXPECT_EQ(4u, a2.size());
+        EXPECT_FALSE(a2.empty());
+    }
+
+    {
+        DynamicArray<TypeParam> a1({1, 2, 3, 4});
+        EXPECT_EQ(4u, a1.size());
+        EXPECT_FALSE(a1.empty());
+
+        DynamicArray<TypeParam> a2 = std::move(a1);
+        EXPECT_EQ(4u, a2.size());
+        EXPECT_FALSE(a2.empty());
+    }
+}
+
+/* ************************************************************************ */
+
+TYPED_TEST(DynamicArrayTest, size)
+{
+    DynamicArray<TypeParam> array;
     EXPECT_EQ(0u, array.size());
 
     array.resize(10u);

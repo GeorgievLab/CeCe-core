@@ -23,30 +23,111 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
+// GTest
+#include "gtest/gtest.h"
+
+// CeCe
+#include "cece/Exception.hpp"
+#include "cece/PtrStringMap.hpp"
 
 /* ************************************************************************ */
 
-// C++
-#include <array>
+using namespace cece;
 
 /* ************************************************************************ */
 
-namespace cece {
+TEST(PtrStringMapTest, ctors)
+{
+    {
+        PtrStringMap<int> data;
+        EXPECT_EQ(0u, data.size());
+        EXPECT_TRUE(data.empty());
+    }
+
+    {
+        PtrStringMap<int> data;
+        data.create("one", 1);
+        data.create("two", 2);
+        EXPECT_EQ(2u, data.size());
+        EXPECT_FALSE(data.empty());
+    }
+}
 
 /* ************************************************************************ */
 
-/**
- * @brief      Static (stack allocated) array.
- *
- * @tparam     T     Element type.
- * @tparam     N     Number of elements.
- */
-template<typename T, std::size_t N>
-using StaticArray = std::array<T, N>;
+TEST(PtrStringMapTest, add)
+{
+    PtrStringMap<int> data;
+    data.add("one", makeUnique<int>(1));
+    data.add("two", makeUnique<int>(2));
+    EXPECT_EQ(2u, data.size());
+
+    EXPECT_TRUE(data.exists("one"));
+    EXPECT_TRUE(data.exists("two"));
+    EXPECT_FALSE(data.exists("three"));
+
+    // Replace
+    data.add("one", makeUnique<int>(3));
+    EXPECT_EQ(2u, data.size());
+    EXPECT_TRUE(data.exists("one"));
+}
 
 /* ************************************************************************ */
 
+TEST(PtrStringMapTest, exists)
+{
+    PtrStringMap<int> data;
+    data.create("one", 1);
+    data.create("two", 2);
+    EXPECT_EQ(2u, data.size());
+
+    EXPECT_TRUE(data.exists("one"));
+    EXPECT_TRUE(data.exists("two"));
+    EXPECT_FALSE(data.exists("three"));
+}
+
+/* ************************************************************************ */
+
+TEST(PtrStringMapTest, at)
+{
+    PtrStringMap<int> data;
+    data.create("one", 1);
+    data.create("two", 2);
+    EXPECT_EQ(2u, data.size());
+
+    EXPECT_EQ(1, *data.at("one"));
+    EXPECT_EQ(2, *data.at("two"));
+    EXPECT_THROW(data.at("three"), OutOfRangeException);
+}
+
+/* ************************************************************************ */
+
+TEST(PtrStringMapTest, get)
+{
+    PtrStringMap<int> data;
+    data.create("one", 1);
+    data.create("two", 2);
+    EXPECT_EQ(2u, data.size());
+
+    ASSERT_NE(nullptr, data.get("one"));
+    EXPECT_EQ(1, *data.get("one"));
+    ASSERT_NE(nullptr, data.get("two"));
+    EXPECT_EQ(2, *data.get("two"));
+    EXPECT_EQ(nullptr, data.get("three"));
+}
+
+/* ************************************************************************ */
+
+TEST(PtrStringMapTest, remove)
+{
+    PtrStringMap<int> data;
+    data.add("one", makeUnique<int>(1));
+    data.add("two", makeUnique<int>(2));
+    EXPECT_EQ(2u, data.size());
+
+    data.remove("one");
+
+    EXPECT_EQ(1u, data.size());
 }
 
 /* ************************************************************************ */

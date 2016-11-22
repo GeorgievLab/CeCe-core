@@ -23,30 +23,58 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
+// GTest
+#include "gtest/gtest.h"
+
+// CeCe
+#include "cece/Exception.hpp"
+#include "cece/StringMap.hpp"
 
 /* ************************************************************************ */
 
-// C++
-#include <array>
+using namespace cece;
 
 /* ************************************************************************ */
 
-namespace cece {
+TEST(StringMapTest, ctors)
+{
+    {
+        StringMap<int> data;
+        EXPECT_EQ(0u, data.size());
+        EXPECT_TRUE(data.empty());
+    }
+
+    {
+        StringMap<int> data{{"one", 1}, {"two", 2}};
+        EXPECT_EQ(2u, data.size());
+        EXPECT_FALSE(data.empty());
+    }
+}
 
 /* ************************************************************************ */
 
-/**
- * @brief      Static (stack allocated) array.
- *
- * @tparam     T     Element type.
- * @tparam     N     Number of elements.
- */
-template<typename T, std::size_t N>
-using StaticArray = std::array<T, N>;
+TEST(StringMapTest, exists)
+{
+    StringMap<int> data{{"one", 1}, {"two", 2}};
+    EXPECT_EQ(2u, data.size());
+
+    EXPECT_TRUE(data.exists("one"));
+    EXPECT_TRUE(data.exists("two"));
+    EXPECT_FALSE(data.exists("three"));
+}
 
 /* ************************************************************************ */
 
+TEST(StringMapTest, at)
+{
+    StringMap<int> data;
+    data.emplace("one", 1);
+    data.emplace("two", 2);
+    EXPECT_EQ(2u, data.size());
+
+    EXPECT_EQ(1, data.at("one"));
+    EXPECT_EQ(2, data.at("two"));
+    EXPECT_THROW(data.at("three"), OutOfRangeException);
 }
 
 /* ************************************************************************ */

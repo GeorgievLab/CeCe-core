@@ -23,18 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-// C++
-#include <algorithm>
-
 // GTest
 #include "gtest/gtest.h"
 
 // CeCe
-#include "cece/UniquePtr.hpp"
-#include "cece/String.hpp"
 #include "cece/Exception.hpp"
-#include "cece/StaticArray.hpp"
-#include "cece/PtrContainer.hpp"
+#include "cece/Map.hpp"
 
 /* ************************************************************************ */
 
@@ -42,112 +36,33 @@ using namespace cece;
 
 /* ************************************************************************ */
 
-TEST(PtrContainerTest, ctorEmpty)
+TEST(MapTest, ctors)
 {
-    PtrContainer<int> data;
-    EXPECT_EQ(0u, data.size());
+    {
+        Map<int, int> data;
+        EXPECT_EQ(0u, data.size());
+        EXPECT_TRUE(data.empty());
+    }
+
+    {
+        Map<int, int> data{{1, 2}, {2, 3}};
+        EXPECT_EQ(2u, data.size());
+        EXPECT_FALSE(data.empty());
+    }
 }
 
 /* ************************************************************************ */
 
-TEST(PtrContainerTest, read)
+TEST(MapTest, at)
 {
-    PtrContainer<int> data;
-    data.create(5);
-    EXPECT_EQ(1u, data.size());
-
-    EXPECT_EQ(5, *data[0]);
-
-    data.create(0);
-    data.create(566);
-    EXPECT_EQ(3u, data.size());
-
-    EXPECT_EQ(5, *data[0]);
-    EXPECT_EQ(0, *data[1]);
-    EXPECT_EQ(566, *data[2]);
-}
-
-/* ************************************************************************ */
-
-TEST(PtrContainerTest, at)
-{
-    PtrContainer<int> data;
-    data.create(0);
-    data.create(3);
+    Map<int, int> data;
+    data.emplace(0, 0);
+    data.emplace(1, 3);
     EXPECT_EQ(2u, data.size());
 
-    EXPECT_EQ(0, *data.at(0));
-    EXPECT_EQ(3, *data.at(1));
+    EXPECT_EQ(0, data.at(0));
+    EXPECT_EQ(3, data.at(1));
     EXPECT_THROW(data.at(2), OutOfRangeException);
-}
-
-/* ************************************************************************ */
-
-TEST(PtrContainerTest, write)
-{
-    PtrContainer<int> data;
-    data.add(makeUnique<int>(10));
-    EXPECT_EQ(1u, data.size());
-
-    EXPECT_EQ(10, *data.at(0));
-}
-
-/* ************************************************************************ */
-
-TEST(PtrContainerTest, remove)
-{
-    PtrContainer<int> data;
-    auto ptr1 = data.create(1);
-    auto ptr2 = data.create(2);
-    auto ptr3 = data.create(3);
-
-    EXPECT_EQ(1, *ptr1);
-    EXPECT_EQ(2, *ptr2);
-    EXPECT_EQ(3, *ptr3);
-    EXPECT_EQ(3u, data.size());
-
-    data.remove(ptr2);
-    data.remove(ptr1);
-
-    EXPECT_EQ(1u, data.size());
-    EXPECT_EQ(*ptr3, *data.at(0));
-    EXPECT_EQ(3, *data.at(0));
-}
-
-/* ************************************************************************ */
-
-TEST(PtrContainerTest, clear)
-{
-    PtrContainer<int> data;
-    data.create(1);
-    data.create(2);
-    data.create(3);
-    EXPECT_EQ(3u, data.size());
-
-    data.clear();
-
-    EXPECT_EQ(0u, data.size());
-}
-
-/* ************************************************************************ */
-
-TEST(PtrContainerTest, iterate)
-{
-    const StaticArray<String, 3> names{{"name1", "name2", "name3"}};
-
-    PtrContainer<String> data;
-    ASSERT_EQ(0u, data.size());
-
-    for (const auto& name : names)
-        data.create(name);
-
-    // Values
-    EXPECT_TRUE(std::equal(
-        std::begin(data), std::end(data),
-        std::begin(names),
-        [](const UniquePtr<String>& item, const String& name) {
-            return *item == name;
-        }));
 }
 
 /* ************************************************************************ */

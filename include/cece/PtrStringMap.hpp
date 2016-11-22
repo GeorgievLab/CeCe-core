@@ -27,8 +27,10 @@
 
 /* ************************************************************************ */
 
-// C++
-#include <vector>
+// CeCe
+#include "cece/StringMap.hpp"
+#include "cece/UniquePtr.hpp"
+#include "cece/ViewPtr.hpp"
 
 /* ************************************************************************ */
 
@@ -37,32 +39,14 @@ namespace cece {
 /* ************************************************************************ */
 
 /**
- * @brief      An array with dynamic allocation.
+ * @brief      Container for mapping string to value.
  *
- * @tparam     T          Element type.
- * @tparam     Allocator  Array allocator type.
+ * @tparam     T     Value type.
  */
-template<typename T, class Allocator = std::allocator<T>>
-class DynamicArray : protected std::vector<T, Allocator>
+template<typename T>
+class PtrStringMap : protected StringMap<UniquePtr<T>>
 {
-    using Parent = std::vector<T, Allocator>;
-
-// Public Types
-public:
-
-
-    using value_type = typename Parent::value_type;
-    using allocator_type = typename Parent::allocator_type;
-    using size_type = typename Parent::size_type;
-    using difference_type = typename Parent::difference_type;
-    using reference = typename Parent::reference;
-    using const_reference = typename Parent::const_reference;
-    using pointer = typename Parent::pointer;
-    using const_pointer = typename Parent::const_pointer;
-    using iterator = typename Parent::iterator;
-    using const_iterator = typename Parent::const_iterator;
-    using reverse_iterator = typename Parent::reverse_iterator;
-    using const_reverse_iterator = typename Parent::const_reverse_iterator;
+    using Parent = StringMap<UniquePtr<T>>;
 
 
 // Public Ctors & Dtors
@@ -76,13 +60,9 @@ public:
 public:
 
 
-    using Parent::operator=;
     using Parent::operator[];
-    using Parent::assign;
+    using Parent::operator=;
     using Parent::at;
-    using Parent::back;
-    using Parent::front;
-    using Parent::data;
     using Parent::begin;
     using Parent::cbegin;
     using Parent::end;
@@ -94,17 +74,120 @@ public:
     using Parent::empty;
     using Parent::size;
     using Parent::max_size;
-    using Parent::reserve;
-    using Parent::capacity;
-    using Parent::shrink_to_fit;
     using Parent::clear;
     using Parent::insert;
     using Parent::emplace;
     using Parent::erase;
-    using Parent::push_back;
-    using Parent::emplace_back;
-    using Parent::pop_back;
-    using Parent::resize;
+    using Parent::count;
+    using Parent::find;
+    using Parent::exists;
+
+
+    /**
+     * @brief      Returns value stored under given key.
+     *
+     * @param      name  Key name.
+     *
+     * @return     Pointer to value. Can be nullptr.
+     */
+    ViewPtr<T> get(StringView name) const noexcept
+    {
+#if __cplusplus >= 201402L
+        auto it = find(name);
+#else
+        auto it = find(String(name));
+#endif
+
+        if (it == end())
+            return nullptr;
+
+        return it->second;
+    }
+
+
+    /**
+     * @brief Returns object with given value.
+     *
+     * @tparam T2 Required type.
+     *
+     * @param name Object name.
+     *
+     * @return Pointer to object. Can be nullptr.
+     */
+    template<typename U>
+    ViewPtr<U> get(StringView name) const noexcept
+    {
+#if __cplusplus >= 201402L
+        auto it = find(name);
+#else
+        auto it = find(String(name));
+#endif
+
+        if (it == end())
+            return nullptr;
+
+        CECE_ASSERT(dynamic_cast<U*>(it->second.get()));
+        return static_cast<U*>(it->second.get());
+    }
+
+
+    /**
+     * @brief      Store a value under specified key.
+     *
+     * @param[in]  name   The key name.
+     * @param[in]  value  The value to store.
+     *
+     * @return     View pointer to stored object.
+     */
+    ViewPtr<T> add(String name, UniquePtr<T> value)
+    {
+        auto it = find(name);
+
+        if (it != end())
+        {
+            it->second = std::move(value);
+        }
+        else
+        {
+            std::tie(it, std::ignore) = emplace(std::move(name), std::move(value));
+        }
+
+        return it->second;
+    }
+
+
+    /**
+     * @brief      Create and store an object.
+     *
+     * @param[in]  name       Key value.
+     * @param[in]  args       Construction arguments.
+     *
+     * @tparam     U          Type of constructed object.
+     * @tparam     Args       Construction argument types.
+     *
+     * @return     View pointer to stored object.
+     */
+    template<typename U = T, typename... Args>
+    ViewPtr<U> create(String name, Args&&... args)
+    {
+        return ViewPtr<U>(add(std::move(name), makeUnique<U>(std::forward<Args>(args)...)));
+    }
+
+
+    /**
+     * @brief      Remove value from container.
+     *
+     * @param      name  Key name.
+     */
+    void remove(StringView name)
+    {
+#if __cplusplus >= 201402L
+        erase(name);
+#else
+        erase(String(name));
+#endif
+    }
+
 
 };
 

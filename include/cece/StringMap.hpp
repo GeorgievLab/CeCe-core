@@ -27,8 +27,10 @@
 
 /* ************************************************************************ */
 
-// C++
-#include <array>
+// CeCe
+#include "cece/Map.hpp"
+#include "cece/String.hpp"
+#include "cece/StringView.hpp"
 
 /* ************************************************************************ */
 
@@ -37,13 +39,66 @@ namespace cece {
 /* ************************************************************************ */
 
 /**
- * @brief      Static (stack allocated) array.
+ * @brief      Container for mapping string to value.
  *
- * @tparam     T     Element type.
- * @tparam     N     Number of elements.
+ * @tparam     T     Value type.
  */
-template<typename T, std::size_t N>
-using StaticArray = std::array<T, N>;
+template<typename T>
+class StringMap : protected Map<String, T>
+{
+    using Parent = Map<String, T>;
+
+
+// Public Ctors & Dtors
+public:
+
+
+    using Parent::Parent;
+
+
+// Public Accessors & Mutators
+public:
+
+
+    using Parent::operator[];
+    using Parent::operator=;
+    using Parent::at;
+    using Parent::begin;
+    using Parent::cbegin;
+    using Parent::end;
+    using Parent::cend;
+    using Parent::rbegin;
+    using Parent::crbegin;
+    using Parent::rend;
+    using Parent::crend;
+    using Parent::empty;
+    using Parent::size;
+    using Parent::max_size;
+    using Parent::clear;
+    using Parent::insert;
+    using Parent::emplace;
+    using Parent::erase;
+    using Parent::count;
+    using Parent::find;
+
+
+    /**
+     * @brief      Returns if an object with given name exists.
+     *
+     * @param      name  Object name.
+     *
+     * @return     If a value exists.
+     */
+    bool exists(StringView name) const noexcept
+    {
+#if __cplusplus >= 201402L
+        return count(name) == 1;
+#else
+        return count(String(name)) == 1;
+#endif
+    }
+
+};
 
 /* ************************************************************************ */
 

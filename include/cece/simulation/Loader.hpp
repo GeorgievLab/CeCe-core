@@ -38,7 +38,7 @@
 /* ************************************************************************ */
 
 namespace cece {
-    inline namespace core   { class Parameters; }
+    class Parameters;
     namespace simulation    { class Simulation; }
     namespace plugin        { class Manager; }
 }

@@ -48,7 +48,7 @@
 
 namespace cece {
     /// @deprecated
-    inline namespace core { class Parameters; }
+    class Parameters;
 
     namespace config { class Configuration; }
     namespace plugin { class Api; }

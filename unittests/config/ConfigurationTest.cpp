@@ -23,69 +23,82 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
+// GTest
+#include "gtest/gtest.h"
 
 // CeCe
-#include "cece/String.hpp"
-#include "cece/io/StringStream.hpp"
+#include "cece/config/Configuration.hpp"
 
 /* ************************************************************************ */
 
-namespace cece {
-namespace config {
+using namespace cece;
+using namespace cece::config;
 
 /* ************************************************************************ */
 
-/**
- * @brief      Configuration value convertor.
- *
- * @tparam     T     Type for conversion.
- */
-template<typename T>
-struct Convertor
+TEST(Configuration, memory)
 {
+    Configuration config;
+    EXPECT_FALSE(config.has("name1"));
+    EXPECT_FALSE(config.has("name2"));
+    EXPECT_FALSE(config.hasContent());
 
-    /**
-     * @brief      Convert from String to required type.
-     *
-     * @param[in]  value  The string value.
-     *
-     * @return     The result value.
-     */
-    static T fromString(const String& value)
-    {
-        io::InStringStream iss(value);
+    config.set("name1", "value1");
+    EXPECT_TRUE(config.has("name1"));
+    EXPECT_FALSE(config.has("name2"));
+    EXPECT_FALSE(config.hasContent());
+    EXPECT_EQ("value1", config.get("name1"));
+    EXPECT_EQ("value1", config.get("name1", "def-value1"));
 
-        T res;
-        iss >> std::noskipws >> std::boolalpha >> res;
+    config.set("name2", "value2");
+    EXPECT_TRUE(config.has("name1"));
+    EXPECT_TRUE(config.has("name2"));
+    EXPECT_FALSE(config.hasContent());
+    EXPECT_EQ("value2", config.get("name2"));
+    EXPECT_EQ("value2", config.get("name2", "def-value2"));
 
-        return res;
-    }
+    ASSERT_FALSE(config.has("name5"));
+    EXPECT_EQ("def-value5", config.get("name5", "def-value5"));
 
+    config.setContent("Hello world");
+    EXPECT_TRUE(config.has("name1"));
+    EXPECT_TRUE(config.has("name2"));
+    EXPECT_TRUE(config.hasContent());
+    EXPECT_EQ("Hello world", config.getContent());
 
-    /**
-     * @brief      Convert to String from required type.
-     *
-     * @param[in]  value  The source value.
-     *
-     * @return     The string value.
-     */
-    static String toString(const T& value)
-    {
-        io::OutStringStream oss;
+    config.set("bool", true);
+    ASSERT_TRUE(config.has("bool"));
+    EXPECT_TRUE(config.get<bool>("bool"));
 
-        oss << std::boolalpha << value;
+    config.set("bool", false);
+    ASSERT_TRUE(config.has("bool"));
+    EXPECT_FALSE(config.get<bool>("bool"));
 
-        return oss.str();
-    }
+    config.set("int", 15);
+    ASSERT_TRUE(config.has("int"));
+    EXPECT_EQ(15, config.get<int>("int"));
 
-};
+    config.set("uint", 15u);
+    ASSERT_TRUE(config.has("uint"));
+    EXPECT_EQ(15u, config.get<unsigned int>("uint"));
+
+    config.set("float", 0.31f);
+    ASSERT_TRUE(config.has("float"));
+    EXPECT_FLOAT_EQ(0.31f, config.get<float>("float"));
+
+    config.set("double", 0.31);
+    ASSERT_TRUE(config.has("double"));
+    EXPECT_FLOAT_EQ(0.31, config.get("double", 0.0));
+
+    ASSERT_FALSE(config.has("double2"));
+    EXPECT_FLOAT_EQ(0.31, config.get("double2", 0.31));
+}
 
 /* ************************************************************************ */
 
-}
+TEST(Configuration, params)
+{
+    Configuration config;
 }
 
 /* ************************************************************************ */

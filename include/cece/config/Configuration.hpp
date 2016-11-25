@@ -123,12 +123,38 @@ public:
 
 
     /**
+     * @brief      Returns stored value.
+     *
+     * @param      name  The name.
+     * @param      def   Default value returned if no value is stored..
+     *
+     * @return     Stored value with replaced parameters.
+     */
+    String get(StringView name, const char* def) const
+    {
+        return get(name, String(def));
+    }
+
+
+    /**
      * @brief      Store a value.
      *
      * @param      name   The name.
      * @param      value  The value to store.
      */
     void set(StringView name, String value);
+
+
+    /**
+     * @brief      Store a value.
+     *
+     * @param      name   The name.
+     * @param      value  The value to store.
+     */
+    void set(StringView name, const char* value)
+    {
+        set(name, String(value));
+    }
 
 
     /**

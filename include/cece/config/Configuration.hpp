@@ -31,12 +31,12 @@
 #include "cece/String.hpp"
 #include "cece/StringView.hpp"
 #include "cece/UniquePtr.hpp"
+#include "cece/SharedPtr.hpp"
 #include "cece/ViewPtr.hpp"
 #include "cece/DynamicArray.hpp"
-#include "cece/Exception.hpp"
 #include "cece/io/StringStream.hpp"
 #include "cece/config/Exception.hpp"
-#include "cece/config/Implementation.hpp"
+#include "cece/config/Convertor.hpp"
 
 /* ************************************************************************ */
 
@@ -49,8 +49,17 @@ namespace config {
 
 /* ************************************************************************ */
 
+class Implementation;
+
+/* ************************************************************************ */
+
 /**
- * @brief Container for configuration.
+ * @brief      A interface for configuration.
+ *
+ * @details    The configuration is an interface for different configuration
+ *             implementations (see `Implementation`). This class is just a
+ *             layer used to hide real configuration implementation where the
+ *             data can be stored in the memory or somewhere else.
  */
 class Configuration
 {
@@ -60,265 +69,204 @@ public:
 
 
     /**
-     * @brief Constructor.
+     * @brief      Constructor.
      *
-     * @param impl       Implementation.
-     * @param parameters Optional parameters.
+     * @param      impl        Implementation.
+     * @param      parameters  Optional parameters.
      */
-    Configuration(UniquePtr<Implementation> impl, ViewPtr<Parameters> parameters = nullptr) noexcept
-        : m_impl(std::move(impl))
-        , m_parameters(parameters)
-    {
-        // Nothing to do
-    }
+    explicit Configuration(UniquePtr<Implementation> impl, ViewPtr<Parameters> parameters = nullptr);
 
 
     /**
-     * @brief Constructor.
+     * @brief      Constructor (memory version).
      *
-     * @param impl       Implementation.
-     * @param parameters Optional parameters.
+     * @param      parameters  Optional parameters.
      */
-    Configuration(Implementation* impl, ViewPtr<Parameters> parameters = nullptr) noexcept
-        : m_impl(impl)
-        , m_parameters(parameters)
-    {
-        // Nothign to do
-    }
+    explicit Configuration(ViewPtr<Parameters> parameters = nullptr);
 
 
-    /**
-     * @brief Constructor (memory version).
-     *
-     * @param parameters Optional parameters.
-     */
-    explicit Configuration(ViewPtr<Parameters> parameters = nullptr) noexcept;
-
-
-// Public Accessors
+// Public Accessors & Mutators
 public:
 
 
     /**
-     * @brief Returns if value exists under given name.
+     * @brief      Checks if a value is stored under given name.
      *
-     * @param name Value name.
+     * @param      name  The name.
      *
-     * @return
+     * @return     `true` if value is stored, `false` otherwise.
      */
-    bool has(StringView name) const noexcept
-    {
-        return m_impl->has(name);
-    }
+    bool has(StringView name) const;
 
 
     /**
-     * @brief Returns string value.
+     * @brief      Returns stored value.
      *
-     * @param name Value name.
+     * @param      name  The name.
      *
-     * @return
+     * @return     Stored value with replaced parameters.
      *
-     * @throw ConfigException
+     * @throws     NotFoundException  When no value is stored.
      */
-    String get(StringView name) const
-    {
-        if (!has(name))
-            throw config::Exception("Missing value for '" + String(name) + "'");
-
-        return replaceParameters(m_impl->get(name));
-    }
+    String get(StringView name) const;
 
 
     /**
-     * @brief Returns string value.
+     * @brief      Returns stored value.
      *
-     * @param name Value name.
-     * @param def  Default value if doesn't exists.
+     * @param      name  The name.
+     * @param      def   Default value returned if no value is stored..
      *
-     * @return
+     * @return     Stored value with replaced parameters.
      */
-    String get(StringView name, String def) const
-    {
-        return has(name) ? replaceParameters(m_impl->get(name)) : std::move(def);
-    }
+    String get(StringView name, String def) const;
 
 
     /**
-     * @brief Returns value of given type.
+     * @brief      Store a value.
      *
-     * @tparam T Required value type.
+     * @param      name   The name.
+     * @param      value  The value to store.
+     */
+    void set(StringView name, String value);
+
+
+    /**
+     * @brief      Returns stored value converted into required type.
      *
-     * @param name Value name.
+     * @details    Conversion is done by `Convertor` class which allows you to
+     *             define custom conversion rules.
      *
-     * @return
+     * @param      name  The name.
      *
-     * @throw ConfigException
+     * @tparam     T     The required result type.
+     *
+     * @return     Result value.
      */
     template<typename T>
     T get(StringView name) const
     {
-        return castFrom<T>(get(name));
+        return Convertor<T>::fromString(get(name));
     }
 
 
     /**
-     * @brief Returns value of given type.
+     * @brief      Returns stored value converted into required type.
      *
-     * @tparam T Required value type.
+     * @details    Conversion is done by `Convertor` class which allows you to
+     *             define custom conversion rules.
      *
-     * @param name Value name.
-     * @param def  Default value if doesn't exists.
+     * @param      name  The name.
+     * @param      def   Default value returned if no value is stored..
      *
-     * @return
+     * @tparam     T     Required value type.
+     *
+     * @return     Stored value with replaced parameters (the default value is
+     *             not replaced).
      */
     template<typename T>
     T get(StringView name, T def) const
     {
-        return has(name) ? castFrom<T>(replaceParameters(m_impl->get(name))) : std::move(def);
+        return has(name) ? get<T>(name) : std::move(def);
     }
 
 
     /**
-     * @brief Returns list of configuration names.
+     * @brief      Store a value.
      *
-     * @return
-     */
-    DynamicArray<String> getNames() const noexcept
-    {
-        return m_impl->getNames();
-    }
-
-
-    /**
-     * @brief Returns if there is content.
+     * @details    Conversion is done by `Convertor` class which allows you to
+     *             define custom conversion rules.
      *
-     * @return
-     */
-    bool hasContent() const noexcept
-    {
-        return m_impl->hasContent();
-    }
-
-
-    /**
-     * @brief Returns content.
+     * @param      name   The name.
+     * @param      value  The value to store.
      *
-     * @return
-     */
-    String getContent() const noexcept
-    {
-        return m_impl->getContent();
-    }
-
-
-    /**
-     * @brief Check if subconfiguration exists.
-     *
-     * @param name Configuration name.
-     *
-     * @return Configuration or nullptr.
-     */
-    bool hasConfiguration(StringView name) const noexcept
-    {
-        return m_impl->hasSubs(name);
-    }
-
-
-    /**
-     * @brief Returns the first sub-configuration.
-     *
-     * @param name Sub-configuration name.
-     *
-     * @return Sub-configuration.
-     *
-     * @throw ConfigException
-     */
-    Configuration getConfiguration(StringView name) const
-    {
-        auto configurations = getConfigurations(name);
-
-        if (configurations.empty())
-            throw config::Exception("Sub-configuration '" + String(name) + "' doesn't exists");
-
-        return std::move(configurations[0]);
-    }
-
-
-    /**
-     * @brief Returns all sub-configurations with given name.
-     *
-     * @param name Sub-configuration name.
-     *
-     * @return List of valid sub-configurations.
-     */
-    DynamicArray<Configuration> getConfigurations(StringView name) const noexcept;
-
-
-    /**
-     * @brief Returns list of sub-configuration names.
-     *
-     * @return
-     */
-    DynamicArray<String> getConfigurationNames() const noexcept
-    {
-        return m_impl->getSubNames();
-    }
-
-
-// Public Mutators
-public:
-
-
-    /**
-     * @brief Store string value.
-     *
-     * @param name  Value name.
-     * @param value Value to store.
-     */
-    void set(StringView name, StringView value) noexcept
-    {
-        m_impl->set(name, value);
-    }
-
-
-    /**
-     * @brief Set integer value.
-     *
-     * @tparam T Value type.
-     *
-     * @param name  Value name.
-     * @param value Value to store.
+     * @tparam     T      Value type.
      */
     template<typename T>
-    void set(StringView name, T value) noexcept
+    void set(StringView name, const T& value) noexcept
     {
-        m_impl->set(name, castTo(value));
+        set(name, Convertor<T>::toString(value));
     }
 
 
     /**
-     * @brief Set content text.
+     * @brief      Returns list of names under which values are stored.
      *
-     * @param content Content text.
+     * @return     A list of names.
      */
-    void setContent(StringView content) noexcept
-    {
-        m_impl->setContent(content);
-    }
+    DynamicArray<String> getNames() const;
 
 
     /**
-     * @brief Create new sub-configuration.
+     * @brief      Checks if the configuration contains a content.
      *
-     * @param name Sub-configuration name.
-     *
-     * @return New configuration.
+     * @return     If content is present.
      */
-    Configuration addConfiguration(StringView name) noexcept
-    {
-        return {m_impl->addSub(name)};
-    }
+    bool hasContent() const;
+
+
+    /**
+     * @brief      Returns the configuration content.
+     *
+     * @return     The content with replaced parameters.
+     */
+    String getContent() const;
+
+
+    /**
+     * @brief      Change configuration content.
+     *
+     * @param      content  The new content.
+     */
+    void setContent(String content);
+
+
+    /**
+     * @brief      Check if at least one child configuration exists.
+     *
+     * @param      name  The child configuration name.
+     *
+     * @return     `true` if exists, `false` otherwise.
+     */
+    bool hasConfiguration(StringView name) const;
+
+
+    /**
+     * @brief      Returns the first child configuration with given name.
+     *
+     * @param      name  The child configuration name.
+     *
+     * @return     The child configuration.
+     */
+    Configuration getConfiguration(StringView name) const;
+
+
+    /**
+     * @brief      Returns child configurations with given name.
+     *
+     * @param      name  The child configuration name.
+     *
+     * @return     List of child configurations.
+     */
+    DynamicArray<Configuration> getConfigurations(StringView name) const;
+
+
+    /**
+     * @brief      Returns list of available child configuration names.
+     *
+     * @return     A list of names.
+     */
+    DynamicArray<String> getConfigurationNames() const;
+
+
+    /**
+     * @brief      Create new child configuration.
+     *
+     * @param      name  The child configuration name.
+     *
+     * @return     New child configuration.
+     */
+    Configuration addConfiguration(StringView name);
 
 
 // Public Operations
@@ -326,17 +274,21 @@ public:
 
 
     /**
-     * @brief Copy configuration from other one.
+     * @brief      Append configuration values from other one.
      *
-     * @param config Source configuration.
+     * @param      src   The source configuration.
      */
-    void copyFrom(const Configuration& config);
+    void append(const Configuration& src);
 
 
     /**
-     * @brief Clone configuration to memory.
+     * @brief      Create a configuration which uses memory implementation.
      *
-     * @return
+     * @details    This function is useful when you need to store configuration
+     *             for later use and the used implementation might not be valid
+     *             at time when you wan to use.
+     *
+     * @return     The new configuration.
      */
     Configuration toMemory() const;
 
@@ -346,44 +298,14 @@ private:
 
 
     /**
-     * @brief Cast value from string into required type.
+     * @brief      Replace parameters in given string.
      *
-     * @param value Value.
+     * @details    Function replaces special expressions `{$name}` where the
+     *             `name` is a parameter name.
      *
-     * @return
-     */
-    template<typename T>
-    static T castFrom(const String& value)
-    {
-        io::InStringStream is(value);
-        T res;
-        is >> std::noskipws >> std::boolalpha >> res;
-        return res;
-    }
-
-
-    /**
-     * @brief Cast value to string from given type.
+     * @param      str   The source string.
      *
-     * @param value Value.
-     *
-     * @return
-     */
-    template<typename T>
-    static String castTo(T&& value)
-    {
-        io::OutStringStream os;
-        os << value;
-        return os.str();
-    }
-
-
-    /**
-     * @brief Replace parameters in given string.
-     *
-     * @param str Source string.
-     *
-     * @return Result string with replaced parameters.
+     * @return     Result string with replaced parameters.
      */
     String replaceParameters(String str) const;
 
@@ -392,7 +314,7 @@ private:
 private:
 
     /// Configuration implementation.
-    UniquePtr<Implementation> m_impl;
+    SharedPtr<Implementation> m_impl;
 
     /// Optional parameters.
     ViewPtr<Parameters> m_parameters;

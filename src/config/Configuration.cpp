@@ -27,11 +27,17 @@
 #include "cece/config/Configuration.hpp"
 
 // C++
+#include <utility>
 #include <algorithm>
 
 // CeCe
+#include "cece/Assert.hpp"
 #include "cece/Parameters.hpp"
-#include "cece/config/MemoryImplementation.hpp"
+#include "cece/Exception.hpp"
+#include "cece/config/Implementation.hpp"
+
+// Private
+#include "MemoryImplementation.hpp"
 
 /* ************************************************************************ */
 
@@ -40,23 +46,116 @@ namespace config {
 
 /* ************************************************************************ */
 
-Configuration::Configuration(ViewPtr<Parameters> parameters) noexcept
-    : m_impl(makeUnique<MemoryImplementation>())
+Configuration::Configuration(UniquePtr<Implementation> impl, ViewPtr<Parameters> parameters)
+    : m_impl(std::move(impl))
     , m_parameters(parameters)
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+Configuration::Configuration(ViewPtr<Parameters> parameters)
+    : Configuration(makeUnique<MemoryImplementation>(), parameters)
 {
     // Nothign to do
 }
 
 /* ************************************************************************ */
 
-DynamicArray<Configuration> Configuration::getConfigurations(StringView name) const noexcept
+bool Configuration::has(StringView name) const
+{
+    CECE_ASSERT(m_impl);
+    return m_impl->has(name);
+}
+
+/* ************************************************************************ */
+
+String Configuration::get(StringView name) const
+{
+    CECE_ASSERT(m_impl);
+    return replaceParameters(m_impl->get(name));
+}
+
+/* ************************************************************************ */
+
+String Configuration::get(StringView name, String def) const
+{
+    CECE_ASSERT(m_impl);
+    return has(name)
+        ? replaceParameters(m_impl->get(name))
+        : std::move(def)
+    ;
+}
+
+/* ************************************************************************ */
+
+void Configuration::set(StringView name, String value)
+{
+    CECE_ASSERT(m_impl);
+    m_impl->set(name, std::move(value));
+}
+
+/* ************************************************************************ */
+
+DynamicArray<String> Configuration::getNames() const
+{
+    CECE_ASSERT(m_impl);
+    return m_impl->getNames();
+}
+
+/* ************************************************************************ */
+
+bool Configuration::hasContent() const
+{
+    CECE_ASSERT(m_impl);
+    return m_impl->hasContent();
+}
+
+/* ************************************************************************ */
+
+String Configuration::getContent() const
+{
+    CECE_ASSERT(m_impl);
+    return replaceParameters(m_impl->getContent());
+}
+
+/* ************************************************************************ */
+
+void Configuration::setContent(String content)
+{
+    CECE_ASSERT(m_impl);
+    m_impl->setContent(std::move(content));
+}
+
+/* ************************************************************************ */
+
+bool Configuration::hasConfiguration(StringView name) const
+{
+    CECE_ASSERT(m_impl);
+    return m_impl->hasChild(name);
+}
+
+/* ************************************************************************ */
+
+Configuration Configuration::getConfiguration(StringView name) const
 {
     if (!hasConfiguration(name))
-        return {};
+        throw NotFoundException("No configuration found with name: " + String(name));
 
+    auto&& configs = getConfigurations(name);
+    CECE_ASSERT(!configs.empty());
+    return configs[0];
+}
+
+/* ************************************************************************ */
+
+DynamicArray<Configuration> Configuration::getConfigurations(StringView name) const
+{
     DynamicArray<Configuration> res;
 
-    for (auto&& ptr : m_impl->getSubs(name))
+    CECE_ASSERT(m_impl);
+    for (auto&& ptr : m_impl->getChilds(name))
         res.emplace_back(std::move(ptr), m_parameters);
 
     return res;
@@ -64,18 +163,37 @@ DynamicArray<Configuration> Configuration::getConfigurations(StringView name) co
 
 /* ************************************************************************ */
 
-void Configuration::copyFrom(const Configuration& config)
+DynamicArray<String> Configuration::getConfigurationNames() const
 {
+    CECE_ASSERT(m_impl);
+    return m_impl->getChildNames();
+}
+
+/* ************************************************************************ */
+
+Configuration Configuration::addConfiguration(StringView name)
+{
+    CECE_ASSERT(m_impl);
+    return Configuration{m_impl->createChild(name)};
+}
+
+/* ************************************************************************ */
+
+void Configuration::append(const Configuration& config)
+{
+    // Overwrite values
     for (const auto& name : config.getNames())
         set(name, config.get(name));
 
-    setContent(config.getContent());
+    // Set content
+    if (config.hasContent())
+        setContent(config.getContent());
 
-    // Copy subconfigurations
+    // Append child configurations
     for (const auto& name : config.getConfigurationNames())
     {
         for (auto&& cfg : config.getConfigurations(name))
-            addConfiguration(name).copyFrom(cfg);
+            addConfiguration(name).append(cfg);
     }
 }
 
@@ -84,7 +202,7 @@ void Configuration::copyFrom(const Configuration& config)
 Configuration Configuration::toMemory() const
 {
     Configuration config;
-    config.copyFrom(*this);
+    config.append(*this);
     return config;
 }
 
@@ -92,6 +210,7 @@ Configuration Configuration::toMemory() const
 
 String Configuration::replaceParameters(String str) const
 {
+    // No parameters, nothing to replace
     if (!m_parameters)
         return str;
 

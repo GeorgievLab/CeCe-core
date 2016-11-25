@@ -24,7 +24,11 @@
 /* ************************************************************************ */
 
 // Declaration
-#include "cece/config/MemoryImplementation.hpp"
+#include "MemoryImplementation.hpp"
+
+// CeCe
+#include "cece/Assert.hpp"
+#include "cece/config/Exception.hpp"
 
 /* ************************************************************************ */
 
@@ -33,27 +37,140 @@ namespace config {
 
 /* ************************************************************************ */
 
-DynamicArray<String> MemoryImplementation::getNames() const noexcept
+struct MemoryData
 {
+    /// Stored values.
+    StringMap<String> values;
+
+    /// Stored content.
+    String content;
+
+    /// Child data
+    StringMap<DynamicArray<SharedPtr<MemoryData>>> data;
+};
+
+/* ************************************************************************ */
+
+MemoryImplementation::MemoryImplementation()
+    : MemoryImplementation(makeShared<MemoryData>())
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+MemoryImplementation::MemoryImplementation(SharedPtr<MemoryData> data)
+    : m_data(std::move(data))
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+bool MemoryImplementation::has(StringView name) const
+{
+    CECE_ASSERT(m_data);
+#if __cplusplus >= 201402L
+    return m_data->values.find(name) != m_data->values.end();
+#else
+    return m_data->values.find(String(name)) != m_data->values.end();
+#endif
+}
+
+/* ************************************************************************ */
+
+String MemoryImplementation::get(StringView name) const
+{
+    CECE_ASSERT(m_data);
+#if __cplusplus >= 201402L
+    auto it = m_data->values.find(name);
+#else
+    auto it = m_data->values.find(String(name));
+#endif
+
+    if (it == m_data->values.end())
+        throw NotFoundException("Value stored under '" + String(name) + "' not found");
+
+    return it->second;
+}
+
+/* ************************************************************************ */
+
+void MemoryImplementation::set(StringView name, String value)
+{
+    CECE_ASSERT(m_data);
+    m_data->values[String(name)] = std::move(value);
+}
+
+/* ************************************************************************ */
+
+DynamicArray<String> MemoryImplementation::getNames() const
+{
+    CECE_ASSERT(m_data);
+
     DynamicArray<String> names;
     names.reserve(m_data->values.size());
 
     for (const auto& p : m_data->values)
-        names.push_back(std::move(p.first));
+        names.push_back(p.first);
 
     return names;
 }
 
 /* ************************************************************************ */
 
-DynamicArray<UniquePtr<Implementation>> MemoryImplementation::getSubs(StringView name) const noexcept
+bool MemoryImplementation::hasContent() const
 {
-    DynamicArray<UniquePtr<Implementation>> res;
+    CECE_ASSERT(m_data);
+    return !m_data->content.empty();
+}
 
-    auto it = m_data->data.find(name.getData());
+/* ************************************************************************ */
 
+String MemoryImplementation::getContent() const
+{
+    CECE_ASSERT(m_data);
+    return m_data->content;
+}
+
+/* ************************************************************************ */
+
+void MemoryImplementation::setContent(String content)
+{
+    CECE_ASSERT(m_data);
+    m_data->content = std::move(content);
+}
+
+/* ************************************************************************ */
+
+bool MemoryImplementation::hasChild(StringView name) const
+{
+    CECE_ASSERT(m_data);
+#if __cplusplus >= 201402L
+    return m_data->data.find(name) != m_data->data.end();
+#else
+    return m_data->data.find(String(name)) != m_data->data.end();
+#endif
+}
+
+/* ************************************************************************ */
+
+PtrDynamicArray<Implementation> MemoryImplementation::getChilds(StringView name) const
+{
+    CECE_ASSERT(m_data);
+
+    // Find data
+#if __cplusplus >= 201402L
+    auto it = m_data->data.find(name);
+#else
+    auto it = m_data->data.find(String(name));
+#endif
+
+    // Nothing found
     if (it == m_data->data.end())
-        return res;
+        return {};
+
+    PtrDynamicArray<Implementation> res;
 
     for (const auto& ptr : it->second)
         res.push_back(makeUnique<MemoryImplementation>(ptr));
@@ -63,8 +180,10 @@ DynamicArray<UniquePtr<Implementation>> MemoryImplementation::getSubs(StringView
 
 /* ************************************************************************ */
 
-DynamicArray<String> MemoryImplementation::getSubNames() const noexcept
+DynamicArray<String> MemoryImplementation::getChildNames() const
 {
+    CECE_ASSERT(m_data);
+
     DynamicArray<String> names;
     names.reserve(m_data->data.size());
 
@@ -76,13 +195,16 @@ DynamicArray<String> MemoryImplementation::getSubNames() const noexcept
 
 /* ************************************************************************ */
 
-UniquePtr<Implementation> MemoryImplementation::addSub(StringView name) noexcept
+UniquePtr<Implementation> MemoryImplementation::createChild(StringView name)
 {
-    auto data = makeShared<Data>();
+    // Create new shared data block
+    auto data = makeShared<MemoryData>();
 
     // Register data
-    m_data->data[name.getData()].push_back(data);
+    CECE_ASSERT(m_data);
+    m_data->data[String(name)].push_back(data);
 
+    // Create implementation
     return makeUnique<MemoryImplementation>(std::move(data));
 }
 

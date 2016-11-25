@@ -23,15 +23,13 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
 // CeCe
 #include "cece/String.hpp"
 #include "cece/StringView.hpp"
-#include "cece/UniquePtr.hpp"
-#include "cece/PtrDynamicArray.hpp"
+#include "cece/SharedPtr.hpp"
+#include "cece/DynamicArray.hpp"
+#include "cece/StringMap.hpp"
+#include "cece/config/Implementation.hpp"
 
 /* ************************************************************************ */
 
@@ -40,14 +38,14 @@ namespace config {
 
 /* ************************************************************************ */
 
-class NotFoundException;
+struct MemoryData;
 
 /* ************************************************************************ */
 
 /**
- * @brief      An interface for configuration implementation.
+ * @brief      Memory configuration implementation.
  */
-class Implementation
+class MemoryImplementation final : public Implementation
 {
 
 // Public Ctors & Dtors
@@ -55,9 +53,17 @@ public:
 
 
     /**
-     * @brief      Destructor.
+     * @brief      Constructor.
      */
-    virtual ~Implementation() = 0;
+    MemoryImplementation();
+
+
+    /**
+     * @brief      Constructor.
+     *
+     * @param      data  Managed data.
+     */
+    explicit MemoryImplementation(SharedPtr<MemoryData> data);
 
 
 // Public Accessors & Mutators
@@ -71,7 +77,7 @@ public:
      *
      * @return     `true` if value is stored, `false` otherwise.
      */
-    virtual bool has(StringView name) const = 0;
+    bool has(StringView name) const override;
 
 
     /**
@@ -83,7 +89,7 @@ public:
      *
      * @throws     NotFoundException  When no value is stored.
      */
-    virtual String get(StringView name) const = 0;
+    String get(StringView name) const override;
 
 
     /**
@@ -92,7 +98,7 @@ public:
      * @param      name   The name.
      * @param      value  The value to store.
      */
-    virtual void set(StringView name, String value) = 0;
+    void set(StringView name, String value) override;
 
 
     /**
@@ -100,7 +106,7 @@ public:
      *
      * @return     A list of names.
      */
-    virtual DynamicArray<String> getNames() const = 0;
+    DynamicArray<String> getNames() const override;
 
 
     /**
@@ -108,7 +114,7 @@ public:
      *
      * @return     If content is present.
      */
-    virtual bool hasContent() const = 0;
+    bool hasContent() const override;
 
 
     /**
@@ -116,7 +122,7 @@ public:
      *
      * @return     The content with replaced parameters.
      */
-    virtual String getContent() const = 0;
+    String getContent() const override;
 
 
     /**
@@ -124,7 +130,7 @@ public:
      *
      * @param      content  The new content.
      */
-    virtual void setContent(String value) = 0;
+    void setContent(String content) override;
 
 
     /**
@@ -134,7 +140,7 @@ public:
      *
      * @return     `true` if exists, `false` otherwise.
      */
-    virtual bool hasChild(StringView name) const = 0;
+    bool hasChild(StringView name) const override;
 
 
     /**
@@ -144,7 +150,7 @@ public:
      *
      * @return     List of child configurations.
      */
-    virtual PtrDynamicArray<Implementation> getChilds(StringView name) const = 0;
+    PtrDynamicArray<Implementation> getChilds(StringView name) const override;
 
 
     /**
@@ -152,7 +158,7 @@ public:
      *
      * @return     A list of names.
      */
-    virtual DynamicArray<String> getChildNames() const = 0;
+    DynamicArray<String> getChildNames() const override;
 
 
     /**
@@ -162,8 +168,14 @@ public:
      *
      * @return     New child configuration.
      */
-    virtual UniquePtr<Implementation> createChild(StringView name) = 0;
+    UniquePtr<Implementation> createChild(StringView name) override;
 
+
+// Private Data Members
+private:
+
+    /// Shared data.
+    SharedPtr<MemoryData> m_data;
 };
 
 /* ************************************************************************ */

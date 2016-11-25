@@ -28,7 +28,8 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/Exception.hpp"
+#include "cece/String.hpp"
+#include "cece/io/StringStream.hpp"
 
 /* ************************************************************************ */
 
@@ -38,21 +39,48 @@ namespace config {
 /* ************************************************************************ */
 
 /**
- * @brief      Configuration exception.
+ * @brief      Configuration value convertor.
+ *
+ * @tparam     T     Type for conversion.
  */
-class Exception : public RuntimeException
+template<typename T>
+struct Convertor
 {
-    using RuntimeException::RuntimeException;
-};
 
-/* ************************************************************************ */
+    /**
+     * @brief      Convert from String to required type.
+     *
+     * @param[in]  value  The string value.
+     *
+     * @return     The result value.
+     */
+    static T fromString(const String& value)
+    {
+        io::InStringStream iss(value);
 
-/**
- * @brief      Not found exception.
- */
-class NotFoundException : public Exception
-{
-    using Exception::Exception;
+        T res;
+        iss >> std::noskipws >> std::boolalpha >> res;
+
+        return res;
+    }
+
+
+    /**
+     * @brief      Convert to String from required type.
+     *
+     * @param[in]  value  The source value.
+     *
+     * @return     The string value.
+     */
+    static String toString(const T& value)
+    {
+        io::OutStringStream oss;
+
+        oss << value;
+
+        return oss.str();
+    }
+
 };
 
 /* ************************************************************************ */

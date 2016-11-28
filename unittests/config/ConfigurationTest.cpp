@@ -33,6 +33,7 @@
 #include "cece/Parameters.hpp"
 #include "cece/io/FilePath.hpp"
 #include "cece/config/Configuration.hpp"
+#include "cece/config/ConverterSpec.hpp"
 
 /* ************************************************************************ */
 

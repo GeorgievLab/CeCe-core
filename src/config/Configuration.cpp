@@ -226,7 +226,7 @@ String Configuration::replaceParameters(String str) const
         const auto end = str.find('}', start + 2);
 
         if (end == String::npos)
-            throw InvalidArgumentException("Missing closing parameter character '}' in '" + str + "'");
+            throw UnterminatedParameterException(std::move(str));
 
         // Copy name
         const String name = str.substr(start + 2, (end - start + 1) - 3);
@@ -237,7 +237,7 @@ String Configuration::replaceParameters(String str) const
         }) == name.end();
 
         if (!valid)
-            throw InvalidArgumentException("Parameter name '" + name + "' contains invalid characters");
+            throw InvalidParameterNameException(std::move(name), std::move(str));
 
         // Try to find parameter
         const auto value = m_parameters->get(name);

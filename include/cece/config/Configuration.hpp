@@ -263,6 +263,9 @@ public:
      * @param      name  The child configuration name.
      *
      * @return     The child configuration.
+     *
+     * @throws     NotFoundException  If no child configuration exists:
+     *                                `hasConfiguration` returns `false`.
      */
     Configuration getConfiguration(StringView name) const;
 

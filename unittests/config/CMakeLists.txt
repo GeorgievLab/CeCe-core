@@ -25,6 +25,7 @@
 
 cece_add_test(config
     SOURCES
+        ExceptionTest.cpp
         ConfigurationTest.cpp
 )
 

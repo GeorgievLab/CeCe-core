@@ -27,6 +27,7 @@
 set(SRCS
     Implementation.cpp
     Configuration.cpp
+    Exception.cpp
     MemoryImplementation.cpp
 )
 

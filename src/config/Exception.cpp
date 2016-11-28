@@ -23,13 +23,8 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
-// CeCe
-#include "cece/String.hpp"
-#include "cece/Exception.hpp"
+// Declaration
+#include "cece/config/Exception.hpp"
 
 /* ************************************************************************ */
 
@@ -38,130 +33,22 @@ namespace config {
 
 /* ************************************************************************ */
 
-/**
- * @brief      Configuration exception.
- */
-class Exception : public RuntimeException
+UnterminatedParameterException::UnterminatedParameterException(String text)
+    : Exception("Missing parameter closing character '}' in '" + text + "'")
+    , m_text(std::move(text))
 {
-    using RuntimeException::RuntimeException;
-};
+    // Nothing to do
+}
 
 /* ************************************************************************ */
 
-/**
- * @brief      Not found exception.
- */
-class NotFoundException : public Exception
+InvalidParameterNameException::InvalidParameterNameException(String name, String text)
+    : Exception("Parameter name '" + name + "' contains invalid characters. In the '" + text + "'")
+    , m_name(std::move(name))
+    , m_text(std::move(text))
 {
-    using Exception::Exception;
-};
-
-/* ************************************************************************ */
-
-/**
- * @brief      Error when parameter is not properly terminated.
- *
- * @details    Used in cases when the config parameter is not properly
- *             terminated: `{$name`.
- */
-class UnterminatedParameterException : public Exception
-{
-
-// Public Ctors & Dtors
-public:
-
-
-    /**
-     * @brief      Constructor.
-     *
-     * @param[in]  text  The text where the replacement was taken place.
-     */
-    explicit UnterminatedParameterException(String text);
-
-
-// Accessors & Mutators
-public:
-
-
-    /**
-     * @brief      Returns the text.
-     *
-     * @return     The text.
-     */
-    const String& getText() const noexcept
-    {
-        return m_text;
-    }
-
-
-// Private Data Members
-private:
-
-    /// The text.
-    String m_text;
-
-};
-
-/* ************************************************************************ */
-
-/**
- * @brief      Invalid parameter name.
- *
- * @details    Used in cases when the config parameter name contains invalid
- *             characters.
- */
-class InvalidParameterNameException : public Exception
-{
-
-// Public Ctors & Dtors
-public:
-
-
-    /**
-     * @brief      Constructor.
-     *
-     * @param[in]  name  The parameter name.
-     * @param[in]  text  The text where the replacement was taken place.
-     */
-    explicit InvalidParameterNameException(String name, String text);
-
-
-// Accessors & Mutators
-public:
-
-
-    /**
-     * @brief      Returns parameter name.
-     *
-     * @return     The parameter name.
-     */
-    const String& getName() const noexcept
-    {
-        return m_name;
-    }
-
-
-    /**
-     * @brief      Returns text.
-     *
-     * @return     The text.
-     */
-    const String& getText() const noexcept
-    {
-        return m_text;
-    }
-
-
-// Private Data Members
-private:
-
-    /// The parameter name.
-    String m_name;
-
-    /// The text.
-    String m_text;
-
-};
+    // Nothing to do
+}
 
 /* ************************************************************************ */
 

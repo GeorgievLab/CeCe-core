@@ -39,12 +39,12 @@ namespace config {
 /* ************************************************************************ */
 
 /**
- * @brief      Configuration value convertor.
+ * @brief      Configuration value converter.
  *
  * @tparam     T     Type for conversion.
  */
 template<typename T>
-struct Convertor
+struct Converter
 {
 
     /**

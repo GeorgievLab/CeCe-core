@@ -36,7 +36,7 @@
 #include "cece/DynamicArray.hpp"
 #include "cece/io/StringStream.hpp"
 #include "cece/config/Exception.hpp"
-#include "cece/config/Convertor.hpp"
+#include "cece/config/Converter.hpp"
 
 /* ************************************************************************ */
 
@@ -160,7 +160,7 @@ public:
     /**
      * @brief      Returns stored value converted into required type.
      *
-     * @details    Conversion is done by `Convertor` class which allows you to
+     * @details    Conversion is done by `Converter` class which allows you to
      *             define custom conversion rules.
      *
      * @param      name  The name.
@@ -172,14 +172,14 @@ public:
     template<typename T>
     T get(StringView name) const
     {
-        return Convertor<T>::fromString(get(name));
+        return Converter<T>::fromString(get(name));
     }
 
 
     /**
      * @brief      Returns stored value converted into required type.
      *
-     * @details    Conversion is done by `Convertor` class which allows you to
+     * @details    Conversion is done by `Converter` class which allows you to
      *             define custom conversion rules.
      *
      * @param      name  The name.
@@ -200,7 +200,7 @@ public:
     /**
      * @brief      Store a value.
      *
-     * @details    Conversion is done by `Convertor` class which allows you to
+     * @details    Conversion is done by `Converter` class which allows you to
      *             define custom conversion rules.
      *
      * @param      name   The name.
@@ -211,7 +211,7 @@ public:
     template<typename T>
     void set(StringView name, const T& value) noexcept
     {
-        set(name, Convertor<T>::toString(value));
+        set(name, Converter<T>::toString(value));
     }
 
 

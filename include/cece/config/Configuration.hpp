@@ -27,6 +27,9 @@
 
 /* ************************************************************************ */
 
+// C++
+#include <type_traits>
+
 // CeCe
 #include "cece/String.hpp"
 #include "cece/StringView.hpp"
@@ -171,7 +174,7 @@ public:
     template<typename T>
     T get(StringView name) const
     {
-        return io::Converter<T>::fromString(get(name));
+        return io::Converter<typename std::decay<T>::type>::fromString(get(name));
     }
 
 
@@ -210,7 +213,7 @@ public:
     template<typename T>
     void set(StringView name, const T& value) noexcept
     {
-        set(name, io::Converter<T>::toString(value));
+        set(name, io::Converter<typename std::decay<T>::type>::toString(value));
     }
 
 

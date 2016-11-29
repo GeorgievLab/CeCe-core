@@ -115,6 +115,186 @@ struct Converter<bool>
 
 /* ************************************************************************ */
 
+/**
+ * @brief      Configuration value converter for int values.
+ */
+template<>
+struct Converter<int>
+{
+
+    /**
+     * @brief      Convert from String to required type.
+     *
+     * @param[in]  value  The string value.
+     *
+     * @return     The result value.
+     */
+    static int fromString(const String& value) noexcept;
+
+
+    /**
+     * @brief      Convert to String from required type.
+     *
+     * @param[in]  value  The source value.
+     *
+     * @return     The string value.
+     */
+    static String toString(int value) noexcept;
+
+};
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Configuration value converter for int values.
+ */
+template<>
+struct Converter<unsigned int>
+{
+
+    /**
+     * @brief      Convert from String to required type.
+     *
+     * @param[in]  value  The string value.
+     *
+     * @return     The result value.
+     */
+    static unsigned int fromString(const String& value) noexcept;
+
+
+    /**
+     * @brief      Convert to String from required type.
+     *
+     * @param[in]  value  The source value.
+     *
+     * @return     The string value.
+     */
+    static String toString(unsigned int value) noexcept;
+
+};
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Configuration value converter for long values.
+ */
+template<>
+struct Converter<long>
+{
+
+    /**
+     * @brief      Convert from String to required type.
+     *
+     * @param[in]  value  The string value.
+     *
+     * @return     The result value.
+     */
+    static long fromString(const String& value) noexcept;
+
+
+    /**
+     * @brief      Convert to String from required type.
+     *
+     * @param[in]  value  The source value.
+     *
+     * @return     The string value.
+     */
+    static String toString(long value) noexcept;
+
+};
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Configuration value converter for long values.
+ */
+template<>
+struct Converter<unsigned long>
+{
+
+    /**
+     * @brief      Convert from String to required type.
+     *
+     * @param[in]  value  The string value.
+     *
+     * @return     The result value.
+     */
+    static unsigned long fromString(const String& value) noexcept;
+
+
+    /**
+     * @brief      Convert to String from required type.
+     *
+     * @param[in]  value  The source value.
+     *
+     * @return     The string value.
+     */
+    static String toString(unsigned long value) noexcept;
+
+};
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Configuration value converter for float values.
+ */
+template<>
+struct Converter<float>
+{
+
+    /**
+     * @brief      Convert from String to required type.
+     *
+     * @param[in]  value  The string value.
+     *
+     * @return     The result value.
+     */
+    static float fromString(const String& value) noexcept;
+
+
+    /**
+     * @brief      Convert to String from required type.
+     *
+     * @param[in]  value  The source value.
+     *
+     * @return     The string value.
+     */
+    static String toString(float value) noexcept;
+
+};
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Configuration value converter for double values.
+ */
+template<>
+struct Converter<double>
+{
+
+    /**
+     * @brief      Convert from String to required type.
+     *
+     * @param[in]  value  The string value.
+     *
+     * @return     The result value.
+     */
+    static double fromString(const String& value) noexcept;
+
+
+    /**
+     * @brief      Convert to String from required type.
+     *
+     * @param[in]  value  The source value.
+     *
+     * @return     The string value.
+     */
+    static String toString(double value) noexcept;
+
+};
+
+/* ************************************************************************ */
+
 }
 }
 

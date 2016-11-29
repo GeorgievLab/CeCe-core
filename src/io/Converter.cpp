@@ -26,6 +26,9 @@
 // Declaration
 #include "cece/io/Converter.hpp"
 
+// CeCe
+#include "cece/String.hpp"
+
 /* ************************************************************************ */
 
 namespace cece {
@@ -43,6 +46,90 @@ bool Converter<bool>::fromString(const String& value) noexcept
 String Converter<bool>::toString(bool value) noexcept
 {
     return value ? "true" : "false";
+}
+
+/* ************************************************************************ */
+
+int Converter<int>::fromString(const String& value) noexcept
+{
+    return str2i(value);
+}
+
+/* ************************************************************************ */
+
+String Converter<int>::toString(int value) noexcept
+{
+    return cece::toString(value);
+}
+
+/* ************************************************************************ */
+
+unsigned int Converter<unsigned int>::fromString(const String& value) noexcept
+{
+    return str2i(value);
+}
+
+/* ************************************************************************ */
+
+String Converter<unsigned int>::toString(unsigned int value) noexcept
+{
+    return cece::toString(value);
+}
+
+/* ************************************************************************ */
+
+long Converter<long>::fromString(const String& value) noexcept
+{
+    return str2l(value);
+}
+
+/* ************************************************************************ */
+
+String Converter<long>::toString(long value) noexcept
+{
+    return cece::toString(value);
+}
+
+/* ************************************************************************ */
+
+unsigned long Converter<unsigned long>::fromString(const String& value) noexcept
+{
+    return str2ll(value);
+}
+
+/* ************************************************************************ */
+
+String Converter<unsigned long>::toString(unsigned long value) noexcept
+{
+    return cece::toString(value);
+}
+
+/* ************************************************************************ */
+
+float Converter<float>::fromString(const String& value) noexcept
+{
+    return str2f(value);
+}
+
+/* ************************************************************************ */
+
+String Converter<float>::toString(float value) noexcept
+{
+    return cece::toString(value);
+}
+
+/* ************************************************************************ */
+
+double Converter<double>::fromString(const String& value) noexcept
+{
+    return str2d(value);
+}
+
+/* ************************************************************************ */
+
+String Converter<double>::toString(double value) noexcept
+{
+    return cece::toString(value);
 }
 
 /* ************************************************************************ */

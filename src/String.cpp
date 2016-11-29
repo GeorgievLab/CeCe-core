@@ -29,7 +29,6 @@
 // C++
 #include <cstdio>
 #include <cstdlib>
-#include <limits>
 
 // CeCe
 #include "cece/Assert.hpp"
@@ -43,9 +42,10 @@ namespace cece {
 
 String toString(int value) noexcept
 {
-    char buffer[std::numeric_limits<int>::digits10];
+    char buffer[64];
     const int count = std::snprintf(buffer, sizeof buffer, "%d", value);
     CECE_ASSERT(count > 0);
+    CECE_ASSERT(count <= sizeof buffer);
     return String(buffer, count);
 }
 
@@ -53,9 +53,10 @@ String toString(int value) noexcept
 
 String toString(long value) noexcept
 {
-    char buffer[std::numeric_limits<long>::digits10];
+    char buffer[64];
     const int count = std::snprintf(buffer, sizeof buffer, "%ld", value);
     CECE_ASSERT(count > 0);
+    CECE_ASSERT(count <= sizeof buffer);
     return String(buffer, count);
 }
 
@@ -63,9 +64,10 @@ String toString(long value) noexcept
 
 String toString(long long value) noexcept
 {
-    char buffer[std::numeric_limits<long long>::digits10];
+    char buffer[64];
     const int count = std::snprintf(buffer, sizeof buffer, "%lld", value);
     CECE_ASSERT(count > 0);
+    CECE_ASSERT(count <= sizeof buffer);
     return String(buffer, count);
 }
 
@@ -73,9 +75,10 @@ String toString(long long value) noexcept
 
 String toString(unsigned value) noexcept
 {
-    char buffer[std::numeric_limits<unsigned>::digits10];
+    char buffer[64];
     const int count = std::snprintf(buffer, sizeof buffer, "%u", value);
     CECE_ASSERT(count > 0);
+    CECE_ASSERT(count <= sizeof buffer);
     return String(buffer, count);
 }
 
@@ -83,9 +86,10 @@ String toString(unsigned value) noexcept
 
 String toString(unsigned long value) noexcept
 {
-    char buffer[std::numeric_limits<unsigned long>::digits10];
+    char buffer[64];
     const int count = std::snprintf(buffer, sizeof buffer, "%lu", value);
     CECE_ASSERT(count > 0);
+    CECE_ASSERT(count <= sizeof buffer);
     return String(buffer, count);
 }
 
@@ -93,9 +97,10 @@ String toString(unsigned long value) noexcept
 
 String toString(unsigned long long value) noexcept
 {
-    char buffer[std::numeric_limits<unsigned long long>::digits10];
+    char buffer[64];
     const int count = std::snprintf(buffer, sizeof buffer, "%llu", value);
     CECE_ASSERT(count > 0);
+    CECE_ASSERT(count <= sizeof buffer);
     return String(buffer, count);
 }
 
@@ -103,9 +108,10 @@ String toString(unsigned long long value) noexcept
 
 String toString(float value) noexcept
 {
-    char buffer[std::numeric_limits<float>::max_digits10];
+    char buffer[64];
     const int count = std::snprintf(buffer, sizeof buffer, "%f", value);
     CECE_ASSERT(count > 0);
+    CECE_ASSERT(count <= sizeof buffer);
     return String(buffer, count);
 }
 
@@ -113,9 +119,10 @@ String toString(float value) noexcept
 
 String toString(double value) noexcept
 {
-    char buffer[std::numeric_limits<double>::max_digits10];
+    char buffer[64];
     const int count = std::snprintf(buffer, sizeof buffer, "%f", value);
     CECE_ASSERT(count > 0);
+    CECE_ASSERT(count <= sizeof buffer);
     return String(buffer, count);
 }
 
@@ -123,9 +130,10 @@ String toString(double value) noexcept
 
 String toString(long double value) noexcept
 {
-    char buffer[std::numeric_limits<long double>::max_digits10];
+    char buffer[64];
     const int count = std::snprintf(buffer, sizeof buffer, "%Lf", value);
     CECE_ASSERT(count > 0);
+    CECE_ASSERT(count <= sizeof buffer);
     return String(buffer, count);
 }
 

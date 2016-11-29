@@ -97,7 +97,7 @@ struct Converter<bool>
      *
      * @param[in]  value  The string value.
      *
-     * @return     The result value.
+     * @return     The result value. Returns `true` when `value == "true"`, otherwise `false`.
      */
     static bool fromString(const String& value) noexcept;
 
@@ -129,7 +129,7 @@ struct Converter<int>
      *
      * @return     The result value.
      */
-    static int fromString(const String& value) noexcept;
+    static int fromString(const String& value);
 
 
     /**
@@ -159,7 +159,7 @@ struct Converter<unsigned int>
      *
      * @return     The result value.
      */
-    static unsigned int fromString(const String& value) noexcept;
+    static unsigned int fromString(const String& value);
 
 
     /**
@@ -189,7 +189,7 @@ struct Converter<long>
      *
      * @return     The result value.
      */
-    static long fromString(const String& value) noexcept;
+    static long fromString(const String& value);
 
 
     /**
@@ -219,7 +219,7 @@ struct Converter<unsigned long>
      *
      * @return     The result value.
      */
-    static unsigned long fromString(const String& value) noexcept;
+    static unsigned long fromString(const String& value);
 
 
     /**
@@ -249,7 +249,7 @@ struct Converter<float>
      *
      * @return     The result value.
      */
-    static float fromString(const String& value) noexcept;
+    static float fromString(const String& value);
 
 
     /**
@@ -279,7 +279,7 @@ struct Converter<double>
      *
      * @return     The result value.
      */
-    static double fromString(const String& value) noexcept;
+    static double fromString(const String& value);
 
 
     /**

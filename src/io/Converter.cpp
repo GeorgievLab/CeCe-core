@@ -50,7 +50,7 @@ String Converter<bool>::toString(bool value) noexcept
 
 /* ************************************************************************ */
 
-int Converter<int>::fromString(const String& value) noexcept
+int Converter<int>::fromString(const String& value)
 {
     return str2i(value);
 }
@@ -64,7 +64,7 @@ String Converter<int>::toString(int value) noexcept
 
 /* ************************************************************************ */
 
-unsigned int Converter<unsigned int>::fromString(const String& value) noexcept
+unsigned int Converter<unsigned int>::fromString(const String& value)
 {
     return str2i(value);
 }
@@ -78,7 +78,7 @@ String Converter<unsigned int>::toString(unsigned int value) noexcept
 
 /* ************************************************************************ */
 
-long Converter<long>::fromString(const String& value) noexcept
+long Converter<long>::fromString(const String& value)
 {
     return str2l(value);
 }
@@ -92,7 +92,7 @@ String Converter<long>::toString(long value) noexcept
 
 /* ************************************************************************ */
 
-unsigned long Converter<unsigned long>::fromString(const String& value) noexcept
+unsigned long Converter<unsigned long>::fromString(const String& value)
 {
     return str2ll(value);
 }
@@ -106,7 +106,7 @@ String Converter<unsigned long>::toString(unsigned long value) noexcept
 
 /* ************************************************************************ */
 
-float Converter<float>::fromString(const String& value) noexcept
+float Converter<float>::fromString(const String& value)
 {
     return str2f(value);
 }
@@ -120,7 +120,7 @@ String Converter<float>::toString(float value) noexcept
 
 /* ************************************************************************ */
 
-double Converter<double>::fromString(const String& value) noexcept
+double Converter<double>::fromString(const String& value)
 {
     return str2d(value);
 }

@@ -34,9 +34,8 @@
 #include "cece/SharedPtr.hpp"
 #include "cece/ViewPtr.hpp"
 #include "cece/DynamicArray.hpp"
-#include "cece/io/StringStream.hpp"
+#include "cece/io/Converter.hpp"
 #include "cece/config/Exception.hpp"
-#include "cece/config/Converter.hpp"
 
 /* ************************************************************************ */
 
@@ -172,7 +171,7 @@ public:
     template<typename T>
     T get(StringView name) const
     {
-        return Converter<T>::fromString(get(name));
+        return io::Converter<T>::fromString(get(name));
     }
 
 
@@ -211,7 +210,7 @@ public:
     template<typename T>
     void set(StringView name, const T& value) noexcept
     {
-        set(name, Converter<T>::toString(value));
+        set(name, io::Converter<T>::toString(value));
     }
 
 

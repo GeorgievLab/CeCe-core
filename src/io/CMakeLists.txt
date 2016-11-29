@@ -32,6 +32,7 @@ set(SRCS
     DataExportCsv.cpp
     DataExportFactory.cpp
     DataExportCsvFactory.cpp
+    Converter.cpp
 )
 
 # ######################################################################### #

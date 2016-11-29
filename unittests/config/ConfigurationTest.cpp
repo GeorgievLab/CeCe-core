@@ -32,8 +32,8 @@
 // CeCe
 #include "cece/Parameters.hpp"
 #include "cece/io/FilePath.hpp"
+#include "cece/io/Converter.hpp"
 #include "cece/config/Configuration.hpp"
-#include "cece/config/ConverterSpec.hpp"
 
 /* ************************************************************************ */
 

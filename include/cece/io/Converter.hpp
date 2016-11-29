@@ -28,12 +28,60 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/config/Converter.hpp"
+#include "cece/String.hpp"
+#include "cece/io/StringStream.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
-namespace config {
+namespace io {
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Configuration value converter.
+ *
+ * @tparam     T     Type for conversion.
+ */
+template<typename T>
+struct Converter
+{
+
+    /**
+     * @brief      Convert from String to required type.
+     *
+     * @param[in]  value  The string value.
+     *
+     * @return     The result value.
+     */
+    static T fromString(const String& value)
+    {
+        io::InStringStream iss(value);
+
+        T res;
+        iss >> std::noskipws >> std::boolalpha >> res;
+
+        return res;
+    }
+
+
+    /**
+     * @brief      Convert to String from required type.
+     *
+     * @param[in]  value  The source value.
+     *
+     * @return     The string value.
+     */
+    static String toString(const T& value)
+    {
+        io::OutStringStream oss;
+
+        oss << std::boolalpha << value;
+
+        return oss.str();
+    }
+
+};
 
 /* ************************************************************************ */
 
@@ -51,10 +99,7 @@ struct Converter<bool>
      *
      * @return     The result value.
      */
-    static bool fromString(const String& value) noexcept
-    {
-        return value == "true";
-    }
+    static bool fromString(const String& value) noexcept;
 
 
     /**
@@ -64,10 +109,7 @@ struct Converter<bool>
      *
      * @return     The string value.
      */
-    static String toString(bool value) noexcept
-    {
-        return value ? "true" : "false";
-    }
+    static String toString(bool value) noexcept;
 
 };
 

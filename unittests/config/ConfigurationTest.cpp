@@ -342,6 +342,11 @@ TEST(Configuration, converter)
     EXPECT_EQ(15u, config.get<unsigned int>("uint"));
     EXPECT_EQ(15u, config.get<unsigned int>("uint", 45632u));
 
+    config.set("long", 14596423135l);
+    ASSERT_TRUE(config.has("long"));
+    EXPECT_EQ(14596423135l, config.get<long>("long"));
+    EXPECT_EQ(14596423135l, config.get<long>("long", 4244l));
+
     config.set("ulong", 14596423135ul);
     ASSERT_TRUE(config.has("ulong"));
     EXPECT_EQ(14596423135ul, config.get<unsigned long>("ulong"));

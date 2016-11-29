@@ -89,7 +89,7 @@ String MemoryImplementation::get(StringView name) const
 #endif
 
     if (it == m_data->values.end())
-        throw NotFoundException("Value stored under '" + String(name) + "' not found");
+        throw NotFoundException("No value found: " + String(name));
 
     return it->second;
 }

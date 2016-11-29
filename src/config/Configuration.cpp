@@ -141,7 +141,7 @@ bool Configuration::hasConfiguration(StringView name) const
 Configuration Configuration::getConfiguration(StringView name) const
 {
     if (!hasConfiguration(name))
-        throw NotFoundException("No configuration found with name: " + String(name));
+        throw NotFoundException("No configuration found: " + String(name));
 
     auto&& configs = getConfigurations(name);
     CECE_ASSERT(!configs.empty());

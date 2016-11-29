@@ -144,6 +144,32 @@ int str2i(const String& value)
 
 /* ************************************************************************ */
 
+long str2l(const String& value)
+{
+    char* end;
+    long val = std::strtol(value.c_str(), &end, 10);
+
+    if (value.empty() || end != value.c_str() + value.size())
+        throw InvalidArgumentException("Cannot convert '" + value + "' to long");
+
+    return val;
+}
+
+/* ************************************************************************ */
+
+long long str2ll(const String& value)
+{
+    char* end;
+    long long val = std::strtoll(value.c_str(), &end, 10);
+
+    if (value.empty() || end != value.c_str() + value.size())
+        throw InvalidArgumentException("Cannot convert '" + value + "' to long long");
+
+    return val;
+}
+
+/* ************************************************************************ */
+
 float str2f(const String& value)
 {
     char* end;
@@ -151,6 +177,19 @@ float str2f(const String& value)
 
     if (value.empty() || end != value.c_str() + value.size())
         throw InvalidArgumentException("Cannot convert '" + value + "' to float");
+
+    return val;
+}
+
+/* ************************************************************************ */
+
+double str2d(const String& value)
+{
+    char* end;
+    double val = std::strtod(value.c_str(), &end);
+
+    if (value.empty() || end != value.c_str() + value.size())
+        throw InvalidArgumentException("Cannot convert '" + value + "' to double");
 
     return val;
 }

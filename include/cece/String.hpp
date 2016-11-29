@@ -164,7 +164,46 @@ int str2i(const String& value);
  *
  * @throws     InvalidArgumentException  String cannot be converted.
  */
+long str2l(const String& value);
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Converts string value to integer.
+ *
+ * @param      value  Input value.
+ *
+ * @return     Parsed value.
+ *
+ * @throws     InvalidArgumentException  String cannot be converted.
+ */
+long long str2ll(const String& value);
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Converts string value to integer.
+ *
+ * @param      value  Input value.
+ *
+ * @return     Parsed value.
+ *
+ * @throws     InvalidArgumentException  String cannot be converted.
+ */
 float str2f(const String& value);
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Converts string value to integer.
+ *
+ * @param      value  Input value.
+ *
+ * @return     Parsed value.
+ *
+ * @throws     InvalidArgumentException  String cannot be converted.
+ */
+double str2d(const String& value);
 
 /* ************************************************************************ */
 

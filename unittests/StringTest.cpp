@@ -128,6 +128,70 @@ TEST(String, str2i)
 
 /* ************************************************************************ */
 
+TEST(String, str2l)
+{
+    {
+        auto val = str2l("0");
+        EXPECT_EQ(0, val);
+    }
+
+    {
+        auto val = str2l("484321");
+        EXPECT_EQ(484321, val);
+    }
+
+    {
+        auto val = str2l("-484321");
+        EXPECT_EQ(-484321, val);
+    }
+
+    {
+        EXPECT_THROW(str2l("abc04"), InvalidArgumentException);
+    }
+
+    {
+        EXPECT_THROW(str2l("1.456"), InvalidArgumentException);
+    }
+
+    {
+        EXPECT_THROW(str2l(""), InvalidArgumentException);
+    }
+}
+
+/* ************************************************************************ */
+
+TEST(String, str2ll)
+{
+    {
+        auto val = str2ll("0");
+        EXPECT_EQ(0, val);
+    }
+
+    {
+        auto val = str2ll("484321");
+        EXPECT_EQ(484321, val);
+    }
+
+    {
+        auto val = str2ll("-484321");
+        EXPECT_EQ(-484321, val);
+    }
+
+    {
+        EXPECT_THROW(str2ll("abc04"), InvalidArgumentException);
+    }
+
+    {
+        EXPECT_THROW(str2ll("1.456"), InvalidArgumentException);
+    }
+
+    {
+        EXPECT_THROW(str2ll(""), InvalidArgumentException);
+    }
+}
+
+/* ************************************************************************ */
+
 TEST(String, str2f)
 {
     {
@@ -151,6 +215,34 @@ TEST(String, str2f)
 
     {
         EXPECT_THROW(str2f(""), InvalidArgumentException);
+    }
+}
+
+/* ************************************************************************ */
+
+TEST(String, str2d)
+{
+    {
+        auto val = str2d("0");
+        EXPECT_FLOAT_EQ(0, val);
+    }
+
+    {
+        auto val = str2d(".41");
+        EXPECT_FLOAT_EQ(.41, val);
+    }
+
+    {
+        auto val = str2d("-484321");
+        EXPECT_FLOAT_EQ(-484321, val);
+    }
+
+    {
+        EXPECT_THROW(str2d("as45e12"), InvalidArgumentException);
+    }
+
+    {
+        EXPECT_THROW(str2d(""), InvalidArgumentException);
     }
 }
 

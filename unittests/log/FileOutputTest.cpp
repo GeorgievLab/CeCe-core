@@ -67,7 +67,7 @@ String readfile(io::FilePath path)
 
 TEST(FileOutput, invalidFile)
 {
-    EXPECT_THROW(FileOutput("/test.log"), InvalidArgumentException);
+    EXPECT_THROW(FileOutput("/invalid directory/test.log"), InvalidArgumentException);
 }
 
 /* ************************************************************************ */

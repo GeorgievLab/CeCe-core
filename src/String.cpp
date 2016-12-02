@@ -45,7 +45,7 @@ String toString(int value) noexcept
     char buffer[64];
     const int count = std::snprintf(buffer, sizeof buffer, "%d", value);
     CECE_ASSERT(count > 0);
-    CECE_ASSERT(count <= sizeof buffer);
+    CECE_ASSERT(count <= static_cast<int>(sizeof buffer));
     return String(buffer, count);
 }
 
@@ -56,7 +56,7 @@ String toString(long value) noexcept
     char buffer[64];
     const int count = std::snprintf(buffer, sizeof buffer, "%ld", value);
     CECE_ASSERT(count > 0);
-    CECE_ASSERT(count <= sizeof buffer);
+    CECE_ASSERT(count <= static_cast<int>(sizeof buffer));
     return String(buffer, count);
 }
 
@@ -67,7 +67,7 @@ String toString(long long value) noexcept
     char buffer[64];
     const int count = std::snprintf(buffer, sizeof buffer, "%lld", value);
     CECE_ASSERT(count > 0);
-    CECE_ASSERT(count <= sizeof buffer);
+    CECE_ASSERT(count <= static_cast<int>(sizeof buffer));
     return String(buffer, count);
 }
 
@@ -78,7 +78,7 @@ String toString(unsigned value) noexcept
     char buffer[64];
     const int count = std::snprintf(buffer, sizeof buffer, "%u", value);
     CECE_ASSERT(count > 0);
-    CECE_ASSERT(count <= sizeof buffer);
+    CECE_ASSERT(count <= static_cast<int>(sizeof buffer));
     return String(buffer, count);
 }
 
@@ -89,7 +89,7 @@ String toString(unsigned long value) noexcept
     char buffer[64];
     const int count = std::snprintf(buffer, sizeof buffer, "%lu", value);
     CECE_ASSERT(count > 0);
-    CECE_ASSERT(count <= sizeof buffer);
+    CECE_ASSERT(count <= static_cast<int>(sizeof buffer));
     return String(buffer, count);
 }
 
@@ -100,7 +100,7 @@ String toString(unsigned long long value) noexcept
     char buffer[64];
     const int count = std::snprintf(buffer, sizeof buffer, "%llu", value);
     CECE_ASSERT(count > 0);
-    CECE_ASSERT(count <= sizeof buffer);
+    CECE_ASSERT(count <= static_cast<int>(sizeof buffer));
     return String(buffer, count);
 }
 
@@ -111,7 +111,7 @@ String toString(float value) noexcept
     char buffer[64];
     const int count = std::snprintf(buffer, sizeof buffer, "%f", value);
     CECE_ASSERT(count > 0);
-    CECE_ASSERT(count <= sizeof buffer);
+    CECE_ASSERT(count <= static_cast<int>(sizeof buffer));
     return String(buffer, count);
 }
 
@@ -122,7 +122,7 @@ String toString(double value) noexcept
     char buffer[64];
     const int count = std::snprintf(buffer, sizeof buffer, "%f", value);
     CECE_ASSERT(count > 0);
-    CECE_ASSERT(count <= sizeof buffer);
+    CECE_ASSERT(count <= static_cast<int>(sizeof buffer));
     return String(buffer, count);
 }
 
@@ -133,7 +133,7 @@ String toString(long double value) noexcept
     char buffer[64];
     const int count = std::snprintf(buffer, sizeof buffer, "%Lf", value);
     CECE_ASSERT(count > 0);
-    CECE_ASSERT(count <= sizeof buffer);
+    CECE_ASSERT(count <= static_cast<int>(sizeof buffer));
     return String(buffer, count);
 }
 

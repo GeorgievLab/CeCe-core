@@ -24,10 +24,10 @@
 /* ************************************************************************ */
 
 // Declaration
-#include "cece/log/Log.hpp"
+#include "cece/log/StreamOutput.hpp"
 
-// CeCe
-#include "cece/log/StdOutput.hpp"
+// C++
+#include <ostream>
 
 /* ************************************************************************ */
 
@@ -36,10 +36,21 @@ namespace log {
 
 /* ************************************************************************ */
 
-Logger& get_logger() noexcept
+void StreamOutput::write(Severity severity, const String& section, const String& msg)
 {
-    static Logger logger(makeUnique<StdOutput>());
-    return logger;
+    switch (severity)
+    {
+    case Severity::Default: break;
+    case Severity::Info:    m_stream << "[INFO] "; break;
+    case Severity::Warning: m_stream << "[WARN] "; break;
+    case Severity::Error:   m_stream << "[ERROR] "; break;
+    case Severity::Debug:   m_stream << "[DEBUG] "; break;
+    }
+
+    if (!section.empty())
+        m_stream << "[" << section << "] ";
+
+    m_stream << msg << std::endl;
 }
 
 /* ************************************************************************ */

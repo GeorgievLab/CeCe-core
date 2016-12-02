@@ -23,11 +23,7 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-// Declaration
-#include "cece/log/Log.hpp"
-
-// CeCe
-#include "cece/log/StdOutput.hpp"
+#pragma once
 
 /* ************************************************************************ */
 
@@ -36,11 +32,17 @@ namespace log {
 
 /* ************************************************************************ */
 
-Logger& get_logger() noexcept
+/**
+ * @brief      Message log severity.
+ */
+enum class Severity
 {
-    static Logger logger(makeUnique<StdOutput>());
-    return logger;
-}
+    Default,
+    Info,
+    Warning,
+    Error,
+    Debug
+};
 
 /* ************************************************************************ */
 

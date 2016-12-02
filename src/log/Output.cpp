@@ -24,10 +24,7 @@
 /* ************************************************************************ */
 
 // Declaration
-#include "cece/log/Log.hpp"
-
-// CeCe
-#include "cece/log/StdOutput.hpp"
+#include "cece/log/Output.hpp"
 
 /* ************************************************************************ */
 
@@ -36,11 +33,7 @@ namespace log {
 
 /* ************************************************************************ */
 
-Logger& get_logger() noexcept
-{
-    static Logger logger(makeUnique<StdOutput>());
-    return logger;
-}
+Output::~Output() = default;
 
 /* ************************************************************************ */
 

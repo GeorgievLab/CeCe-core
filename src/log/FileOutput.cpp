@@ -24,10 +24,13 @@
 /* ************************************************************************ */
 
 // Declaration
-#include "cece/log/Log.hpp"
+#include "cece/log/FileOutput.hpp"
+
+// C++
+#include <ostream>
 
 // CeCe
-#include "cece/log/StdOutput.hpp"
+#include "cece/Exception.hpp"
 
 /* ************************************************************************ */
 
@@ -36,10 +39,12 @@ namespace log {
 
 /* ************************************************************************ */
 
-Logger& get_logger() noexcept
+FileOutput::FileOutput(io::FilePath path)
+    : StreamOutput(m_stream)
+    , m_stream(path.toString(), std::ios_base::out | std::ios_base::app)
 {
-    static Logger logger(makeUnique<StdOutput>());
-    return logger;
+    if (!m_stream.is_open())
+        throw InvalidArgumentException("Cannot open file for writing: " + path.toString());
 }
 
 /* ************************************************************************ */

@@ -23,28 +23,56 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-// Declaration
-#include "cece/log/Log.hpp"
+// GTest
+#include "gtest/gtest.h"
 
 // CeCe
-#include "cece/log/StdOutput.hpp"
+#include "cece/String.hpp"
+#include "cece/UniquePtr.hpp"
+#include "cece/log/Output.hpp"
 
 /* ************************************************************************ */
 
-namespace cece {
-namespace log {
+using namespace cece;
+using namespace cece::log;
 
 /* ************************************************************************ */
 
-Logger& get_logger() noexcept
+struct TestOutput : public Output
 {
-    static Logger logger(makeUnique<StdOutput>());
-    return logger;
+    int called = 0;
+
+    void write(Severity severity, const String& section, const String& msg) override
+    {
+        EXPECT_EQ(Severity::Info, severity);
+        EXPECT_EQ("", section);
+        EXPECT_EQ("Message", msg);
+
+        ++called;
+    }
+};
+
+/* ************************************************************************ */
+
+TEST(Output, write)
+{
+    TestOutput output;
+    output.write(Severity::Info, {}, "Message");
+
+    EXPECT_EQ(1, output.called);
 }
 
 /* ************************************************************************ */
 
-}
+TEST(Output, writeAbstract)
+{
+    UniquePtr<Output> output = makeUnique<TestOutput>();
+    EXPECT_NE(nullptr, output);
+    output->write(Severity::Info, {}, "Message");
+    output->write(Severity::Info, {}, "Message");
+    output->write(Severity::Info, {}, "Message");
+
+    EXPECT_EQ(3, static_cast<TestOutput*>(output.get())->called);
 }
 
 /* ************************************************************************ */

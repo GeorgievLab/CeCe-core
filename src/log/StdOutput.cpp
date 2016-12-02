@@ -24,10 +24,14 @@
 /* ************************************************************************ */
 
 // Declaration
-#include "cece/log/Log.hpp"
+#include "cece/log/StdOutput.hpp"
+
+// C++
+#include <iostream>
 
 // CeCe
-#include "cece/log/StdOutput.hpp"
+#include "cece/io/OutStream.hpp"
+#include "cece/io/CliColor.hpp"
 
 /* ************************************************************************ */
 
@@ -36,10 +40,23 @@ namespace log {
 
 /* ************************************************************************ */
 
-Logger& get_logger() noexcept
+void StdOutput::write(Severity severity, const String& section, const String& msg)
 {
-    static Logger logger(makeUnique<StdOutput>());
-    return logger;
+    io::OutStream& os = severity == Severity::Error ? std::cerr : std::cout;
+
+    switch (severity)
+    {
+    case Severity::Default: break;
+    case Severity::Info:    os << io::CliColor::LightGreen   << "[INFO] "  << io::CliColor::Default; break;
+    case Severity::Warning: os << io::CliColor::Yellow       << "[WARN] "  << io::CliColor::Default; break;
+    case Severity::Error:   os << io::CliColor::Red          << "[ERROR] " << io::CliColor::Default; break;
+    case Severity::Debug:   os << io::CliColor::Green        << "[DEBUG] " << io::CliColor::Default; break;
+    }
+
+    if (!section.empty())
+        os << "[" << section << "] ";
+
+    os << msg << std::endl;
 }
 
 /* ************************************************************************ */

@@ -23,11 +23,13 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-// Declaration
-#include "cece/log/Log.hpp"
+#pragma once
+
+/* ************************************************************************ */
 
 // CeCe
-#include "cece/log/StdOutput.hpp"
+#include "cece/io/OutStream.hpp"
+#include "cece/log/Output.hpp"
 
 /* ************************************************************************ */
 
@@ -36,11 +38,49 @@ namespace log {
 
 /* ************************************************************************ */
 
-Logger& get_logger() noexcept
+/**
+ * @brief      The log output for output streams.
+ */
+class StreamOutput : public Output
 {
-    static Logger logger(makeUnique<StdOutput>());
-    return logger;
-}
+
+// Public Ctors & Dtors
+public:
+
+
+    /**
+     * @brief      Constructor.
+     *
+     * @param      stream  The output stream.
+     */
+    explicit StreamOutput(io::OutStream& stream) noexcept
+        : m_stream(stream)
+    {
+        // Nothing to do
+    }
+
+
+// Public Operations
+public:
+
+
+    /**
+     * @brief      Log a message.
+     *
+     * @param      severity  Message severity.
+     * @param      section   Message section.
+     * @param      msg       Message to log.
+     */
+    void write(Severity severity, const String& section, const String& msg) override;
+
+
+// Private Data Members
+private:
+
+    /// Output stream.
+    io::OutStream& m_stream;
+
+};
 
 /* ************************************************************************ */
 

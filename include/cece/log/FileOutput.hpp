@@ -23,11 +23,14 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-// Declaration
-#include "cece/log/Log.hpp"
+#pragma once
+
+/* ************************************************************************ */
 
 // CeCe
-#include "cece/log/StdOutput.hpp"
+#include "cece/io/FilePath.hpp"
+#include "cece/io/FileStream.hpp"
+#include "cece/log/StreamOutput.hpp"
 
 /* ************************************************************************ */
 
@@ -36,11 +39,33 @@ namespace log {
 
 /* ************************************************************************ */
 
-Logger& get_logger() noexcept
+/**
+ * @brief      The log output for output streams.
+ */
+class FileOutput : public StreamOutput
 {
-    static Logger logger(makeUnique<StdOutput>());
-    return logger;
-}
+
+// Public Ctors & Dtors
+public:
+
+
+    /**
+     * @brief      Constructor.
+     *
+     * @param      path  Path to log file.
+     *
+     * @throws     InvalidArgumentException If file cannot be open.
+     */
+    explicit FileOutput(io::FilePath path);
+
+
+// Private Data Members
+private:
+
+    /// Output file stream.
+    io::OutFileStream m_stream;
+
+};
 
 /* ************************************************************************ */
 

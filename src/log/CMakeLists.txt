@@ -25,6 +25,11 @@
 
 set(SRCS
     Log.cpp
+    Logger.cpp
+    Output.cpp
+    StreamOutput.cpp
+    FileOutput.cpp
+    StdOutput.cpp
 )
 
 # ######################################################################### #

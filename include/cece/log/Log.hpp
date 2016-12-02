@@ -28,11 +28,9 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/export.hpp"
-#include "cece/String.hpp"
-#include "cece/io/OutStream.hpp"
-#include "cece/io/StringStream.hpp"
-#include "cece/io/CliColor.hpp"
+#include "cece/UniquePtr.hpp"
+#include "cece/log/Logger.hpp"
+#include "cece/log/Output.hpp"
 
 /* ************************************************************************ */
 
@@ -42,123 +40,224 @@ namespace log {
 /* ************************************************************************ */
 
 /**
- * @brief Logging class.
+ * @brief      Returns the default logger.
+ *
+ * @return     The logger.
+ */
+Logger& get_logger() noexcept;
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Returns output.
+ *
+ * @return     The output.
+ */
+inline ViewPtr<Output> get_output() noexcept
+{
+    return get_logger().getOutput();
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Change output.
+ *
+ * @param[in]  output  The pointer to output.
+ */
+inline void set_output(UniquePtr<Output> output) noexcept
+{
+    return get_logger().setOutput(std::move(output));
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Log a message.
+ *
+ * @param[in]  args       Log arguments.
+ *
+ * @tparam     Args       Argument types.
+ */
+template<typename... Args>
+inline void msg(Args&&... args)
+{
+    get_logger().msg(std::forward<Args>(args)...);
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Log a message.
+ *
+ * @param[in]  section    Message section.
+ * @param[in]  args       Log arguments.
+ *
+ * @tparam     Args       Argument types.
+ */
+template<typename... Args>
+inline void msgS(const String& section, Args&&... args)
+{
+    get_logger().msgS(section, std::forward<Args>(args)...);
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Log an info message.
+ *
+ * @param[in]  args       Log arguments.
+ *
+ * @tparam     Args       Argument types.
+ */
+template<typename... Args>
+inline void info(Args&&... args)
+{
+    get_logger().info(std::forward<Args>(args)...);
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Log an info message.
+ *
+ * @param[in]  section    Message section.
+ * @param[in]  args       Log arguments.
+ *
+ * @tparam     Args       Argument types.
+ */
+template<typename... Args>
+inline void infoS(const String& section, Args&&... args)
+{
+    get_logger().infoS(section, std::forward<Args>(args)...);
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Log a debug message.
+ *
+ * @param[in]  args       Log arguments.
+ *
+ * @tparam     Args       Argument types.
+ */
+template<typename... Args>
+inline void debug(Args&&... args)
+{
+    get_logger().debug(std::forward<Args>(args)...);
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Log a debug message.
+ *
+ * @param[in]  section    Message section.
+ * @param[in]  args       Log arguments.
+ *
+ * @tparam     Args       Argument types.
+ */
+template<typename... Args>
+inline void debugS(const String& section, Args&&... args)
+{
+    get_logger().debugS(section, std::forward<Args>(args)...);
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Log a warning message.
+ *
+ * @param[in]  args       Log arguments.
+ *
+ * @tparam     Args       Argument types.
+ */
+template<typename... Args>
+inline void warning(Args&&... args)
+{
+    get_logger().warning(std::forward<Args>(args)...);
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Log a warning message.
+ *
+ * @param[in]  section    Message section.
+ * @param[in]  args       Log arguments.
+ *
+ * @tparam     Args       Argument types.
+ */
+template<typename... Args>
+inline void warningS(const String& section, Args&&... args)
+{
+    get_logger().warningS(section, std::forward<Args>(args)...);
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Log an error message.
+ *
+ * @param[in]  args       Log arguments.
+ *
+ * @tparam     Args       Argument types.
+ */
+template<typename... Args>
+inline void error(Args&&... args)
+{
+    get_logger().error(std::forward<Args>(args)...);
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Log an error message.
+ *
+ * @param[in]  section    Message section.
+ * @param[in]  args       Log arguments.
+ *
+ * @tparam     Args       Argument types.
+ */
+template<typename... Args>
+inline void errorS(const String& section, Args&&... args)
+{
+    get_logger().errorS(section, std::forward<Args>(args)...);
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Logging main interface.
+ *
+ * @deprecated
  */
 class Log
 {
 
-// Public Enums
+// Public Accessors & Mutators
 public:
 
 
     /**
-     * @brief Log message types.
-     */
-    enum class Type
-    {
-        Default,
-        Info,
-        Warning,
-        Error,
-        Debug
-    };
-
-
-// Public Classes
-public:
-
-
-    /**
-     * @brief Output class that handles log output.
-     */
-    class Output
-    {
-    // Public Ctors & Dtors
-    public:
-
-        /**
-         * @brief Destructor.
-         */
-        virtual ~Output();
-
-    // Public Operations
-    public:
-
-        /**
-         * @brief Write a message to output.
-         *
-         * @param type    Message type.
-         * @param section Message section.
-         * @param msg     Message to log.
-         */
-        virtual void write(Type type, const String& section, const String& msg) = 0;
-    };
-
-
-    /**
-     * @brief Output for output streams.
-     */
-    class StreamOutput : public Output
-    {
-    // Public Ctors & Dtors
-    public:
-
-        /**
-         * @brief Constructor.
-         *
-         * @param os
-         */
-        explicit StreamOutput(io::OutStream* os) : m_os(os) {}
-
-
-        /**
-         * @brief Destructor.
-         */
-        ~StreamOutput();
-
-    // Public Operations
-    public:
-
-        /**
-         * @brief Write a message to output.
-         *
-         * @param type    Message type.
-         * @param section Message section.
-         * @param msg     Message to log.
-         */
-        void write(Type type, const String& section, const String& msg) override;
-
-    // Private Data Members
-    private:
-
-        /// Output stream.
-        io::OutStream* m_os;
-    };
-
-
-// Public Mutators
-public:
-
-
-    /**
-     * @brief Set output stream.
+     * @brief      Returns output.
      *
-     * @param os
+     * @return     The output.
      */
-    static void setOutput(Output* os) noexcept
+    static ViewPtr<Output> getOutput() noexcept
     {
-        s_output = os;
+        return get_output();
     }
 
 
     /**
-     * @brief Set error stream.
+     * @brief      Change output.
      *
-     * @param os
+     * @param[in]  output  The pointer to output.
      */
-    static void setError(Output* os) noexcept
+    static void setOutput(UniquePtr<Output> output) noexcept
     {
-        s_error = os;
+        set_output(std::move(output));
     }
 
 
@@ -167,109 +266,59 @@ public:
 
 
     /**
-     * @brief Log info message.
+     * @brief      Log an info message.
      *
-     * @param args
+     * @param[in]  args       Log arguments.
+     *
+     * @tparam     Args       Argument types.
      */
     template<typename... Args>
     static void info(Args&&... args)
     {
-        if (s_output)
-        {
-            io::OutStringStream oss;
-            message(oss, std::forward<Args>(args)...);
-            s_output->write(Type::Info, String{}, oss.str());
-        }
+        log::info(std::forward<Args>(args)...);
     }
 
 
     /**
-     * @brief Log debug message.
+     * @brief      Log a debug message.
      *
-     * @param args
+     * @param[in]  args       Log arguments.
+     *
+     * @tparam     Args       Argument types.
      */
     template<typename... Args>
     static void debug(Args&&... args)
     {
-#ifndef NDEBUG
-        if (s_output)
-        {
-            io::OutStringStream oss;
-            message(oss, std::forward<Args>(args)...);
-            s_output->write(Type::Debug, String{}, oss.str());
-        }
-#endif
+        log::debug(std::forward<Args>(args)...);
     }
 
 
     /**
-     * @brief Log warning message.
+     * @brief      Log a warning message.
      *
-     * @param args
+     * @param[in]  args       Log arguments.
+     *
+     * @tparam     Args       Argument types.
      */
     template<typename... Args>
     static void warning(Args&&... args)
     {
-        if (s_output)
-        {
-            io::OutStringStream oss;
-            message(oss, std::forward<Args>(args)...);
-            s_output->write(Type::Warning, String{}, oss.str());
-        }
+        log::warning(std::forward<Args>(args)...);
     }
 
 
     /**
-     * @brief Log error message.
+     * @brief      Log an error message.
      *
-     * @param args
+     * @param[in]  args       Log arguments.
+     *
+     * @tparam     Args       Argument types.
      */
     template<typename... Args>
     static void error(Args&&... args)
     {
-        if (s_error)
-        {
-            io::OutStringStream oss;
-            message(oss, std::forward<Args>(args)...);
-            s_error->write(Type::Error, String{}, oss.str());
-        }
+        log::error(std::forward<Args>(args)...);
     }
-
-
-// Private Operations
-private:
-
-
-    /**
-     * @brief Log message.
-     */
-    static void message(io::OutStream& os)
-    {
-        // Nothing to do
-    }
-
-
-    /**
-     * @brief Log message.
-     *
-     * @param args
-     */
-    template<typename Arg, typename... Args>
-    static void message(io::OutStream& os, Arg&& arg, Args&&... args)
-    {
-        os << arg;
-        message(os, std::forward<Args>(args)...);
-    }
-
-
-// Private Data Members
-private:
-
-    /// Standard output.
-    static CECE_EXPORT Output* s_output;
-
-    /// Error output.
-    static CECE_EXPORT Output* s_error;
 
 };
 

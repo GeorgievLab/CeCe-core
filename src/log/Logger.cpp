@@ -24,10 +24,11 @@
 /* ************************************************************************ */
 
 // Declaration
-#include "cece/log/Log.hpp"
+#include "cece/log/Logger.hpp"
 
 // CeCe
-#include "cece/log/StdOutput.hpp"
+#include "cece/Assert.hpp"
+#include "cece/log/Output.hpp"
 
 /* ************************************************************************ */
 
@@ -36,10 +37,10 @@ namespace log {
 
 /* ************************************************************************ */
 
-Logger& get_logger() noexcept
+void Logger::writeMessage(Severity severity, const String& section, const String& msg)
 {
-    static Logger logger(makeUnique<StdOutput>());
-    return logger;
+    CECE_ASSERT(m_output);
+    m_output->write(severity, section, msg);
 }
 
 /* ************************************************************************ */

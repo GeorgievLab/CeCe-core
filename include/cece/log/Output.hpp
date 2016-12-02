@@ -23,11 +23,13 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-// Declaration
-#include "cece/log/Log.hpp"
+#pragma once
+
+/* ************************************************************************ */
 
 // CeCe
-#include "cece/log/StdOutput.hpp"
+#include "cece/String.hpp"
+#include "cece/log/Severity.hpp"
 
 /* ************************************************************************ */
 
@@ -36,11 +38,35 @@ namespace log {
 
 /* ************************************************************************ */
 
-Logger& get_logger() noexcept
+/**
+ * @brief      Output class that handles log output.
+ */
+class Output
 {
-    static Logger logger(makeUnique<StdOutput>());
-    return logger;
-}
+
+// Public Ctors & Dtors
+public:
+
+
+    /**
+     * @brief      Destructor.
+     */
+    virtual ~Output() = 0;
+
+
+// Public Operations
+public:
+
+    /**
+     * @brief      Log a message.
+     *
+     * @param      severity  Message severity.
+     * @param      section   Message section.
+     * @param      msg       Message to log.
+     */
+    virtual void write(Severity severity, const String& section, const String& msg) = 0;
+
+};
 
 /* ************************************************************************ */
 

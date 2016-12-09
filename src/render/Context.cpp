@@ -249,8 +249,8 @@ void Context::setView(int width, int height) noexcept
 
     // Move camera
     glTranslatef(
-        static_cast<float>(m_camera.getPosition().getX().value()), 
-        static_cast<float>(m_camera.getPosition().getY().value()), 
+        static_cast<RealType>(m_camera.getPosition().getX()),
+        static_cast<RealType>(m_camera.getPosition().getY()),
         0
     );
 
@@ -400,8 +400,8 @@ void Context::matrixIdentity() noexcept
 void Context::matrixTranslate(const unit::PositionVector& pos) noexcept
 {
     gl(glTranslatef(
-        static_cast<float>(pos.getX().value()), 
-        static_cast<float>(pos.getY().value()), 
+        static_cast<RealType>(pos.getX()),
+        static_cast<RealType>(pos.getY()),
         0.0f
     ));
 }
@@ -411,8 +411,8 @@ void Context::matrixTranslate(const unit::PositionVector& pos) noexcept
 void Context::matrixScale(const unit::ScaleVector& scale) noexcept
 {
     gl(glScalef(
-        static_cast<float>(scale.getX()), 
-        static_cast<float>(scale.getY()), 
+        static_cast<float>(scale.getX()),
+        static_cast<float>(scale.getY()),
         1.0f
     ));
 }
@@ -422,9 +422,9 @@ void Context::matrixScale(const unit::ScaleVector& scale) noexcept
 void Context::matrixRotate(unit::Angle angle) noexcept
 {
     gl(glRotatef(
-        static_cast<float>(unit::rad2deg(angle.value())), 
-        0.f, 
-        0.f, 
+        static_cast<RealType>(unit::rad2deg(angle)),
+        0.f,
+        0.f,
         1.f
     ));
 }

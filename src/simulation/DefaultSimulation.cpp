@@ -536,7 +536,7 @@ bool DefaultSimulation::update()
     {
         auto _ = perf::measure_time("sim.physics", TimeMeasurement(this));
 
-        m_world->Step(static_cast<float32>(getPhysicsEngineTimeStep().value()), 10, 10);
+        m_world->Step(static_cast<float32>(getPhysicsEngineTimeStep().get()), 10, 10);
     }
 
     // Detect object that leaved the scene

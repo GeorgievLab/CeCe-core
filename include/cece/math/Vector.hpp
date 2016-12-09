@@ -38,6 +38,7 @@
 #include "cece/math/Zero.hpp"
 #include "cece/io/InStream.hpp"
 #include "cece/io/OutStream.hpp"
+#include "cece/unit/math.hpp"
 #include "cece/unit/Units.hpp"
 
 /* ************************************************************************ */
@@ -939,8 +940,8 @@ public:
     BasicVector rotated(unit::Angle angle) const noexcept
     {
         return BasicVector(
-            static_cast<T>(getX() * cos(angle.value()) - getY() * sin(angle.value())),
-            static_cast<T>(getX() * sin(angle.value()) + getY() * cos(angle.value()))
+            static_cast<T>(getX() * cos(static_cast<RealType>(angle)) - getY() * sin(static_cast<RealType>(angle))),
+            static_cast<T>(getX() * sin(static_cast<RealType>(angle)) + getY() * cos(static_cast<RealType>(angle)))
         );
     }
 

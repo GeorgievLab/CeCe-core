@@ -35,9 +35,8 @@
 // CeCe
 #include "cece/common.hpp"
 #include "cece/String.hpp"
-#include "cece/StringView.hpp"
-#include "cece/StaticArray.hpp"
 #include "cece/math/Zero.hpp"
+#include "cece/unit/Exception.hpp"
 
 /* ************************************************************************ */
 
@@ -46,546 +45,549 @@ namespace unit {
 
 /* ************************************************************************ */
 
-/**
- * @brief Basic value.
- */
-using Value = RealType;
+/// Underlying type for units.
+using ValueType = RealType;
 
 /* ************************************************************************ */
 
-/// Base units exponents
-static constexpr int LENGTH_EXPONENT = 6;
-static constexpr int TIME_EXPONENT = 0;
-static constexpr int MASS_EXPONENT = 6;
-static constexpr int ELECTRIC_CURRENT_EXPONENT = 0;
-static constexpr int THERMODYNAMIC_TEMPERATURE_EXPONENT = 0;
-static constexpr int AMOUNT_OF_SUBSTANCE_EXPONENT = 6;
-static constexpr int LUMINOUS_INTENSITY_EXPONENT = 0;
-
-/* ************************************************************************ */
-
-/// @link http://stackoverflow.com/questions/26682812/argument-counting-macro-with-zero-arguments-for-visualstudio-2010/26685339#26685339
-#ifdef _MSC_VER // Microsoft compilers
-
-#define EXPAND(x) x
-#define __NARGS(_1, _2, _3, _4, N, ...) N
-#define NARGS_1(...) EXPAND(__NARGS(__VA_ARGS__, 3, 2, 1, 0))
-
-#define AUGMENTER(...) unused, __VA_ARGS__
-#define NARG(...) NARGS_1(AUGMENTER(__VA_ARGS__))
-
-#else // And normal compilers
-
-/// @link https://azraelplanet.wordpress.com/2012/03/30/number-of-arguments-in-__va_args__-gcc/
-#define ARG_N(_1, _2, _3, N, ...) N
-#define NARG_(...) ARG_N(__VA_ARGS__)
-#define NARG(...) NARG_(__VA_ARGS__, 3, 2, 1, 0)
-
-#endif
+struct DynamicImpl;
 
 /* ************************************************************************ */
 
 /**
- * @brief Defines base unit.
+ * @brief      Unit type static implementation.
  *
- * @param name Unit Name.
- * @param ord  Unit order.
- * @param exp  Value coefficient exponent.
- * @param ...  Characters of unit symbol.
+ * @tparam     Length       Number of length units.
+ * @tparam     Time         Number of time units.
+ * @tparam     Mass         Number of mass units.
+ * @tparam     Current      Number of electrical current units.
+ * @tparam     Temperature  Number of temperature units.
+ * @tparam     Substance    Number of amount of substance units.
+ * @tparam     Intensity    Number of intensity units.
  */
-#define DEFINE_BASE_UNIT(name, exp, ord, ...) \
-    struct Base ## name {\
-        static constexpr int exponent = exp; \
-        static constexpr int order = ord;\
-        static constexpr std::size_t symbolLength = NARG(__VA_ARGS__) + 1; \
-        static constexpr StaticArray<char, symbolLength> getSymbol() noexcept \
-        { \
-            return {{__VA_ARGS__, '\0'}};\
-        } \
-    }
-
-/* ************************************************************************ */
-
-/**
- * @brief Base SI units.
- */
-DEFINE_BASE_UNIT(Length,                   LENGTH_EXPONENT,                    0, 'm');
-DEFINE_BASE_UNIT(Time,                     TIME_EXPONENT,                      1, 's');
-DEFINE_BASE_UNIT(Mass,                     MASS_EXPONENT,                      2, 'g');
-DEFINE_BASE_UNIT(ElectricCurrent,          ELECTRIC_CURRENT_EXPONENT,          3, 'A');
-DEFINE_BASE_UNIT(ThermodynamicTemperature, THERMODYNAMIC_TEMPERATURE_EXPONENT, 4, 'K');
-DEFINE_BASE_UNIT(AmountOfSubstance,        AMOUNT_OF_SUBSTANCE_EXPONENT,       5, 'm', 'o', 'l');
-DEFINE_BASE_UNIT(LuminousIntensity,        LUMINOUS_INTENSITY_EXPONENT,        6, 'c', 'd');
-
-/* ************************************************************************ */
-
-/**
- * @brief Calculate coefficient from exponent.
- *
- * @param exponent
- *
- * @return Result coefficient
- */
-inline constexpr Value exponentToCoefficient(int exponent) noexcept
-{
-    return (exponent == 0)
-        ? 1
-        : (exponent > 0)
-            ? 10 * exponentToCoefficient(exponent - 1)
-            : 0.1 * exponentToCoefficient(exponent + 1)
-    ;
-}
-
-/* ************************************************************************ */
-
-/**
- * @brief Less structure.
- *
- * @tparam T1 First base unit type.
- * @tparam T2 Second base unit type.
- */
-template<typename T1, typename T2>
-struct Less
-{
-    /// If T1 is less than T2
-    static constexpr bool value = T1::order < T2::order;
-};
-
-/* ************************************************************************ */
-
-/**
- * @brief List of types.
- *
- * @tparam Types A list of types.
- */
-template<typename... Types>
-struct List
+template<
+    int Length,
+    int Time,
+    int Mass,
+    int Current,
+    int Temperature,
+    int Substance,
+    int Intensity
+>
+struct StaticImpl
 {
 
-    /// Number of types in list.
-    static constexpr std::size_t size = sizeof...(Types);
+    /// Stored value.
+    ValueType value{};
 
-};
-
-/* ************************************************************************ */
-
-/**
- * @brief Struct for calculating total coefficient exponent of given list.
- *
- * @tparam Types A list of unit types.
- */
-template<typename... Types>
-struct Exponent;
-
-/* ************************************************************************ */
-
-/**
- * @brief Struct for calculating total coefficient exponent of given list.
- *
- * @tparam Types A list of unit types.
- */
-template<typename... Types>
-struct Exponent<List<Types...>>
-{
 
     /**
-     * @brief Add coefficient exponents.
-     *
-     * @param arg  The first coefficient exponent.
-     * @param args Rest of the coefficient exponents.
-     *
-     * @return Result exponent.
+     * @brief      Default constructor.
      */
-    template<typename Arg, typename... Args>
-    static constexpr int add(Arg&& arg, Args&&... args) noexcept
+    StaticImpl() = default;
+
+
+    /**
+     * @brief      Constructor.
+     *
+     * @param[in]  value  The value.
+     */
+    explicit StaticImpl(ValueType value) noexcept
+        : value(value)
     {
-        return arg + add(args...);
+        // Check if
     }
 
 
     /**
-     * @brief Add coefficient exponents.
+     * @brief      Construct from dynamic implementation.
      *
-     * @return 1.
+     * @param[in]  impl  The implementation.
      */
-    static constexpr int add() noexcept
-    {
-        return 0;
-    }
-
-
-    /// Calculate types coefficient exponent.
-    static constexpr int value = add(Types::exponent...);
-
-};
-
-/* ************************************************************************ */
-
-/**
- * @brief Concatenate two lists.
- *
- * @tparam T Types.
- */
-template<typename... T>
-struct Concat;
-
-/* ************************************************************************ */
-
-/**
- * @brief Concatenated specialization for single list.
- *
- * @tparam Types Types of the list.
- */
-template<typename... Types>
-struct Concat<List<Types...>>
-{
-    /// Concatenated list.
-    using type = List<Types...>;
-};
-
-/* ************************************************************************ */
-
-/**
- * @brief Concatenate two lists.
- *
- * @tparam Types1 Types of the first list.
- * @tparam Types2 Types of the second list.
- * @tparam Tail   Remaining types.
- */
-template<typename... Types1, typename... Types2, typename... Tail>
-struct Concat<List<Types1...>, List<Types2...>, Tail...>
-{
-    /// Concatenated list.
-    using type = typename Concat<List<Types1..., Types2...>, Tail...>::type;
-};
-
-/* ************************************************************************ */
-
-/**
- * @brief Type counter.
- *
- * @tparam T    Type to count.
- * @tparam List List of types.
- */
-template<typename T, typename... Types>
-struct Counter;
-
-/* ************************************************************************ */
-
-/**
- * @brief Type counter.
- *
- * @tparam T Type to count.
- */
-template<typename T>
-struct Counter<T, List<>>
-{
-    /// Number of occurences.
-    static constexpr std::size_t value = 0;
-};
-
-/* ************************************************************************ */
-
-/**
- * @brief Type counter.
- *
- * @tparam T    Type to count.
- * @tparam Type The first type from types.
- * @tparam List List of types.
- */
-template<typename T, typename Type, typename... Types>
-struct Counter<T, List<Type, Types...>>
-{
-    /// Number of occurences.
-    static constexpr std::size_t value =
-        (std::is_same<T, Type>::value ? 1 : 0) +
-        Counter<T, List<Types...>>::value
-    ;
-};
-
-/* ************************************************************************ */
-
-/**
- * @brief Type counter.
- *
- * @tparam List List of types.
- */
-template<typename... Types>
-struct CounterFirst;
-
-/* ************************************************************************ */
-
-/**
- * @brief Type counter.
- *
- * @tparam List List of types.
- */
-template<>
-struct CounterFirst<List<>>
-{
-    /// Number of occurences.
-    static constexpr std::size_t value = 0;
-};
-
-/* ************************************************************************ */
-
-/**
- * @brief Type counter.
- *
- * @tparam Type The first type from types.
- * @tparam List List of types.
- */
-template<typename Type, typename... Types>
-struct CounterFirst<List<Type, Types...>>
-{
-    /// Number of occurences.
-    static constexpr std::size_t value = Counter<Type, List<Type, Types...>>::value;
-};
-
-/* ************************************************************************ */
-
-/**
- * @brief Remove type from list.
- *
- * @tparam T    Type to remove.
- * @tparam List List of types.
- */
-template<typename T, typename List>
-struct Remove;
-
-/* ************************************************************************ */
-
-/**
- * @brief Remove type from list.
- *
- * @tparam T Type to remove.
- */
-template<typename T>
-struct Remove<T, List<>>
-{
-    // Not found
-    static constexpr bool value = false;
-
-    // Remaining types.
-    using type = List<>;
-};
-
-/* ************************************************************************ */
-
-/**
- * @brief Remove type element from list.
- *
- * @tparam T     Type to remove.
- * @tparam Type  First type.
- * @tparam Types Remaining types in the list.
- */
-template<typename T, typename Type, typename... Types>
-struct Remove<T, List<Type, Types...>>
-{
-    /// If types match.
-    static constexpr bool match = std::is_same<T, Type>::value;
-
-    // Inner remove.
-    using RemoveInnerType = Remove<T, List<Types...>>;
-
-    // If type is found.
-    static constexpr bool value = match || RemoveInnerType::value;
-
-    /// List type without the required type.
-    using type = typename std::conditional<match,
-        List<Types...>,
-        typename Concat<List<Type>, typename RemoveInnerType::type>::type
-    >::type;
-};
-
-/* ************************************************************************ */
-
-/**
- * @brief Helper class to reduce units.
- *
- * @tparam Nom   Nominators.
- * @tparam Denom Denominators.
- */
-template<typename Nom, typename Denom>
-struct ReduceInner;
-
-/* ************************************************************************ */
-
-/**
- * @brief Helper class to reduce units.
- *
- * @tparam Denominators List types.
- */
-template<typename... Denominators>
-struct ReduceInner<List<>, List<Denominators...>>
-{
-    using nominators = List<>;
-    using denominators = List<Denominators...>;
-};
-
-/* ************************************************************************ */
-
-/**
- * @brief Helper class to simplify units.
- *
- * Type removes shared types in nominator and denominator.
- *
- * @tparam Nom          First nominator.
- * @tparam Nominators   List types.
- * @tparam Denominators List types.
- */
-template<typename Nom, typename... Nominators, typename... Denominators>
-struct ReduceInner<List<Nom, Nominators...>, List<Denominators...>>
-{
-    /// Type of removing type.
-    using remove_type = Remove<Nom, List<Denominators...>>;
-
-    // Reduce without the first nominator
-    using reduce_inner = ReduceInner<List<Nominators...>, typename remove_type::type>;
-
-    /// List of nominators
-    using nominators = typename std::conditional<remove_type::value,
-        typename reduce_inner::nominators,
-        typename Concat<List<Nom>, typename reduce_inner::nominators>::type
-    >::type;
-
-    /// List of denominators
-    using denominators = typename reduce_inner::denominators;
-};
-
-/* ************************************************************************ */
-
-/**
- * @brief Remove all occurences of given type element from list.
- *
- * @tparam T    Type to remove.
- * @tparam List List of types.
- */
-template<typename T, typename List>
-struct RemoveAll;
-
-/* ************************************************************************ */
-
-/**
- * @brief Remove all occurences of given type element from list.
- *
- * @tparam T Type to remove.
- */
-template<typename T>
-struct RemoveAll<T, List<>>
-{
-    // Not found
-    static constexpr bool value = false;
-
-    // Number of occurences.
-    static constexpr std::size_t count = 0;
-
-    // Remaining types.
-    using type = List<>;
-};
-
-/* ************************************************************************ */
-
-/**
- * @brief Remove all occurences of given type element from list.
- *
- * @tparam T     Type to remove.
- * @tparam Type  First type.
- * @tparam Types Remaining types in the list.
- */
-template<typename T, typename Type, typename... Types>
-struct RemoveAll<T, List<Type, Types...>>
-{
-    /// If types match.
-    static constexpr bool match = std::is_same<T, Type>::value;
-
-    // Inner remove.
-    using RemoveInnerType = RemoveAll<T, List<Types...>>;
-
-    // If type is found.
-    static constexpr bool value = match || RemoveInnerType::value;
-
-    // Number of occurences.
-    static constexpr std::size_t count = (match ? 1 : 0) + RemoveInnerType::count;
-
-    /// List type without the required type.
-    using type = typename std::conditional<match,
-        typename RemoveInnerType::type,
-        typename Concat<List<Type>, typename RemoveInnerType::type>::type
-    >::type;
-};
-
-/* ************************************************************************ */
-
-/**
- * @brief SI Unit.
- *
- * @tparam Nom   List type.
- * @tparam Denom List type.
- */
-template<typename Nom, typename Denom>
-class Unit
-{
-
-// Public Types
-public:
-
-
-    /// Value type.
-    using value_type = Value;
-
-    /// List type.
-    using nominator = Nom;
-
-    /// List type.
-    using denominator = Denom;
-
-// Public Constants
-public:
-
-
-    /// Total unit coefficient.
-    static constexpr int exponent = Exponent<Nom>::value - Exponent<Denom>::value;
-
-    /// Number of occurences of the first nominator.
-    static constexpr std::size_t firstCountNom = CounterFirst<Nom>::value;
-
-    /// Number of occurences of the first denominator.
-    static constexpr std::size_t firstCountDenom = CounterFirst<Denom>::value;
-
-
-// Public Ctors & Dtors
-public:
+    StaticImpl(const DynamicImpl& impl);
 
 
     /**
-     * @brief Default constructor.
-     */
-    Unit() noexcept
-        : m_value{}
-    {
-        // Default ( = default) constructor and extern template are not
-        // friends in GCC
-    }
-
-
-    /**
-     * @brief Constructor.
+     * @brief      Assign from dynamic implementation.
      *
-     * @param value Init value.
+     * @param[in]  impl  The implementation.
      */
-    explicit constexpr Unit(value_type value) noexcept
-        : m_value(value)
+    StaticImpl& operator=(const DynamicImpl& impl);
+
+};
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Unit type dynamic implementation.
+ */
+struct DynamicImpl
+{
+
+    struct Detail
+    {
+        int length      : 4;  // -7, 7
+        int time        : 4;
+        int mass        : 4;
+        int current     : 4;
+        int temperature : 4;
+        int substance   : 4;
+        int intensity   : 4;
+    };
+
+
+    /// Stored value.
+    ValueType value{};
+
+    /// Runtime detail.
+    Detail detail{};
+
+
+    /**
+     * @brief      Default constructor.
+     */
+    DynamicImpl() = default;
+
+
+    /**
+     * @brief      Constructor.
+     *
+     * @param[in]  value   The value.
+     * @param[in]  detail  The detail.
+     */
+    explicit DynamicImpl(ValueType value, Detail detail = {}) noexcept
+        : value(value)
+        , detail{detail}
+    {
+        // Check if
+    }
+
+
+    /**
+     * @brief      Construct from static implementation.
+     *
+     * @param[in]  impl  The implementation.
+     */
+    template<
+        int Length,
+        int Time,
+        int Mass,
+        int Current,
+        int Temperature,
+        int Substance,
+        int Intensity
+    >
+    DynamicImpl(const StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>& impl) noexcept
+        : value(impl.value)
+        , detail{Length, Time, Mass, Current, Temperature, Substance, Intensity}
     {
         // Nothing to do
     }
 
 
     /**
-     * @brief Zero constructor.
+     * @brief      Assign from static implementation.
+     *
+     * @param[in]  impl  The implementation.
      */
-    constexpr Unit(math::Zero_t) noexcept
-        : m_value(0)
+    template<
+        int Length,
+        int Time,
+        int Mass,
+        int Current,
+        int Temperature,
+        int Substance,
+        int Intensity
+    >
+    DynamicImpl& operator=(const StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>& impl) noexcept
+    {
+        value = impl.value;
+        detail.length = Length;
+        detail.time = Time;
+        detail.mass = Mass;
+        detail.current = Current;
+        detail.temperature = Temperature;
+        detail.substance = Substance;
+        detail.intensity = Intensity;
+        return *this;
+    }
+
+};
+
+/* ************************************************************************ */
+
+template<
+    int Length,
+    int Time,
+    int Mass,
+    int Current,
+    int Temperature,
+    int Substance,
+    int Intensity
+>
+StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>::StaticImpl(const DynamicImpl& impl)
+    : value(impl.value)
+{
+    // Check if can be converted
+    if (impl.detail.length != Length)
+        throw Exception("Length exponent mismatch: " + toString(impl.detail.length) + " vs " + toString(Length));
+
+    if (impl.detail.time != Time)
+        throw Exception("Time exponent mismatch: " + toString(impl.detail.time) + " vs " + toString(Time));
+
+    if (impl.detail.mass != Mass)
+        throw Exception("Mass exponent mismatch: " + toString(impl.detail.mass) + " vs " + toString(Mass));
+
+    if (impl.detail.current != Current)
+        throw Exception("Current exponent mismatch: " + toString(impl.detail.current) + " vs " + toString(Current));
+
+    if (impl.detail.temperature != Temperature)
+        throw Exception("Temperature exponent mismatch: " + toString(impl.detail.temperature) + " vs " + toString(Temperature));
+
+    if (impl.detail.substance != Substance)
+        throw Exception("Substance exponent mismatch: " + toString(impl.detail.substance) + " vs " + toString(Substance));
+
+    if (impl.detail.intensity != Intensity)
+        throw Exception("Intensity exponent mismatch: " + toString(impl.detail.intensity) + " vs " + toString(Intensity));
+}
+
+/* ************************************************************************ */
+
+template<
+    int Length,
+    int Time,
+    int Mass,
+    int Current,
+    int Temperature,
+    int Substance,
+    int Intensity
+>
+StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>&
+StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>::operator=(const DynamicImpl& impl)
+{
+    value = impl.value;
+
+    // Check if can be converted
+    if (impl.detail.length != Length)
+        throw Exception("Length exponent mismatch: " + toString(impl.detail.length) + " vs " + toString(Length));
+
+    if (impl.detail.time != Time)
+        throw Exception("Time exponent mismatch: " + toString(impl.detail.time) + " vs " + toString(Time));
+
+    if (impl.detail.mass != Mass)
+        throw Exception("Mass exponent mismatch: " + toString(impl.detail.mass) + " vs " + toString(Mass));
+
+    if (impl.detail.current != Current)
+        throw Exception("Current exponent mismatch: " + toString(impl.detail.current) + " vs " + toString(Current));
+
+    if (impl.detail.temperature != Temperature)
+        throw Exception("Temperature exponent mismatch: " + toString(impl.detail.temperature) + " vs " + toString(Temperature));
+
+    if (impl.detail.substance != Substance)
+        throw Exception("Substance exponent mismatch: " + toString(impl.detail.substance) + " vs " + toString(Substance));
+
+    if (impl.detail.intensity != Intensity)
+        throw Exception("Intensity exponent mismatch: " + toString(impl.detail.intensity) + " vs " + toString(Intensity));
+
+    return *this;
+}
+
+/* ************************************************************************ */
+
+namespace detail {
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Implementations helper.
+ *
+ * @tparam     Impl1  The first implementation.
+ * @tparam     Impl2  The second implementation.
+ */
+template<typename Impl1, typename Impl2>
+struct ImplHelper;
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Implementation helper for 2 static implementations.
+ *
+ * @tparam     Length1       Number of length units.
+ * @tparam     Time1         Number of time units.
+ * @tparam     Mass1         Number of mass units.
+ * @tparam     Current1      Number of electrical current units.
+ * @tparam     Temperature1  Number of temperature units.
+ * @tparam     Substance1    Number of amount of substance units.
+ * @tparam     Intensity1    Number of intensity units.
+ * @tparam     Length2       Number of length units.
+ * @tparam     Time2         Number of time units.
+ * @tparam     Mass2         Number of mass units.
+ * @tparam     Current2      Number of electrical current units.
+ * @tparam     Temperature2  Number of temperature units.
+ * @tparam     Substance2    Number of amount of substance units.
+ * @tparam     Intensity2    Number of intensity units.
+ */
+template<
+    int Length1,
+    int Time1,
+    int Mass1,
+    int Current1,
+    int Temperature1,
+    int Substance1,
+    int Intensity1,
+    int Length2,
+    int Time2,
+    int Mass2,
+    int Current2,
+    int Temperature2,
+    int Substance2,
+    int Intensity2
+>
+struct ImplHelper<
+    StaticImpl<
+        Length1,
+        Time1,
+        Mass1,
+        Current1,
+        Temperature1,
+        Substance1,
+        Intensity1
+    >, StaticImpl<
+        Length2,
+        Time2,
+        Mass2,
+        Current2,
+        Temperature2,
+        Substance2,
+        Intensity2
+    >
+>
+{
+    /// If relational operations are supported
+    static constexpr bool isRelSupported =
+        Length1         == Length2 &&
+        Time1           == Time2 &&
+        Mass1           == Mass2 &&
+        Current1        == Current2 &&
+        Temperature1    == Temperature2 &&
+        Substance1      == Substance2 &&
+        Intensity1      == Intensity2
+    ;
+
+    /// If addition is supported
+    static constexpr bool isAddSupported =
+        Length1         == Length2 &&
+        Time1           == Time2 &&
+        Mass1           == Mass2 &&
+        Current1        == Current2 &&
+        Temperature1    == Temperature2 &&
+        Substance1      == Substance2 &&
+        Intensity1      == Intensity2
+    ;
+
+    /// If subtraction is supported
+    static constexpr bool isSubSupported = isAddSupported;
+
+    /// Addition result implementation (only valid when `isAddSupported == true`)
+    using AddImplType = StaticImpl<
+        Length1,
+        Time1,
+        Mass1,
+        Current1,
+        Temperature1,
+        Substance1,
+        Intensity1
+    >;
+
+    /// Subtraction result implementation (only valid when `isSubSupported == true`)
+    using SubImplType = StaticImpl<
+        Length1,
+        Time1,
+        Mass1,
+        Current1,
+        Temperature1,
+        Substance1,
+        Intensity1
+    >;
+
+    /// Multiplicate result implementation.
+    using MulImplType = StaticImpl<
+        Length1         + Length2,
+        Time1           + Time2,
+        Mass1           + Mass2,
+        Current1        + Current2,
+        Temperature1    + Temperature2,
+        Substance1      + Substance2,
+        Intensity1      + Intensity2
+    >;
+
+    /// Divide result implementation.
+    using DivImplType = StaticImpl<
+        Length1         - Length2,
+        Time1           - Time2,
+        Mass1           - Mass2,
+        Current1        - Current2,
+        Temperature1    - Temperature2,
+        Substance1      - Substance2,
+        Intensity1      - Intensity2
+    >;
+
+};
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Implementations inverter.
+ *
+ * @tparam     Impl  The implementation.
+ */
+template<typename Impl>
+struct ImplInverter
+{
+    using ImplType = Impl;
+};
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Implementations inverter.
+ *
+ * @tparam     Length       Number of length units.
+ * @tparam     Time         Number of time units.
+ * @tparam     Mass         Number of mass units.
+ * @tparam     Current      Number of electrical current units.
+ * @tparam     Temperature  Number of temperature units.
+ * @tparam     Substance    Number of amount of substance units.
+ * @tparam     Intensity    Number of intensity units.
+ */
+template<
+    int Length,
+    int Time,
+    int Mass,
+    int Current,
+    int Temperature,
+    int Substance,
+    int Intensity
+>
+struct ImplInverter<StaticImpl<
+    Length,
+    Time,
+    Mass,
+    Current,
+    Temperature,
+    Substance,
+    Intensity
+>>
+{
+    using ImplType = StaticImpl<
+        -Length,
+        -Time,
+        -Mass,
+        -Current,
+        -Temperature,
+        -Substance,
+        -Intensity
+    >;
+};
+
+/* ************************************************************************ */
+
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief      SI Unit.
+ *
+ * @tparam     Impl  Unit implementation: `StaticImpl` or `DynamicImpl`.
+ */
+template<typename Impl>
+class UnitBase
+{
+    template<class T> friend class UnitBase;
+
+// Public Ctors & Dtors
+public:
+
+
+    /**
+     * @brief      Default constructor.
+     */
+    constexpr UnitBase() noexcept
+        : m_impl{}
+    {
+        // Nothing to do
+    }
+
+
+    /**
+     * @brief      Constructor.
+     *
+     * @param[in]  impl  The implementation.
+     */
+    constexpr UnitBase(Impl impl) noexcept
+        : m_impl{impl}
+    {
+        // Nothing to do
+    }
+
+
+    /**
+     * @brief      Constructor.
+     *
+     * @param      value  Init value.
+     */
+    template<typename I = Impl,
+        typename std::enable_if<
+            std::is_same<I, StaticImpl<0, 0, 0, 0, 0, 0, 0>>::value ||
+            std::is_same<I, DynamicImpl>::value,
+        int>::type = 0
+    >
+    constexpr UnitBase(ValueType value) noexcept
+        : m_impl{value}
+    {
+        // Nothing to do
+    }
+
+
+    /**
+     * @brief      Constructor.
+     *
+     * @param      value  Init value.
+     */
+    template<typename I = Impl,
+        typename std::enable_if<!(
+            std::is_same<I, StaticImpl<0, 0, 0, 0, 0, 0, 0>>::value ||
+            std::is_same<I, DynamicImpl>::value),
+        int>::type = 0
+    >
+    explicit constexpr UnitBase(ValueType value) noexcept
+        : m_impl{value}
+    {
+        // Nothing to do
+    }
+
+
+    /**
+     * @brief      Zero constructor.
+     */
+    constexpr UnitBase(math::Zero_t) noexcept
+        : m_impl{}
+    {
+        // Nothing to do
+    }
+
+
+    /**
+     * @brief      Constructor.
+     *
+     * @param[in]  unit   The unit.
+     *
+     * @tparam     Impl2  The second unit implementation.
+     */
+    template<typename Impl2>
+    UnitBase(const UnitBase<Impl2>& unit)
+        : m_impl(unit.m_impl)
     {
         // Nothing to do
     }
@@ -596,101 +598,127 @@ public:
 
 
     /**
-     * @brief If value is set operator.
+     * @brief      Assignment operator.
      *
-     * @return
+     * @param[in]  unit   The unit.
+     *
+     * @tparam     Impl2  The second unit implementation.
+     */
+    template<typename Impl2>
+    UnitBase& operator=(const UnitBase<Impl2>& unit)
+    {
+        m_impl = unit.m_impl;
+        return *this;
+    }
+
+
+    /**
+     * @brief      If value is set operator.
      */
     explicit operator bool() const noexcept
     {
-        return m_value != 0;
+        return get() != ValueType(0.0);
     }
 
 
     /**
-     * @brief Cast to value type.
-     *
-     * @return
+     * @brief      Cast to value type.
      */
-    explicit operator Value() const noexcept
+    template<typename I = Impl,
+        typename std::enable_if<std::is_same<I, StaticImpl<0, 0, 0, 0, 0, 0, 0>>::value, int>::type = 0
+    >
+    operator ValueType() const noexcept
     {
-        return m_value;
+        return get();
     }
 
 
     /**
-     * @brief Unary plus operator.
-     *
-     * @return New value.
+     * @brief      Cast to value type.
      */
-    Unit operator+() const noexcept
+    template<typename I = Impl,
+        typename std::enable_if<!std::is_same<I, StaticImpl<0, 0, 0, 0, 0, 0, 0>>::value, int>::type = 0
+    >
+    explicit operator ValueType() const noexcept
     {
-        return Unit(m_value);
+        return get();
     }
 
 
     /**
-     * @brief Unary minus operator.
+     * @brief      Unary plus operator.
      *
-     * @return New value.
+     * @return     New value.
      */
-    Unit operator-() const noexcept
+    UnitBase operator+() const noexcept
     {
-        return Unit(-m_value);
+        return UnitBase(m_impl.value);
     }
 
 
     /**
-     * @brief Addition operator.
+     * @brief      Unary minus operator.
      *
-     * @param rhs
-     *
-     * @return *this.
+     * @return     New value.
      */
-    Unit& operator+=(Unit rhs) noexcept
+    UnitBase operator-() const noexcept
     {
-        m_value += rhs.m_value;
+        return UnitBase(-m_impl.value);
+    }
+
+
+    /**
+     * @brief      Addition operator.
+     *
+     * @param      rhs   The right hand side.
+     *
+     * @return     *this.
+     */
+    UnitBase& operator+=(UnitBase rhs) noexcept
+    {
+        m_impl.value += rhs.m_impl.value;
         return *this;
     }
 
 
     /**
-     * @brief Substraction operator.
+     * @brief      Substraction operator.
      *
-     * @param rhs Right operand.
+     * @param      rhs   The right hand side.
      *
-     * @return *this.
+     * @return     *this.
      */
-    Unit& operator-=(Unit rhs) noexcept
+    UnitBase& operator-=(UnitBase rhs) noexcept
     {
-        m_value -= rhs.m_value;
+        m_impl.value -= rhs.m_impl.value;
         return *this;
     }
 
 
     /**
-     * @brief Multiplication operator.
+     * @brief      Multiplication operator.
      *
-     * @param rhs Right operand.
+     * @param      rhs   The right hand side.
      *
-     * @return *this.
+     * @return     *this.
      */
-    Unit& operator*=(value_type rhs) noexcept
+    UnitBase& operator*=(ValueType rhs) noexcept
     {
-        m_value *= rhs;
+        m_impl.value *= rhs;
         return *this;
     }
 
 
     /**
-     * @brief Division operator.
+     * @brief      Division operator.
      *
-     * @param rhs Right operand.
+     * @param      rhs   The right hand side.
      *
-     * @return *this.
+     * @return     *this.
      */
-    Unit& operator/=(value_type rhs) noexcept
+    UnitBase& operator/=(ValueType rhs) noexcept
     {
-        m_value /= rhs;
+        m_impl.value /= rhs;
         return *this;
     }
 
@@ -700,267 +728,200 @@ public:
 
 
     /**
-     * @brief Returns current value.
+     * @brief      Returns underlying value.
      *
-     * @return
+     * @return     The underlying value.
      */
-    constexpr value_type value() const noexcept
+    constexpr ValueType get() const noexcept
     {
-        return m_value;
+        return m_impl.value;
+    }
+
+
+    /**
+     * @brief      Returns underlying value.
+     *
+     * @return     The underlying value.
+     *
+     * @deprecated
+     */
+    constexpr ValueType value() const noexcept
+    {
+        return get();
     }
 
 
 // Private Data Members
 private:
 
-    /// Stored value.
-    value_type m_value;
+    /// Unit implementation.
+    Impl m_impl;
 
 };
 
 /* ************************************************************************ */
 
 /**
- * @brief Reduce empty lists.
+ * @brief      Default unit is dynamic.
  */
-template<typename Nominators, typename Denominators>
-struct ReduceEmpty
+using Unit = UnitBase<DynamicImpl>;
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Sum index values.
+ *
+ * @tparam     Values  The values to sum.
+ */
+template<int... Values>
+struct ComposeSum;
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Sum index values.
+ *
+ * @tparam     Value   The first value.
+ * @tparam     Values  The remaining values.
+ */
+template<int Value, int... Values>
+struct ComposeSum<Value, Values...>
 {
-    /// Result unit type.
-    using type = Unit<Nominators, Denominators>;
+    /// Result sum value
+    static constexpr int value = Value + ComposeSum<Values...>::value;
 };
 
 /* ************************************************************************ */
 
 /**
- * @brief Reduce empty lists.
+ * @brief      Sum index values.
+ *
+ * @tparam     Value   The last value.
  */
-template<>
-struct ReduceEmpty<List<>, List<>>
+template<int Value>
+struct ComposeSum<Value>
 {
-    /// Result unit type.
-    using type = Value;
+    /// Result sum value
+    static constexpr int value = Value;
 };
 
 /* ************************************************************************ */
 
 /**
- * @brief Value filter.
+ * @brief      Compose unit types.
  *
- * @tparam T     Type to filter.
- * @tparam neg   Negate less.
- * @tparam Types Types.
+ * @tparam     Impls  Implementations.
  */
-template<typename T, bool neg, typename Types>
-struct Filter;
+template<typename... Impls>
+struct Compose;
 
 /* ************************************************************************ */
 
 /**
- * @brief Value filter.
+ * @brief      Compose unit types.
  *
- * @tparam T     Type to filter.
- * @tparam neg   Negate less.
- * @tparam Type  First type.
- * @tparam Types Types.
+ * @tparam     Lengths       A list of lengths.
+ * @tparam     Times         A list of times.
+ * @tparam     Masses        A list of masses.
+ * @tparam     Currents      A list of currents.
+ * @tparam     Temperatures  A list of temperatures.
+ * @tparam     Substances    A list of substances.
+ * @tparam     Intensities   A list of intensities.
  */
-template<typename T, bool neg, typename Type, typename... Types>
-struct Filter<T, neg, List<Type, Types...>>
+template<
+    int... Lengths,
+    int... Times,
+    int... Masses,
+    int... Currents,
+    int... Temperatures,
+    int... Substances,
+    int... Intensities
+>
+struct Compose<UnitBase<StaticImpl<Lengths, Times, Masses, Currents, Temperatures, Substances, Intensities>>...>
 {
-    // List without the first type.
-    using tail = typename Filter<T, neg, List<Types...>>::type;
-
-    using type = typename std::conditional<
-        neg ^ Less<T, Type>::value,
-        typename Concat<List<Type>, tail>::type,
-        tail
-    >::type;
+    using type = UnitBase<StaticImpl<
+        ComposeSum<Lengths...>::value,
+        ComposeSum<Times...>::value,
+        ComposeSum<Masses...>::value,
+        ComposeSum<Currents...>::value,
+        ComposeSum<Temperatures...>::value,
+        ComposeSum<Substances...>::value,
+        ComposeSum<Intensities...>::value
+    >>;
 };
 
 /* ************************************************************************ */
 
 /**
- * @brief Value filter.
+ * @brief      Equal operator.
  *
- * @tparam T     Type to filter.
- * @tparam neg   Negate less.
+ * @param      lhs    Left operand.
+ * @param      rhs    Right operand.
+ *
+ * @tparam     Impl1  The first unit implementation.
+ * @tparam     Impl2  The second unit implementation.
+ *
+ * @return     Result value.
  */
-template<typename T, bool neg>
-struct Filter<T, neg, List<>>
+template<typename Impl1, typename Impl2>
+inline constexpr bool operator==(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept
 {
-    using type = List<>;
-};
+    static_assert(detail::ImplHelper<Impl1, Impl2>::isRelSupported, "Can't compare those units");
 
-/* ************************************************************************ */
-
-/**
- * @brief List sorting structure.
- *
- * @tparam Types Types.
- */
-template<typename Types>
-struct Sort;
-
-/* ************************************************************************ */
-
-/**
- * @brief List sorting structure.
- *
- * @tparam Type  First type.
- * @tparam Types A list of types.
- */
-template<typename Type, typename... Types>
-struct Sort<List<Type, Types...>>
-{
-    using front = typename Filter<Type, true, List<Types...>>::type;
-    using tail = typename Filter<Type, false, List<Types...>>::type;
-
-    // Sorted list.
-    using type = typename Concat<front, List<Type>, tail>::type;
-};
-
-/* ************************************************************************ */
-
-/**
- * @brief List sorting structure.
- *
- * @tparam Type Type.
- */
-template<typename Type>
-struct Sort<List<Type>>
-{
-    using type = List<Type>;
-};
-
-/* ************************************************************************ */
-
-/**
- * @brief List sorting structure.
- */
-template<>
-struct Sort<List<>>
-{
-    using type = List<>;
-};
-
-/* ************************************************************************ */
-
-/**
- * @brief Helper class to reduce units.
- *
- * @tparam Nom   Nominators.
- * @tparam Denom Denominators.
- */
-template<typename Nom, typename Denom>
-struct Reduce;
-
-/* ************************************************************************ */
-
-/**
- * @brief Helper class to simplify units.
- *
- * Type removes shared types in nominator and denominator.
- *
- * @tparam Nom          First nominator.
- * @tparam Nominators   List types.
- * @tparam Denominators List types.
- */
-template<typename... Nominators, typename... Denominators>
-struct Reduce<List<Nominators...>, List<Denominators...>>
-{
-    // Inner reduce
-    using inner = ReduceInner<List<Nominators...>, List<Denominators...>>;
-
-    /// Result unit type.
-    using type = typename ReduceEmpty<
-        typename Sort<typename inner::nominators>::type,
-        typename Sort<typename inner::denominators>::type
-    >::type;
-};
-
-/* ************************************************************************ */
-
-/**
- * @brief Compare operator.
- *
- * @tparam Nominators   A list of nominators.
- * @tparam Denominators A list of denominators.
- *
- * @param lhs Left operand.
- * @param rhs Right operand.
- *
- * @return Result value.
- */
-template<typename... Nominators, typename... Denominators>
-inline constexpr bool operator==(
-    Unit<List<Nominators...>, List<Denominators...>> lhs,
-    Unit<List<Nominators...>, List<Denominators...>> rhs
-) noexcept
-{
-    return std::abs(lhs.value() - rhs.value()) < std::numeric_limits<Value>::epsilon();
-    //return lhs.value() == rhs.value();
+    return std::abs(lhs.get() - rhs.get()) < std::numeric_limits<ValueType>::epsilon();
 }
 
 /* ************************************************************************ */
 
 /**
- * @brief Compare operator.
+ * @brief      Equal operator.
  *
- * @tparam Nominators   A list of nominators.
- * @tparam Denominators A list of denominators.
+ * @param      lhs    Left operand.
+ * @param      rhs    Right operand.
  *
- * @param lhs Left operand.
- * @param rhs Right operand.
+ * @tparam     Impl1  The first unit implementation.
  *
- * @return Result value.
+ * @return     Result value.
  */
-template<typename... Nominators, typename... Denominators>
-inline constexpr bool operator==(
-    Unit<List<Nominators...>, List<Denominators...>> lhs, math::Zero_t rhs
-) noexcept
+template<typename Impl1>
+inline constexpr bool operator==(const UnitBase<Impl1>& lhs, math::Zero_t rhs) noexcept
 {
-    return lhs == Unit<List<Nominators...>, List<Denominators...>>(math::Zero);
+    return std::abs(lhs.get()) < std::numeric_limits<ValueType>::epsilon();
 }
 
 /* ************************************************************************ */
 
 /**
- * @brief Compare operator.
+ * @brief      Equal operator.
  *
- * @tparam Nominators   A list of nominators.
- * @tparam Denominators A list of denominators.
+ * @param      lhs    Left operand.
+ * @param      rhs    Right operand.
  *
- * @param lhs Left operand.
- * @param rhs Right operand.
+ * @tparam     Impl2  The second unit implementation.
  *
- * @return Result value.
+ * @return     Result value.
  */
-template<typename... Nominators, typename... Denominators>
-inline constexpr bool operator==(
-    math::Zero_t lhs, Unit<List<Nominators...>, List<Denominators...>> rhs
-) noexcept
+template<typename Impl2>
+inline constexpr bool operator==(math::Zero_t lhs, const UnitBase<Impl2>& rhs) noexcept
 {
-    return Unit<List<Nominators...>, List<Denominators...>>(math::Zero) == rhs;
+    return std::abs(rhs.get()) < std::numeric_limits<ValueType>::epsilon();
 }
 
 /* ************************************************************************ */
 
 /**
- * @brief Compare operator.
+ * @brief      Not equal operator.
  *
- * @tparam Nominators   A list of nominators.
- * @tparam Denominators A list of denominators.
+ * @param      lhs    Left operand.
+ * @param      rhs    Right operand.
  *
- * @param lhs Left operand.
- * @param rhs Right operand.
+ * @tparam     Impl1  The first unit implementation.
+ * @tparam     Impl2  The second unit implementation.
  *
- * @return Result value.
+ * @return     Result value.
  */
-template<typename... Nominators, typename... Denominators>
-inline constexpr bool operator!=(
-    Unit<List<Nominators...>, List<Denominators...>> lhs,
-    Unit<List<Nominators...>, List<Denominators...>> rhs
-) noexcept
+template<typename Impl1, typename Impl2>
+inline constexpr bool operator!=(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept
 {
     return !operator==(lhs, rhs);
 }
@@ -968,20 +929,17 @@ inline constexpr bool operator!=(
 /* ************************************************************************ */
 
 /**
- * @brief Compare operator.
+ * @brief      Not equal operator.
  *
- * @tparam Nominators   A list of nominators.
- * @tparam Denominators A list of denominators.
+ * @param      lhs    Left operand.
+ * @param      rhs    Right operand.
  *
- * @param lhs Left operand.
- * @param rhs Right operand.
+ * @tparam     Impl1  The first unit implementation.
  *
- * @return Result value.
+ * @return     Result value.
  */
-template<typename... Nominators, typename... Denominators>
-inline constexpr bool operator!=(
-    Unit<List<Nominators...>, List<Denominators...>> lhs, math::Zero_t rhs
-) noexcept
+template<typename Impl1>
+inline constexpr bool operator!=(const UnitBase<Impl1>& lhs, math::Zero_t rhs) noexcept
 {
     return !operator==(lhs, rhs);
 }
@@ -989,20 +947,17 @@ inline constexpr bool operator!=(
 /* ************************************************************************ */
 
 /**
- * @brief Compare operator.
+ * @brief      Not equal operator.
  *
- * @tparam Nominators   A list of nominators.
- * @tparam Denominators A list of denominators.
+ * @param      lhs    Left operand.
+ * @param      rhs    Right operand.
  *
- * @param lhs Left operand.
- * @param rhs Right operand.
+ * @tparam     Impl2  The second unit implementation.
  *
- * @return Result value.
+ * @return     Result value.
  */
-template<typename... Nominators, typename... Denominators>
-inline constexpr bool operator!=(
-    math::Zero_t lhs, Unit<List<Nominators...>, List<Denominators...>> rhs
-) noexcept
+template<typename Impl2>
+inline constexpr bool operator!=(math::Zero_t lhs, const UnitBase<Impl2>& rhs) noexcept
 {
     return !operator==(lhs, rhs);
 }
@@ -1010,85 +965,75 @@ inline constexpr bool operator!=(
 /* ************************************************************************ */
 
 /**
- * @brief Less operator.
+ * @brief      Less than operator.
  *
- * @tparam Nominators   A list of nominators.
- * @tparam Denominators A list of denominators.
+ * @param      lhs    Left operand.
+ * @param      rhs    Right operand.
  *
- * @param lhs Left operand.
- * @param rhs Right operand.
+ * @tparam     Impl1  The first unit implementation.
+ * @tparam     Impl2  The second unit implementation.
  *
- * @return Result value.
+ * @return     Result value.
  */
-template<typename... Nominators, typename... Denominators>
-inline constexpr bool operator<(
-    Unit<List<Nominators...>, List<Denominators...>> lhs,
-    Unit<List<Nominators...>, List<Denominators...>> rhs
-) noexcept
+template<typename Impl1, typename Impl2>
+inline constexpr bool operator<(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept
 {
-    return lhs.value() < rhs.value();
+    static_assert(detail::ImplHelper<Impl1, Impl2>::isRelSupported, "Can't compare those units");
+
+    return lhs.get() < rhs.get();
 }
 
 /* ************************************************************************ */
 
 /**
- * @brief Less operator.
+ * @brief      Less than operator.
  *
- * @tparam Nominators   A list of nominators.
- * @tparam Denominators A list of denominators.
+ * @param      lhs    Left operand.
+ * @param      rhs    Right operand.
  *
- * @param lhs Left operand.
- * @param rhs Zero.
+ * @tparam     Impl1  The first unit implementation.
  *
- * @return Result value.
+ * @return     Result value.
  */
-template<typename... Nominators, typename... Denominators>
-inline constexpr bool operator<(
-    Unit<List<Nominators...>, List<Denominators...>> lhs, math::Zero_t
-) noexcept
+template<typename Impl1>
+inline constexpr bool operator<(const UnitBase<Impl1>& lhs, math::Zero_t rhs) noexcept
 {
-    return lhs.value() < 0;
+    return lhs.get() < 0;
 }
 
 /* ************************************************************************ */
 
 /**
- * @brief Less operator.
+ * @brief      Less than operator.
  *
- * @tparam Nominators   A list of nominators.
- * @tparam Denominators A list of denominators.
+ * @param      lhs    Left operand.
+ * @param      rhs    Right operand.
  *
- * @param lhs Zero.
- * @param rhs Right operand.
+ * @tparam     Impl2  The second unit implementation.
  *
- * @return Result value.
+ * @return     Result value.
  */
-template<typename... Nominators, typename... Denominators>
-inline constexpr bool operator<(
-    math::Zero_t, Unit<List<Nominators...>, List<Denominators...>> rhs
-) noexcept
+template<typename Impl2>
+inline constexpr bool operator<(math::Zero_t lhs, const UnitBase<Impl2>& rhs) noexcept
 {
-    return 0 < rhs.value();
+    return 0 < rhs.get();
 }
 
 /* ************************************************************************ */
 
 /**
- * @brief Less equals operator.
+ * @brief      Less equals operator.
  *
- * @tparam Nominators   A list of nominators.
- * @tparam Denominators A list of denominators.
+ * @param      lhs    Left operand.
+ * @param      rhs    Right operand.
  *
- * @param lhs Left operand.
- * @param rhs Right operand.
+ * @tparam     Impl1  The first unit implementation.
+ * @tparam     Impl2  The second unit implementation.
  *
- * @return Result value.
+ * @return     Result value.
  */
-template<typename... Nominators, typename... Denominators>
-inline constexpr bool operator<=(
-    Unit<List<Nominators...>, List<Denominators...>> lhs,
-    Unit<List<Nominators...>, List<Denominators...>> rhs
-) noexcept
+template<typename Impl1, typename Impl2>
+inline constexpr bool operator<=(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept
 {
     return !operator>(lhs, rhs);
 }
@@ -1096,63 +1041,54 @@ inline constexpr bool operator<=(
 /* ************************************************************************ */
 
 /**
- * @brief Less equals operator.
+ * @brief      Less equals operator.
  *
- * @tparam Nominators   A list of nominators.
- * @tparam Denominators A list of denominators.
+ * @param      lhs    Left operand.
+ * @param      rhs    Right operand.
  *
- * @param lhs Left operand.
- * @param rhs Zero.
+ * @tparam     Impl1  The first unit implementation.
  *
- * @return Result value.
+ * @return     Result value.
  */
-template<typename... Nominators, typename... Denominators>
-inline constexpr bool operator<=(
-    Unit<List<Nominators...>, List<Denominators...>> lhs, math::Zero_t
-) noexcept
+template<typename Impl1>
+inline constexpr bool operator<=(const UnitBase<Impl1>& lhs, math::Zero_t rhs) noexcept
 {
-    return !operator>(lhs, math::Zero);
+    return !operator>(lhs, rhs);
 }
 
 /* ************************************************************************ */
 
 /**
- * @brief Less equals operator.
+ * @brief      Less equals operator.
  *
- * @tparam Nominators   A list of nominators.
- * @tparam Denominators A list of denominators.
+ * @param      lhs    Left operand.
+ * @param      rhs    Right operand.
  *
- * @param lhs Zero.
- * @param rhs Right operand.
+ * @tparam     Impl2  The second unit implementation.
  *
- * @return Result value.
+ * @return     Result value.
  */
-template<typename... Nominators, typename... Denominators>
-inline constexpr bool operator<=(
-    math::Zero_t, Unit<List<Nominators...>, List<Denominators...>> rhs
-) noexcept
+template<typename Impl2>
+inline constexpr bool operator<=(math::Zero_t lhs, const UnitBase<Impl2>& rhs) noexcept
 {
-    return !operator>(math::Zero, rhs);
+    return !operator>(lhs, rhs);
 }
 
 /* ************************************************************************ */
 
 /**
- * @brief Greater operator.
+ * @brief      Greater operator.
  *
- * @tparam Nominators   A list of nominators.
- * @tparam Denominators A list of denominators.
+ * @param      rhs    Right operand.
+ * @param      lhs    Left operand.
  *
- * @param lhs Left operand.
- * @param rhs Right operand.
+ * @tparam     Impl1  The first unit implementation.
+ * @tparam     Impl2  The second unit implementation.
  *
- * @return Result value.
+ * @return     Result value.
  */
-template<typename... Nominators, typename... Denominators>
-inline constexpr bool operator>(
-    Unit<List<Nominators...>, List<Denominators...>> lhs,
-    Unit<List<Nominators...>, List<Denominators...>> rhs
-) noexcept
+template<typename Impl1, typename Impl2>
+inline constexpr bool operator>(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept
 {
     return operator<(rhs, lhs);
 }
@@ -1160,63 +1096,54 @@ inline constexpr bool operator>(
 /* ************************************************************************ */
 
 /**
- * @brief Greater operator.
+ * @brief      Greater operator.
  *
- * @tparam Nominators   A list of nominators.
- * @tparam Denominators A list of denominators.
+ * @param      rhs    Right operand.
+ * @param      lhs    Left operand.
  *
- * @param lhs Left operand.
- * @param rhs Zero.
+ * @tparam     Impl1  The first unit implementation.
  *
- * @return Result value.
+ * @return     Result value.
  */
-template<typename... Nominators, typename... Denominators>
-inline constexpr bool operator>(
-    Unit<List<Nominators...>, List<Denominators...>> lhs, math::Zero_t
-) noexcept
+template<typename Impl1>
+inline constexpr bool operator>(const UnitBase<Impl1>& lhs, math::Zero_t rhs) noexcept
 {
-    return operator<(math::Zero, lhs);
+    return operator<(rhs, lhs);
 }
 
 /* ************************************************************************ */
 
 /**
- * @brief Greater operator.
+ * @brief      Greater operator.
  *
- * @tparam Nominators   A list of nominators.
- * @tparam Denominators A list of denominators.
+ * @param      rhs    Right operand.
+ * @param      lhs    Left operand.
  *
- * @param lhs Zero.
- * @param rhs Right operand.
+ * @tparam     Impl2  The second unit implementation.
  *
- * @return Result value.
+ * @return     Result value.
  */
-template<typename... Nominators, typename... Denominators>
-inline constexpr bool operator>(
-    math::Zero_t, Unit<List<Nominators...>, List<Denominators...>> rhs
-) noexcept
+template<typename Impl2>
+inline constexpr bool operator>(math::Zero_t lhs, const UnitBase<Impl2>& rhs) noexcept
 {
-    return operator<(rhs, math::Zero);
+    return operator<(rhs, lhs);
 }
 
 /* ************************************************************************ */
 
 /**
- * @brief Greater equals operator.
+ * @brief      Greater equals operator.
  *
- * @tparam Nominators   A list of nominators.
- * @tparam Denominators A list of denominators.
+ * @param      lhs    Left operand.
+ * @param      rhs    Right operand.
  *
- * @param lhs Left operand.
- * @param rhs Right operand.
+ * @tparam     Impl1  The first unit implementation.
+ * @tparam     Impl2  The second unit implementation.
  *
- * @return Result value.
+ * @return     Result value.
  */
-template<typename... Nominators, typename... Denominators>
-inline constexpr bool operator>=(
-    Unit<List<Nominators...>, List<Denominators...>> lhs,
-    Unit<List<Nominators...>, List<Denominators...>> rhs
-) noexcept
+template<typename Impl1, typename Impl2>
+inline constexpr bool operator>=(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept
 {
     return !operator<(lhs, rhs);
 }
@@ -1224,109 +1151,123 @@ inline constexpr bool operator>=(
 /* ************************************************************************ */
 
 /**
- * @brief Greater equals operator.
+ * @brief      Greater equals operator.
  *
- * @tparam Nominators   A list of nominators.
- * @tparam Denominators A list of denominators.
+ * @param      lhs    Left operand.
+ * @param      rhs    Right operand.
  *
- * @param lhs Left operand.
- * @param rhs Zero.
+ * @tparam     Impl1  The first unit implementation.
  *
- * @return Result value.
+ * @return     Result value.
  */
-template<typename... Nominators, typename... Denominators>
-inline constexpr bool operator>=(
-    Unit<List<Nominators...>, List<Denominators...>> lhs, math::Zero_t
-) noexcept
+template<typename Impl1>
+inline constexpr bool operator>=(const UnitBase<Impl1>& lhs, math::Zero_t rhs) noexcept
 {
-    return !operator<(lhs, math::Zero);
+    return !operator<(lhs, rhs);
 }
 
 /* ************************************************************************ */
 
 /**
- * @brief Greater equals operator.
+ * @brief      Greater equals operator.
  *
- * @tparam Nominators   A list of nominators.
- * @tparam Denominators A list of denominators.
+ * @param      lhs    Left operand.
+ * @param      rhs    Right operand.
  *
- * @param lhs Zero.
- * @param rhs Right operand.
+ * @tparam     Impl2  The second unit implementation.
  *
- * @return Result value.
+ * @return     Result value.
  */
-template<typename... Nominators, typename... Denominators>
-inline constexpr bool operator>=(
-    math::Zero_t, Unit<List<Nominators...>, List<Denominators...>> rhs
-) noexcept
+template<typename Impl2>
+inline constexpr bool operator>=(math::Zero_t lhs, const UnitBase<Impl2>& rhs) noexcept
 {
-    return !operator<(math::Zero, rhs);
+    return !operator<(lhs, rhs);
 }
 
 /* ************************************************************************ */
 
 /**
- * @brief Addition operator.
+ * @brief      Addition operator.
  *
- * @tparam Nominators   A list of nominators.
- * @tparam Denominators A list of denominators.
+ * @param      lhs    Left operand.
+ * @param      rhs    Right operand.
  *
- * @param lhs Left operand.
- * @param rhs Right operand.
+ * @tparam     Impl1  The first unit implementation.
+ * @tparam     Impl2  The second unit implementation.
  *
- * @return Result value.
+ * @return     Result value.
  */
-template<typename... Nominators, typename... Denominators>
-inline constexpr
-Unit<List<Nominators...>, List<Denominators...>> operator+(
-    Unit<List<Nominators...>, List<Denominators...>> lhs,
-    Unit<List<Nominators...>, List<Denominators...>> rhs
-) noexcept
+template<typename Impl1, typename Impl2>
+inline constexpr auto operator+(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept
+    -> UnitBase<typename detail::ImplHelper<Impl1, Impl2>::AddImplType>
 {
-    return lhs += rhs;
+    static_assert(detail::ImplHelper<Impl1, Impl2>::isAddSupported, "Can't add those units");
+
+    return UnitBase<typename detail::ImplHelper<Impl1, Impl2>::AddImplType>(
+        lhs.get() + rhs.get()
+    );
 }
 
 /* ************************************************************************ */
 
 /**
- * @brief Substraction operator.
+ * @brief      Substraction operator.
  *
- * @tparam Nominators   A list of nominators.
- * @tparam Denominators A list of denominators.
+ * @param      lhs    Left operand.
+ * @param      rhs    Right operand.
  *
- * @param lhs Left operand.
- * @param rhs Right operand.
+ * @tparam     Impl1  The first unit implementation.
+ * @tparam     Impl2  The second unit implementation.
  *
- * @return Result value.
+ * @return     Result value.
  */
-template<typename... Nominators, typename... Denominators>
-inline constexpr
-Unit<List<Nominators...>, List<Denominators...>> operator-(
-    Unit<List<Nominators...>, List<Denominators...>> lhs,
-    Unit<List<Nominators...>, List<Denominators...>> rhs
-) noexcept
+template<typename Impl1, typename Impl2>
+inline constexpr auto operator-(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept
+    -> UnitBase<typename detail::ImplHelper<Impl1, Impl2>::SubImplType>
 {
-    return lhs -= rhs;
+    static_assert(detail::ImplHelper<Impl1, Impl2>::isSubSupported, "Can't subtract those units");
+
+    return UnitBase<typename detail::ImplHelper<Impl1, Impl2>::SubImplType>(
+        lhs.get() - rhs.get()
+    );
 }
 
 /* ************************************************************************ */
 
 /**
- * @brief Multiplication operator.
+ * @brief      Multiplication operator.
  *
- * @tparam Nominators   A list of nominators.
- * @tparam Denominators A list of denominators.
+ * @param      lhs    Left operand.
+ * @param      rhs    Right operand.
  *
- * @param lhs Left operand.
- * @param rhs Right operand.
+ * @tparam     Impl1  The first unit implementation.
+ * @tparam     Impl2  The second unit implementation.
  *
- * @return Result value.
+ * @return     Result value.
  */
-template<typename... Nominators, typename... Denominators>
-inline constexpr
-Unit<List<Nominators...>, List<Denominators...>> operator*(
-    Unit<List<Nominators...>, List<Denominators...>> lhs,
-    typename Unit<List<Nominators...>, List<Denominators...>>::value_type rhs) noexcept
+template<typename Impl1, typename Impl2>
+inline constexpr auto operator*(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept
+    -> UnitBase<typename detail::ImplHelper<Impl1, Impl2>::MulImplType>
+{
+    return UnitBase<typename detail::ImplHelper<Impl1, Impl2>::MulImplType>(
+        lhs.get() * rhs.get()
+    );
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Multiplication operator.
+ *
+ * @param      lhs    Left operand.
+ * @param      rhs    Right operand.
+ *
+ * @tparam     Impl1  The unit implementation.
+ *
+ * @return     Result value.
+ */
+template<typename Impl1>
+inline constexpr UnitBase<Impl1> operator*(UnitBase<Impl1> lhs, RealType rhs) noexcept
 {
     return lhs *= rhs;
 }
@@ -1334,22 +1275,17 @@ Unit<List<Nominators...>, List<Denominators...>> operator*(
 /* ************************************************************************ */
 
 /**
- * @brief Multiplication operator.
+ * @brief      Multiplication operator.
  *
- * @tparam Nominators   A list of nominators.
- * @tparam Denominators A list of denominators.
+ * @param      lhs    Left operand.
+ * @param      rhs    Right operand.
  *
- * @param lhs Left operand.
- * @param rhs Right operand.
+ * @tparam     Impl2  The unit implementation.
  *
- * @return Result value.
+ * @return     Result value.
  */
-template<typename... Nominators, typename... Denominators>
-inline constexpr
-Unit<List<Nominators...>, List<Denominators...>> operator*(
-    typename Unit<List<Nominators...>, List<Denominators...>>::value_type lhs,
-    Unit<List<Nominators...>, List<Denominators...>> rhs
-) noexcept
+template<typename Impl2>
+inline constexpr UnitBase<Impl2> operator*(RealType lhs, UnitBase<Impl2> rhs) noexcept
 {
     return rhs *= lhs;
 }
@@ -1357,49 +1293,39 @@ Unit<List<Nominators...>, List<Denominators...>> operator*(
 /* ************************************************************************ */
 
 /**
- * @brief Multiplication operator.
+ * @brief      Division operator.
  *
- * @tparam Nominators1   A list of nominators.
- * @tparam Denominators1 A list of denominators.
- * @tparam Nominators2   A list of nominators.
- * @tparam Denominators2 A list of denominators.
+ * @param      lhs    Left operand.
+ * @param      rhs    Right operand.
  *
- * @param lhs Left operand.
- * @param rhs Right operand.
+ * @tparam     Impl1  The first unit implementation.
+ * @tparam     Impl2  The second unit implementation.
  *
- * @return Result value.
+ * @return     Result value.
  */
-template<typename... Nominators1, typename... Denominators1, typename... Nominators2, typename... Denominators2>
-inline constexpr
-typename Reduce<List<Nominators1..., Nominators2...>, List<Denominators1..., Denominators2...>>::type operator*(
-    Unit<List<Nominators1...>, List<Denominators1...>> lhs,
-    Unit<List<Nominators2...>, List<Denominators2...>> rhs
-) noexcept
+template<typename Impl1, typename Impl2>
+inline constexpr auto operator/(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept
+    -> UnitBase<typename detail::ImplHelper<Impl1, Impl2>::DivImplType>
 {
-    return typename Reduce<List<Nominators1..., Nominators2...>, List<Denominators1..., Denominators2...>>::type{
-        lhs.value() * rhs.value()
-    };
+    return UnitBase<typename detail::ImplHelper<Impl1, Impl2>::DivImplType>(
+        lhs.get() / rhs.get()
+    );
 }
 
 /* ************************************************************************ */
 
 /**
- * @brief Dividing operator.
+ * @brief      Division operator.
  *
- * @tparam Nominators   A list of nominators.
- * @tparam Denominators A list of denominators.
+ * @param      lhs    Left operand.
+ * @param      rhs    Right operand.
  *
- * @param lhs Left operand.
- * @param rhs Right operand.
+ * @tparam     Impl1  The unit implementation.
  *
- * @return Result value.
+ * @return     Result value.
  */
-template<typename... Nominators, typename... Denominators>
-inline constexpr
-Unit<List<Nominators...>, List<Denominators...>> operator/(
-    Unit<List<Nominators...>, List<Denominators...>> lhs,
-    typename Unit<List<Nominators...>, List<Denominators...>>::value_type rhs
-) noexcept
+template<typename Impl1>
+inline constexpr UnitBase<Impl1> operator/(UnitBase<Impl1> lhs, RealType rhs) noexcept
 {
     return lhs /= rhs;
 }
@@ -1407,196 +1333,20 @@ Unit<List<Nominators...>, List<Denominators...>> operator/(
 /* ************************************************************************ */
 
 /**
- * @brief Dividing operator.
+ * @brief      Division operator.
  *
- * @tparam Nominators   A list of nominators.
- * @tparam Denominators A list of denominators.
+ * @param      lhs    Left operand.
+ * @param      rhs    Right operand.
  *
- * @param lhs Left operand.
- * @param rhs Right operand.
+ * @tparam     Impl2  The unit implementation.
  *
- * @return Result value.
+ * @return     Result value.
  */
-template<typename... Nominators, typename... Denominators>
-inline constexpr
-Unit<List<Denominators...>, List<Nominators...>> operator/(
-    typename Unit<List<Nominators...>, List<Denominators...>>::value_type lhs,
-    Unit<List<Nominators...>, List<Denominators...>> rhs
-) noexcept
+template<typename Impl2>
+inline constexpr auto operator/(RealType lhs, const UnitBase<Impl2>& rhs) noexcept
+    -> UnitBase<typename detail::ImplInverter<Impl2>::ImplType>
 {
-    return Unit<List<Denominators...>, List<Nominators...>>(lhs / rhs.value());
-}
-
-/* ************************************************************************ */
-
-/**
- * @brief Dividing operator.
- *
- * @tparam Nominators1   A list of nominators.
- * @tparam Denominators1 A list of denominators.
- * @tparam Nominators2   A list of nominators.
- * @tparam Denominators2 A list of denominators.
- *
- * @param lhs Left operand.
- * @param rhs Right operand.
- *
- * @return Result value.
- */
-template<typename... Nominators1, typename... Denominators1, typename... Nominators2, typename... Denominators2>
-inline constexpr
-typename Reduce<List<Nominators1..., Denominators2...>, List<Denominators1..., Nominators2...>>::type operator/(
-    Unit<List<Nominators1...>, List<Denominators1...>> lhs,
-    Unit<List<Nominators2...>, List<Denominators2...>> rhs
-) noexcept
-{
-    return typename Reduce<List<Nominators1..., Denominators2...>, List<Denominators1..., Nominators2...>>::type{
-        lhs.value() / rhs.value()
-    };
-}
-
-/* ************************************************************************ */
-
-/**
- * @brief Remove type for Sqrt.
- */
-template<typename Types>
-struct SqrtRemove;
-
-/* ************************************************************************ */
-
-/**
- * @brief Remove type for Sqrt.
- */
-template<>
-struct SqrtRemove<List<>>
-{
-    using type = List<>;
-};
-
-/* ************************************************************************ */
-
-/**
- * @brief Remove type for Sqrt.
- */
-template<typename Type, typename... Types>
-struct SqrtRemove<List<Type, Types...>>
-{
-    using Rem = Remove<Type, List<Types...>>;
-    static_assert(Rem::value, "List is not sqrt");
-
-    using Inner = SqrtRemove<typename Rem::type>;
-
-    using type = typename Concat<List<Type>, typename Inner::type>::type;
-};
-
-/* ************************************************************************ */
-
-/**
- * @brief Square root type.
- *
- * @tparam Nom
- * @tparam Denom
- */
-template<typename Nom, typename Denom>
-struct Sqrt
-{
-    using Nominators = typename SqrtRemove<Nom>::type;
-    using Denominators = typename SqrtRemove<Denom>::type;
-
-    using type = Unit<Nominators, Denominators>;
-};
-
-/* ************************************************************************ */
-
-template<typename... Nominators, typename... Denominators>
-typename Sqrt<List<Nominators...>, List<Denominators...>>::type
-sqrt(const Unit<List<Nominators...>, List<Denominators...>>& value) noexcept
-{
-    return typename Sqrt<List<Nominators...>, List<Denominators...>>::type(
-        std::sqrt(value.value())
-    );
-}
-
-/* ************************************************************************ */
-
-/**
- * @brief Division type - used for change nominator per denominator.
- *
- * @tparam Nom
- * @tparam Denom
- */
-template<typename Nom, typename Denom>
-struct Divide
-{
-    using type = decltype(Nom{} / Denom{});
-};
-
-/* ************************************************************************ */
-
-/**
- * @brief Calculate inverse type (1 / type).
- *
- * @tparam T Unit type.
- */
-template<typename Type>
-struct Inverse;
-
-/* ************************************************************************ */
-
-/**
- * @brief Calculate inverse type (1 / type).
- *
- * @tparam Nominators
- * @tparam Denominators
- */
-template<typename... Nominators, typename... Denominators>
-struct Inverse<Unit<List<Nominators...>, List<Denominators...>>>
-{
-    using type = Unit<List<Denominators...>, List<Nominators...>>;
-};
-
-/* ************************************************************************ */
-
-/**
- * @brief Calculate prefix coefficient exponent.
- *
- * @param c     SI prefix character.
- * @param count Number of first SI base unit after prefix.
- *
- * @return Coefficient exponent.
- */
-int calcPrefixExponent(char c, unsigned int count = 1);
-
-/* ************************************************************************ */
-
-/**
- * @brief Calculate prefix coefficient exponent.
- *
- * @param symbol     SI unit symbol (or list of symbols).
- * @param typeSymbol Required symbol (or list of symbols).
- * @param count      Number of first SI base unit after prefix.
- *
- * @return Coefficient exponent.
- */
-int calcPrefixExponent(const String& symbol, StringView typeSymbol, unsigned int count = 1);
-
-/* ************************************************************************ */
-
-/**
- * @brief Calculate absolute value.
- *
- * @param unit
- */
-template<typename... Nominators, typename... Denominators>
-inline constexpr
-Unit<List<Nominators...>, List<Denominators...>>
-abs(const Unit<List<Nominators...>, List<Denominators...>>& unit)
-{
-    return Unit<List<Nominators...>, List<Denominators...>>(
-        unit.value() > Value(0)
-        ? unit.value()
-        : -unit.value()
-    );
+    return UnitBase<typename detail::ImplInverter<Impl2>::ImplType>(lhs / rhs.get());
 }
 
 /* ************************************************************************ */

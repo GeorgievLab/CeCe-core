@@ -28,10 +28,8 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/String.hpp"
 #include "cece/StringView.hpp"
 #include "cece/unit/Unit.hpp"
-#include "cece/unit/UnitSymbol.hpp"
 #include "cece/io/InStream.hpp"
 #include "cece/io/OutStream.hpp"
 
@@ -43,112 +41,67 @@ namespace unit {
 /* ************************************************************************ */
 
 /**
- * @brief Parse units value.
+ * @brief      Parse units value.
  *
- * This function can handle unit suffix and convert it into proper coefficient.
+ * @param[in]  beg   The string beginning.
+ * @param      end   The string end. After return it can be used as a pointer
+ *                   where the parsing ended.
  *
- * @note Unit prefix is not supported because there is issue with meters:
- * `mg` - it's milligram or metergram?
- *
- * @param is Input stream.
- *
- * @return Result value.
+ * @return     Result value.
  */
-Value parse(io::InStream& is);
+Unit parse(const char* beg, const char*& end);
 
 /* ************************************************************************ */
 
 /**
- * @brief Parse units value.
+ * @brief      Parse units value.
  *
- * This function can handle unit suffix and convert it into proper coefficient.
+ * @details    This function can handle unit suffix and convert it into proper
+ *             coefficient.
  *
- * @note Unit prefix is not supported because there is issue with meters:
- * `mg` - it's milligram or metergram?
+ * @note       Unit prefix is not supported because there is issue with meters:
+ *             `mg` - it's milligram or metergram?
  *
- * @param value Value to parse.
+ * @param      is    Input stream.
  *
- * @return Result value.
+ * @return     Result value.
  */
-Value parse(StringView value);
+Unit parse(io::InStream& is);
 
 /* ************************************************************************ */
 
 /**
- * @brief Input stream operator.
+ * @brief      Parse units value.
  *
- * @param is   Input stream.
- * @param unit Result value.
+ * @details    This function can handle unit suffix and convert it into proper
+ *             coefficient.
  *
- * @return is.
+ * @note       Unit prefix is not supported because there is issue with meters:
+ *             `mg` - it's milligram or metergram?
+ *
+ * @param      value  Value to parse.
+ *
+ * @return     Result value.
  */
-template<typename... Nominators, typename... Denominators>
-io::InStream& operator>>(io::InStream& is, Unit<List<Nominators...>, List<Denominators...>>& unit)
+Unit parse(StringView value);
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Input stream operator.
+ *
+ * @param      is    Input stream.
+ * @param      unit  Result value.
+ *
+ * @tparam     Impl  Unit implementation.
+ *
+ * @return     is.
+ */
+template<typename Impl>
+io::InStream& operator>>(io::InStream& is, UnitBase<Impl>& unit)
 {
-    using Type = Unit<List<Nominators...>, List<Denominators...>>;
-    using SymbolType = Symbol<Type>;
-
-    // Type symbol
-#if _LIBCPP_VERSION || _MSC_VER
-    // MACOSX use old stdlib that doesnt support constexpr std::array.
-    static const auto typeSymbolNom   = SymbolType::nominators::get();
-    static const auto typeSymbolDenom = SymbolType::denominators::get();
-#else
-    static constexpr auto typeSymbolNom   = SymbolType::nominators::get();
-    static constexpr auto typeSymbolDenom = SymbolType::denominators::get();
-#endif
-
-    Value val;
-    String symbol;
-
-    is >> std::ws >> val;
-
-    // Unable to load unit
-    if (!is)
-        return is;
-
-    // No symbol given
-    if (!(is >> std::noskipws >> symbol))
-    {
-        is.clear();
-
-        // Set value
-        unit = Type{val};
-        return is;
-    }
-
-    // Split symbol to two parts
-    const auto sepPos = symbol.find('/');
-
-    String symbolNom;
-    String symbolDenom;
-
-    // Only nominators
-    if (sepPos == String::npos)
-    {
-        symbolNom = symbol;
-    }
-    else
-    {
-        symbolNom = symbol.substr(0, sepPos);
-        symbolDenom = symbol.substr(sepPos + 1);
-    }
-
-    // Get coefficient exponent
-    const int exponent = 0
-        // Base given by type
-        + Type::exponent
-        // Nominators
-        + calcPrefixExponent(symbolNom, typeSymbolNom, Type::firstCountNom)
-        // Denominators
-        - calcPrefixExponent(symbolDenom, typeSymbolDenom, Type::firstCountDenom)
-    ;
-
-    // Value coefficient
-    const Value coefficient = exponentToCoefficient(exponent);
-
-    // Set unit
-    unit = Type(val * coefficient);
+    // Parse unit and convert from dynamic to static
+    unit = parse(is);
 
     return is;
 }
@@ -156,17 +109,19 @@ io::InStream& operator>>(io::InStream& is, Unit<List<Nominators...>, List<Denomi
 /* ************************************************************************ */
 
 /**
- * @brief Output stream operator.
+ * @brief      Output stream operator.
  *
- * @param os   Output stream.
- * @param unit Input value.
+ * @param      os    Output stream.
+ * @param      unit  Input value.
  *
- * @return os.
+ * @tparam     Impl  The unit implementation.
+ *
+ * @return     os.
  */
-template<typename... Nominators, typename... Denominators>
-io::OutStream& operator<<(io::OutStream& os, const Unit<List<Nominators...>, List<Denominators...>>& unit) noexcept
+template<typename Impl>
+io::OutStream& operator<<(io::OutStream& os, const UnitBase<Impl>& unit) noexcept
 {
-    os << unit.value();
+    os << unit.get();
 
     // TODO: write suffix
 

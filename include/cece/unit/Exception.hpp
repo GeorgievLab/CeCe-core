@@ -28,7 +28,7 @@
 /* ************************************************************************ */
 
 // CeCe
-#include "cece/unit/Units.hpp"
+#include "cece/Exception.hpp"
 
 /* ************************************************************************ */
 
@@ -37,30 +37,13 @@ namespace unit {
 
 /* ************************************************************************ */
 
-/// Base units exponents
-static constexpr int LENGTH_EXPONENT = 6;
-static constexpr int TIME_EXPONENT = 0;
-static constexpr int MASS_EXPONENT = 6;
-static constexpr int ELECTRIC_CURRENT_EXPONENT = 0;
-static constexpr int THERMODYNAMIC_TEMPERATURE_EXPONENT = 0;
-static constexpr int AMOUNT_OF_SUBSTANCE_EXPONENT = 6;
-static constexpr int LUMINOUS_INTENSITY_EXPONENT = 0;
-
-/* ************************************************************************ */
-
-#define CECE_UNIT_SYMBOL_BASE(unit, name, sym)                                 \
-    inline constexpr unit name(ValueType value) noexcept                       \
-    {                                                                          \
-        return unit(value);                                                    \
-    }
-
-#define CECE_UNIT_SYMBOL(unit, name, sym, def)                                 \
-    inline constexpr unit name(ValueType value) noexcept                       \
-    {                                                                          \
-        return value * def;                                                    \
-    }
-
-#include "Units.def"
+/**
+ * @brief      Unit exception.
+ */
+class Exception : public RuntimeException
+{
+    using RuntimeException::RuntimeException;
+};
 
 /* ************************************************************************ */
 

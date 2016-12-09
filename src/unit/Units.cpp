@@ -33,24 +33,14 @@ namespace unit {
 
 /* ************************************************************************ */
 
-template class Unit<List<>, List<>>;
-template class Unit<List<BaseLength>, List<>>;
-template class Unit<List<BaseMass>, List<>>;
-template class Unit<List<BaseTime>, List<>>;
-template class Unit<List<BaseLength, BaseLength>, List<>>;
-template class Unit<List<BaseLength, BaseLength, BaseLength>, List<>>;
-template class Unit<List<BaseLength>, List<BaseTime>>;
-template class Unit<List<BaseLength>, List<BaseTime, BaseTime>>;
-template class Unit<List<BaseLength, BaseMass>, List<BaseTime, BaseTime>>;
-template class Unit<List<BaseLength, BaseMass>, List<BaseTime>>;
-template class Unit<List<BaseMass>, List<BaseLength, BaseLength, BaseLength>>;
-template class Unit<List<BaseMass>, List<BaseLength, BaseTime>>;
-template class Unit<List<BaseLength, BaseLength>, List<BaseTime>>;
-template class Unit<List<BaseAmountOfSubstance>, List<>>;
-template class Unit<List<BaseAmountOfSubstance>, List<BaseLength, BaseLength, BaseLength>>;
-template class Unit<List<>, List<BaseLength, BaseLength, BaseLength>>;
-template class Unit<List<>, List<BaseTime>>;
-template class Unit<List<BaseLength, BaseLength, BaseLength>, List<BaseTime>>;
+template class UnitBase<StaticImpl<0, 0, 0, 0, 0, 0, 0>>;
+template class UnitBase<StaticImpl<1, 0, 0, 0, 0, 0, 0>>;
+template class UnitBase<StaticImpl<0, 1, 0, 0, 0, 0, 0>>;
+template class UnitBase<StaticImpl<0, 0, 1, 0, 0, 0, 0>>;
+template class UnitBase<StaticImpl<0, 0, 0, 1, 0, 0, 0>>;
+template class UnitBase<StaticImpl<0, 0, 0, 0, 1, 0, 0>>;
+template class UnitBase<StaticImpl<0, 0, 0, 0, 0, 1, 0>>;
+template class UnitBase<StaticImpl<0, 0, 0, 0, 0, 0, 1>>;
 
 /* ************************************************************************ */
 

@@ -25,8 +25,9 @@
 
 cece_add_test(unit
     SOURCES
-        UnitsTest.cpp
-        VectorUnitsTest.cpp
+        UnitTest.cpp
+        #UnitsTest.cpp
+        #VectorUnitsTest.cpp
 )
 
 # ######################################################################### #

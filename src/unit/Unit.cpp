@@ -22,7 +22,7 @@
 /* along with CeCe.  If not, see <http://www.gnu.org/licenses/>.            */
 /*                                                                          */
 /* ************************************************************************ */
-
+#if 0
 // Declaration
 #include "cece/unit/Unit.hpp"
 
@@ -147,3 +147,4 @@ int calcPrefixExponent(const String& symbol, StringView typeSymbol, unsigned int
 }
 
 /* ************************************************************************ */
+#endif

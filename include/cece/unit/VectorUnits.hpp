@@ -96,12 +96,12 @@ namespace math {
 
 /* ************************************************************************ */
 
-extern template class BasicVector<unit::Length, DIMENSION>;
-extern template class BasicVector<unit::Velocity, DIMENSION>;
-extern template class BasicVector<unit::Acceleration, DIMENSION>;
-extern template class BasicVector<unit::Force, DIMENSION>;
-extern template class BasicVector<unit::Impulse, DIMENSION>;
-extern template class BasicVector<RealType, DIMENSION>;
+// extern template class BasicVector<unit::Length, DIMENSION>;
+// extern template class BasicVector<unit::Velocity, DIMENSION>;
+// extern template class BasicVector<unit::Acceleration, DIMENSION>;
+// extern template class BasicVector<unit::Force, DIMENSION>;
+// extern template class BasicVector<unit::Impulse, DIMENSION>;
+// extern template class BasicVector<RealType, DIMENSION>;
 
 /* ************************************************************************ */
 

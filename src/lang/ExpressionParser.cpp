@@ -421,7 +421,7 @@ private:
             return coeff * function(local);
         }
         skipWhitespace();
-        return coeff * unit::parse(parameters.get(local));
+        return coeff * unit::parse(parameters.get(local)).get();
     }
 
     RealType function(String local)

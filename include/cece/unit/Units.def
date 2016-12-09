@@ -1,0 +1,123 @@
+/* ************************************************************************ */
+/* Georgiev Lab (c) 2015-2016                                               */
+/* ************************************************************************ */
+/* Department of Cybernetics                                                */
+/* Faculty of Applied Sciences                                              */
+/* University of West Bohemia in Pilsen                                     */
+/* ************************************************************************ */
+/*                                                                          */
+/* This file is part of CeCe.                                               */
+/*                                                                          */
+/* CeCe is free software: you can redistribute it and/or modify             */
+/* it under the terms of the GNU General Public License as published by     */
+/* the Free Software Foundation, either version 3 of the License, or        */
+/* (at your option) any later version.                                      */
+/*                                                                          */
+/* CeCe is distributed in the hope that it will be useful,                  */
+/* but WITHOUT ANY WARRANTY; without even the implied warranty of           */
+/* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            */
+/* GNU General Public License for more details.                             */
+/*                                                                          */
+/* You should have received a copy of the GNU General Public License        */
+/* along with CeCe.  If not, see <http://www.gnu.org/licenses/>.            */
+/*                                                                          */
+/* ************************************************************************ */
+
+#pragma once
+
+/* ************************************************************************ */
+
+#ifndef CECE_UNIT_SYMBOL
+#define CECE_UNIT_SYMBOL(unit, base, sym, def)
+#endif
+
+#ifndef CECE_UNIT_SYMBOL_BASE
+#define CECE_UNIT_SYMBOL_BASE(unit, base, sym) CECE_UNIT_SYMBOL(unit, base, sym, 1)
+#endif
+
+/* ************************************************************************ */
+
+CECE_UNIT_SYMBOL_BASE(Length, m, "m")
+CECE_UNIT_SYMBOL(Length, dm, "dm", m(1e-1))
+CECE_UNIT_SYMBOL(Length, cm, "cm", m(1e-2))
+CECE_UNIT_SYMBOL(Length, mm, "mm", m(1e-3))
+CECE_UNIT_SYMBOL(Length, um, "um", m(1e-6))
+
+CECE_UNIT_SYMBOL_BASE(Mass, g, "g")
+CECE_UNIT_SYMBOL(Mass, kg, "kg", g(1e3))
+CECE_UNIT_SYMBOL(Mass, mg, "mg", g(1e-3))
+CECE_UNIT_SYMBOL(Mass, ug, "ug", g(1e-6))
+CECE_UNIT_SYMBOL(Mass, ng, "ng", g(1e-9))
+CECE_UNIT_SYMBOL(Mass, pg, "pg", g(1e-12))
+
+CECE_UNIT_SYMBOL_BASE(Time, s, "s")
+CECE_UNIT_SYMBOL(Time, ms, "ms", s(1e-3))
+CECE_UNIT_SYMBOL(Time, us, "us", s(1e-6))
+CECE_UNIT_SYMBOL(Time, min, "min", s(60))
+CECE_UNIT_SYMBOL(Time, h, "h", min(60))
+
+CECE_UNIT_SYMBOL(Area, m2, "m2", m(1) * m(1))
+CECE_UNIT_SYMBOL(Area, dm2, "dm2", dm(1) * dm(1))
+CECE_UNIT_SYMBOL(Area, mm2, "mm2", mm(1) * mm(1))
+CECE_UNIT_SYMBOL(Area, um2, "um2", um(1) * um(1))
+
+CECE_UNIT_SYMBOL(Volume, m3, "m3", m2(1) * m(1))
+CECE_UNIT_SYMBOL(Volume, dm3, "dm3", dm2(1) * dm(1))
+CECE_UNIT_SYMBOL(Volume, mm3, "mm3", mm2(1) * mm(1))
+CECE_UNIT_SYMBOL(Volume, um3, "um3", um2(1) * um(1))
+
+CECE_UNIT_SYMBOL(Velocity, m_s, "m/s", m(1) / s(1))
+CECE_UNIT_SYMBOL(Velocity, mm_s, "mm/s", mm(1) / s(1))
+CECE_UNIT_SYMBOL(Velocity, um_s, "um/s", um(1) / s(1))
+
+CECE_UNIT_SYMBOL(Acceleration, m_s2, "m/s2", m_s(1) / s(1))
+CECE_UNIT_SYMBOL(Acceleration, mm_s2, "mm/s2", mm_s(1) / s(1))
+CECE_UNIT_SYMBOL(Acceleration, um_s2, "um/s2", um_s(1) / s(1))
+
+CECE_UNIT_SYMBOL(Force, kgm_s2, "kgm/s2", kg(1) * m_s2(1))
+CECE_UNIT_SYMBOL(Force, gm_s2, "gm/s2", g(1) * m_s2(1))
+CECE_UNIT_SYMBOL(Force, mgm_s2, "mgm/s2", mg(1) * m_s2(1))
+CECE_UNIT_SYMBOL(Force, N, "N", kgm_s2(1))
+CECE_UNIT_SYMBOL(Force, mN, "mN", gm_s2(1))
+CECE_UNIT_SYMBOL(Force, uN, "uN", mgm_s2(1))
+
+CECE_UNIT_SYMBOL(DynamicViscosity, kg_ms, "kg/ms", kg(1) / m(1) / s(1))
+CECE_UNIT_SYMBOL(DynamicViscosity, g_ms, "g/ms", g(1) / m(1) / s(1))
+CECE_UNIT_SYMBOL(DynamicViscosity, Ns_m2, "Ns/m2", N(1) * s(1) / m2(1))
+CECE_UNIT_SYMBOL(DynamicViscosity, Pas, "Pas", N(1) * s(1) / m2(1))
+CECE_UNIT_SYMBOL(DynamicViscosity, mPas, "mPas", mN(1) * s(1) / m2(1))
+
+CECE_UNIT_SYMBOL(KinematicViscosity, m2_s, "m2/s", m2(1) / s(1))
+CECE_UNIT_SYMBOL(KinematicViscosity, mm2_s, "mm2/s", mm2(1) / s(1))
+CECE_UNIT_SYMBOL(KinematicViscosity, um2_s, "um2/s", um2(1) / s(1))
+
+CECE_UNIT_SYMBOL_BASE(AmountOfSubstance, mol, "mol")
+CECE_UNIT_SYMBOL(AmountOfSubstance, mmol, "mmol", mol(1e-3))
+CECE_UNIT_SYMBOL(AmountOfSubstance, umol, "umol", mol(1e-6))
+CECE_UNIT_SYMBOL(AmountOfSubstance, nmol, "nmol", mol(1e-9))
+
+CECE_UNIT_SYMBOL(MolarConcentration, mol_m3, "mol/m3", mol(1) / m3(1))
+CECE_UNIT_SYMBOL(MolarConcentration, mmol_m3, "mmol/m3", mmol(1) / m3(1))
+CECE_UNIT_SYMBOL(MolarConcentration, umol_m3, "umol/m3", umol(1) / m3(1))
+CECE_UNIT_SYMBOL(MolarConcentration, nmol_m3, "nmol/m3", nmol(1) / m3(1))
+CECE_UNIT_SYMBOL(MolarConcentration, mM, "mM", mol(1) / m3(1))
+CECE_UNIT_SYMBOL(MolarConcentration, uM, "uM", umol(1) / m3(1))
+CECE_UNIT_SYMBOL(MolarConcentration, nM, "nM", nmol(1) / m3(1))
+
+CECE_UNIT_SYMBOL_BASE(Angle, rad, "rad")
+CECE_UNIT_SYMBOL(Angle, deg, "deg", rad(deg2rad(1)))
+
+CECE_UNIT_SYMBOL_BASE(Frequency, _s, "/s")
+CECE_UNIT_SYMBOL(Frequency, Hz, "Hz", _s(1))
+CECE_UNIT_SYMBOL(Frequency, kHz, "kHz", Hz(1e3))
+CECE_UNIT_SYMBOL(Frequency, MHz, "MHz", Hz(1e6))
+CECE_UNIT_SYMBOL(Frequency, GHz, "GHz", Hz(1e9))
+
+CECE_UNIT_SYMBOL(Probability, precent, "%", 1 / 100.0)
+
+/* ************************************************************************ */
+
+#undef CECE_UNIT_SYMBOL_BASE
+#undef CECE_UNIT_SYMBOL
+
+/* ************************************************************************ */

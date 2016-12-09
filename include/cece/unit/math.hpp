@@ -23,15 +23,12 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-// Declaration
-#include "cece/unit/UnitIo.hpp"
+#pragma once
 
-// C++
-#include <cstdlib>
+/* ************************************************************************ */
 
 // CeCe
-#include "cece/Exception.hpp"
-#include "cece/unit/UnitsCtors.hpp"
+#include "cece/unit/Unit.hpp"
 
 /* ************************************************************************ */
 
@@ -40,85 +37,117 @@ namespace unit {
 
 /* ************************************************************************ */
 
-namespace {
+namespace detail {
 
 /* ************************************************************************ */
 
 /**
- * @brief      Check if given character can be a part of symbol.
+ * @brief      Square root helper.
  *
- * @param      c     The tested character.
- *
- * @return     True if symbol character, False otherwise.
+ * @tparam     Impl  Implementation detail.
  */
-bool isSymbolChar(char c) noexcept
+template<typename Impl>
+struct SqrtHelper;
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Square root helper.
+ *
+ * @tparam     Length       Number of length units.
+ * @tparam     Time         Number of time units.
+ * @tparam     Mass         Number of mass units.
+ * @tparam     Current      Number of electrical current units.
+ * @tparam     Temperature  Number of temperature units.
+ * @tparam     Substance    Number of amount of substance units.
+ * @tparam     Intensity    Number of intensity units.
+ */
+template<
+    int Length,
+    int Time,
+    int Mass,
+    int Current,
+    int Temperature,
+    int Substance,
+    int Intensity
+>
+struct SqrtHelper<StaticImpl<
+    Length,
+    Time,
+    Mass,
+    Current,
+    Temperature,
+    Substance,
+    Intensity
+>>
 {
-    return (
-        (c >= 'a' && c <= 'z') ||
-        (c >= 'A' && c <= 'Z') ||
-        (c >= '0' && c <= '9') ||
-        (c == '/')
+
+    // Calculate if unit can be used as sqrt argument.
+    static constexpr bool isValid =
+        Length      % 2 == 0 &&
+        Time        % 2 == 0 &&
+        Mass        % 2 == 0 &&
+        Current     % 2 == 0 &&
+        Temperature % 2 == 0 &&
+        Substance   % 2 == 0 &&
+        Intensity   % 2 == 0
+    ;
+
+    using ImplType = StaticImpl<
+        Length      / 2,
+        Time        / 2,
+        Mass        / 2,
+        Current     / 2,
+        Temperature / 2,
+        Substance   / 2,
+        Intensity   / 2
+    >;
+};
+
+/* ************************************************************************ */
+
+}
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Calculate square root of given unit.
+ *
+ * @param[in]  value  The unit value.
+ *
+ * @tparam     Impl   The unit implementation.
+ *
+ * @return     The square root value.
+ */
+template<typename Impl>
+inline auto sqrt(UnitBase<Impl> value) noexcept
+    -> UnitBase<typename detail::SqrtHelper<Impl>::ImplType>
+{
+    static_assert(detail::SqrtHelper<Impl>::isValid, "Unit cannot be used as sqrt argument");
+
+    return UnitBase<typename detail::SqrtHelper<Impl>::ImplType>(
+        std::sqrt(value.get())
     );
 }
 
 /* ************************************************************************ */
 
-}
-
-/* ************************************************************************ */
-
-Unit parse(const char* beg, const char*& end)
+/**
+ * @brief      Calculate absolute value.
+ *
+ * @param      unit  The unit.
+ *
+ * @tparam     Impl  The unit implementation.
+ *
+ * @return     The absolute value.
+ */
+template<typename Impl>
+inline constexpr UnitBase<Impl> abs(UnitBase<Impl> unit) noexcept
 {
-    char* fend;
-
-    // Read float value
-    const auto value = std::strtod(beg, &fend);
-
-    // Not a float value
-    if (fend == beg)
-        throw InvalidArgumentException("Cannot parse unit value from: " + String(beg, end));
-
-    String symbol;
-
-    // Store symbol characters
-    const char* pSym = fend;
-    for (; pSym != end && isSymbolChar(*pSym); ++pSym)
-        symbol.push_back(*pSym);
-
-    // No symbol
-    if (symbol.empty())
-    {
-        end = fend;
-        return Unit(DynamicImpl(value, DynamicImpl::Detail{}));
-    }
-
-    end = pSym;
-
-#define CECE_UNIT_SYMBOL(unit, name, sym, def) if (symbol == sym) return name(value)
-#include "cece/unit/Units.def"
-
-    // TODO: dynamic symbol parser
-
-    // Unknown symbol
-    throw InvalidArgumentException("Unsupported or invalid unit symbol: " + symbol);
-}
-
-/* ************************************************************************ */
-
-Unit parse(io::InStream& is)
-{
-    String str;
-    is >> str;
-
-    return parse(str);
-}
-
-/* ************************************************************************ */
-
-Unit parse(StringView str)
-{
-    const char* end = str.getData() + str.getLength();
-    return parse(str.getData(), end);
+    return UnitBase<Impl>(unit.get() > ValueType(0)
+        ? unit.get()
+        : -unit.get()
+    );
 }
 
 /* ************************************************************************ */

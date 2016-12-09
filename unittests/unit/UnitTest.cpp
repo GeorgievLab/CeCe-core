@@ -132,3 +132,41 @@ TEST(UnitsTest, plus)
 }
 
 /* ************************************************************************ */
+
+TEST(UnitsTest, minus)
+{
+    using Unit = UnitBase<StaticImpl<1, 0, 0, 0, 0, 0, 0>>;
+
+    const Unit unit1(1);
+    const Unit unit2(2);
+    const Unit unit3(3);
+
+    const Unit unit4 = unit1 - unit1;
+    EXPECT_FLOAT_EQ(0, unit4.get());
+
+    const Unit unit5 = unit1 - unit2 - unit3 - unit4;
+    EXPECT_FLOAT_EQ(-4, unit5.get());
+}
+
+/* ************************************************************************ */
+
+TEST(UnitsTest, mult)
+{
+    using ::testing::StaticAssertTypeEq;
+
+    using Unit = UnitBase<StaticImpl<1, 0, 0, 0, 0, 0, 0>>;
+
+    const Unit unit1(1);
+    const Unit unit2(2);
+    const Unit unit3(3);
+
+    const auto unit4 = unit1 * unit1;
+    EXPECT_FLOAT_EQ(1, unit4.get());
+    //StaticAssertTypeEq<decltype(unit4), UnitBase<StaticImpl<2, 0, 0, 0, 0, 0, 0>>>();
+
+    const auto unit5 = unit1 * unit2 * unit3 * unit4;
+    EXPECT_FLOAT_EQ(6, unit5.get());
+    //StaticAssertTypeEq<decltype(unit5), UnitBase<StaticImpl<5, 0, 0, 0, 0, 0, 0>>>();
+}
+
+/* ************************************************************************ */

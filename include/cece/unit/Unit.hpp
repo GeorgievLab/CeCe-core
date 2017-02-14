@@ -92,11 +92,7 @@ struct StaticImpl
      *
      * @param[in]  value  The value.
      */
-    explicit StaticImpl(ValueType value) noexcept
-        : value(value)
-    {
-        // Check if
-    }
+    explicit StaticImpl(ValueType value) noexcept;
 
 
     /**
@@ -113,6 +109,62 @@ struct StaticImpl
      * @param[in]  impl  The implementation.
      */
     StaticImpl& operator=(const DynamicImpl& impl);
+
+
+    /**
+     * @brief      Returns the length exponent.
+     *
+     * @return     The length exponent.
+     */
+    constexpr int getLengthExp() const noexcept;
+
+
+    /**
+     * @brief      Returns the time exponent.
+     *
+     * @return     The time exponent.
+     */
+    constexpr int getTimeExp() const noexcept;
+
+
+    /**
+     * @brief      Returns the mass exponent.
+     *
+     * @return     The mass exponent.
+     */
+    constexpr int getMassExp() const noexcept;
+
+
+    /**
+     * @brief      Returns the current exponent.
+     *
+     * @return     The current exponent.
+     */
+    constexpr int getCurrentExp() const noexcept;
+
+
+    /**
+     * @brief      Returns the temperature exponent.
+     *
+     * @return     The temperature exponent.
+     */
+    constexpr int getTemperatureExp() const noexcept;
+
+
+    /**
+     * @brief      Returns the substance exponent.
+     *
+     * @return     The substance exponent.
+     */
+    constexpr int getSubstanceExp() const noexcept;
+
+
+    /**
+     * @brief      Returns the intensity exponent.
+     *
+     * @return     The intensity exponent.
+     */
+    constexpr int getIntensityExp() const noexcept;
 
 };
 
@@ -155,12 +207,7 @@ struct DynamicImpl
      * @param[in]  value   The value.
      * @param[in]  detail  The detail.
      */
-    explicit DynamicImpl(ValueType value, Detail detail = {}) noexcept
-        : value(value)
-        , detail{detail}
-    {
-        // Check if
-    }
+    explicit DynamicImpl(ValueType value, Detail detail = {}) noexcept;
 
 
     /**
@@ -177,12 +224,7 @@ struct DynamicImpl
         int Substance,
         int Intensity
     >
-    DynamicImpl(const StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>& impl) noexcept
-        : value(impl.value)
-        , detail{Length, Time, Mass, Current, Temperature, Substance, Intensity}
-    {
-        // Nothing to do
-    }
+    DynamicImpl(const StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>& impl) noexcept;
 
 
     /**
@@ -199,98 +241,65 @@ struct DynamicImpl
         int Substance,
         int Intensity
     >
-    DynamicImpl& operator=(const StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>& impl) noexcept
-    {
-        value = impl.value;
-        detail.length = Length;
-        detail.time = Time;
-        detail.mass = Mass;
-        detail.current = Current;
-        detail.temperature = Temperature;
-        detail.substance = Substance;
-        detail.intensity = Intensity;
-        return *this;
-    }
+    DynamicImpl& operator=(const StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>& impl) noexcept;
+
+
+    /**
+     * @brief      Returns the length exponent.
+     *
+     * @return     The length exponent.
+     */
+    constexpr int getLengthExp() const noexcept;
+
+
+    /**
+     * @brief      Returns the time exponent.
+     *
+     * @return     The time exponent.
+     */
+    constexpr int getTimeExp() const noexcept;
+
+
+    /**
+     * @brief      Returns the mass exponent.
+     *
+     * @return     The mass exponent.
+     */
+    constexpr int getMassExp() const noexcept;
+
+
+    /**
+     * @brief      Returns the current exponent.
+     *
+     * @return     The current exponent.
+     */
+    constexpr int getCurrentExp() const noexcept;
+
+
+    /**
+     * @brief      Returns the temperature exponent.
+     *
+     * @return     The temperature exponent.
+     */
+    constexpr int getTemperatureExp() const noexcept;
+
+
+    /**
+     * @brief      Returns the substance exponent.
+     *
+     * @return     The substance exponent.
+     */
+    constexpr int getSubstanceExp() const noexcept;
+
+
+    /**
+     * @brief      Returns the intensity exponent.
+     *
+     * @return     The intensity exponent.
+     */
+    constexpr int getIntensityExp() const noexcept;
 
 };
-
-/* ************************************************************************ */
-
-template<
-    int Length,
-    int Time,
-    int Mass,
-    int Current,
-    int Temperature,
-    int Substance,
-    int Intensity
->
-StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>::StaticImpl(const DynamicImpl& impl)
-    : value(impl.value)
-{
-    // Check if can be converted
-    if (impl.detail.length != Length)
-        throw Exception("Length exponent mismatch: " + toString(impl.detail.length) + " vs " + toString(Length));
-
-    if (impl.detail.time != Time)
-        throw Exception("Time exponent mismatch: " + toString(impl.detail.time) + " vs " + toString(Time));
-
-    if (impl.detail.mass != Mass)
-        throw Exception("Mass exponent mismatch: " + toString(impl.detail.mass) + " vs " + toString(Mass));
-
-    if (impl.detail.current != Current)
-        throw Exception("Current exponent mismatch: " + toString(impl.detail.current) + " vs " + toString(Current));
-
-    if (impl.detail.temperature != Temperature)
-        throw Exception("Temperature exponent mismatch: " + toString(impl.detail.temperature) + " vs " + toString(Temperature));
-
-    if (impl.detail.substance != Substance)
-        throw Exception("Substance exponent mismatch: " + toString(impl.detail.substance) + " vs " + toString(Substance));
-
-    if (impl.detail.intensity != Intensity)
-        throw Exception("Intensity exponent mismatch: " + toString(impl.detail.intensity) + " vs " + toString(Intensity));
-}
-
-/* ************************************************************************ */
-
-template<
-    int Length,
-    int Time,
-    int Mass,
-    int Current,
-    int Temperature,
-    int Substance,
-    int Intensity
->
-StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>&
-StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>::operator=(const DynamicImpl& impl)
-{
-    value = impl.value;
-
-    // Check if can be converted
-    if (impl.detail.length != Length)
-        throw Exception("Length exponent mismatch: " + toString(impl.detail.length) + " vs " + toString(Length));
-
-    if (impl.detail.time != Time)
-        throw Exception("Time exponent mismatch: " + toString(impl.detail.time) + " vs " + toString(Time));
-
-    if (impl.detail.mass != Mass)
-        throw Exception("Mass exponent mismatch: " + toString(impl.detail.mass) + " vs " + toString(Mass));
-
-    if (impl.detail.current != Current)
-        throw Exception("Current exponent mismatch: " + toString(impl.detail.current) + " vs " + toString(Current));
-
-    if (impl.detail.temperature != Temperature)
-        throw Exception("Temperature exponent mismatch: " + toString(impl.detail.temperature) + " vs " + toString(Temperature));
-
-    if (impl.detail.substance != Substance)
-        throw Exception("Substance exponent mismatch: " + toString(impl.detail.substance) + " vs " + toString(Substance));
-
-    if (impl.detail.intensity != Intensity)
-        throw Exception("Intensity exponent mismatch: " + toString(impl.detail.intensity) + " vs " + toString(Intensity));
-
-    return *this;
-}
 
 /* ************************************************************************ */
 
@@ -513,11 +522,7 @@ public:
     /**
      * @brief      Default constructor.
      */
-    constexpr UnitBase() noexcept
-        : m_impl{}
-    {
-        // Nothing to do
-    }
+    constexpr UnitBase() noexcept;
 
 
     /**
@@ -525,11 +530,7 @@ public:
      *
      * @param[in]  impl  The implementation.
      */
-    constexpr UnitBase(Impl impl) noexcept
-        : m_impl{impl}
-    {
-        // Nothing to do
-    }
+    constexpr UnitBase(Impl impl);
 
 
     /**
@@ -541,41 +542,48 @@ public:
         typename std::enable_if<
             std::is_same<I, StaticImpl<0, 0, 0, 0, 0, 0, 0>>::value ||
             std::is_same<I, DynamicImpl>::value,
-        int>::type = 0
+            int
+        >::type = 0
     >
-    constexpr UnitBase(ValueType value) noexcept
-        : m_impl{value}
-    {
-        // Nothing to do
-    }
+    constexpr UnitBase(ValueType value) noexcept;
 
 
     /**
      * @brief      Constructor.
      *
-     * @param      value  Init value.
+     * @param[in]  args       Construction arguments.
+     *
+     * @tparam     Args       Argument types.
      */
-    template<typename I = Impl,
-        typename std::enable_if<!(
-            std::is_same<I, StaticImpl<0, 0, 0, 0, 0, 0, 0>>::value ||
-            std::is_same<I, DynamicImpl>::value),
-        int>::type = 0
+    template<typename... Args,
+        typename std::enable_if<
+            std::is_constructible<Impl, Args...>::value,
+            int
+        >::type = 0
     >
-    explicit constexpr UnitBase(ValueType value) noexcept
-        : m_impl{value}
-    {
-        // Nothing to do
-    }
+    explicit constexpr UnitBase(Args&&... args);
 
 
     /**
      * @brief      Zero constructor.
      */
-    constexpr UnitBase(math::Zero_t) noexcept
-        : m_impl{}
-    {
-        // Nothing to do
-    }
+    constexpr UnitBase(math::Zero_t) noexcept;
+
+
+    /**
+     * @brief      Constructor.
+     *
+     * @param[in]  unit   The unit.
+     */
+    constexpr UnitBase(const UnitBase& unit);
+
+
+    /**
+     * @brief      Constructor.
+     *
+     * @param[in]  unit   The unit.
+     */
+    constexpr UnitBase(UnitBase&& unit);
 
 
     /**
@@ -586,11 +594,18 @@ public:
      * @tparam     Impl2  The second unit implementation.
      */
     template<typename Impl2>
-    UnitBase(const UnitBase<Impl2>& unit)
-        : m_impl(unit.m_impl)
-    {
-        // Nothing to do
-    }
+    constexpr UnitBase(const UnitBase<Impl2>& unit);
+
+
+    /**
+     * @brief      Constructor.
+     *
+     * @param[in]  unit   The unit.
+     *
+     * @tparam     Impl2  The second unit implementation.
+     */
+    template<typename Impl2>
+    UnitBase(UnitBase<Impl2>&& unit);
 
 
 // Public Operators
@@ -601,24 +616,27 @@ public:
      * @brief      Assignment operator.
      *
      * @param[in]  unit   The unit.
+     */
+    UnitBase& operator=(const UnitBase& unit);
+
+
+    /**
+     * @brief      Assignment operator.
+     *
+     * @param[in]  unit   The unit.
+     */
+    UnitBase& operator=(UnitBase&& unit) noexcept;
+
+
+    /**
+     * @brief      Assignment operator.
+     *
+     * @param[in]  unit   The unit.
      *
      * @tparam     Impl2  The second unit implementation.
      */
     template<typename Impl2>
-    UnitBase& operator=(const UnitBase<Impl2>& unit)
-    {
-        m_impl = unit.m_impl;
-        return *this;
-    }
-
-
-    /**
-     * @brief      If value is set operator.
-     */
-    explicit operator bool() const noexcept
-    {
-        return get() != ValueType(0.0);
-    }
+    UnitBase& operator=(const UnitBase<Impl2>& unit);
 
 
     /**
@@ -627,10 +645,7 @@ public:
     template<typename I = Impl,
         typename std::enable_if<std::is_same<I, StaticImpl<0, 0, 0, 0, 0, 0, 0>>::value, int>::type = 0
     >
-    operator ValueType() const noexcept
-    {
-        return get();
-    }
+    operator ValueType() const noexcept;
 
 
     /**
@@ -639,10 +654,7 @@ public:
     template<typename I = Impl,
         typename std::enable_if<!std::is_same<I, StaticImpl<0, 0, 0, 0, 0, 0, 0>>::value, int>::type = 0
     >
-    explicit operator ValueType() const noexcept
-    {
-        return get();
-    }
+    explicit operator ValueType() const noexcept;
 
 
     /**
@@ -650,10 +662,7 @@ public:
      *
      * @return     New value.
      */
-    UnitBase operator+() const noexcept
-    {
-        return UnitBase(m_impl.value);
-    }
+    UnitBase operator+() const noexcept;
 
 
     /**
@@ -661,10 +670,7 @@ public:
      *
      * @return     New value.
      */
-    UnitBase operator-() const noexcept
-    {
-        return UnitBase(-m_impl.value);
-    }
+    UnitBase operator-() const noexcept;
 
 
     /**
@@ -674,11 +680,7 @@ public:
      *
      * @return     *this.
      */
-    UnitBase& operator+=(UnitBase rhs) noexcept
-    {
-        m_impl.value += rhs.m_impl.value;
-        return *this;
-    }
+    UnitBase& operator+=(UnitBase rhs) noexcept;
 
 
     /**
@@ -688,11 +690,7 @@ public:
      *
      * @return     *this.
      */
-    UnitBase& operator-=(UnitBase rhs) noexcept
-    {
-        m_impl.value -= rhs.m_impl.value;
-        return *this;
-    }
+    UnitBase& operator-=(UnitBase rhs) noexcept;
 
 
     /**
@@ -702,11 +700,7 @@ public:
      *
      * @return     *this.
      */
-    UnitBase& operator*=(ValueType rhs) noexcept
-    {
-        m_impl.value *= rhs;
-        return *this;
-    }
+    UnitBase& operator*=(ValueType rhs) noexcept;
 
 
     /**
@@ -716,11 +710,7 @@ public:
      *
      * @return     *this.
      */
-    UnitBase& operator/=(ValueType rhs) noexcept
-    {
-        m_impl.value /= rhs;
-        return *this;
-    }
+    UnitBase& operator/=(ValueType rhs) noexcept;
 
 
 // Public Accessors
@@ -732,10 +722,7 @@ public:
      *
      * @return     The underlying value.
      */
-    constexpr ValueType get() const noexcept
-    {
-        return m_impl.value;
-    }
+    constexpr ValueType get() const noexcept;
 
 
     /**
@@ -745,10 +732,63 @@ public:
      *
      * @deprecated
      */
-    constexpr ValueType value() const noexcept
-    {
-        return get();
-    }
+    constexpr ValueType value() const noexcept;
+
+
+    /**
+     * @brief      Returns the length exponent.
+     *
+     * @return     The length exponent.
+     */
+    constexpr int getLengthExp() const noexcept;
+
+
+    /**
+     * @brief      Returns the time exponent.
+     *
+     * @return     The time exponent.
+     */
+    constexpr int getTimeExp() const noexcept;
+
+
+    /**
+     * @brief      Returns the mass exponent.
+     *
+     * @return     The mass exponent.
+     */
+    constexpr int getMassExp() const noexcept;
+
+
+    /**
+     * @brief      Returns the current exponent.
+     *
+     * @return     The current exponent.
+     */
+    constexpr int getCurrentExp() const noexcept;
+
+
+    /**
+     * @brief      Returns the temperature exponent.
+     *
+     * @return     The temperature exponent.
+     */
+    constexpr int getTemperatureExp() const noexcept;
+
+
+    /**
+     * @brief      Returns the substance exponent.
+     *
+     * @return     The substance exponent.
+     */
+    constexpr int getSubstanceExp() const noexcept;
+
+
+    /**
+     * @brief      Returns the intensity exponent.
+     *
+     * @return     The intensity exponent.
+     */
+    constexpr int getIntensityExp() const noexcept;
 
 
 // Private Data Members
@@ -864,12 +904,7 @@ struct Compose<UnitBase<StaticImpl<Lengths, Times, Masses, Currents, Temperature
  * @return     Result value.
  */
 template<typename Impl1, typename Impl2>
-inline constexpr bool operator==(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept
-{
-    static_assert(detail::ImplHelper<Impl1, Impl2>::isRelSupported, "Can't compare those units");
-
-    return std::abs(lhs.get() - rhs.get()) < std::numeric_limits<ValueType>::epsilon();
-}
+inline constexpr bool operator==(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -884,10 +919,7 @@ inline constexpr bool operator==(const UnitBase<Impl1>& lhs, const UnitBase<Impl
  * @return     Result value.
  */
 template<typename Impl1>
-inline constexpr bool operator==(const UnitBase<Impl1>& lhs, math::Zero_t rhs) noexcept
-{
-    return std::abs(lhs.get()) < std::numeric_limits<ValueType>::epsilon();
-}
+inline constexpr bool operator==(const UnitBase<Impl1>& lhs, math::Zero_t rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -902,10 +934,7 @@ inline constexpr bool operator==(const UnitBase<Impl1>& lhs, math::Zero_t rhs) n
  * @return     Result value.
  */
 template<typename Impl2>
-inline constexpr bool operator==(math::Zero_t lhs, const UnitBase<Impl2>& rhs) noexcept
-{
-    return std::abs(rhs.get()) < std::numeric_limits<ValueType>::epsilon();
-}
+inline constexpr bool operator==(math::Zero_t lhs, const UnitBase<Impl2>& rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -921,10 +950,7 @@ inline constexpr bool operator==(math::Zero_t lhs, const UnitBase<Impl2>& rhs) n
  * @return     Result value.
  */
 template<typename Impl1, typename Impl2>
-inline constexpr bool operator!=(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept
-{
-    return !operator==(lhs, rhs);
-}
+inline constexpr bool operator!=(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -939,10 +965,7 @@ inline constexpr bool operator!=(const UnitBase<Impl1>& lhs, const UnitBase<Impl
  * @return     Result value.
  */
 template<typename Impl1>
-inline constexpr bool operator!=(const UnitBase<Impl1>& lhs, math::Zero_t rhs) noexcept
-{
-    return !operator==(lhs, rhs);
-}
+inline constexpr bool operator!=(const UnitBase<Impl1>& lhs, math::Zero_t rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -957,10 +980,7 @@ inline constexpr bool operator!=(const UnitBase<Impl1>& lhs, math::Zero_t rhs) n
  * @return     Result value.
  */
 template<typename Impl2>
-inline constexpr bool operator!=(math::Zero_t lhs, const UnitBase<Impl2>& rhs) noexcept
-{
-    return !operator==(lhs, rhs);
-}
+inline constexpr bool operator!=(math::Zero_t lhs, const UnitBase<Impl2>& rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -976,12 +996,7 @@ inline constexpr bool operator!=(math::Zero_t lhs, const UnitBase<Impl2>& rhs) n
  * @return     Result value.
  */
 template<typename Impl1, typename Impl2>
-inline constexpr bool operator<(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept
-{
-    static_assert(detail::ImplHelper<Impl1, Impl2>::isRelSupported, "Can't compare those units");
-
-    return lhs.get() < rhs.get();
-}
+inline constexpr bool operator<(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -996,10 +1011,7 @@ inline constexpr bool operator<(const UnitBase<Impl1>& lhs, const UnitBase<Impl2
  * @return     Result value.
  */
 template<typename Impl1>
-inline constexpr bool operator<(const UnitBase<Impl1>& lhs, math::Zero_t rhs) noexcept
-{
-    return lhs.get() < 0;
-}
+inline constexpr bool operator<(const UnitBase<Impl1>& lhs, math::Zero_t rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -1014,10 +1026,7 @@ inline constexpr bool operator<(const UnitBase<Impl1>& lhs, math::Zero_t rhs) no
  * @return     Result value.
  */
 template<typename Impl2>
-inline constexpr bool operator<(math::Zero_t lhs, const UnitBase<Impl2>& rhs) noexcept
-{
-    return 0 < rhs.get();
-}
+inline constexpr bool operator<(math::Zero_t lhs, const UnitBase<Impl2>& rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -1033,10 +1042,7 @@ inline constexpr bool operator<(math::Zero_t lhs, const UnitBase<Impl2>& rhs) no
  * @return     Result value.
  */
 template<typename Impl1, typename Impl2>
-inline constexpr bool operator<=(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept
-{
-    return !operator>(lhs, rhs);
-}
+inline constexpr bool operator<=(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -1051,10 +1057,7 @@ inline constexpr bool operator<=(const UnitBase<Impl1>& lhs, const UnitBase<Impl
  * @return     Result value.
  */
 template<typename Impl1>
-inline constexpr bool operator<=(const UnitBase<Impl1>& lhs, math::Zero_t rhs) noexcept
-{
-    return !operator>(lhs, rhs);
-}
+inline constexpr bool operator<=(const UnitBase<Impl1>& lhs, math::Zero_t rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -1069,10 +1072,7 @@ inline constexpr bool operator<=(const UnitBase<Impl1>& lhs, math::Zero_t rhs) n
  * @return     Result value.
  */
 template<typename Impl2>
-inline constexpr bool operator<=(math::Zero_t lhs, const UnitBase<Impl2>& rhs) noexcept
-{
-    return !operator>(lhs, rhs);
-}
+inline constexpr bool operator<=(math::Zero_t lhs, const UnitBase<Impl2>& rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -1088,10 +1088,7 @@ inline constexpr bool operator<=(math::Zero_t lhs, const UnitBase<Impl2>& rhs) n
  * @return     Result value.
  */
 template<typename Impl1, typename Impl2>
-inline constexpr bool operator>(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept
-{
-    return operator<(rhs, lhs);
-}
+inline constexpr bool operator>(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -1106,10 +1103,7 @@ inline constexpr bool operator>(const UnitBase<Impl1>& lhs, const UnitBase<Impl2
  * @return     Result value.
  */
 template<typename Impl1>
-inline constexpr bool operator>(const UnitBase<Impl1>& lhs, math::Zero_t rhs) noexcept
-{
-    return operator<(rhs, lhs);
-}
+inline constexpr bool operator>(const UnitBase<Impl1>& lhs, math::Zero_t rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -1124,10 +1118,7 @@ inline constexpr bool operator>(const UnitBase<Impl1>& lhs, math::Zero_t rhs) no
  * @return     Result value.
  */
 template<typename Impl2>
-inline constexpr bool operator>(math::Zero_t lhs, const UnitBase<Impl2>& rhs) noexcept
-{
-    return operator<(rhs, lhs);
-}
+inline constexpr bool operator>(math::Zero_t lhs, const UnitBase<Impl2>& rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -1143,10 +1134,7 @@ inline constexpr bool operator>(math::Zero_t lhs, const UnitBase<Impl2>& rhs) no
  * @return     Result value.
  */
 template<typename Impl1, typename Impl2>
-inline constexpr bool operator>=(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept
-{
-    return !operator<(lhs, rhs);
-}
+inline constexpr bool operator>=(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -1161,10 +1149,7 @@ inline constexpr bool operator>=(const UnitBase<Impl1>& lhs, const UnitBase<Impl
  * @return     Result value.
  */
 template<typename Impl1>
-inline constexpr bool operator>=(const UnitBase<Impl1>& lhs, math::Zero_t rhs) noexcept
-{
-    return !operator<(lhs, rhs);
-}
+inline constexpr bool operator>=(const UnitBase<Impl1>& lhs, math::Zero_t rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -1179,10 +1164,7 @@ inline constexpr bool operator>=(const UnitBase<Impl1>& lhs, math::Zero_t rhs) n
  * @return     Result value.
  */
 template<typename Impl2>
-inline constexpr bool operator>=(math::Zero_t lhs, const UnitBase<Impl2>& rhs) noexcept
-{
-    return !operator<(lhs, rhs);
-}
+inline constexpr bool operator>=(math::Zero_t lhs, const UnitBase<Impl2>& rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -1199,14 +1181,7 @@ inline constexpr bool operator>=(math::Zero_t lhs, const UnitBase<Impl2>& rhs) n
  */
 template<typename Impl1, typename Impl2>
 inline constexpr auto operator+(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept
-    -> UnitBase<typename detail::ImplHelper<Impl1, Impl2>::AddImplType>
-{
-    static_assert(detail::ImplHelper<Impl1, Impl2>::isAddSupported, "Can't add those units");
-
-    return UnitBase<typename detail::ImplHelper<Impl1, Impl2>::AddImplType>(
-        lhs.get() + rhs.get()
-    );
-}
+    -> UnitBase<typename detail::ImplHelper<Impl1, Impl2>::AddImplType>;
 
 /* ************************************************************************ */
 
@@ -1223,14 +1198,7 @@ inline constexpr auto operator+(const UnitBase<Impl1>& lhs, const UnitBase<Impl2
  */
 template<typename Impl1, typename Impl2>
 inline constexpr auto operator-(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept
-    -> UnitBase<typename detail::ImplHelper<Impl1, Impl2>::SubImplType>
-{
-    static_assert(detail::ImplHelper<Impl1, Impl2>::isSubSupported, "Can't subtract those units");
-
-    return UnitBase<typename detail::ImplHelper<Impl1, Impl2>::SubImplType>(
-        lhs.get() - rhs.get()
-    );
-}
+    -> UnitBase<typename detail::ImplHelper<Impl1, Impl2>::SubImplType>;
 
 /* ************************************************************************ */
 
@@ -1247,12 +1215,7 @@ inline constexpr auto operator-(const UnitBase<Impl1>& lhs, const UnitBase<Impl2
  */
 template<typename Impl1, typename Impl2>
 inline constexpr auto operator*(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept
-    -> UnitBase<typename detail::ImplHelper<Impl1, Impl2>::MulImplType>
-{
-    return UnitBase<typename detail::ImplHelper<Impl1, Impl2>::MulImplType>(
-        lhs.get() * rhs.get()
-    );
-}
+    -> UnitBase<typename detail::ImplHelper<Impl1, Impl2>::MulImplType>;
 
 /* ************************************************************************ */
 
@@ -1267,10 +1230,7 @@ inline constexpr auto operator*(const UnitBase<Impl1>& lhs, const UnitBase<Impl2
  * @return     Result value.
  */
 template<typename Impl1>
-inline constexpr UnitBase<Impl1> operator*(UnitBase<Impl1> lhs, RealType rhs) noexcept
-{
-    return lhs *= rhs;
-}
+inline constexpr UnitBase<Impl1> operator*(UnitBase<Impl1> lhs, RealType rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -1285,10 +1245,7 @@ inline constexpr UnitBase<Impl1> operator*(UnitBase<Impl1> lhs, RealType rhs) no
  * @return     Result value.
  */
 template<typename Impl2>
-inline constexpr UnitBase<Impl2> operator*(RealType lhs, UnitBase<Impl2> rhs) noexcept
-{
-    return rhs *= lhs;
-}
+inline constexpr UnitBase<Impl2> operator*(RealType lhs, UnitBase<Impl2> rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -1305,12 +1262,7 @@ inline constexpr UnitBase<Impl2> operator*(RealType lhs, UnitBase<Impl2> rhs) no
  */
 template<typename Impl1, typename Impl2>
 inline constexpr auto operator/(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept
-    -> UnitBase<typename detail::ImplHelper<Impl1, Impl2>::DivImplType>
-{
-    return UnitBase<typename detail::ImplHelper<Impl1, Impl2>::DivImplType>(
-        lhs.get() / rhs.get()
-    );
-}
+    -> UnitBase<typename detail::ImplHelper<Impl1, Impl2>::DivImplType>;
 
 /* ************************************************************************ */
 
@@ -1325,10 +1277,7 @@ inline constexpr auto operator/(const UnitBase<Impl1>& lhs, const UnitBase<Impl2
  * @return     Result value.
  */
 template<typename Impl1>
-inline constexpr UnitBase<Impl1> operator/(UnitBase<Impl1> lhs, RealType rhs) noexcept
-{
-    return lhs /= rhs;
-}
+inline constexpr UnitBase<Impl1> operator/(UnitBase<Impl1> lhs, RealType rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -1342,6 +1291,717 @@ inline constexpr UnitBase<Impl1> operator/(UnitBase<Impl1> lhs, RealType rhs) no
  *
  * @return     Result value.
  */
+template<typename Impl2>
+inline constexpr auto operator/(RealType lhs, const UnitBase<Impl2>& rhs) noexcept
+    -> UnitBase<typename detail::ImplInverter<Impl2>::ImplType>;
+
+/* ************************************************************************ */
+
+}
+}
+
+/* ************************************************************************ */
+/* ************************************************************************ */
+/* ************************************************************************ */
+
+namespace cece {
+namespace unit {
+
+/* ************************************************************************ */
+
+template<int Length, int Time, int Mass, int Current, int Temperature, int Substance, int Intensity>
+inline StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>::StaticImpl(ValueType value) noexcept
+    : value(value)
+{
+    // Check if
+}
+
+/* ************************************************************************ */
+
+template<int Length, int Time, int Mass, int Current, int Temperature, int Substance, int Intensity>
+inline StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>::StaticImpl(const DynamicImpl& impl)
+    : value(impl.value)
+{
+    // Check if can be converted
+    if (impl.detail.length != Length)
+        throw Exception("Length exponent mismatch: " + toString(impl.detail.length) + " vs " + toString(Length));
+
+    if (impl.detail.time != Time)
+        throw Exception("Time exponent mismatch: " + toString(impl.detail.time) + " vs " + toString(Time));
+
+    if (impl.detail.mass != Mass)
+        throw Exception("Mass exponent mismatch: " + toString(impl.detail.mass) + " vs " + toString(Mass));
+
+    if (impl.detail.current != Current)
+        throw Exception("Current exponent mismatch: " + toString(impl.detail.current) + " vs " + toString(Current));
+
+    if (impl.detail.temperature != Temperature)
+        throw Exception("Temperature exponent mismatch: " + toString(impl.detail.temperature) + " vs " + toString(Temperature));
+
+    if (impl.detail.substance != Substance)
+        throw Exception("Substance exponent mismatch: " + toString(impl.detail.substance) + " vs " + toString(Substance));
+
+    if (impl.detail.intensity != Intensity)
+        throw Exception("Intensity exponent mismatch: " + toString(impl.detail.intensity) + " vs " + toString(Intensity));
+}
+
+/* ************************************************************************ */
+
+template<int Length, int Time, int Mass, int Current, int Temperature, int Substance, int Intensity>
+inline StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>& StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>::operator=(const DynamicImpl& impl)
+{
+    value = impl.value;
+
+    // Check if can be converted
+    if (impl.detail.length != Length)
+        throw Exception("Length exponent mismatch: " + toString(impl.detail.length) + " vs " + toString(Length));
+
+    if (impl.detail.time != Time)
+        throw Exception("Time exponent mismatch: " + toString(impl.detail.time) + " vs " + toString(Time));
+
+    if (impl.detail.mass != Mass)
+        throw Exception("Mass exponent mismatch: " + toString(impl.detail.mass) + " vs " + toString(Mass));
+
+    if (impl.detail.current != Current)
+        throw Exception("Current exponent mismatch: " + toString(impl.detail.current) + " vs " + toString(Current));
+
+    if (impl.detail.temperature != Temperature)
+        throw Exception("Temperature exponent mismatch: " + toString(impl.detail.temperature) + " vs " + toString(Temperature));
+
+    if (impl.detail.substance != Substance)
+        throw Exception("Substance exponent mismatch: " + toString(impl.detail.substance) + " vs " + toString(Substance));
+
+    if (impl.detail.intensity != Intensity)
+        throw Exception("Intensity exponent mismatch: " + toString(impl.detail.intensity) + " vs " + toString(Intensity));
+
+    return *this;
+}
+
+/* ************************************************************************ */
+
+template<int Length, int Time, int Mass, int Current, int Temperature, int Substance, int Intensity>
+inline constexpr int StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>::getLengthExp() const noexcept
+{
+    return Length;
+}
+
+/* ************************************************************************ */
+
+template<int Length, int Time, int Mass, int Current, int Temperature, int Substance, int Intensity>
+inline constexpr int StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>::getTimeExp() const noexcept
+{
+    return Time;
+}
+
+/* ************************************************************************ */
+
+template<int Length, int Time, int Mass, int Current, int Temperature, int Substance, int Intensity>
+inline constexpr int StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>::getMassExp() const noexcept
+{
+    return Mass;
+}
+
+/* ************************************************************************ */
+
+template<int Length, int Time, int Mass, int Current, int Temperature, int Substance, int Intensity>
+inline constexpr int StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>::getCurrentExp() const noexcept
+{
+    return Current;
+}
+
+/* ************************************************************************ */
+
+template<int Length, int Time, int Mass, int Current, int Temperature, int Substance, int Intensity>
+inline constexpr int StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>::getTemperatureExp() const noexcept
+{
+    return Temperature;
+}
+
+/* ************************************************************************ */
+
+template<int Length, int Time, int Mass, int Current, int Temperature, int Substance, int Intensity>
+inline constexpr int StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>::getSubstanceExp() const noexcept
+{
+    return Substance;
+}
+
+/* ************************************************************************ */
+
+template<int Length, int Time, int Mass, int Current, int Temperature, int Substance, int Intensity>
+inline constexpr int StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>::getIntensityExp() const noexcept
+{
+    return Intensity;
+}
+
+/* ************************************************************************ */
+
+inline DynamicImpl::DynamicImpl(ValueType value, Detail detail) noexcept
+    : value(value)
+    , detail(detail)
+{
+    // Check if
+}
+
+/* ************************************************************************ */
+
+template<int Length, int Time, int Mass, int Current, int Temperature, int Substance, int Intensity>
+inline DynamicImpl::DynamicImpl(const StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>& impl) noexcept
+    : value(impl.value)
+    , detail{Length, Time, Mass, Current, Temperature, Substance, Intensity}
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+template<int Length, int Time, int Mass, int Current, int Temperature, int Substance, int Intensity>
+inline DynamicImpl& DynamicImpl::operator=(const StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>& impl) noexcept
+{
+    value = impl.value;
+    detail.length = Length;
+    detail.time = Time;
+    detail.mass = Mass;
+    detail.current = Current;
+    detail.temperature = Temperature;
+    detail.substance = Substance;
+    detail.intensity = Intensity;
+
+    return *this;
+}
+
+/* ************************************************************************ */
+
+inline constexpr int DynamicImpl::getLengthExp() const noexcept
+{
+    return detail.length;
+}
+
+/* ************************************************************************ */
+
+inline constexpr int DynamicImpl::getTimeExp() const noexcept
+{
+    return detail.time;
+}
+
+/* ************************************************************************ */
+
+inline constexpr int DynamicImpl::getMassExp() const noexcept
+{
+    return detail.mass;
+}
+
+/* ************************************************************************ */
+
+inline constexpr int DynamicImpl::getCurrentExp() const noexcept
+{
+    return detail.current;
+}
+
+/* ************************************************************************ */
+
+inline constexpr int DynamicImpl::getTemperatureExp() const noexcept
+{
+    return detail.temperature;
+}
+
+/* ************************************************************************ */
+
+inline constexpr int DynamicImpl::getSubstanceExp() const noexcept
+{
+    return detail.substance;
+}
+
+/* ************************************************************************ */
+
+inline constexpr int DynamicImpl::getIntensityExp() const noexcept
+{
+    return detail.intensity;
+}
+
+/* ************************************************************************ */
+
+template<typename Impl>
+inline constexpr UnitBase<Impl>::UnitBase() noexcept
+    : m_impl()
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+template<typename Impl>
+inline constexpr UnitBase<Impl>::UnitBase(Impl impl)
+    : m_impl(impl)
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+template<typename Impl>
+template<typename I, typename std::enable_if<
+    std::is_same<I, StaticImpl<0, 0, 0, 0, 0, 0, 0>>::value ||
+    std::is_same<I, DynamicImpl>::value,
+    int
+>::type>
+inline constexpr UnitBase<Impl>::UnitBase(ValueType value) noexcept
+    : m_impl(value)
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+template<typename Impl>
+template<typename... Args, typename std::enable_if<
+    std::is_constructible<Impl, Args...>::value,
+    int
+>::type>
+inline constexpr UnitBase<Impl>::UnitBase(Args&&... args)
+    : m_impl(std::forward<Args>(args)...)
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+template<typename Impl>
+inline constexpr UnitBase<Impl>::UnitBase(math::Zero_t) noexcept
+    : m_impl()
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+template<typename Impl>
+inline constexpr UnitBase<Impl>::UnitBase(const UnitBase& unit)
+    : m_impl(unit.m_impl)
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+template<typename Impl>
+inline constexpr UnitBase<Impl>::UnitBase(UnitBase&& unit)
+    : m_impl(unit.m_impl)
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+template<typename Impl>
+template<typename Impl2>
+inline constexpr UnitBase<Impl>::UnitBase(const UnitBase<Impl2>& unit)
+    : m_impl(unit.m_impl)
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+template<typename Impl>
+template<typename Impl2>
+inline UnitBase<Impl>::UnitBase(UnitBase<Impl2>&& unit)
+    : m_impl(unit.m_impl)
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+template<typename Impl>
+inline UnitBase<Impl>& UnitBase<Impl>::operator=(const UnitBase& unit)
+{
+    m_impl = unit.m_impl;
+    return *this;
+}
+
+/* ************************************************************************ */
+
+template<typename Impl>
+inline UnitBase<Impl>& UnitBase<Impl>::operator=(UnitBase&& unit) noexcept
+{
+    m_impl = unit.m_impl;
+    return *this;
+}
+
+/* ************************************************************************ */
+
+template<typename Impl>
+template<typename Impl2>
+inline UnitBase<Impl>& UnitBase<Impl>::operator=(const UnitBase<Impl2>& unit)
+{
+    m_impl = unit.m_impl;
+    return *this;
+}
+
+/* ************************************************************************ */
+
+template<typename Impl>
+template<typename I, typename std::enable_if<std::is_same<I, StaticImpl<0, 0, 0, 0, 0, 0, 0>>::value, int>::type>
+inline UnitBase<Impl>::operator ValueType() const noexcept
+{
+    return get();
+}
+
+/* ************************************************************************ */
+
+template<typename Impl>
+template<typename I, typename std::enable_if<!std::is_same<I, StaticImpl<0, 0, 0, 0, 0, 0, 0>>::value, int>::type>
+inline UnitBase<Impl>::operator ValueType() const noexcept
+{
+    return get();
+}
+
+/* ************************************************************************ */
+
+template<typename Impl>
+inline UnitBase<Impl> UnitBase<Impl>::operator+() const noexcept
+{
+    return UnitBase(m_impl.value);
+}
+
+/* ************************************************************************ */
+
+template<typename Impl>
+inline UnitBase<Impl> UnitBase<Impl>::operator-() const noexcept
+{
+    return UnitBase(-m_impl.value);
+}
+
+/* ************************************************************************ */
+
+template<typename Impl>
+inline UnitBase<Impl>& UnitBase<Impl>::operator+=(UnitBase rhs) noexcept
+{
+    m_impl.value += rhs.m_impl.value;
+    return *this;
+}
+
+/* ************************************************************************ */
+
+template<typename Impl>
+inline UnitBase<Impl>& UnitBase<Impl>::operator-=(UnitBase rhs) noexcept
+{
+    m_impl.value -= rhs.m_impl.value;
+    return *this;
+}
+
+/* ************************************************************************ */
+
+template<typename Impl>
+inline UnitBase<Impl>& UnitBase<Impl>::operator*=(ValueType rhs) noexcept
+{
+    m_impl.value *= rhs;
+    return *this;
+}
+
+/* ************************************************************************ */
+
+template<typename Impl>
+inline UnitBase<Impl>& UnitBase<Impl>::operator/=(ValueType rhs) noexcept
+{
+    m_impl.value /= rhs;
+    return *this;
+}
+
+/* ************************************************************************ */
+
+template<typename Impl>
+inline constexpr ValueType UnitBase<Impl>::get() const noexcept
+{
+    return m_impl.value;
+}
+
+/* ************************************************************************ */
+
+template<typename Impl>
+inline constexpr ValueType UnitBase<Impl>::value() const noexcept
+{
+    return get();
+}
+
+/* ************************************************************************ */
+
+template<typename Impl>
+inline constexpr int UnitBase<Impl>::getLengthExp() const noexcept
+{
+    return m_impl.getLengthExp();
+}
+
+/* ************************************************************************ */
+
+template<typename Impl>
+inline constexpr int UnitBase<Impl>::getTimeExp() const noexcept
+{
+    return m_impl.getTimeExp();
+}
+
+/* ************************************************************************ */
+
+template<typename Impl>
+inline constexpr int UnitBase<Impl>::getMassExp() const noexcept
+{
+    return m_impl.getMassExp();
+}
+
+/* ************************************************************************ */
+
+template<typename Impl>
+inline constexpr int UnitBase<Impl>::getCurrentExp() const noexcept
+{
+    return m_impl.getCurrentExp();
+}
+
+/* ************************************************************************ */
+
+template<typename Impl>
+inline constexpr int UnitBase<Impl>::getTemperatureExp() const noexcept
+{
+    return m_impl.getTemperatureExp();
+}
+
+/* ************************************************************************ */
+
+template<typename Impl>
+inline constexpr int UnitBase<Impl>::getSubstanceExp() const noexcept
+{
+    return m_impl.getSubstanceExp();
+}
+
+/* ************************************************************************ */
+
+template<typename Impl>
+inline constexpr int UnitBase<Impl>::getIntensityExp() const noexcept
+{
+    return m_impl.getIntensityExp();
+}
+
+/* ************************************************************************ */
+
+template<typename Impl1, typename Impl2>
+inline constexpr bool operator==(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept
+{
+    static_assert(detail::ImplHelper<Impl1, Impl2>::isRelSupported, "Can't compare those units");
+
+    return std::abs(lhs.get() - rhs.get()) < std::numeric_limits<ValueType>::epsilon();
+}
+
+/* ************************************************************************ */
+
+template<typename Impl1>
+inline constexpr bool operator==(const UnitBase<Impl1>& lhs, math::Zero_t rhs) noexcept
+{
+    return std::abs(lhs.get()) < std::numeric_limits<ValueType>::epsilon();
+}
+
+/* ************************************************************************ */
+
+template<typename Impl2>
+inline constexpr bool operator==(math::Zero_t lhs, const UnitBase<Impl2>& rhs) noexcept
+{
+    return std::abs(rhs.get()) < std::numeric_limits<ValueType>::epsilon();
+}
+
+/* ************************************************************************ */
+
+template<typename Impl1, typename Impl2>
+inline constexpr bool operator!=(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept
+{
+    return !operator==(lhs, rhs);
+}
+
+/* ************************************************************************ */
+
+template<typename Impl1>
+inline constexpr bool operator!=(const UnitBase<Impl1>& lhs, math::Zero_t rhs) noexcept
+{
+    return !operator==(lhs, rhs);
+}
+
+/* ************************************************************************ */
+
+template<typename Impl2>
+inline constexpr bool operator!=(math::Zero_t lhs, const UnitBase<Impl2>& rhs) noexcept
+{
+    return !operator==(lhs, rhs);
+}
+
+/* ************************************************************************ */
+
+template<typename Impl1, typename Impl2>
+inline constexpr bool operator<(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept
+{
+    static_assert(detail::ImplHelper<Impl1, Impl2>::isRelSupported, "Can't compare those units");
+
+    return lhs.get() < rhs.get();
+}
+
+/* ************************************************************************ */
+
+template<typename Impl1>
+inline constexpr bool operator<(const UnitBase<Impl1>& lhs, math::Zero_t rhs) noexcept
+{
+    return lhs.get() < 0;
+}
+
+/* ************************************************************************ */
+
+template<typename Impl2>
+inline constexpr bool operator<(math::Zero_t lhs, const UnitBase<Impl2>& rhs) noexcept
+{
+    return 0 < rhs.get();
+}
+
+/* ************************************************************************ */
+
+template<typename Impl1, typename Impl2>
+inline constexpr bool operator<=(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept
+{
+    return !operator>(lhs, rhs);
+}
+
+/* ************************************************************************ */
+
+template<typename Impl1>
+inline constexpr bool operator<=(const UnitBase<Impl1>& lhs, math::Zero_t rhs) noexcept
+{
+    return !operator>(lhs, rhs);
+}
+
+/* ************************************************************************ */
+
+template<typename Impl2>
+inline constexpr bool operator<=(math::Zero_t lhs, const UnitBase<Impl2>& rhs) noexcept
+{
+    return !operator>(lhs, rhs);
+}
+
+/* ************************************************************************ */
+
+template<typename Impl1, typename Impl2>
+inline constexpr bool operator>(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept
+{
+    return operator<(rhs, lhs);
+}
+
+/* ************************************************************************ */
+
+template<typename Impl1>
+inline constexpr bool operator>(const UnitBase<Impl1>& lhs, math::Zero_t rhs) noexcept
+{
+    return operator<(rhs, lhs);
+}
+
+/* ************************************************************************ */
+
+template<typename Impl2>
+inline constexpr bool operator>(math::Zero_t lhs, const UnitBase<Impl2>& rhs) noexcept
+{
+    return operator<(rhs, lhs);
+}
+
+/* ************************************************************************ */
+
+template<typename Impl1, typename Impl2>
+inline constexpr bool operator>=(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept
+{
+    return !operator<(lhs, rhs);
+}
+
+/* ************************************************************************ */
+
+template<typename Impl1>
+inline constexpr bool operator>=(const UnitBase<Impl1>& lhs, math::Zero_t rhs) noexcept
+{
+    return !operator<(lhs, rhs);
+}
+
+/* ************************************************************************ */
+
+template<typename Impl2>
+inline constexpr bool operator>=(math::Zero_t lhs, const UnitBase<Impl2>& rhs) noexcept
+{
+    return !operator<(lhs, rhs);
+}
+
+/* ************************************************************************ */
+
+template<typename Impl1, typename Impl2>
+inline constexpr auto operator+(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept
+    -> UnitBase<typename detail::ImplHelper<Impl1, Impl2>::AddImplType>
+{
+    static_assert(detail::ImplHelper<Impl1, Impl2>::isAddSupported, "Can't add those units");
+
+    return UnitBase<typename detail::ImplHelper<Impl1, Impl2>::AddImplType>(
+        lhs.get() + rhs.get()
+    );
+}
+
+/* ************************************************************************ */
+
+template<typename Impl1, typename Impl2>
+inline constexpr auto operator-(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept
+    -> UnitBase<typename detail::ImplHelper<Impl1, Impl2>::SubImplType>
+{
+    static_assert(detail::ImplHelper<Impl1, Impl2>::isSubSupported, "Can't subtract those units");
+
+    return UnitBase<typename detail::ImplHelper<Impl1, Impl2>::SubImplType>(
+        lhs.get() - rhs.get()
+    );
+}
+
+/* ************************************************************************ */
+
+template<typename Impl1, typename Impl2>
+inline constexpr auto operator*(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept
+    -> UnitBase<typename detail::ImplHelper<Impl1, Impl2>::MulImplType>
+{
+    return UnitBase<typename detail::ImplHelper<Impl1, Impl2>::MulImplType>(
+        lhs.get() * rhs.get()
+    );
+}
+
+/* ************************************************************************ */
+
+template<typename Impl1>
+inline constexpr UnitBase<Impl1> operator*(UnitBase<Impl1> lhs, RealType rhs) noexcept
+{
+    return lhs *= rhs;
+}
+
+/* ************************************************************************ */
+
+template<typename Impl2>
+inline constexpr UnitBase<Impl2> operator*(RealType lhs, UnitBase<Impl2> rhs) noexcept
+{
+    return rhs *= lhs;
+}
+
+/* ************************************************************************ */
+
+template<typename Impl1, typename Impl2>
+inline constexpr auto operator/(const UnitBase<Impl1>& lhs, const UnitBase<Impl2>& rhs) noexcept
+    -> UnitBase<typename detail::ImplHelper<Impl1, Impl2>::DivImplType>
+{
+    return UnitBase<typename detail::ImplHelper<Impl1, Impl2>::DivImplType>(
+        lhs.get() / rhs.get()
+    );
+}
+
+/* ************************************************************************ */
+
+template<typename Impl1>
+inline constexpr UnitBase<Impl1> operator/(UnitBase<Impl1> lhs, RealType rhs) noexcept
+{
+    return lhs /= rhs;
+}
+
+/* ************************************************************************ */
+
 template<typename Impl2>
 inline constexpr auto operator/(RealType lhs, const UnitBase<Impl2>& rhs) noexcept
     -> UnitBase<typename detail::ImplInverter<Impl2>::ImplType>

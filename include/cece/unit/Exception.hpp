@@ -38,9 +38,9 @@ namespace unit {
 /* ************************************************************************ */
 
 /**
- * @brief      Unit exception.
+ * @brief      Unit cast exception.
  */
-class Exception : public RuntimeException
+class CastException : public RuntimeException
 {
     using RuntimeException::RuntimeException;
 };

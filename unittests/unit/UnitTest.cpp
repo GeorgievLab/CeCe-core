@@ -655,6 +655,111 @@ TEST(UnitsTest, rel)
 
 /* ************************************************************************ */
 
+TEST(UnitsTest, cast)
+{
+    using StaticUnit  = UnitBase<StaticImpl<1, 0, 0, 0, 0, 0, 0>>;
+    using DynamicUnit = UnitBase<DynamicImpl>;
+    using DynamicDetail = DynamicImpl::Detail;
+
+    {
+        DynamicUnit unit(1, DynamicDetail{1, 0, 0, 0, 0, 0, 0});
+
+        EXPECT_NO_THROW({StaticUnit unit2(unit);});
+    }
+
+    {
+        DynamicUnit unit(1, DynamicDetail{0, 0, 0, 0, 0, 0, 0});
+
+        EXPECT_THROW({StaticUnit unit2(unit);}, CastException);
+    }
+
+    {
+        DynamicUnit unit(1, DynamicDetail{1, 1, 0, 0, 0, 0, 0});
+
+        EXPECT_THROW({StaticUnit unit2(unit);}, CastException);
+    }
+
+    {
+        DynamicUnit unit(1, DynamicDetail{1, 0, 1, 0, 0, 0, 0});
+
+        EXPECT_THROW({StaticUnit unit2(unit);}, CastException);
+    }
+
+    {
+        DynamicUnit unit(1, DynamicDetail{1, 0, 0, 1, 0, 0, 0});
+
+        EXPECT_THROW({StaticUnit unit2(unit);}, CastException);
+    }
+
+    {
+        DynamicUnit unit(1, DynamicDetail{1, 0, 0, 0, 1, 0, 0});
+
+        EXPECT_THROW({StaticUnit unit2(unit);}, CastException);
+    }
+
+    {
+        DynamicUnit unit(1, DynamicDetail{1, 0, 0, 0, 0, 1, 0});
+
+        EXPECT_THROW({StaticUnit unit2(unit);}, CastException);
+    }
+
+    {
+        DynamicUnit unit(1, DynamicDetail{1, 0, 0, 0, 0, 0, 1});
+
+        EXPECT_THROW({StaticUnit unit2(unit);}, CastException);
+    }
+
+    {
+        DynamicUnit unit(1, DynamicDetail{1, 0, 0, 0, 0, 0, 0});
+
+        EXPECT_NO_THROW({StaticUnit unit2; unit2 = unit;});
+    }
+
+    {
+        DynamicUnit unit(1, DynamicDetail{0, 0, 0, 0, 0, 0, 0});
+
+        EXPECT_THROW({StaticUnit unit2; unit2 = unit;}, CastException);
+    }
+
+    {
+        DynamicUnit unit(1, DynamicDetail{1, 1, 0, 0, 0, 0, 0});
+
+        EXPECT_THROW({StaticUnit unit2; unit2 = unit;}, CastException);
+    }
+
+    {
+        DynamicUnit unit(1, DynamicDetail{1, 0, 1, 0, 0, 0, 0});
+
+        EXPECT_THROW({StaticUnit unit2; unit2 = unit;}, CastException);
+    }
+
+    {
+        DynamicUnit unit(1, DynamicDetail{1, 0, 0, 1, 0, 0, 0});
+
+        EXPECT_THROW({StaticUnit unit2; unit2 = unit;}, CastException);
+    }
+
+    {
+        DynamicUnit unit(1, DynamicDetail{1, 0, 0, 0, 1, 0, 0});
+
+        EXPECT_THROW({StaticUnit unit2; unit2 = unit;}, CastException);
+    }
+
+    {
+        DynamicUnit unit(1, DynamicDetail{1, 0, 0, 0, 0, 1, 0});
+
+        EXPECT_THROW({StaticUnit unit2; unit2 = unit;}, CastException);
+    }
+
+    {
+        DynamicUnit unit(1, DynamicDetail{1, 0, 0, 0, 0, 0, 1});
+
+        EXPECT_THROW({StaticUnit unit2; unit2 = unit;}, CastException);
+    }
+}
+
+/* ************************************************************************ */
+
 TEST(UnitsTest, relDiff)
 {
     using Unit1 = UnitBase<StaticImpl<1, 0, 0, 0, 0, 0, 0>>;
@@ -838,6 +943,37 @@ TEST(UnitsTest, div)
         EXPECT_DOUBLE_EQ(2, unit1.get());
         EXPECT_DOUBLE_EQ(4, unit2.get());
         EXPECT_DOUBLE_EQ(6, unit3.get());
+    }
+
+    {
+        Unit unit1(10);
+        Unit unit2(5);
+
+        auto unit3 = unit1 / unit2;
+
+        EXPECT_DOUBLE_EQ(2, unit3.get());
+        EXPECT_EQ(0, unit3.getLengthExp());
+        EXPECT_EQ(0, unit3.getTimeExp());
+        EXPECT_EQ(0, unit3.getMassExp());
+        EXPECT_EQ(0, unit3.getCurrentExp());
+        EXPECT_EQ(0, unit3.getTemperatureExp());
+        EXPECT_EQ(0, unit3.getSubstanceExp());
+        EXPECT_EQ(0, unit3.getIntensityExp());
+    }
+
+    {
+        Unit unit1(10);
+
+        auto unit2 = 100 / unit1;
+
+        EXPECT_DOUBLE_EQ(10, unit2.get());
+        EXPECT_EQ(-1, unit2.getLengthExp());
+        EXPECT_EQ(0, unit2.getTimeExp());
+        EXPECT_EQ(0, unit2.getMassExp());
+        EXPECT_EQ(0, unit2.getCurrentExp());
+        EXPECT_EQ(0, unit2.getTemperatureExp());
+        EXPECT_EQ(0, unit2.getSubstanceExp());
+        EXPECT_EQ(0, unit2.getIntensityExp());
     }
 }
 

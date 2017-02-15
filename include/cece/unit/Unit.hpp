@@ -1324,25 +1324,25 @@ inline StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity
 {
     // Check if can be converted
     if (impl.detail.length != Length)
-        throw Exception("Length exponent mismatch: " + toString(impl.detail.length) + " vs " + toString(Length));
+        throw CastException("Length exponent mismatch: " + toString(impl.detail.length) + " vs " + toString(Length));
 
     if (impl.detail.time != Time)
-        throw Exception("Time exponent mismatch: " + toString(impl.detail.time) + " vs " + toString(Time));
+        throw CastException("Time exponent mismatch: " + toString(impl.detail.time) + " vs " + toString(Time));
 
     if (impl.detail.mass != Mass)
-        throw Exception("Mass exponent mismatch: " + toString(impl.detail.mass) + " vs " + toString(Mass));
+        throw CastException("Mass exponent mismatch: " + toString(impl.detail.mass) + " vs " + toString(Mass));
 
     if (impl.detail.current != Current)
-        throw Exception("Current exponent mismatch: " + toString(impl.detail.current) + " vs " + toString(Current));
+        throw CastException("Current exponent mismatch: " + toString(impl.detail.current) + " vs " + toString(Current));
 
     if (impl.detail.temperature != Temperature)
-        throw Exception("Temperature exponent mismatch: " + toString(impl.detail.temperature) + " vs " + toString(Temperature));
+        throw CastException("Temperature exponent mismatch: " + toString(impl.detail.temperature) + " vs " + toString(Temperature));
 
     if (impl.detail.substance != Substance)
-        throw Exception("Substance exponent mismatch: " + toString(impl.detail.substance) + " vs " + toString(Substance));
+        throw CastException("Substance exponent mismatch: " + toString(impl.detail.substance) + " vs " + toString(Substance));
 
     if (impl.detail.intensity != Intensity)
-        throw Exception("Intensity exponent mismatch: " + toString(impl.detail.intensity) + " vs " + toString(Intensity));
+        throw CastException("Intensity exponent mismatch: " + toString(impl.detail.intensity) + " vs " + toString(Intensity));
 }
 
 /* ************************************************************************ */
@@ -1354,25 +1354,25 @@ inline StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity
 
     // Check if can be converted
     if (impl.detail.length != Length)
-        throw Exception("Length exponent mismatch: " + toString(impl.detail.length) + " vs " + toString(Length));
+        throw CastException("Length exponent mismatch: " + toString(impl.detail.length) + " vs " + toString(Length));
 
     if (impl.detail.time != Time)
-        throw Exception("Time exponent mismatch: " + toString(impl.detail.time) + " vs " + toString(Time));
+        throw CastException("Time exponent mismatch: " + toString(impl.detail.time) + " vs " + toString(Time));
 
     if (impl.detail.mass != Mass)
-        throw Exception("Mass exponent mismatch: " + toString(impl.detail.mass) + " vs " + toString(Mass));
+        throw CastException("Mass exponent mismatch: " + toString(impl.detail.mass) + " vs " + toString(Mass));
 
     if (impl.detail.current != Current)
-        throw Exception("Current exponent mismatch: " + toString(impl.detail.current) + " vs " + toString(Current));
+        throw CastException("Current exponent mismatch: " + toString(impl.detail.current) + " vs " + toString(Current));
 
     if (impl.detail.temperature != Temperature)
-        throw Exception("Temperature exponent mismatch: " + toString(impl.detail.temperature) + " vs " + toString(Temperature));
+        throw CastException("Temperature exponent mismatch: " + toString(impl.detail.temperature) + " vs " + toString(Temperature));
 
     if (impl.detail.substance != Substance)
-        throw Exception("Substance exponent mismatch: " + toString(impl.detail.substance) + " vs " + toString(Substance));
+        throw CastException("Substance exponent mismatch: " + toString(impl.detail.substance) + " vs " + toString(Substance));
 
     if (impl.detail.intensity != Intensity)
-        throw Exception("Intensity exponent mismatch: " + toString(impl.detail.intensity) + " vs " + toString(Intensity));
+        throw CastException("Intensity exponent mismatch: " + toString(impl.detail.intensity) + " vs " + toString(Intensity));
 
     return *this;
 }

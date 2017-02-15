@@ -23,102 +23,85 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
+// GTest
+#include "gtest/gtest.h"
 
 // CeCe
-#include "cece/common.hpp"
-#include "cece/math/Vector.hpp"
+#include "cece/unit/math.hpp"
 #include "cece/unit/Units.hpp"
 
 /* ************************************************************************ */
 
-namespace cece {
-namespace unit {
+using namespace cece;
+using namespace cece::unit;
 
 /* ************************************************************************ */
 
-/**
- * @brief      Position vector structure.
- * @deprecated
- */
-using PositionVector = math::Vector<Length>;
+TEST(UnitMathTest, sqrt)
+{
+    {
+        Area area(100);
 
-/* ************************************************************************ */
-
-/**
- * @brief      Position vector structure.
- */
-using LengthVector = math::Vector<Length>;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Velocity vector structure.
- */
-using VelocityVector = math::Vector<Velocity>;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Acceleration vector structure.
- */
-using AccelerationVector = math::Vector<Acceleration>;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Force vector structure.
- */
-using ForceVector = math::Vector<Force>;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Impulse vector structure.
- */
-using ImpulseVector = math::Vector<Impulse>;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Scale vector.
- * @deprecated
- */
-using ScaleVector = math::Vector<RealType>;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Size vector.
- * @deprecated
- */
-using SizeVector = math::Vector<Length>;
-
-/* ************************************************************************ */
-
+        auto unit = sqrt(area);
+        EXPECT_DOUBLE_EQ(10, unit.get());
+        EXPECT_EQ(1, unit.getLengthExp());
+        EXPECT_EQ(0, unit.getTimeExp());
+        EXPECT_EQ(0, unit.getMassExp());
+        EXPECT_EQ(0, unit.getCurrentExp());
+        EXPECT_EQ(0, unit.getTemperatureExp());
+        EXPECT_EQ(0, unit.getSubstanceExp());
+        EXPECT_EQ(0, unit.getIntensityExp());
+    }
 }
 
 /* ************************************************************************ */
 
-namespace math {
+TEST(UnitMathTest, abs)
+{
+    {
+        Area area(100);
 
-/* ************************************************************************ */
+        auto unit = abs(area);
+        EXPECT_DOUBLE_EQ(100, unit.get());
+        EXPECT_EQ(2, unit.getLengthExp());
+        EXPECT_EQ(0, unit.getTimeExp());
+        EXPECT_EQ(0, unit.getMassExp());
+        EXPECT_EQ(0, unit.getCurrentExp());
+        EXPECT_EQ(0, unit.getTemperatureExp());
+        EXPECT_EQ(0, unit.getSubstanceExp());
+        EXPECT_EQ(0, unit.getIntensityExp());
+    }
 
-extern template class BasicVector<unit::Length, DIMENSION>;
-extern template class BasicVector<unit::Velocity, DIMENSION>;
-extern template class BasicVector<unit::Acceleration, DIMENSION>;
-extern template class BasicVector<unit::Force, DIMENSION>;
-extern template class BasicVector<unit::Impulse, DIMENSION>;
-extern template class BasicVector<RealType, DIMENSION>;
+    {
+        Area area(-100);
 
-/* ************************************************************************ */
-
+        auto unit = abs(area);
+        EXPECT_DOUBLE_EQ(100, unit.get());
+        EXPECT_EQ(2, unit.getLengthExp());
+        EXPECT_EQ(0, unit.getTimeExp());
+        EXPECT_EQ(0, unit.getMassExp());
+        EXPECT_EQ(0, unit.getCurrentExp());
+        EXPECT_EQ(0, unit.getTemperatureExp());
+        EXPECT_EQ(0, unit.getSubstanceExp());
+        EXPECT_EQ(0, unit.getIntensityExp());
+    }
 }
 
 /* ************************************************************************ */
 
+TEST(UnitMathTest, angle)
+{
+    {
+        auto rad = deg2rad(10);
+
+        EXPECT_DOUBLE_EQ(10 * math::PI / 180.0, rad);
+    }
+
+    {
+        auto deg = rad2deg(3);
+
+        EXPECT_DOUBLE_EQ(3 * 180.0 / math::PI, deg);
+    }
 }
 
 /* ************************************************************************ */

@@ -23,10 +23,6 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-#pragma once
-
-/* ************************************************************************ */
-
 #ifndef CECE_UNIT_SYMBOL
 #define CECE_UNIT_SYMBOL(unit, base, sym, def)
 #endif
@@ -42,6 +38,8 @@ CECE_UNIT_SYMBOL(Length, dm, "dm", m(1e-1))
 CECE_UNIT_SYMBOL(Length, cm, "cm", m(1e-2))
 CECE_UNIT_SYMBOL(Length, mm, "mm", m(1e-3))
 CECE_UNIT_SYMBOL(Length, um, "um", m(1e-6))
+CECE_UNIT_SYMBOL(Length, nm, "nm", m(1e-9))
+CECE_UNIT_SYMBOL(Length, pm, "pm", m(1e-12))
 
 CECE_UNIT_SYMBOL_BASE(Mass, g, "g")
 CECE_UNIT_SYMBOL(Mass, kg, "kg", g(1e3))
@@ -53,6 +51,7 @@ CECE_UNIT_SYMBOL(Mass, pg, "pg", g(1e-12))
 CECE_UNIT_SYMBOL_BASE(Time, s, "s")
 CECE_UNIT_SYMBOL(Time, ms, "ms", s(1e-3))
 CECE_UNIT_SYMBOL(Time, us, "us", s(1e-6))
+CECE_UNIT_SYMBOL(Time, ns, "ns", s(1e-9))
 CECE_UNIT_SYMBOL(Time, min, "min", s(60))
 CECE_UNIT_SYMBOL(Time, h, "h", min(60))
 
@@ -93,16 +92,16 @@ CECE_UNIT_SYMBOL(KinematicViscosity, um2_s, "um2/s", um2(1) / s(1))
 
 CECE_UNIT_SYMBOL_BASE(AmountOfSubstance, mol, "mol")
 CECE_UNIT_SYMBOL(AmountOfSubstance, mmol, "mmol", mol(1e-3))
-CECE_UNIT_SYMBOL(AmountOfSubstance, umol, "umol", mol(1e-6))
-CECE_UNIT_SYMBOL(AmountOfSubstance, nmol, "nmol", mol(1e-9))
+CECE_UNIT_SYMBOL(AmountOfSubstance, umol, "umol", mmol(1e-3))
+CECE_UNIT_SYMBOL(AmountOfSubstance, nmol, "nmol", umol(1e-3))
 
 CECE_UNIT_SYMBOL(MolarConcentration, mol_m3, "mol/m3", mol(1) / m3(1))
 CECE_UNIT_SYMBOL(MolarConcentration, mmol_m3, "mmol/m3", mmol(1) / m3(1))
 CECE_UNIT_SYMBOL(MolarConcentration, umol_m3, "umol/m3", umol(1) / m3(1))
 CECE_UNIT_SYMBOL(MolarConcentration, nmol_m3, "nmol/m3", nmol(1) / m3(1))
 CECE_UNIT_SYMBOL(MolarConcentration, mM, "mM", mol(1) / m3(1))
-CECE_UNIT_SYMBOL(MolarConcentration, uM, "uM", umol(1) / m3(1))
-CECE_UNIT_SYMBOL(MolarConcentration, nM, "nM", nmol(1) / m3(1))
+CECE_UNIT_SYMBOL(MolarConcentration, uM, "uM", mmol(1) / m3(1))
+CECE_UNIT_SYMBOL(MolarConcentration, nM, "nM", umol(1) / m3(1))
 
 CECE_UNIT_SYMBOL_BASE(Angle, rad, "rad")
 CECE_UNIT_SYMBOL(Angle, deg, "deg", rad(deg2rad(1)))
@@ -110,8 +109,9 @@ CECE_UNIT_SYMBOL(Angle, deg, "deg", rad(deg2rad(1)))
 CECE_UNIT_SYMBOL_BASE(Frequency, _s, "/s")
 CECE_UNIT_SYMBOL(Frequency, Hz, "Hz", _s(1))
 CECE_UNIT_SYMBOL(Frequency, kHz, "kHz", Hz(1e3))
-CECE_UNIT_SYMBOL(Frequency, MHz, "MHz", Hz(1e6))
-CECE_UNIT_SYMBOL(Frequency, GHz, "GHz", Hz(1e9))
+CECE_UNIT_SYMBOL(Frequency, MHz, "MHz", kHz(1e3))
+CECE_UNIT_SYMBOL(Frequency, GHz, "GHz", MHz(1e3))
+CECE_UNIT_SYMBOL(Frequency, THz, "THz", GHz(1e3))
 
 CECE_UNIT_SYMBOL(Probability, precent, "%", 1 / 100.0)
 

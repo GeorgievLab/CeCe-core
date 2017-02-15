@@ -98,9 +98,41 @@ Unit parse(StringView value);
  * @return     is.
  */
 template<typename Impl>
-io::InStream& operator>>(io::InStream& is, UnitBase<Impl>& unit)
+io::InStream& operator>>(io::InStream& is, UnitBase<Impl>& unit);
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Output stream operator.
+ *
+ * @param      os    Output stream.
+ * @param      unit  Input value.
+ *
+ * @tparam     Impl  The unit implementation.
+ *
+ * @return     os.
+ */
+template<typename Impl>
+io::OutStream& operator<<(io::OutStream& os, const UnitBase<Impl>& unit) noexcept;
+
+/* ************************************************************************ */
+
+}
+}
+
+/* ************************************************************************ */
+/* ************************************************************************ */
+/* ************************************************************************ */
+
+namespace cece {
+namespace unit {
+
+/* ************************************************************************ */
+
+template<typename Impl>
+inline io::InStream& operator>>(io::InStream& is, UnitBase<Impl>& unit)
 {
-    // Parse unit and convert from dynamic to static
+    // Parse unit and convert from dynamic to static or dynamic
     unit = parse(is);
 
     return is;
@@ -119,7 +151,7 @@ io::InStream& operator>>(io::InStream& is, UnitBase<Impl>& unit)
  * @return     os.
  */
 template<typename Impl>
-io::OutStream& operator<<(io::OutStream& os, const UnitBase<Impl>& unit) noexcept
+inline io::OutStream& operator<<(io::OutStream& os, const UnitBase<Impl>& unit) noexcept
 {
     os << unit.get();
 

@@ -123,35 +123,35 @@ using Acceleration = Compose<Length, BaseTime<-2>>::type;
 /**
  * @brief      Class for representing force (Newton).
  */
-using Force = Compose<Length, BaseMass<1>, BaseTime<-2>>::type;
+using Force = Compose<Length, Mass, BaseTime<-2>>::type;
 
 /* ************************************************************************ */
 
 /**
  * @brief      Class for representing impulse.
  */
-using Impulse = Compose<Length, BaseMass<1>, BaseTime<-1>>::type;
+using Impulse = Compose<Length, Mass, BaseTime<-1>>::type;
 
 /* ************************************************************************ */
 
 /**
  * @brief      Class for representing density.
  */
-using Density = Compose<BaseMass<1>, BaseLength<-3>>::type;
+using Density = Compose<Mass, BaseLength<-3>>::type;
 
 /* ************************************************************************ */
 
 /**
  * @brief      Class for representing dynamic viscosity.
  */
-using DynamicViscosity = Compose<BaseMass<1>, BaseLength<-1>, BaseTime<-1>>::type;
+using DynamicViscosity = Compose<Mass, BaseLength<-1>, BaseTime<-1>>::type;
 
 /* ************************************************************************ */
 
 /**
  * @brief      Class for representing kinematic viscosity.
  */
-using KinematicViscosity = Compose<BaseLength<2>, BaseTime<-1>>::type;
+using KinematicViscosity = Compose<Area, BaseTime<-1>>::type;
 
 /* ************************************************************************ */
 
@@ -180,7 +180,7 @@ using NumberConcentration = BaseLength<-3>;
 /**
  * @brief      Molar concentration.
  */
-using MolarConcentration = Compose<BaseAmountOfSubstance<1>, BaseLength<-3>>::type;
+using MolarConcentration = Compose<AmountOfSubstance, BaseLength<-3>>::type;
 
 /* ************************************************************************ */
 
@@ -208,7 +208,7 @@ using Probability = None;
 /**
  * @brief      Volumeric flow rate.
  */
-using VolumericFlow = Compose<BaseLength<3>, BaseTime<-1>>::type;
+using VolumericFlow = Compose<Volume, BaseTime<-1>>::type;
 
 /* ************************************************************************ */
 
@@ -216,45 +216,6 @@ using VolumericFlow = Compose<BaseLength<3>, BaseTime<-1>>::type;
  * @brief      Frequency.
  */
 using Frequency = BaseTime<-1>;
-
-/* ************************************************************************ */
-
-/**
- * @brief Convert degrees to radians.
- *
- * @param value
- *
- * @return
- */
-inline constexpr ValueType deg2rad(ValueType value) noexcept
-{
-    return value * 0.01745329252f;
-}
-
-/* ************************************************************************ */
-
-/**
- * @brief Convert radians to degrees.
- *
- * @param value
- *
- * @return
- */
-inline constexpr ValueType rad2deg(ValueType value) noexcept
-{
-    return value * 57.2957795f;
-}
-
-/* ************************************************************************ */
-
-extern template class UnitBase<StaticImpl<0, 0, 0, 0, 0, 0, 0>>;
-extern template class UnitBase<StaticImpl<1, 0, 0, 0, 0, 0, 0>>;
-extern template class UnitBase<StaticImpl<0, 1, 0, 0, 0, 0, 0>>;
-extern template class UnitBase<StaticImpl<0, 0, 1, 0, 0, 0, 0>>;
-extern template class UnitBase<StaticImpl<0, 0, 0, 1, 0, 0, 0>>;
-extern template class UnitBase<StaticImpl<0, 0, 0, 0, 1, 0, 0>>;
-extern template class UnitBase<StaticImpl<0, 0, 0, 0, 0, 1, 0>>;
-extern template class UnitBase<StaticImpl<0, 0, 0, 0, 0, 0, 1>>;
 
 /* ************************************************************************ */
 

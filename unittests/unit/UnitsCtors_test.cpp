@@ -23,107 +23,80 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-// Declaration
-#include "cece/unit/UnitIo.hpp"
-
-// C++
-#include <cstdlib>
+// GTest
+#include "gtest/gtest.h"
 
 // CeCe
-#include "cece/Exception.hpp"
 #include "cece/unit/UnitsCtors.hpp"
 
 /* ************************************************************************ */
 
-namespace cece {
-namespace unit {
+using namespace cece;
+using namespace cece::unit;
 
 /* ************************************************************************ */
 
-namespace {
-
-/* ************************************************************************ */
-
-/**
- * @brief      Check if given character can be a part of symbol.
- *
- * @param      c     The tested character.
- *
- * @return     True if symbol character, False otherwise.
- */
-bool isSymbolChar(char c) noexcept
+TEST(UnitsCtorsTest, ctorLength)
 {
-    return (
-        (c >= 'a' && c <= 'z') ||
-        (c >= 'A' && c <= 'Z') ||
-        (c >= '0' && c <= '9') ||
-        (c == '/') || (c == '%')
-    );
-}
-
-/* ************************************************************************ */
-
-}
-
-/* ************************************************************************ */
-
-Unit parse(const char* beg, const char*& end)
-{
-    char* fend;
-
-    // Read float value
-    const auto value = std::strtod(beg, &fend);
-
-    // Not a float value
-    if (fend == beg)
-        throw InvalidArgumentException("Cannot parse unit value from: " + String(beg, end));
-
-    String symbol;
-
-    // Store symbol characters
-    const char* pSym = fend;
-    for (; pSym != end && isSymbolChar(*pSym); ++pSym)
-        symbol.push_back(*pSym);
-
-    // No symbol
-    if (symbol.empty())
     {
-        end = fend;
-        return Unit(value);
+        auto unit = m(10);
+        EXPECT_DOUBLE_EQ(10, unit.get());
+        EXPECT_EQ(1, unit.getLengthExp());
+        EXPECT_EQ(0, unit.getTimeExp());
+        EXPECT_EQ(0, unit.getMassExp());
+        EXPECT_EQ(0, unit.getCurrentExp());
+        EXPECT_EQ(0, unit.getTemperatureExp());
+        EXPECT_EQ(0, unit.getSubstanceExp());
+        EXPECT_EQ(0, unit.getIntensityExp());
     }
 
-    end = pSym;
+    {
+        auto unit = mm(10);
+        EXPECT_DOUBLE_EQ(10e-3, unit.get());
+        EXPECT_EQ(1, unit.getLengthExp());
+        EXPECT_EQ(0, unit.getTimeExp());
+        EXPECT_EQ(0, unit.getMassExp());
+        EXPECT_EQ(0, unit.getCurrentExp());
+        EXPECT_EQ(0, unit.getTemperatureExp());
+        EXPECT_EQ(0, unit.getSubstanceExp());
+        EXPECT_EQ(0, unit.getIntensityExp());
+    }
 
-#define CECE_UNIT_SYMBOL(unit, name, sym, def) if (symbol == sym) return name(value);
-#include "cece/unit/Units.def"
+    {
+        auto unit = um(10);
+        EXPECT_DOUBLE_EQ(10e-6, unit.get());
+        EXPECT_EQ(1, unit.getLengthExp());
+        EXPECT_EQ(0, unit.getTimeExp());
+        EXPECT_EQ(0, unit.getMassExp());
+        EXPECT_EQ(0, unit.getCurrentExp());
+        EXPECT_EQ(0, unit.getTemperatureExp());
+        EXPECT_EQ(0, unit.getSubstanceExp());
+        EXPECT_EQ(0, unit.getIntensityExp());
+    }
 
-    // TODO: dynamic symbol parser
+    {
+        auto unit = nm(10);
+        EXPECT_DOUBLE_EQ(10e-9, unit.get());
+        EXPECT_EQ(1, unit.getLengthExp());
+        EXPECT_EQ(0, unit.getTimeExp());
+        EXPECT_EQ(0, unit.getMassExp());
+        EXPECT_EQ(0, unit.getCurrentExp());
+        EXPECT_EQ(0, unit.getTemperatureExp());
+        EXPECT_EQ(0, unit.getSubstanceExp());
+        EXPECT_EQ(0, unit.getIntensityExp());
+    }
 
-    // Unknown symbol
-    throw InvalidArgumentException("Unsupported or invalid unit symbol: " + symbol);
-}
-
-/* ************************************************************************ */
-
-Unit parse(io::InStream& is)
-{
-    String str;
-    is >> str;
-
-    return parse(str);
-}
-
-/* ************************************************************************ */
-
-Unit parse(StringView str)
-{
-    const char* end = str.getData() + str.getLength();
-    return parse(str.getData(), end);
-}
-
-/* ************************************************************************ */
-
-}
+    {
+        auto unit = pm(10);
+        EXPECT_DOUBLE_EQ(10e-12, unit.get());
+        EXPECT_EQ(1, unit.getLengthExp());
+        EXPECT_EQ(0, unit.getTimeExp());
+        EXPECT_EQ(0, unit.getMassExp());
+        EXPECT_EQ(0, unit.getCurrentExp());
+        EXPECT_EQ(0, unit.getTemperatureExp());
+        EXPECT_EQ(0, unit.getSubstanceExp());
+        EXPECT_EQ(0, unit.getIntensityExp());
+    }
 }
 
 /* ************************************************************************ */

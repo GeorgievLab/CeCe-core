@@ -166,6 +166,16 @@ struct StaticImpl
      */
     constexpr int getIntensityExp() const noexcept;
 
+
+    /**
+     * @brief      Check dynamic implementation.
+     *
+     * @param[in]  impl  The implementation.
+     *
+     * @throw      CastException If dynamic cannot be cast to static.
+     */
+    void checkDynamic(const DynamicImpl& impl) const;
+
 };
 
 /* ************************************************************************ */
@@ -1322,27 +1332,7 @@ template<int Length, int Time, int Mass, int Current, int Temperature, int Subst
 inline StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>::StaticImpl(const DynamicImpl& impl)
     : value(impl.value)
 {
-    // Check if can be converted
-    if (impl.detail.length != Length)
-        throw CastException("Length exponent mismatch: " + toString(impl.detail.length) + " vs " + toString(Length));
-
-    if (impl.detail.time != Time)
-        throw CastException("Time exponent mismatch: " + toString(impl.detail.time) + " vs " + toString(Time));
-
-    if (impl.detail.mass != Mass)
-        throw CastException("Mass exponent mismatch: " + toString(impl.detail.mass) + " vs " + toString(Mass));
-
-    if (impl.detail.current != Current)
-        throw CastException("Current exponent mismatch: " + toString(impl.detail.current) + " vs " + toString(Current));
-
-    if (impl.detail.temperature != Temperature)
-        throw CastException("Temperature exponent mismatch: " + toString(impl.detail.temperature) + " vs " + toString(Temperature));
-
-    if (impl.detail.substance != Substance)
-        throw CastException("Substance exponent mismatch: " + toString(impl.detail.substance) + " vs " + toString(Substance));
-
-    if (impl.detail.intensity != Intensity)
-        throw CastException("Intensity exponent mismatch: " + toString(impl.detail.intensity) + " vs " + toString(Intensity));
+    checkDynamic(impl);
 }
 
 /* ************************************************************************ */
@@ -1352,27 +1342,7 @@ inline StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity
 {
     value = impl.value;
 
-    // Check if can be converted
-    if (impl.detail.length != Length)
-        throw CastException("Length exponent mismatch: " + toString(impl.detail.length) + " vs " + toString(Length));
-
-    if (impl.detail.time != Time)
-        throw CastException("Time exponent mismatch: " + toString(impl.detail.time) + " vs " + toString(Time));
-
-    if (impl.detail.mass != Mass)
-        throw CastException("Mass exponent mismatch: " + toString(impl.detail.mass) + " vs " + toString(Mass));
-
-    if (impl.detail.current != Current)
-        throw CastException("Current exponent mismatch: " + toString(impl.detail.current) + " vs " + toString(Current));
-
-    if (impl.detail.temperature != Temperature)
-        throw CastException("Temperature exponent mismatch: " + toString(impl.detail.temperature) + " vs " + toString(Temperature));
-
-    if (impl.detail.substance != Substance)
-        throw CastException("Substance exponent mismatch: " + toString(impl.detail.substance) + " vs " + toString(Substance));
-
-    if (impl.detail.intensity != Intensity)
-        throw CastException("Intensity exponent mismatch: " + toString(impl.detail.intensity) + " vs " + toString(Intensity));
+    checkDynamic(impl);
 
     return *this;
 }
@@ -1431,6 +1401,45 @@ template<int Length, int Time, int Mass, int Current, int Temperature, int Subst
 inline constexpr int StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>::getIntensityExp() const noexcept
 {
     return Intensity;
+}
+
+/* ************************************************************************ */
+
+template<int Length, int Time, int Mass, int Current, int Temperature, int Substance, int Intensity>
+void StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>::checkDynamic(const DynamicImpl& impl) const
+{
+    // Non-dimensional zero can be cast to anything
+    if (value == 0.0 &&
+        impl.detail.length == 0 &&
+        impl.detail.time == 0 &&
+        impl.detail.mass == 0 &&
+        impl.detail.current == 0 &&
+        impl.detail.temperature == 0 &&
+        impl.detail.substance == 0 &&
+        impl.detail.intensity == 0)
+        return;
+
+    // Check if can be converted
+    if (impl.detail.length != Length)
+        throw CastException("Length exponent mismatch: " + toString(impl.detail.length) + " vs " + toString(Length));
+
+    if (impl.detail.time != Time)
+        throw CastException("Time exponent mismatch: " + toString(impl.detail.time) + " vs " + toString(Time));
+
+    if (impl.detail.mass != Mass)
+        throw CastException("Mass exponent mismatch: " + toString(impl.detail.mass) + " vs " + toString(Mass));
+
+    if (impl.detail.current != Current)
+        throw CastException("Current exponent mismatch: " + toString(impl.detail.current) + " vs " + toString(Current));
+
+    if (impl.detail.temperature != Temperature)
+        throw CastException("Temperature exponent mismatch: " + toString(impl.detail.temperature) + " vs " + toString(Temperature));
+
+    if (impl.detail.substance != Substance)
+        throw CastException("Substance exponent mismatch: " + toString(impl.detail.substance) + " vs " + toString(Substance));
+
+    if (impl.detail.intensity != Intensity)
+        throw CastException("Intensity exponent mismatch: " + toString(impl.detail.intensity) + " vs " + toString(Intensity));
 }
 
 /* ************************************************************************ */

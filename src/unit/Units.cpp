@@ -33,15 +33,6 @@ namespace unit {
 
 /* ************************************************************************ */
 
-template class UnitBase<StaticImpl<0, 0, 0, 0, 0, 0, 0>>;
-template class UnitBase<StaticImpl<1, 0, 0, 0, 0, 0, 0>>;
-template class UnitBase<StaticImpl<0, 1, 0, 0, 0, 0, 0>>;
-template class UnitBase<StaticImpl<0, 0, 1, 0, 0, 0, 0>>;
-template class UnitBase<StaticImpl<0, 0, 0, 1, 0, 0, 0>>;
-template class UnitBase<StaticImpl<0, 0, 0, 0, 1, 0, 0>>;
-template class UnitBase<StaticImpl<0, 0, 0, 0, 0, 1, 0>>;
-template class UnitBase<StaticImpl<0, 0, 0, 0, 0, 0, 1>>;
-
 /* ************************************************************************ */
 
 }

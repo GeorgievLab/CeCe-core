@@ -28,6 +28,7 @@
 /* ************************************************************************ */
 
 // CeCe
+#include "cece/math/constants.hpp"
 #include "cece/unit/Unit.hpp"
 
 /* ************************************************************************ */
@@ -120,15 +121,7 @@ struct SqrtHelper<StaticImpl<
  * @return     The square root value.
  */
 template<typename Impl>
-inline auto sqrt(UnitBase<Impl> value) noexcept
-    -> UnitBase<typename detail::SqrtHelper<Impl>::ImplType>
-{
-    static_assert(detail::SqrtHelper<Impl>::isValid, "Unit cannot be used as sqrt argument");
-
-    return UnitBase<typename detail::SqrtHelper<Impl>::ImplType>(
-        std::sqrt(value.get())
-    );
-}
+auto sqrt(UnitBase<Impl> value) noexcept -> UnitBase<typename detail::SqrtHelper<Impl>::ImplType>;
 
 /* ************************************************************************ */
 
@@ -142,12 +135,78 @@ inline auto sqrt(UnitBase<Impl> value) noexcept
  * @return     The absolute value.
  */
 template<typename Impl>
+constexpr UnitBase<Impl> abs(UnitBase<Impl> unit) noexcept;
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Convert degrees to radians.
+ *
+ * @param      value  Degrees.
+ *
+ * @return     Radians
+ */
+constexpr ValueType deg2rad(ValueType value) noexcept;
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Convert radians to degrees.
+ *
+ * @param      value  Radians.
+ *
+ * @return     Degrees.
+ */
+constexpr ValueType rad2deg(ValueType value) noexcept;
+
+/* ************************************************************************ */
+
+}
+}
+
+/* ************************************************************************ */
+/* ************************************************************************ */
+/* ************************************************************************ */
+
+namespace cece {
+namespace unit {
+
+/* ************************************************************************ */
+
+template<typename Impl>
+inline auto sqrt(UnitBase<Impl> value) noexcept
+    -> UnitBase<typename detail::SqrtHelper<Impl>::ImplType>
+{
+    static_assert(detail::SqrtHelper<Impl>::isValid, "Unit cannot be used as sqrt argument");
+
+    return UnitBase<typename detail::SqrtHelper<Impl>::ImplType>(
+        std::sqrt(value.get())
+    );
+}
+
+/* ************************************************************************ */
+
+template<typename Impl>
 inline constexpr UnitBase<Impl> abs(UnitBase<Impl> unit) noexcept
 {
     return UnitBase<Impl>(unit.get() > ValueType(0)
         ? unit.get()
         : -unit.get()
     );
+}
+
+/* ************************************************************************ */
+
+inline constexpr ValueType deg2rad(ValueType value) noexcept
+{
+    return value * math::PI / 180.0;
+}
+
+/* ************************************************************************ */
+
+inline constexpr ValueType rad2deg(ValueType value) noexcept
+{
+    return value * 180.0 / math::PI;
 }
 
 /* ************************************************************************ */

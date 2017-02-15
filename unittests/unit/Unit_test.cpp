@@ -709,6 +709,15 @@ TEST(UnitsTest, cast)
         EXPECT_THROW({StaticUnit unit2(unit);}, CastException);
     }
 
+    // Zero can be cast to anything
+    {
+        DynamicUnit unit(Zero);
+
+        EXPECT_NO_THROW({StaticUnit unit2(unit);});
+    }
+
+
+
     {
         DynamicUnit unit(1, DynamicDetail{1, 0, 0, 0, 0, 0, 0});
 
@@ -755,6 +764,13 @@ TEST(UnitsTest, cast)
         DynamicUnit unit(1, DynamicDetail{1, 0, 0, 0, 0, 0, 1});
 
         EXPECT_THROW({StaticUnit unit2; unit2 = unit;}, CastException);
+    }
+
+    // Zero can be cast to anything
+    {
+        DynamicUnit unit(Zero);
+
+        EXPECT_NO_THROW({StaticUnit unit2; unit2 = unit;});
     }
 }
 

@@ -28,6 +28,7 @@
 /* ************************************************************************ */
 
 // CeCe
+#include "cece/unit/math.hpp"
 #include "cece/unit/Units.hpp"
 
 /* ************************************************************************ */
@@ -38,6 +39,7 @@ namespace unit {
 /* ************************************************************************ */
 
 /// Base units exponents
+/// @deprecated
 static constexpr int LENGTH_EXPONENT = 6;
 static constexpr int TIME_EXPONENT = 0;
 static constexpr int MASS_EXPONENT = 6;

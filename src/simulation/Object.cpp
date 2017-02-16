@@ -435,7 +435,7 @@ void Object::update(unit::Duration dt)
             // forceY
             force.getY().value() << ";" <<
             // angle
-            getRotation() << ";" <<
+            getRotation().get() << ";" <<
             // omega
             getAngularVelocity().value() <<
             "\n"

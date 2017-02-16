@@ -84,7 +84,7 @@ struct StaticImpl
     /**
      * @brief      Default constructor.
      */
-    StaticImpl() = default;
+    constexpr StaticImpl();
 
 
     /**
@@ -92,7 +92,7 @@ struct StaticImpl
      *
      * @param[in]  value  The value.
      */
-    explicit StaticImpl(ValueType value) noexcept;
+    explicit constexpr StaticImpl(ValueType value) noexcept;
 
 
     /**
@@ -538,14 +538,6 @@ public:
     /**
      * @brief      Constructor.
      *
-     * @param[in]  impl  The implementation.
-     */
-    constexpr UnitBase(Impl impl);
-
-
-    /**
-     * @brief      Constructor.
-     *
      * @param      value  Init value.
      */
     template<typename I = Impl,
@@ -899,6 +891,116 @@ struct Compose<UnitBase<StaticImpl<Lengths, Times, Masses, Currents, Temperature
         ComposeSum<Intensities...>::value
     >>;
 };
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Define empty dynamic detail.
+ *
+ * @return     Dynamic implementation detail.
+ */
+DynamicImpl::Detail none() noexcept;
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Define dynamic detail for N-dimension length.
+ *
+ * @param[in]  dim   The dimension.
+ *
+ * @return     Dynamic implementation detail.
+ */
+DynamicImpl::Detail length(int dim = 1) noexcept;
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Define dynamic detail for N-dimension time.
+ *
+ * @param[in]  dim   The dimension.
+ *
+ * @return     Dynamic implementation detail.
+ */
+DynamicImpl::Detail time(int dim = 1) noexcept;
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Define dynamic detail for N-dimension mass.
+ *
+ * @param[in]  dim   The dimension.
+ *
+ * @return     Dynamic implementation detail.
+ */
+DynamicImpl::Detail mass(int dim = 1) noexcept;
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Define dynamic detail for N-dimension current.
+ *
+ * @param[in]  dim   The dimension.
+ *
+ * @return     Dynamic implementation detail.
+ */
+DynamicImpl::Detail current(int dim = 1) noexcept;
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Define dynamic detail for N-dimension temperature.
+ *
+ * @param[in]  dim   The dimension.
+ *
+ * @return     Dynamic implementation detail.
+ */
+DynamicImpl::Detail temperature(int dim = 1) noexcept;
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Define dynamic detail for N-dimension substance.
+ *
+ * @param[in]  dim   The dimension.
+ *
+ * @return     Dynamic implementation detail.
+ */
+DynamicImpl::Detail substance(int dim = 1) noexcept;
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Define dynamic detail for N-dimension intensity.
+ *
+ * @param[in]  dim   The dimension.
+ *
+ * @return     Dynamic implementation detail.
+ */
+DynamicImpl::Detail intensity(int dim = 1) noexcept;
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Merge dynamic implementation detail.
+ *
+ * @param[in]  lhs   The left hand side.
+ * @param[in]  rhs   The right hand side.
+ *
+ * @return     Result.
+ */
+DynamicImpl::Detail operator|(DynamicImpl::Detail lhs, DynamicImpl::Detail rhs) noexcept;
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Merge dynamic implementation detail.
+ *
+ * @param[in]  lhs   The left hand side.
+ * @param[in]  rhs   The right hand side.
+ *
+ * @return     Result.
+ */
+DynamicImpl::Detail operator/(DynamicImpl::Detail lhs, DynamicImpl::Detail rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -1320,7 +1422,12 @@ namespace unit {
 /* ************************************************************************ */
 
 template<int Length, int Time, int Mass, int Current, int Temperature, int Substance, int Intensity>
-inline StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>::StaticImpl(ValueType value) noexcept
+inline constexpr StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>::StaticImpl() = default;
+
+/* ************************************************************************ */
+
+template<int Length, int Time, int Mass, int Current, int Temperature, int Substance, int Intensity>
+inline constexpr StaticImpl<Length, Time, Mass, Current, Temperature, Substance, Intensity>::StaticImpl(ValueType value) noexcept
     : value(value)
 {
     // Check if
@@ -1532,15 +1639,6 @@ inline constexpr int DynamicImpl::getIntensityExp() const noexcept
 template<typename Impl>
 inline constexpr UnitBase<Impl>::UnitBase() noexcept
     : m_impl()
-{
-    // Nothing to do
-}
-
-/* ************************************************************************ */
-
-template<typename Impl>
-inline constexpr UnitBase<Impl>::UnitBase(Impl impl)
-    : m_impl(impl)
 {
     // Nothing to do
 }
@@ -1787,6 +1885,104 @@ template<typename Impl>
 inline constexpr int UnitBase<Impl>::getIntensityExp() const noexcept
 {
     return m_impl.getIntensityExp();
+}
+
+/* ************************************************************************ */
+
+inline DynamicImpl::Detail none() noexcept
+{
+    return {};
+}
+
+/* ************************************************************************ */
+
+inline DynamicImpl::Detail length(int dim) noexcept
+{
+    DynamicImpl::Detail detail{};
+    detail.length = dim;
+    return detail;
+}
+
+/* ************************************************************************ */
+
+inline DynamicImpl::Detail time(int dim) noexcept
+{
+    DynamicImpl::Detail detail{};
+    detail.time = dim;
+    return detail;
+}
+
+/* ************************************************************************ */
+
+inline DynamicImpl::Detail mass(int dim) noexcept
+{
+    DynamicImpl::Detail detail{};
+    detail.mass = dim;
+    return detail;
+}
+
+/* ************************************************************************ */
+
+inline DynamicImpl::Detail current(int dim) noexcept
+{
+    DynamicImpl::Detail detail{};
+    detail.current = dim;
+    return detail;
+}
+
+/* ************************************************************************ */
+
+inline DynamicImpl::Detail temperature(int dim) noexcept
+{
+    DynamicImpl::Detail detail{};
+    detail.temperature = dim;
+    return detail;
+}
+
+/* ************************************************************************ */
+
+inline DynamicImpl::Detail substance(int dim) noexcept
+{
+    DynamicImpl::Detail detail{};
+    detail.substance = dim;
+    return detail;
+}
+
+/* ************************************************************************ */
+
+inline DynamicImpl::Detail intensity(int dim) noexcept
+{
+    DynamicImpl::Detail detail{};
+    detail.intensity = dim;
+    return detail;
+}
+
+/* ************************************************************************ */
+
+inline DynamicImpl::Detail operator|(DynamicImpl::Detail lhs, DynamicImpl::Detail rhs) noexcept
+{
+    lhs.length += rhs.length;
+    lhs.time += rhs.time;
+    lhs.mass += rhs.mass;
+    lhs.current += rhs.current;
+    lhs.temperature += rhs.temperature;
+    lhs.substance += rhs.substance;
+    lhs.intensity += rhs.intensity;
+    return lhs;
+}
+
+/* ************************************************************************ */
+
+inline DynamicImpl::Detail operator/(DynamicImpl::Detail lhs, DynamicImpl::Detail rhs) noexcept
+{
+    lhs.length -= rhs.length;
+    lhs.time -= rhs.time;
+    lhs.mass -= rhs.mass;
+    lhs.current -= rhs.current;
+    lhs.temperature -= rhs.temperature;
+    lhs.substance -= rhs.substance;
+    lhs.intensity -= rhs.intensity;
+    return lhs;
 }
 
 /* ************************************************************************ */

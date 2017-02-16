@@ -994,3 +994,152 @@ TEST(UnitsTest, div)
 }
 
 /* ************************************************************************ */
+
+TEST(UnitsTest, builders)
+{
+    {
+        Unit unit(10);
+        EXPECT_DOUBLE_EQ(10, unit.get());
+        EXPECT_EQ(0, unit.getLengthExp());
+        EXPECT_EQ(0, unit.getTimeExp());
+        EXPECT_EQ(0, unit.getMassExp());
+        EXPECT_EQ(0, unit.getCurrentExp());
+        EXPECT_EQ(0, unit.getTemperatureExp());
+        EXPECT_EQ(0, unit.getSubstanceExp());
+        EXPECT_EQ(0, unit.getIntensityExp());
+    }
+
+    {
+        Unit unit(10, length(2));
+        EXPECT_DOUBLE_EQ(10, unit.get());
+        EXPECT_EQ(2, unit.getLengthExp());
+        EXPECT_EQ(0, unit.getTimeExp());
+        EXPECT_EQ(0, unit.getMassExp());
+        EXPECT_EQ(0, unit.getCurrentExp());
+        EXPECT_EQ(0, unit.getTemperatureExp());
+        EXPECT_EQ(0, unit.getSubstanceExp());
+        EXPECT_EQ(0, unit.getIntensityExp());
+    }
+
+    {
+        Unit unit(10, mass(1));
+        EXPECT_DOUBLE_EQ(10, unit.get());
+        EXPECT_EQ(0, unit.getLengthExp());
+        EXPECT_EQ(0, unit.getTimeExp());
+        EXPECT_EQ(1, unit.getMassExp());
+        EXPECT_EQ(0, unit.getCurrentExp());
+        EXPECT_EQ(0, unit.getTemperatureExp());
+        EXPECT_EQ(0, unit.getSubstanceExp());
+        EXPECT_EQ(0, unit.getIntensityExp());
+    }
+
+    {
+        Unit unit(10, time(-2));
+        EXPECT_DOUBLE_EQ(10, unit.get());
+        EXPECT_EQ(0, unit.getLengthExp());
+        EXPECT_EQ(-2, unit.getTimeExp());
+        EXPECT_EQ(0, unit.getMassExp());
+        EXPECT_EQ(0, unit.getCurrentExp());
+        EXPECT_EQ(0, unit.getTemperatureExp());
+        EXPECT_EQ(0, unit.getSubstanceExp());
+        EXPECT_EQ(0, unit.getIntensityExp());
+    }
+
+    {
+        Unit unit(10, current(1));
+        EXPECT_DOUBLE_EQ(10, unit.get());
+        EXPECT_EQ(0, unit.getLengthExp());
+        EXPECT_EQ(0, unit.getTimeExp());
+        EXPECT_EQ(0, unit.getMassExp());
+        EXPECT_EQ(1, unit.getCurrentExp());
+        EXPECT_EQ(0, unit.getTemperatureExp());
+        EXPECT_EQ(0, unit.getSubstanceExp());
+        EXPECT_EQ(0, unit.getIntensityExp());
+    }
+
+    {
+        Unit unit(10, temperature(1));
+        EXPECT_DOUBLE_EQ(10, unit.get());
+        EXPECT_EQ(0, unit.getLengthExp());
+        EXPECT_EQ(0, unit.getTimeExp());
+        EXPECT_EQ(0, unit.getMassExp());
+        EXPECT_EQ(0, unit.getCurrentExp());
+        EXPECT_EQ(1, unit.getTemperatureExp());
+        EXPECT_EQ(0, unit.getSubstanceExp());
+        EXPECT_EQ(0, unit.getIntensityExp());
+    }
+
+    {
+        Unit unit(10, substance());
+        EXPECT_DOUBLE_EQ(10, unit.get());
+        EXPECT_EQ(0, unit.getLengthExp());
+        EXPECT_EQ(0, unit.getTimeExp());
+        EXPECT_EQ(0, unit.getMassExp());
+        EXPECT_EQ(0, unit.getCurrentExp());
+        EXPECT_EQ(0, unit.getTemperatureExp());
+        EXPECT_EQ(1, unit.getSubstanceExp());
+        EXPECT_EQ(0, unit.getIntensityExp());
+    }
+
+    {
+        Unit unit(10, intensity());
+        EXPECT_DOUBLE_EQ(10, unit.get());
+        EXPECT_EQ(0, unit.getLengthExp());
+        EXPECT_EQ(0, unit.getTimeExp());
+        EXPECT_EQ(0, unit.getMassExp());
+        EXPECT_EQ(0, unit.getCurrentExp());
+        EXPECT_EQ(0, unit.getTemperatureExp());
+        EXPECT_EQ(0, unit.getSubstanceExp());
+        EXPECT_EQ(1, unit.getIntensityExp());
+    }
+
+    {
+        Unit unit(10, length(2) | mass(1) | time(-1));
+        EXPECT_DOUBLE_EQ(10, unit.get());
+        EXPECT_EQ(2, unit.getLengthExp());
+        EXPECT_EQ(-1, unit.getTimeExp());
+        EXPECT_EQ(1, unit.getMassExp());
+        EXPECT_EQ(0, unit.getCurrentExp());
+        EXPECT_EQ(0, unit.getTemperatureExp());
+        EXPECT_EQ(0, unit.getSubstanceExp());
+        EXPECT_EQ(0, unit.getIntensityExp());
+    }
+
+    {
+        // 1O/s
+        Unit unit(10, none() / time(1));
+        EXPECT_DOUBLE_EQ(10, unit.get());
+        EXPECT_EQ(0, unit.getLengthExp());
+        EXPECT_EQ(-1, unit.getTimeExp());
+        EXPECT_EQ(0, unit.getMassExp());
+        EXPECT_EQ(0, unit.getCurrentExp());
+        EXPECT_EQ(0, unit.getTemperatureExp());
+        EXPECT_EQ(0, unit.getSubstanceExp());
+        EXPECT_EQ(0, unit.getIntensityExp());
+    }
+
+    {
+        // 1O/ms (meter & second, not millisecond)
+        Unit unit(10, none() / length(1) / time(1));
+        EXPECT_DOUBLE_EQ(10, unit.get());
+        EXPECT_EQ(-1, unit.getLengthExp());
+        EXPECT_EQ(-1, unit.getTimeExp());
+        EXPECT_EQ(0, unit.getMassExp());
+        EXPECT_EQ(0, unit.getCurrentExp());
+        EXPECT_EQ(0, unit.getTemperatureExp());
+        EXPECT_EQ(0, unit.getSubstanceExp());
+        EXPECT_EQ(0, unit.getIntensityExp());
+    }
+}
+
+/* ************************************************************************ */
+
+TEST(UnitsTest, deprecated)
+{
+    {
+        Unit unit(456.1);
+        EXPECT_DOUBLE_EQ(456.1, unit.value());
+    }
+}
+
+/* ************************************************************************ */

@@ -31,6 +31,7 @@
 #include "cece/unit/math.hpp"
 #include "cece/unit/UnitIo.hpp"
 #include "cece/unit/Units.hpp"
+#include "cece/unit/UnitsCtors.hpp"
 
 /* ************************************************************************ */
 
@@ -1016,6 +1017,71 @@ TEST(UnitIoTest, invalid)
 
     {
         EXPECT_THROW(parse("1GM"), InvalidArgumentException);
+    }
+}
+
+/* ************************************************************************ */
+
+TEST(UnitIoTest, userSymbols)
+{
+    {
+        EXPECT_THROW(parse("15ll"), InvalidArgumentException);
+        registerSymbol("ll", [](double value) { return Unit(value); });
+
+        Unit unit;
+        EXPECT_NO_THROW({ unit = parse("15ll"); });
+
+        EXPECT_DOUBLE_EQ(15, unit.get());
+        EXPECT_EQ(0, unit.getLengthExp());
+        EXPECT_EQ(0, unit.getTimeExp());
+        EXPECT_EQ(0, unit.getMassExp());
+        EXPECT_EQ(0, unit.getCurrentExp());
+        EXPECT_EQ(0, unit.getTemperatureExp());
+        EXPECT_EQ(0, unit.getSubstanceExp());
+        EXPECT_EQ(0, unit.getIntensityExp());
+
+        unregisterSymbol("ll");
+        EXPECT_THROW(parse("15ll"), InvalidArgumentException);
+    }
+
+    {
+        EXPECT_THROW(parse("15a"), InvalidArgumentException);
+        registerSymbol("a", [](double value) -> Unit { return value * m2(100); });
+
+        Unit unit;
+        EXPECT_NO_THROW({ unit = parse("15a"); });
+
+        EXPECT_DOUBLE_EQ(15 * 100, unit.get());
+        EXPECT_EQ(2, unit.getLengthExp());
+        EXPECT_EQ(0, unit.getTimeExp());
+        EXPECT_EQ(0, unit.getMassExp());
+        EXPECT_EQ(0, unit.getCurrentExp());
+        EXPECT_EQ(0, unit.getTemperatureExp());
+        EXPECT_EQ(0, unit.getSubstanceExp());
+        EXPECT_EQ(0, unit.getIntensityExp());
+
+        unregisterSymbol("a");
+        EXPECT_THROW(parse("15a"), InvalidArgumentException);
+    }
+
+    {
+        EXPECT_THROW(parse("15akr"), InvalidArgumentException);
+        registerSymbol("akr", [](double value) { return Unit(4046873 * value, length(2)); });
+
+        Unit unit;
+        EXPECT_NO_THROW({ unit = parse("15akr"); });
+
+        EXPECT_DOUBLE_EQ(15 * 4046873, unit.get());
+        EXPECT_EQ(2, unit.getLengthExp());
+        EXPECT_EQ(0, unit.getTimeExp());
+        EXPECT_EQ(0, unit.getMassExp());
+        EXPECT_EQ(0, unit.getCurrentExp());
+        EXPECT_EQ(0, unit.getTemperatureExp());
+        EXPECT_EQ(0, unit.getSubstanceExp());
+        EXPECT_EQ(0, unit.getIntensityExp());
+
+        unregisterSymbol("akr");
+        EXPECT_THROW(parse("15akr"), InvalidArgumentException);
     }
 }
 

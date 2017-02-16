@@ -28,6 +28,7 @@
 /* ************************************************************************ */
 
 // CeCe
+#include "cece/Function.hpp"
 #include "cece/StringView.hpp"
 #include "cece/unit/Unit.hpp"
 #include "cece/io/InStream.hpp"
@@ -84,6 +85,33 @@ Unit parse(io::InStream& is);
  * @return     Result value.
  */
 Unit parse(StringView value);
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Register user defined symbol converter.
+ *
+ * @details    Adds user defined symbol so for 'km' when it parse '15km' the
+ *             `parse` function invoke given function with argument `15`.
+ *
+ * @param[in]  name  The symbol name.
+ * @param[in]  fn    The conversion function.
+ */
+void registerSymbol(String name, Function<Unit(ValueType)> fn);
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Remove symbol from list.
+ *
+ * @param[in]  name  The symbol name.
+ *
+ * @note       If conversion function is provided by plugin it should be
+ *             unregistred before the plugin is unloaded because the function
+ *             code might be in plugin code and after unload it will not be
+ *             available to execute.
+ */
+void unregisterSymbol(StringView name);
 
 /* ************************************************************************ */
 

@@ -30,6 +30,9 @@
 #include <cstdlib>
 
 // CeCe
+#include "cece/Map.hpp"
+#include "cece/Function.hpp"
+#include "cece/Pair.hpp"
 #include "cece/Exception.hpp"
 #include "cece/unit/UnitsCtors.hpp"
 
@@ -60,6 +63,19 @@ bool isSymbolChar(char c) noexcept
         (c == '/') || (c == '%')
     );
 }
+
+/* ************************************************************************ */
+
+#define CECE_UNIT_SYMBOL(unit, name, sym, def) {sym, +[] (ValueType value) -> Unit { return name(value); }},
+
+const Map<String, Function<Unit(ValueType)>> symbols{
+#include "cece/unit/Units.def"
+};
+
+/* ************************************************************************ */
+
+// User defined symbol parsers
+Map<String, Function<Unit(ValueType)>> userSymbols;
 
 /* ************************************************************************ */
 
@@ -94,10 +110,14 @@ Unit parse(const char* beg, const char*& end)
 
     end = pSym;
 
-#define CECE_UNIT_SYMBOL(unit, name, sym, def) if (symbol == sym) return name(value);
-#include "cece/unit/Units.def"
+    // Use known symbol
+    auto it = symbols.find(symbol);
+    if (it != symbols.end())
+        return it->second(value);
 
-    // TODO: dynamic symbol parser
+    auto it2 = userSymbols.find(symbol);
+    if (it2 != userSymbols.end())
+        return it2->second(value);
 
     // Unknown symbol
     throw InvalidArgumentException("Unsupported or invalid unit symbol: " + symbol);
@@ -119,6 +139,24 @@ Unit parse(StringView str)
 {
     const char* end = str.getData() + str.getLength();
     return parse(str.getData(), end);
+}
+
+/* ************************************************************************ */
+
+void registerSymbol(String name, Function<Unit(ValueType)> fn)
+{
+    userSymbols.emplace(std::move(name), std::move(fn));
+}
+
+/* ************************************************************************ */
+
+void unregisterSymbol(StringView name)
+{
+#if __cplusplus >= 201402L
+    userSymbols.erase(name);
+#else
+    userSymbols.erase(String(name));
+#endif
 }
 
 /* ************************************************************************ */

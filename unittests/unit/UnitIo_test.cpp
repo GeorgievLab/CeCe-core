@@ -69,6 +69,32 @@ TEST(UnitIoTest, parseLength)
     }
 
     {
+        auto unit = parse("10dm");
+        EXPECT_DOUBLE_EQ(10e-1, unit.get());
+        EXPECT_EQ(1, unit.getLengthExp());
+        EXPECT_EQ(0, unit.getTimeExp());
+        EXPECT_EQ(0, unit.getMassExp());
+        EXPECT_EQ(0, unit.getCurrentExp());
+        EXPECT_EQ(0, unit.getTemperatureExp());
+        EXPECT_EQ(0, unit.getSubstanceExp());
+        EXPECT_EQ(0, unit.getIntensityExp());
+        EXPECT_NO_THROW({ Length u(unit); });
+    }
+
+    {
+        auto unit = parse("10cm");
+        EXPECT_DOUBLE_EQ(10e-2, unit.get());
+        EXPECT_EQ(1, unit.getLengthExp());
+        EXPECT_EQ(0, unit.getTimeExp());
+        EXPECT_EQ(0, unit.getMassExp());
+        EXPECT_EQ(0, unit.getCurrentExp());
+        EXPECT_EQ(0, unit.getTemperatureExp());
+        EXPECT_EQ(0, unit.getSubstanceExp());
+        EXPECT_EQ(0, unit.getIntensityExp());
+        EXPECT_NO_THROW({ Length u(unit); });
+    }
+
+    {
         auto unit = parse("10mm");
         EXPECT_DOUBLE_EQ(10e-3, unit.get());
         EXPECT_EQ(1, unit.getLengthExp());
@@ -285,6 +311,19 @@ TEST(UnitIoTest, parseMass)
         EXPECT_EQ(0, unit.getIntensityExp());
         EXPECT_NO_THROW({ Mass u(unit); });
     }
+
+    {
+        auto unit = parse("10pg");
+        EXPECT_DOUBLE_EQ(10e-12, unit.get());
+        EXPECT_EQ(0, unit.getLengthExp());
+        EXPECT_EQ(0, unit.getTimeExp());
+        EXPECT_EQ(1, unit.getMassExp());
+        EXPECT_EQ(0, unit.getCurrentExp());
+        EXPECT_EQ(0, unit.getTemperatureExp());
+        EXPECT_EQ(0, unit.getSubstanceExp());
+        EXPECT_EQ(0, unit.getIntensityExp());
+        EXPECT_NO_THROW({ Mass u(unit); });
+    }
 }
 
 /* ************************************************************************ */
@@ -294,6 +333,32 @@ TEST(UnitIoTest, parseArea)
     {
         auto unit = parse("10m2");
         EXPECT_DOUBLE_EQ(10, unit.get());
+        EXPECT_EQ(2, unit.getLengthExp());
+        EXPECT_EQ(0, unit.getTimeExp());
+        EXPECT_EQ(0, unit.getMassExp());
+        EXPECT_EQ(0, unit.getCurrentExp());
+        EXPECT_EQ(0, unit.getTemperatureExp());
+        EXPECT_EQ(0, unit.getSubstanceExp());
+        EXPECT_EQ(0, unit.getIntensityExp());
+        EXPECT_NO_THROW({ Area u(unit); });
+    }
+
+    {
+        auto unit = parse("10dm2");
+        EXPECT_DOUBLE_EQ(10e-2, unit.get());
+        EXPECT_EQ(2, unit.getLengthExp());
+        EXPECT_EQ(0, unit.getTimeExp());
+        EXPECT_EQ(0, unit.getMassExp());
+        EXPECT_EQ(0, unit.getCurrentExp());
+        EXPECT_EQ(0, unit.getTemperatureExp());
+        EXPECT_EQ(0, unit.getSubstanceExp());
+        EXPECT_EQ(0, unit.getIntensityExp());
+        EXPECT_NO_THROW({ Area u(unit); });
+    }
+
+    {
+        auto unit = parse("10cm2");
+        EXPECT_DOUBLE_EQ(10e-4, unit.get());
         EXPECT_EQ(2, unit.getLengthExp());
         EXPECT_EQ(0, unit.getTimeExp());
         EXPECT_EQ(0, unit.getMassExp());
@@ -338,6 +403,32 @@ TEST(UnitIoTest, parseVolume)
     {
         auto unit = parse("10m3");
         EXPECT_DOUBLE_EQ(10, unit.get());
+        EXPECT_EQ(3, unit.getLengthExp());
+        EXPECT_EQ(0, unit.getTimeExp());
+        EXPECT_EQ(0, unit.getMassExp());
+        EXPECT_EQ(0, unit.getCurrentExp());
+        EXPECT_EQ(0, unit.getTemperatureExp());
+        EXPECT_EQ(0, unit.getSubstanceExp());
+        EXPECT_EQ(0, unit.getIntensityExp());
+        EXPECT_NO_THROW({ Volume u(unit); });
+    }
+
+    {
+        auto unit = parse("10dm3");
+        EXPECT_DOUBLE_EQ(10e-3, unit.get());
+        EXPECT_EQ(3, unit.getLengthExp());
+        EXPECT_EQ(0, unit.getTimeExp());
+        EXPECT_EQ(0, unit.getMassExp());
+        EXPECT_EQ(0, unit.getCurrentExp());
+        EXPECT_EQ(0, unit.getTemperatureExp());
+        EXPECT_EQ(0, unit.getSubstanceExp());
+        EXPECT_EQ(0, unit.getIntensityExp());
+        EXPECT_NO_THROW({ Volume u(unit); });
+    }
+
+    {
+        auto unit = parse("10cm3");
+        EXPECT_DOUBLE_EQ(10e-6, unit.get());
         EXPECT_EQ(3, unit.getLengthExp());
         EXPECT_EQ(0, unit.getTimeExp());
         EXPECT_EQ(0, unit.getMassExp());

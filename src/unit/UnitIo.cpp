@@ -66,7 +66,7 @@ bool isSymbolChar(char c) noexcept
 
 /* ************************************************************************ */
 
-#define CECE_UNIT_SYMBOL(unit, name, sym, def) {sym, +[] (ValueType value) -> Unit { return name(value); }},
+#define CECE_UNIT_SYMBOL(unit, name, sym, def) {sym, [] (ValueType value) -> Unit { return name(value); }},
 
 const Map<String, Function<Unit(ValueType)>> symbols{
 #include "cece/unit/Units.def"

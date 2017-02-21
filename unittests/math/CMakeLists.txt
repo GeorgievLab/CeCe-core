@@ -1,5 +1,5 @@
 # ######################################################################### #
-# Georgiev Lab (c) 2015-2016                                                #
+# Georgiev Lab (c) 2015-2017                                                #
 # ######################################################################### #
 # Department of Cybernetics                                                 #
 # Faculty of Applied Sciences                                               #
@@ -25,6 +25,7 @@
 
 cece_add_test(core
     SOURCES
+        Vector_test.cpp
         VectorRangeTest.cpp
 )
 

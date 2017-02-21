@@ -1,5 +1,5 @@
 /* ************************************************************************ */
-/* Georgiev Lab (c) 2015-2016                                               */
+/* Georgiev Lab (c) 2015-2017                                               */
 /* ************************************************************************ */
 /* Department of Cybernetics                                                */
 /* Faculty of Applied Sciences                                              */
@@ -38,14 +38,14 @@ namespace math {
 /* ************************************************************************ */
 
 /**
- * @brief PI constant.
+ * @brief      PI constant.
  */
 constexpr RealType PI = 3.14159265359;
 
 /* ************************************************************************ */
 
 /**
- * @brief Euler number constant.
+ * @brief      Euler number constant.
  */
 constexpr RealType E = 2.718281828459;
 

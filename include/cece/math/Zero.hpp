@@ -1,5 +1,5 @@
 /* ************************************************************************ */
-/* Georgiev Lab (c) 2015-2016                                               */
+/* Georgiev Lab (c) 2015-2017                                               */
 /* ************************************************************************ */
 /* Department of Cybernetics                                                */
 /* Faculty of Applied Sciences                                              */
@@ -33,8 +33,8 @@ namespace math {
 /* ************************************************************************ */
 
 /**
- * @brief Special value used by other types to check if value is zero. The idea is
- * similar with nullptr (nullptr_t).
+ * @brief      Special value used by other types to check if value is zero. The
+ *             idea is similar with nullptr (nullptr_t).
  */
 constexpr struct Zero_t {} Zero{};
 

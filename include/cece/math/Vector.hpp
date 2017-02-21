@@ -1,5 +1,5 @@
 /* ************************************************************************ */
-/* Georgiev Lab (c) 2015-2016                                               */
+/* Georgiev Lab (c) 2015-2017                                               */
 /* ************************************************************************ */
 /* Department of Cybernetics                                                */
 /* Faculty of Applied Sciences                                              */
@@ -29,6 +29,7 @@
 
 // C++
 #include <cmath>
+#include <initializer_list>
 #include <type_traits>
 
 // CeCe
@@ -49,14 +50,16 @@ namespace math {
 /* ************************************************************************ */
 
 /**
- * @brief N dimensional vector.
+ * @brief      N dimensional vector.
  *
- * @tparam T Element type.
- * @tparam N Number of elements.
+ * @tparam     T     Element type.
+ * @tparam     N     Number of elements.
  */
-template<typename T, unsigned N>
+template<typename T, int N>
 class BasicVector
 {
+    static_assert(N > 0, "Cannot create empty vector");
+
 
 // Public Types
 public:
@@ -65,13 +68,8 @@ public:
     /// BasicVector value type.
     using ValueType = T;
 
-
-// Public Contants
-public:
-
-
-    /// Number of elements
-    static constexpr unsigned SIZE = N;
+    /// Element type squared.
+    using ValueTypeSq = decltype(std::declval<T>() * std::declval<T>());
 
 
 // Public Ctors
@@ -79,48 +77,68 @@ public:
 
 
     /**
-     * @brief Default constructor.
+     * @brief      Default constructor.
      */
-    BasicVector() noexcept
-        : m_data{}
-    {
-        // Nothing to do
-    }
+    BasicVector() noexcept;
 
 
     /**
-     * @brief Constructor.
+     * @brief      Constructor.
      *
-     * @param data
+     * @param      data  The source data.
      */
-    explicit BasicVector(StaticArray<T, N> data) noexcept
-        : m_data(data)
-    {
-        // Nothing to do
-    }
+    BasicVector(std::initializer_list<T> data) noexcept;
 
 
     /**
-     * @brief Zero value constructor.
-     */
-    BasicVector(Zero_t) noexcept
-    {
-        for (unsigned i = 0; i < N; ++i)
-            m_data[i] = T{};
-    }
-
-
-    /**
-     * @brief Copy constructor.
+     * @brief      Constructor.
      *
-     * @param v Source vector.
+     * @param      data  The source data.
      */
-    template<typename T2>
-    explicit BasicVector(const BasicVector<T2, N>& v) noexcept
-    {
-        for (unsigned i = 0; i < N; ++i)
-            m_data[i] = static_cast<T>(v[i]);
-    }
+    explicit BasicVector(T (&data)[N]) noexcept;
+
+
+    /**
+     * @brief      Constructor.
+     *
+     * @param      data  The source data.
+     */
+    explicit BasicVector(StaticArray<T, N> data) noexcept;
+
+
+    /**
+     * @brief      Zero value constructor.
+     *
+     * @param[in]  zero  The zero value.
+     */
+    BasicVector(Zero_t zero) noexcept;
+
+
+    /**
+     * @brief      Copy constructor.
+     *
+     * @param[in]  src   The source vector.
+     */
+    BasicVector(const BasicVector& src) noexcept;
+
+
+    /**
+     * @brief      Move constructor.
+     *
+     * @param[in]  src   The source vector.
+     */
+    BasicVector(BasicVector&& src) noexcept;
+
+
+    /**
+     * @brief      Copy constructor.
+     *
+     * @param      v     The source vector.
+     *
+     * @tparam     T2    The source vector element type.
+     */
+    template<typename T2, typename std::enable_if<std::is_constructible<T, T2>::value>::type* = nullptr>
+    explicit BasicVector(const BasicVector<T2, N>& src) noexcept;
 
 
 // Public Operators
@@ -128,170 +146,220 @@ public:
 
 
     /**
-     * @brief Unary plus operator.
+     * @brief      Copy constructor.
      *
-     * @return
+     * @param[in]  zero  The zero value.
+     *
+     * @return     *this.
      */
-    BasicVector operator+() const noexcept
-    {
-        return *this;
-    }
+    BasicVector& operator=(Zero_t zero) noexcept;
 
 
     /**
-     * @brief Unary minus operator.
+     * @brief      Copy constructor.
      *
-     * @return
+     * @param[in]  data  The source data.
+     *
+     * @return     *this.
      */
-    BasicVector operator-() const noexcept
-    {
-        BasicVector res;
-
-        for (unsigned i = 0; i < N; ++i)
-            res[i] = -m_data[i];
-
-        return res;
-    }
+    BasicVector& operator=(std::initializer_list<T> data) noexcept;
 
 
     /**
-     * @brief Addition operator.
+     * @brief      Copy constructor.
      *
-     * @tparam T1 Type of right operand.
+     * @param[in]  data  The source data.
      *
-     * @param rhs Right operand.
-     *
-     * @return *this.
+     * @return     *this.
      */
-    template<typename T1, typename std::enable_if<std::is_same<decltype(T{} + T1{}), T>::value>::type* = nullptr>
-    BasicVector& operator+=(const BasicVector<T1, N>& rhs) noexcept
-    {
-        for (unsigned i = 0; i < N; ++i)
-            m_data[i] += rhs[i];
-
-        return *this;
-    }
+    BasicVector& operator=(T (&data)[N]) noexcept;
 
 
     /**
-     * @brief Subtraction operator.
+     * @brief      Copy constructor.
      *
-     * @tparam T1 Type of value in BasicVector operand.
+     * @param[in]  data  The source data.
      *
-     * @param rhs Right operand.
-     *
-     * @return *this.
+     * @return     *this.
      */
-    template<typename T1, typename std::enable_if<std::is_same<decltype(T{} - T1{}), T>::value>::type* = nullptr>
-    BasicVector& operator-=(const BasicVector<T1, N>& rhs) noexcept
-    {
-        for (unsigned i = 0; i < N; ++i)
-            m_data[i] -= rhs[i];
-
-        return *this;
-    }
+    BasicVector& operator=(StaticArray<T, N> data) noexcept;
 
 
     /**
-     * @brief Multiplication operator.
+     * @brief      Copy constructor.
      *
-     * @tparam T1 Type of right operand.
+     * @param[in]  src   The source vector.
      *
-     * @param rhs Right operand.
-     *
-     * @return *this.
+     * @return     *this.
      */
-    template<typename T1, typename std::enable_if<std::is_same<decltype(T{} * T1{}), T>::value>::type* = nullptr>
-    BasicVector& operator*=(T1 rhs) noexcept
-    {
-        for (unsigned i = 0; i < N; ++i)
-            m_data[i] *= rhs;
-
-        return *this;
-    }
+    BasicVector& operator=(const BasicVector& src) noexcept;
 
 
     /**
-     * @brief Multiplication operator.
+     * @brief      Move constructor.
      *
-     * @tparam T1 Type of value in BasicVector operand.
+     * @param[in]  src   The source vector.
      *
-     * @param rhs Right operand.
-     *
-     * @return *this.
+     * @return     *this.
      */
-    template<typename T1, typename std::enable_if<std::is_same<decltype(T{} * T1{}), T>::value>::type* = nullptr>
-    BasicVector& operator*=(const BasicVector<T1, N>& rhs) noexcept
-    {
-        for (unsigned i = 0; i < N; ++i)
-            m_data[i] *= rhs[i];
-
-        return *this;
-    }
+    BasicVector& operator=(BasicVector&& src) noexcept;
 
 
     /**
-     * @brief Division operator.
+     * @brief      Copy constructor.
      *
-     * @tparam T1 Type of right operand.
+     * @param      v     The source vector.
      *
-     * @param rhs Right operand.
+     * @tparam     T2    The source vector element type.
      *
-     * @return *this.
+     * @return     *this.
      */
-    template<typename T1, typename std::enable_if<std::is_same<decltype(T{} / T1{}), T>::value>::type* = nullptr>
-    BasicVector& operator/=(T1 rhs) noexcept
-    {
-        for (unsigned i = 0; i < N; ++i)
-            m_data[i] /= rhs;
-
-        return *this;
-    }
+    template<typename T2, typename std::enable_if<std::is_constructible<T, T2>::value>::type* = nullptr>
+    BasicVector& operator=(const BasicVector<T2, N>& src) noexcept;
 
 
     /**
-     * @brief Division operator.
+     * @brief      Unary plus operator.
      *
-     * @tparam T1 Type of value in BasicVector operand.
-     *
-     * @param rhs Right operand.
-     *
-     * @return *this.
+     * @return     Vector.
      */
-    template<typename T1, typename std::enable_if<std::is_same<decltype(T{} / T1{}), T>::value>::type* = nullptr>
-    BasicVector& operator/=(const BasicVector<T1, N>& rhs) noexcept
-    {
-        for (unsigned i = 0; i < N; ++i)
-            m_data[i] /= rhs[i];
-
-        return *this;
-    }
+    BasicVector operator+() const noexcept;
 
 
     /**
-     * @brief Access operator.
+     * @brief      Unary minus operator.
      *
-     * @param pos
-     *
-     * @return
+     * @return     Vector.
      */
-    T& operator[](unsigned pos) noexcept
-    {
-        return m_data[pos];
-    }
+    BasicVector operator-() const noexcept;
 
 
     /**
-     * @brief Access operator.
+     * @brief      Addition operator.
      *
-     * @param pos
+     * @param      rhs        Right operand.
      *
-     * @return
+     * @tparam     T1         Type of right operand.
+     *
+     * @return     *this.
      */
-    const T& operator[](unsigned pos) const noexcept
-    {
-        return m_data[pos];
-    }
+    template<typename T1, typename std::enable_if<std::is_same<
+        decltype(std::declval<T>() + std::declval<T1>()),
+        T
+    >::value>::type* = nullptr>
+    BasicVector& operator+=(const BasicVector<T1, N>& rhs) noexcept;
+
+
+    /**
+     * @brief      Subtraction operator.
+     *
+     * @param      rhs        Right operand.
+     *
+     * @tparam     T1         Type of value in BasicVector operand.
+     *
+     * @return     *this.
+     */
+    template<typename T1, typename std::enable_if<std::is_same<
+        decltype(std::declval<T>() - std::declval<T1>()),
+        T
+    >::value>::type* = nullptr>
+    BasicVector& operator-=(const BasicVector<T1, N>& rhs) noexcept;
+
+
+    /**
+     * @brief      Multiplication operator.
+     *
+     * @param      rhs        Right operand.
+     *
+     * @tparam     T1         Type of right operand.
+     *
+     * @return     *this.
+     */
+    template<typename T1, typename std::enable_if<std::is_same<
+        decltype(std::declval<T>() * std::declval<T1>()),
+        T
+    >::value || std::is_constructible<
+        T,
+        decltype(std::declval<T>() * std::declval<T1>())
+    >::value>::type* = nullptr>
+    BasicVector& operator*=(T1 rhs) noexcept;
+
+
+    /**
+     * @brief      Multiplication operator.
+     *
+     * @param      rhs        Right operand.
+     *
+     * @tparam     T1         Type of value in BasicVector operand.
+     *
+     * @return     *this.
+     */
+    template<typename T1, typename std::enable_if<std::is_same<
+        decltype(std::declval<T>() * std::declval<T1>()),
+        T
+    >::value || std::is_constructible<
+        T,
+        decltype(std::declval<T>() * std::declval<T1>())
+    >::value>::type* = nullptr>
+    BasicVector& operator*=(const BasicVector<T1, N>& rhs) noexcept;
+
+
+    /**
+     * @brief      Division operator.
+     *
+     * @param      rhs        Right operand.
+     *
+     * @tparam     T1         Type of right operand.
+     *
+     * @return     *this.
+     */
+    template<typename T1, typename std::enable_if<std::is_same<
+        decltype(std::declval<T>() / std::declval<T1>()),
+        T
+    >::value || std::is_constructible<
+        T,
+        decltype(std::declval<T>() * std::declval<T1>())
+    >::value>::type* = nullptr>
+    BasicVector& operator/=(T1 rhs) noexcept;
+
+
+    /**
+     * @brief      Division operator.
+     *
+     * @param      rhs        Right operand.
+     *
+     * @tparam     T1         Type of value in BasicVector operand.
+     *
+     * @return     *this.
+     */
+    template<typename T1, typename std::enable_if<std::is_same<
+        decltype(std::declval<T>() / std::declval<T1>()),
+        T
+    >::value || std::is_constructible<
+        T,
+        decltype(std::declval<T>() * std::declval<T1>())
+    >::value>::type* = nullptr>
+    BasicVector& operator/=(const BasicVector<T1, N>& rhs) noexcept;
+
+
+    /**
+     * @brief      Access operator.
+     *
+     * @param      pos   The position.
+     *
+     * @return     Reference to the element.
+     */
+    T& operator[](int pos) noexcept;
+
+
+    /**
+     * @brief      Access operator.
+     *
+     * @param      pos   The position.
+     *
+     * @return     Reference to the element.
+     */
+    const T& operator[](int pos) const noexcept;
 
 
 // Public Accessors
@@ -299,37 +367,45 @@ public:
 
 
     /**
-     * @brief Check if given value is in given range.
+     * @brief      Returns vector size.
      *
-     * @param value Given value.
-     * @param low   Minimum value (>=).
-     * @param high  Maximum value (<).
-     *
-     * @return
+     * @return     The size.
      */
-    static bool inRange(T value, T low, T high) noexcept
-    {
-        return value >= low && value < high;
-    }
+    int getSize() const noexcept;
 
 
     /**
-     * @brief Check if current vector is in given range.
+     * @brief      Check if given value is in given range.
      *
-     * @param low  Minimum coordinates (>=).
-     * @param high Maximum coordinates (<).
+     * @param      value  Given value.
+     * @param      low    Minimum value (>=).
+     * @param      high   Maximum value (<).
      *
-     * @return
+     * @return     If given value is in given range.
      */
-    bool inRange(const BasicVector& low, const BasicVector& high) const noexcept
-    {
-        bool res = true;
+    static bool inRange(T value, T low, T high) noexcept;
 
-        for (unsigned i = 0; i < N; ++i)
-            res = res && inRange(m_data[i], low[i], high[i]);
 
-        return res;
-    }
+    /**
+     * @brief      Check if current vector is in given range.
+     *
+     * @param      low   Minimum coordinates (>=).
+     * @param      high  Maximum coordinates (<).
+     *
+     * @return     If current value is in given range.
+     */
+    bool inRange(const BasicVector& low, const BasicVector& high) const noexcept;
+
+
+    /**
+     * @brief      Check if current vector is in given range where the low range
+     *             is Zero vector.
+     *
+     * @param      high  Maximum coordinates (<).
+     *
+     * @return     If current value is in given range.
+     */
+    bool inRange(const BasicVector& high) const noexcept;
 
 
 // Public Operations
@@ -337,87 +413,60 @@ public:
 
 
     /**
-     * @brief Calculate vector length.
+     * @brief      Calculate vector length.
      *
-     * @return
+     * @return     The length.
      */
-    T getLength() const noexcept
-    {
-        using std::sqrt;
-        return static_cast<T>(sqrt(getLengthSquared()));
-    }
+    ValueType getLength() const noexcept;
 
 
     /**
-     * @brief Calculate vector length - squared.
+     * @brief      Calculate vector length - squared.
      *
-     * @return
+     * @return     The length squared.
      */
-    decltype(T{} * T{}) getLengthSquared() const noexcept
-    {
-        return dot(*this);
-    }
+    ValueTypeSq getLengthSquared() const noexcept;
 
 
     /**
-     * @brief Calculate dot of two vectors.
+     * @brief      Calculate dot of two vectors.
      *
-     * @param rhs Second vector.
+     * @param      rhs   Second vector.
      *
-     * @return Dot product.
+     * @return     Dot product.
      */
-    decltype(T{} * T{}) dot(const BasicVector& rhs) const noexcept
-    {
-        decltype(T{} * T{}) res{};
-
-        for (unsigned i = 0; i < N; ++i)
-            res += m_data[i] * rhs[i];
-
-        return res;
-    }
+    ValueTypeSq dot(const BasicVector& rhs) const noexcept;
 
 
     /**
-     * @brief Calculate vectors squared distance.
+     * @brief      Calculate vectors squared distance.
      *
-     * @param rhs Second vector.
+     * @param      rhs   Second vector.
      *
-     * @return Distance.
+     * @return     Distance.
      */
-    decltype(std::declval<T>() * std::declval<T>()) distanceSquared(const BasicVector& rhs) const noexcept
-    {
-        return (*this - rhs).getLengthSquared();
-    }
+    ValueTypeSq distanceSquared(const BasicVector& rhs) const noexcept;
 
 
     /**
-     * @brief Calculate vectors distance.
+     * @brief      Calculate vectors distance.
      *
-     * @param rhs Second vector.
+     * @param      rhs   Second vector.
      *
-     * @return Distance.
+     * @return     Distance.
      */
-    T distance(const BasicVector& rhs) const noexcept
-    {
-        return (*this - rhs).getLength();
-    }
+    ValueType distance(const BasicVector& rhs) const noexcept;
 
 
     /**
-     * @brief Inverse current vector (1 / *this).
+     * @brief      Inverse current vector (1 / *this).
      *
-     * @return
+     * @tparam     T2    Type of result vector's element.
+     *
+     * @return     Inversed vector.
      */
-    template<typename T2>
-    BasicVector<T2, SIZE> inversed() const noexcept
-    {
-        BasicVector<T2, SIZE> res;
-
-        for (unsigned i = 0; i < N; ++i)
-            res[i] = T2(1) / m_data[i];
-
-        return res;
-    }
+    template<typename T2 = T>
+    BasicVector<T2, N> inversed() const noexcept;
 
 
 // Public Operations
@@ -431,23 +480,15 @@ public:
      *
      * @return
      */
-    static BasicVector createSingle(T val) noexcept
-    {
-        BasicVector res;
-
-        for (unsigned i = 0; i < N; ++i)
-            res[i] = val;
-
-        return res;
-    }
+    static BasicVector createSingle(T val) noexcept;
 
 
 // Private Data Members
 private:
 
-
     /// BasicVector data.
     StaticArray<T, N> m_data;
+
 };
 
 /* ************************************************************************ */
@@ -472,7 +513,7 @@ public:
 
 
     /// Number of elements
-    static constexpr unsigned SIZE = 2;
+    static constexpr int SIZE = 2;
 
 
 // Public Ctors
@@ -540,7 +581,7 @@ public:
      *
      * @return
      */
-    T& operator[](unsigned pos) noexcept
+    T& operator[](int pos) noexcept
     {
         CECE_ASSERT(pos < SIZE);
         return (&m_x)[pos];
@@ -554,7 +595,7 @@ public:
      *
      * @return
      */
-    const T& operator[](unsigned pos) const noexcept
+    const T& operator[](int pos) const noexcept
     {
         CECE_ASSERT(pos < SIZE);
         return (&m_x)[pos];
@@ -700,7 +741,7 @@ public:
      *
      * @return
      */
-    unsigned getSize() const noexcept
+    int getSize() const noexcept
     {
         return SIZE;
     }
@@ -992,7 +1033,7 @@ public:
 
 
     /// Number of elements
-    static constexpr unsigned SIZE = 3;
+    static constexpr int SIZE = 3;
 
 
 // Public Ctors
@@ -1065,7 +1106,7 @@ public:
      *
      * @return
      */
-    T& operator[](unsigned pos) noexcept
+    T& operator[](int pos) noexcept
     {
         CECE_ASSERT(pos < SIZE);
         return (&m_x)[pos];
@@ -1079,7 +1120,7 @@ public:
      *
      * @return
      */
-    const T& operator[](unsigned pos) const noexcept
+    const T& operator[](int pos) const noexcept
     {
         CECE_ASSERT(pos < SIZE);
         return (&m_x)[pos];
@@ -1231,7 +1272,7 @@ public:
      *
      * @return
      */
-    unsigned getSize() const noexcept
+    int getSize() const noexcept
     {
         return SIZE;
     }
@@ -1586,16 +1627,30 @@ using VectorInt = Vector<int>;
 /* ************************************************************************ */
 
 /**
- * @brief Vector of unsigned int.
+ * @brief Vector of float.
  */
-using VectorUint = Vector<unsigned int>;
+using VectorFloat = Vector<float>;
 
 /* ************************************************************************ */
 
 /**
  * @brief Vector of float.
  */
-using VectorFloat = Vector<RealType>;
+using VectorDouble = Vector<float>;
+
+/* ************************************************************************ */
+
+/**
+ * @brief Vector of float.
+ */
+using VectorLongDouble = Vector<float>;
+
+/* ************************************************************************ */
+
+/**
+ * @brief Vector of float.
+ */
+using VectorReal = Vector<RealType>;
 
 /* ************************************************************************ */
 
@@ -1611,12 +1666,12 @@ using VectorFloat = Vector<RealType>;
  *
  * @return Result vector.
  */
-template<typename T1, typename T2, unsigned N>
+template<typename T1, typename T2, int N>
 inline BasicVector<decltype(T1{} + T2{}), N> operator+(const BasicVector<T1, N>& lhs, const BasicVector<T2, N>& rhs) noexcept
 {
     BasicVector<decltype(T1{} + T2{}), N> res;
 
-    for (unsigned i = 0; i < N; ++i)
+    for (int i = 0; i < N; ++i)
         res[i] = lhs[i] + rhs[i];
 
     return res;
@@ -1658,12 +1713,12 @@ inline BasicVector<decltype(T1{} + T2{}), 2> operator+(const BasicVector<T1, 2>&
  *
  * @return Result vector.
  */
-template<typename T1, typename T2, unsigned N>
+template<typename T1, typename T2, int N>
 inline BasicVector<decltype(T1{} + T2{}), N> operator+(const BasicVector<T1, N>& lhs, T2 rhs) noexcept
 {
     BasicVector<decltype(T1{} + T2{}), N> res;
 
-    for (unsigned i = 0; i < N; ++i)
+    for (int i = 0; i < N; ++i)
         res[i] = lhs[i] + rhs;
 
     return res;
@@ -1705,12 +1760,12 @@ inline BasicVector<decltype(T1{} + T2{}), 2> operator+(const BasicVector<T1, 2>&
  *
  * @return Result vector.
  */
-template<typename T1, typename T2, unsigned N>
+template<typename T1, typename T2, int N>
 inline BasicVector<decltype(T1{} + T2{}), N> operator+(T1 lhs, const BasicVector<T2, N>& rhs) noexcept
 {
     BasicVector<decltype(T1{} + T2{}), N> res;
 
-    for (unsigned i = 0; i < N; ++i)
+    for (int i = 0; i < N; ++i)
         res[i] = lhs + rhs[i];
 
     return res;
@@ -1751,12 +1806,12 @@ inline BasicVector<decltype(T1{} + T2{}), 2> operator+(T1 lhs, const BasicVector
  *
  * @return Result vector.
  */
-template<typename T1, typename T2, unsigned N>
+template<typename T1, typename T2, int N>
 inline BasicVector<decltype(T1{} - T2{}), N> operator-(const BasicVector<T1, N>& lhs, const BasicVector<T2, N>& rhs) noexcept
 {
     BasicVector<decltype(T1{} - T2{}), N> res;
 
-    for (unsigned i = 0; i < N; ++i)
+    for (int i = 0; i < N; ++i)
         res[i] = lhs[i] - rhs[i];
 
     return res;
@@ -1797,12 +1852,12 @@ inline BasicVector<decltype(T1{} - T2{}), 2> operator-(const BasicVector<T1, 2>&
  *
  * @return Result vector.
  */
-template<typename T1, typename T2, unsigned N>
+template<typename T1, typename T2, int N>
 inline BasicVector<decltype(T1{} - T2{}), N> operator-(const BasicVector<T1, N>& lhs, T2 rhs) noexcept
 {
     BasicVector<decltype(T1{} - T2{}), N> res;
 
-    for (unsigned i = 0; i < N; ++i)
+    for (int i = 0; i < N; ++i)
         res[i] = lhs[i] - rhs;
 
     return res;
@@ -1843,12 +1898,12 @@ inline BasicVector<decltype(T1{} - T2{}), 2> operator-(const BasicVector<T1, 2>&
  *
  * @return Result vector.
  */
-template<typename T1, typename T2, unsigned N>
+template<typename T1, typename T2, int N>
 inline BasicVector<decltype(T1{} - T2{}), N> operator-(T1 lhs, const BasicVector<T2, N>& rhs) noexcept
 {
     BasicVector<decltype(T1{} - T2{}), N> res;
 
-    for (unsigned i = 0; i < N; ++i)
+    for (int i = 0; i < N; ++i)
         res[i] = lhs - rhs[i];
 
     return res;
@@ -1889,12 +1944,12 @@ inline BasicVector<decltype(T1{} - T2{}), 2> operator-(T1 lhs, const BasicVector
  *
  * @return Result vector.
  */
-template<typename T1, typename T2, unsigned N>
+template<typename T1, typename T2, int N>
 inline BasicVector<decltype(T1{} * T2{}), N> operator*(const BasicVector<T1, N>& lhs, const BasicVector<T2, N>& rhs) noexcept
 {
     BasicVector<decltype(T1{} * T2{}), N> res;
 
-    for (unsigned i = 0; i < N; ++i)
+    for (int i = 0; i < N; ++i)
         res[i] = lhs[i] * rhs[i];
 
     return res;
@@ -1935,12 +1990,12 @@ inline BasicVector<decltype(T1{} * T2{}), 2> operator*(const BasicVector<T1, 2>&
  *
  * @return Result vector.
  */
-template<typename T1, typename T2, unsigned N>
+template<typename T1, typename T2, int N>
 inline BasicVector<decltype(T1{} * T2{}), N> operator*(const BasicVector<T1, N>& lhs, T2 rhs) noexcept
 {
     BasicVector<decltype(T1{} * T2{}), N> res;
 
-    for (unsigned i = 0; i < N; ++i)
+    for (int i = 0; i < N; ++i)
         res[i] = lhs[i] * rhs;
 
     return res;
@@ -1981,12 +2036,12 @@ inline BasicVector<decltype(T1{} * T2{}), 2> operator*(const BasicVector<T1, 2>&
  *
  * @return Result vector.
  */
-template<typename T1, typename T2, unsigned N>
+template<typename T1, typename T2, int N>
 inline BasicVector<decltype(T1{} * T2{}), N> operator*(T1 lhs, const BasicVector<T2, N>& rhs) noexcept
 {
     BasicVector<decltype(T1{} * T2{}), N> res;
 
-    for (unsigned i = 0; i < N; ++i)
+    for (int i = 0; i < N; ++i)
         res[i] = lhs * rhs[i];
 
     return res;
@@ -2027,12 +2082,12 @@ inline BasicVector<decltype(T1{} * T2{}), 2> operator*(T1 lhs, const BasicVector
  *
  * @return Result vector.
  */
-template<typename T1, typename T2, unsigned N>
+template<typename T1, typename T2, int N>
 inline BasicVector<decltype(T1{} / T2{}), N> operator/(const BasicVector<T1, N>& lhs, const BasicVector<T2, N>& rhs) noexcept
 {
     BasicVector<decltype(T1{} / T2{}), N> res;
 
-    for (unsigned i = 0; i < N; ++i)
+    for (int i = 0; i < N; ++i)
         res[i] = lhs[i] / rhs[i];
 
     return res;
@@ -2073,12 +2128,12 @@ inline BasicVector<decltype(T1{} / T2{}), 2> operator/(const BasicVector<T1, 2>&
  *
  * @return Result vector.
  */
-template<typename T1, typename T2, unsigned N>
+template<typename T1, typename T2, int N>
 inline BasicVector<decltype(T1{} / T2{}), N> operator/(const BasicVector<T1, N>& lhs, T2 rhs) noexcept
 {
     BasicVector<decltype(T1{} / T2{}), N> res;
 
-    for (unsigned i = 0; i < N; ++i)
+    for (int i = 0; i < N; ++i)
         res[i] = lhs[i] / rhs;
 
     return res;
@@ -2119,12 +2174,12 @@ inline BasicVector<decltype(T1{} / T2{}), 2> operator/(const BasicVector<T1, 2>&
  *
  * @return Result vector.
  */
-template<typename T1, typename T2, unsigned N>
+template<typename T1, typename T2, int N>
 inline BasicVector<decltype(T1{} / T2{}), N> operator/(T1 lhs, const BasicVector<T2, N>& rhs) noexcept
 {
     BasicVector<decltype(T1{} / T2{}), N> res;
 
-    for (unsigned i = 0; i < N; ++i)
+    for (int i = 0; i < N; ++i)
         res[i] = lhs / rhs[i];
 
     return res;
@@ -2162,12 +2217,12 @@ inline BasicVector<decltype(T1{} / T2{}), 2> operator/(T1 lhs, const BasicVector
  *
  * @return
  */
-template<typename T1, typename T2, unsigned N>
+template<typename T1, typename T2, int N>
 inline bool operator==(const BasicVector<T1, N>& lhs, const BasicVector<T2, N>& rhs) noexcept
 {
     bool res = true;
 
-    for (unsigned i = 0; i < N; ++i)
+    for (int i = 0; i < N; ++i)
         res = res && lhs[i] == rhs[i];
 
     return res;
@@ -2202,7 +2257,7 @@ inline bool operator==(const BasicVector<T1, 2>& lhs, const BasicVector<T2, 2>& 
  *
  * @return
  */
-template<typename T1, unsigned N>
+template<typename T1, int N>
 inline bool operator==(const BasicVector<T1, N>& lhs, Zero_t rhs) noexcept
 {
     return lhs == BasicVector<T1, N>(Zero);
@@ -2218,7 +2273,7 @@ inline bool operator==(const BasicVector<T1, N>& lhs, Zero_t rhs) noexcept
  *
  * @return
  */
-template<typename T1, unsigned N>
+template<typename T1, int N>
 inline bool operator==(Zero_t lhs, const BasicVector<T1, N>& rhs) noexcept
 {
     return BasicVector<T1, N>(Zero) == rhs;
@@ -2234,7 +2289,7 @@ inline bool operator==(Zero_t lhs, const BasicVector<T1, N>& rhs) noexcept
  *
  * @return
  */
-template<typename T1, typename T2, unsigned N>
+template<typename T1, typename T2, int N>
 inline bool operator!=(const BasicVector<T1, N>& lhs, const BasicVector<T2, N>& rhs) noexcept
 {
     return !operator==(lhs, rhs);
@@ -2250,7 +2305,7 @@ inline bool operator!=(const BasicVector<T1, N>& lhs, const BasicVector<T2, N>& 
  *
  * @return
  */
-template<typename T1, unsigned N>
+template<typename T1, int N>
 inline bool operator!=(const BasicVector<T1, N>& lhs, Zero_t rhs) noexcept
 {
     return !operator==(lhs, rhs);
@@ -2266,7 +2321,7 @@ inline bool operator!=(const BasicVector<T1, N>& lhs, Zero_t rhs) noexcept
  *
  * @return
  */
-template<typename T1, unsigned N>
+template<typename T1, int N>
 inline bool operator!=(Zero_t lhs, const BasicVector<T1, N>& rhs) noexcept
 {
     return !operator==(lhs, rhs);
@@ -2282,12 +2337,12 @@ inline bool operator!=(Zero_t lhs, const BasicVector<T1, N>& rhs) noexcept
  *
  * @return
  */
-template<typename T1, typename T2, unsigned N>
+template<typename T1, typename T2, int N>
 inline bool operator<(const BasicVector<T1, N>& lhs, const BasicVector<T2, N>& rhs) noexcept
 {
     bool res = true;
 
-    for (unsigned i = 0; i < N; ++i)
+    for (int i = 0; i < N; ++i)
         res = res && ((lhs[i] < rhs[i]) || !(rhs[i] < lhs[i]));
 
     return res;
@@ -2303,7 +2358,7 @@ inline bool operator<(const BasicVector<T1, N>& lhs, const BasicVector<T2, N>& r
  *
  * @return
  */
-template<typename T1, unsigned N>
+template<typename T1, int N>
 inline bool operator<(const BasicVector<T1, N>& lhs, Zero_t rhs) noexcept
 {
     return lhs < BasicVector<T1, N>{Zero};
@@ -2319,7 +2374,7 @@ inline bool operator<(const BasicVector<T1, N>& lhs, Zero_t rhs) noexcept
  *
  * @return
  */
-template<typename T1, unsigned N>
+template<typename T1, int N>
 inline bool operator<(Zero_t lhs, const BasicVector<T1, N>& rhs) noexcept
 {
     return BasicVector<T1, N>{Zero} < rhs;
@@ -2335,7 +2390,7 @@ inline bool operator<(Zero_t lhs, const BasicVector<T1, N>& rhs) noexcept
  *
  * @return
  */
-template<typename T1, typename T2, unsigned N>
+template<typename T1, typename T2, int N>
 inline bool operator<=(const BasicVector<T1, N>& lhs, const BasicVector<T2, N>& rhs) noexcept
 {
     return !operator>(lhs, rhs);
@@ -2351,7 +2406,7 @@ inline bool operator<=(const BasicVector<T1, N>& lhs, const BasicVector<T2, N>& 
  *
  * @return
  */
-template<typename T1, unsigned N>
+template<typename T1, int N>
 inline bool operator<=(const BasicVector<T1, N>& lhs, Zero_t rhs) noexcept
 {
     return !operator>(lhs, rhs);
@@ -2367,7 +2422,7 @@ inline bool operator<=(const BasicVector<T1, N>& lhs, Zero_t rhs) noexcept
  *
  * @return
  */
-template<typename T1, unsigned N>
+template<typename T1, int N>
 inline bool operator<=(Zero_t lhs, const BasicVector<T1, N>& rhs) noexcept
 {
     return !operator>(lhs, rhs);
@@ -2383,7 +2438,7 @@ inline bool operator<=(Zero_t lhs, const BasicVector<T1, N>& rhs) noexcept
  *
  * @return
  */
-template<typename T1, typename T2, unsigned N>
+template<typename T1, typename T2, int N>
 inline bool operator>(const BasicVector<T1, N>& lhs, const BasicVector<T2, N>& rhs) noexcept
 {
     // Reversed operands
@@ -2400,7 +2455,7 @@ inline bool operator>(const BasicVector<T1, N>& lhs, const BasicVector<T2, N>& r
  *
  * @return
  */
-template<typename T1, unsigned N>
+template<typename T1, int N>
 inline bool operator>(const BasicVector<T1, N>& lhs, Zero_t rhs) noexcept
 {
     // Reversed operands
@@ -2417,7 +2472,7 @@ inline bool operator>(const BasicVector<T1, N>& lhs, Zero_t rhs) noexcept
  *
  * @return
  */
-template<typename T1, unsigned N>
+template<typename T1, int N>
 inline bool operator>(Zero_t lhs, const BasicVector<T1, N>& rhs) noexcept
 {
     // Reversed operands
@@ -2434,7 +2489,7 @@ inline bool operator>(Zero_t lhs, const BasicVector<T1, N>& rhs) noexcept
  *
  * @return
  */
-template<typename T1, typename T2, unsigned N>
+template<typename T1, typename T2, int N>
 inline bool operator>=(const BasicVector<T1, N>& lhs, const BasicVector<T2, N>& rhs) noexcept
 {
     return !operator<(lhs, rhs);
@@ -2450,7 +2505,7 @@ inline bool operator>=(const BasicVector<T1, N>& lhs, const BasicVector<T2, N>& 
  *
  * @return
  */
-template<typename T1, unsigned N>
+template<typename T1, int N>
 inline bool operator>=(const BasicVector<T1, N>& lhs, Zero_t rhs) noexcept
 {
     return !operator<(lhs, rhs);
@@ -2466,7 +2521,7 @@ inline bool operator>=(const BasicVector<T1, N>& lhs, Zero_t rhs) noexcept
  *
  * @return
  */
-template<typename T1, unsigned N>
+template<typename T1, int N>
 inline bool operator>=(Zero_t lhs, const BasicVector<T1, N>& rhs) noexcept
 {
     return !operator<(lhs, rhs);
@@ -2482,12 +2537,12 @@ inline bool operator>=(Zero_t lhs, const BasicVector<T1, N>& rhs) noexcept
  *
  * @return Dot product.
  */
-template<typename T1, typename T2, unsigned N>
+template<typename T1, typename T2, int N>
 inline decltype(T1{} * T2{}) dot(const BasicVector<T1, N>& lhs, const BasicVector<T2, N>& rhs) noexcept
 {
     decltype(T1{} * T2{}) res{};
 
-    for (unsigned i = 0; i < N; ++i)
+    for (int i = 0; i < N; ++i)
         res += lhs[i] * rhs[i];
 
     return res;
@@ -2557,10 +2612,10 @@ cross(const T1& lhs, const BasicVector<T2, 2>& rhs) noexcept
  *
  * @return is.
  */
-template<typename T, unsigned N>
+template<typename T, int N>
 io::InStream& operator>>(io::InStream& is, BasicVector<T, N>& vector)
 {
-    unsigned i = 0;
+    int i = 0;
 
     for (; i < N; ++i)
     {
@@ -2573,7 +2628,7 @@ io::InStream& operator>>(io::InStream& is, BasicVector<T, N>& vector)
 
     // Copy missing values
     // TODO: have this feature?
-    for (unsigned j = i; j < N; ++j)
+    for (int j = i; j < N; ++j)
         vector[j] = vector[i - 1];
 
     return is;
@@ -2589,10 +2644,10 @@ io::InStream& operator>>(io::InStream& is, BasicVector<T, N>& vector)
  *
  * @return os.
  */
-template<typename T, unsigned N>
+template<typename T, int N>
 io::OutStream& operator<<(io::OutStream& os, const BasicVector<T, N>& vector) noexcept
 {
-    for (unsigned i = 0; i < N; ++i)
+    for (int i = 0; i < N; ++i)
     {
         if (i != 0)
             os << " ";
@@ -2606,8 +2661,437 @@ io::OutStream& operator<<(io::OutStream& os, const BasicVector<T, N>& vector) no
 /* ************************************************************************ */
 
 extern template class BasicVector<RealType, DIMENSION>;
-extern template class BasicVector<unsigned int, DIMENSION>;
-extern template class BasicVector<int, DIMENSION>;
+
+/* ************************************************************************ */
+
+}
+}
+
+/* ************************************************************************ */
+/* ************************************************************************ */
+/* ************************************************************************ */
+
+namespace cece {
+namespace math {
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+inline BasicVector<T, N>::BasicVector() noexcept
+    : m_data{}
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+inline BasicVector<T, N>::BasicVector(std::initializer_list<T> data) noexcept
+{
+    CECE_ASSERT(data.size() == N);
+
+    using std::begin;
+    auto it = begin(data);
+
+    for (int i = 0; i < N; ++i, ++it)
+        m_data[i] = *it;
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+inline BasicVector<T, N>::BasicVector(T (&data)[N]) noexcept
+{
+    using std::begin;
+    auto it = begin(data);
+
+    for (int i = 0; i < N; ++i, ++it)
+        m_data[i] = *it;
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+inline BasicVector<T, N>::BasicVector(StaticArray<T, N> data) noexcept
+    : m_data(data)
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+inline BasicVector<T, N>::BasicVector(Zero_t zero) noexcept
+{
+    for (int i = 0; i < N; ++i)
+        m_data[i] = T{};
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+inline BasicVector<T, N>::BasicVector(const BasicVector& src) noexcept
+{
+    for (int i = 0; i < N; ++i)
+        m_data[i] = src.m_data[i];
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+inline BasicVector<T, N>::BasicVector(BasicVector&& src) noexcept
+{
+    for (int i = 0; i < N; ++i)
+        m_data[i] = std::move(src.m_data[i]);
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+template<typename T2, typename std::enable_if<std::is_constructible<T, T2>::value>::type*>
+inline BasicVector<T, N>::BasicVector(const BasicVector<T2, N>& src) noexcept
+{
+    for (int i = 0; i < N; ++i)
+        m_data[i] = T(src[i]);
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+inline BasicVector<T, N>& BasicVector<T, N>::operator=(Zero_t zero) noexcept
+{
+    for (int i = 0; i < N; ++i)
+        m_data[i] = T{};
+
+    return *this;
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+inline BasicVector<T, N>& BasicVector<T, N>::operator=(std::initializer_list<T> data) noexcept
+{
+    CECE_ASSERT(data.size() == N);
+
+    using std::begin;
+    auto it = begin(data);
+
+    for (int i = 0; i < N; ++i, ++it)
+        m_data[i] = *it;
+
+    return *this;
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+inline BasicVector<T, N>& BasicVector<T, N>::operator=(T (&data)[N]) noexcept
+{
+    using std::begin;
+    auto it = begin(data);
+
+    for (int i = 0; i < N; ++i, ++it)
+        m_data[i] = *it;
+
+    return *this;
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+inline BasicVector<T, N>& BasicVector<T, N>::operator=(StaticArray<T, N> data) noexcept
+{
+    m_data = data;
+
+    return *this;
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+inline BasicVector<T, N>& BasicVector<T, N>::operator=(const BasicVector& src) noexcept
+{
+    for (int i = 0; i < N; ++i)
+        m_data[i] = src.m_data[i];
+
+    return *this;
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+inline BasicVector<T, N>& BasicVector<T, N>::operator=(BasicVector&& src) noexcept
+{
+    for (int i = 0; i < N; ++i)
+        m_data[i] = std::move(src.m_data[i]);
+
+    return *this;
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+template<typename T2, typename std::enable_if<std::is_constructible<T, T2>::value>::type*>
+inline BasicVector<T, N>& BasicVector<T, N>::operator=(const BasicVector<T2, N>& src) noexcept
+{
+    for (int i = 0; i < N; ++i)
+        m_data[i] = T(src[i]);
+
+    return *this;
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+inline BasicVector<T, N> BasicVector<T, N>::operator+() const noexcept
+{
+    return *this;
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+inline BasicVector<T, N> BasicVector<T, N>::operator-() const noexcept
+{
+    BasicVector res;
+
+    for (int i = 0; i < N; ++i)
+        res[i] = -m_data[i];
+
+    return res;
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+template<typename T1, typename std::enable_if<std::is_same<
+    decltype(std::declval<T>() + std::declval<T1>()),
+    T
+>::value>::type*>
+inline BasicVector<T, N>& BasicVector<T, N>::operator+=(const BasicVector<T1, N>& rhs) noexcept
+{
+    for (int i = 0; i < N; ++i)
+        m_data[i] += rhs[i];
+
+    return *this;
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+template<typename T1, typename std::enable_if<std::is_same<
+    decltype(std::declval<T>() - std::declval<T1>()),
+    T
+>::value>::type*>
+inline BasicVector<T, N>& BasicVector<T, N>::operator-=(const BasicVector<T1, N>& rhs) noexcept
+{
+    for (int i = 0; i < N; ++i)
+        m_data[i] -= rhs[i];
+
+    return *this;
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+template<typename T1, typename std::enable_if<std::is_same<
+    decltype(std::declval<T>() * std::declval<T1>()),
+    T
+>::value || std::is_constructible<
+    T,
+    decltype(std::declval<T>() * std::declval<T1>())
+>::value>::type*>
+inline BasicVector<T, N>& BasicVector<T, N>::operator*=(T1 rhs) noexcept
+{
+    for (int i = 0; i < N; ++i)
+        m_data[i] *= rhs;
+
+    return *this;
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+template<typename T1, typename std::enable_if<std::is_same<
+    decltype(std::declval<T>() * std::declval<T1>()),
+    T
+>::value || std::is_constructible<
+    T,
+    decltype(std::declval<T>() * std::declval<T1>())
+>::value>::type*>
+inline BasicVector<T, N>& BasicVector<T, N>::operator*=(const BasicVector<T1, N>& rhs) noexcept
+{
+    for (int i = 0; i < N; ++i)
+        m_data[i] *= rhs[i];
+
+    return *this;
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+template<typename T1, typename std::enable_if<std::is_same<
+    decltype(std::declval<T>() / std::declval<T1>()),
+    T
+>::value || std::is_constructible<
+    T,
+    decltype(std::declval<T>() * std::declval<T1>())
+>::value>::type*>
+inline BasicVector<T, N>& BasicVector<T, N>::operator/=(T1 rhs) noexcept
+{
+    for (int i = 0; i < N; ++i)
+        m_data[i] /= rhs;
+
+    return *this;
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+template<typename T1, typename std::enable_if<std::is_same<
+    decltype(std::declval<T>() / std::declval<T1>()),
+    T
+>::value || std::is_constructible<
+    T,
+    decltype(std::declval<T>() * std::declval<T1>())
+>::value>::type*>
+inline BasicVector<T, N>& BasicVector<T, N>::operator/=(const BasicVector<T1, N>& rhs) noexcept
+{
+    for (int i = 0; i < N; ++i)
+        m_data[i] /= rhs[i];
+
+    return *this;
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+inline T& BasicVector<T, N>::operator[](int pos) noexcept
+{
+    CECE_ASSERT(pos >= 0);
+    CECE_ASSERT(pos < N);
+    return m_data[pos];
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+inline const T& BasicVector<T, N>::operator[](int pos) const noexcept
+{
+    CECE_ASSERT(pos >= 0);
+    CECE_ASSERT(pos < N);
+    return m_data[pos];
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+int BasicVector<T, N>::getSize() const noexcept
+{
+    return N;
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+inline bool BasicVector<T, N>::inRange(T value, T low, T high) noexcept
+{
+    return value >= low && value < high;
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+inline bool BasicVector<T, N>::inRange(const BasicVector& low, const BasicVector& high) const noexcept
+{
+    bool res = true;
+
+    for (int i = 0; i < N; ++i)
+        res = res && inRange(m_data[i], low[i], high[i]);
+
+    return res;
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+inline bool BasicVector<T, N>::inRange(const BasicVector& high) const noexcept
+{
+    return inRange(Zero, high);
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+inline typename BasicVector<T, N>::ValueType BasicVector<T, N>::getLength() const noexcept
+{
+    using std::sqrt;
+    return static_cast<T>(sqrt(getLengthSquared()));
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+inline typename BasicVector<T, N>::ValueTypeSq BasicVector<T, N>::getLengthSquared() const noexcept
+{
+    return dot(*this);
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+inline typename BasicVector<T, N>::ValueTypeSq BasicVector<T, N>::dot(const BasicVector& rhs) const noexcept
+{
+    ValueTypeSq res{};
+
+    for (int i = 0; i < N; ++i)
+        res += m_data[i] * rhs[i];
+
+    return res;
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+inline typename BasicVector<T, N>::ValueTypeSq BasicVector<T, N>::distanceSquared(const BasicVector& rhs) const noexcept
+{
+    return (*this - rhs).getLengthSquared();
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+inline typename BasicVector<T, N>::ValueType BasicVector<T, N>::distance(const BasicVector& rhs) const noexcept
+{
+    return (*this - rhs).getLength();
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+template<typename T2>
+inline BasicVector<T2, N> BasicVector<T, N>::inversed() const noexcept
+{
+    BasicVector<T2, N> res;
+
+    for (int i = 0; i < N; ++i)
+        res[i] = T2(1) / m_data[i];
+
+    return res;
+}
+
+/* ************************************************************************ */
+
+template<typename T, int N>
+inline BasicVector<T, N> BasicVector<T, N>::createSingle(T val) noexcept
+{
+    BasicVector res;
+
+    for (int i = 0; i < N; ++i)
+        res[i] = val;
+
+    return res;
+}
 
 /* ************************************************************************ */
 

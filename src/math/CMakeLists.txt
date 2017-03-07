@@ -1,5 +1,5 @@
 # ######################################################################### #
-# Georgiev Lab (c) 2015-2016                                                #
+# Georgiev Lab (c) 2015-2017                                                #
 # ######################################################################### #
 # Department of Cybernetics                                                 #
 # Faculty of Applied Sciences                                               #
@@ -25,6 +25,8 @@
 
 set(SRCS
     Vector.cpp
+    Vector2.cpp
+    Vector3.cpp
     Grid.cpp
 )
 

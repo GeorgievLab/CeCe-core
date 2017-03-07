@@ -26,6 +26,7 @@
 cece_add_test(core
     SOURCES
         Vector_test.cpp
+        Vector2_test.cpp
         VectorRangeTest.cpp
 )
 

@@ -503,6 +503,153 @@ TEST(Vector2, functions)
         EXPECT_EQ(0, rot.getY());
     }
 
+
+    // TODO: cross, dot
+}
+
+/* ************************************************************************ */
+
+TEST(Vector2, freeOperators)
+{
+    {
+        const Vector2<float> vec1(5.3f, 8.9f);
+        const Vector2<float> vec2(3.3f, 1.2f);
+
+        EXPECT_FLOAT_EQ(5.3f, vec1.getX());
+        EXPECT_FLOAT_EQ(8.9f, vec1.getY());
+
+        EXPECT_FLOAT_EQ(3.3f, vec2.getX());
+        EXPECT_FLOAT_EQ(1.2f, vec2.getY());
+
+        const auto vec3 = vec1 + vec2;
+        const auto vec4 = vec2 + vec1;
+
+        EXPECT_FLOAT_EQ(5.3f + 3.3f, vec3.getX());
+        EXPECT_FLOAT_EQ(8.9f + 1.2f, vec3.getY());
+
+        EXPECT_FLOAT_EQ(3.3f + 5.3f, vec4.getX());
+        EXPECT_FLOAT_EQ(1.2f + 8.9f, vec4.getY());
+    }
+
+    {
+        const Vector2<float> vec1(5.3f, 8.9f);
+        const Vector2<float> vec2(3.3f, 1.2f);
+
+        EXPECT_FLOAT_EQ(5.3f, vec1.getX());
+        EXPECT_FLOAT_EQ(8.9f, vec1.getY());
+
+        EXPECT_FLOAT_EQ(3.3f, vec2.getX());
+        EXPECT_FLOAT_EQ(1.2f, vec2.getY());
+
+        const auto vec3 = vec1 - vec2;
+        const auto vec4 = vec2 - vec1;
+
+        EXPECT_FLOAT_EQ(5.3f - 3.3f, vec3.getX());
+        EXPECT_FLOAT_EQ(8.9f - 1.2f, vec3.getY());
+
+        EXPECT_FLOAT_EQ(3.3f - 5.3f, vec4.getX());
+        EXPECT_FLOAT_EQ(1.2f - 8.9f, vec4.getY());
+    }
+
+    {
+        const Vector2<float> vec1(5.3f, 8.9f);
+        const Vector2<float> vec2(3.3f, 1.2f);
+
+        EXPECT_FLOAT_EQ(5.3f, vec1.getX());
+        EXPECT_FLOAT_EQ(8.9f, vec1.getY());
+
+        EXPECT_FLOAT_EQ(3.3f, vec2.getX());
+        EXPECT_FLOAT_EQ(1.2f, vec2.getY());
+
+        const auto vec3 = vec1 * vec2;
+        const auto vec4 = vec2 * vec1;
+
+        EXPECT_FLOAT_EQ(5.3f * 3.3f, vec3.getX());
+        EXPECT_FLOAT_EQ(8.9f * 1.2f, vec3.getY());
+
+        EXPECT_FLOAT_EQ(3.3f * 5.3f, vec4.getX());
+        EXPECT_FLOAT_EQ(1.2f * 8.9f, vec4.getY());
+    }
+
+    {
+        const Vector2<float> vec1(5.3f, 8.9f);
+        const Vector2<float> vec2(3.3f, 1.2f);
+
+        EXPECT_FLOAT_EQ(5.3f, vec1.getX());
+        EXPECT_FLOAT_EQ(8.9f, vec1.getY());
+
+        EXPECT_FLOAT_EQ(3.3f, vec2.getX());
+        EXPECT_FLOAT_EQ(1.2f, vec2.getY());
+
+        const auto vec3 = vec1 / vec2;
+        const auto vec4 = vec2 / vec1;
+
+        EXPECT_FLOAT_EQ(5.3f / 3.3f, vec3.getX());
+        EXPECT_FLOAT_EQ(8.9f / 1.2f, vec3.getY());
+
+        EXPECT_FLOAT_EQ(3.3f / 5.3f, vec4.getX());
+        EXPECT_FLOAT_EQ(1.2f / 8.9f, vec4.getY());
+    }
+
+    {
+        const Vector2<float> vec1(5.3f, 8.9f);
+
+        EXPECT_FLOAT_EQ(5.3f, vec1.getX());
+        EXPECT_FLOAT_EQ(8.9f, vec1.getY());
+
+        const auto vec3 = vec1 * 3.2f;
+        const auto vec4 = 3.2f * vec1;
+
+        EXPECT_FLOAT_EQ(5.3f * 3.2f, vec3.getX());
+        EXPECT_FLOAT_EQ(8.9f * 3.2f, vec3.getY());
+
+        EXPECT_FLOAT_EQ(3.2f * 5.3f, vec4.getX());
+        EXPECT_FLOAT_EQ(3.2f * 8.9f, vec4.getY());
+    }
+
+    {
+        const Vector2<float> vec1(5.3f, 8.9f);
+
+        EXPECT_FLOAT_EQ(5.3f, vec1.getX());
+        EXPECT_FLOAT_EQ(8.9f, vec1.getY());
+
+        const auto vec3 = vec1 / 3.2f;
+        const auto vec4 = 3.2f / vec1;
+
+        EXPECT_FLOAT_EQ(5.3f / 3.2f, vec3.getX());
+        EXPECT_FLOAT_EQ(8.9f / 3.2f, vec3.getY());
+
+        EXPECT_FLOAT_EQ(3.2f / 5.3f, vec4.getX());
+        EXPECT_FLOAT_EQ(3.2f / 8.9f, vec4.getY());
+    }
+
+    {
+        const Vector2<float> vec1(5.3f, 8.9f);
+        const Vector2<float> vec2(5.3f, 8.9f);
+        const Vector2<float> vec3(1.3f, 8.9f);
+        const Vector2<float> vec4(5.3f, 0.9f);
+
+        EXPECT_EQ(vec1, vec1);
+        EXPECT_EQ(vec1, vec2);
+        EXPECT_NE(vec1, vec3);
+        EXPECT_NE(vec1, vec4);
+
+        EXPECT_EQ(vec2, vec1);
+        EXPECT_EQ(vec2, vec2);
+        EXPECT_NE(vec2, vec3);
+        EXPECT_NE(vec2, vec4);
+
+        EXPECT_NE(vec3, vec1);
+        EXPECT_NE(vec3, vec2);
+        EXPECT_EQ(vec3, vec3);
+        EXPECT_NE(vec3, vec4);
+
+        EXPECT_NE(vec4, vec1);
+        EXPECT_NE(vec4, vec2);
+        EXPECT_NE(vec4, vec3);
+        EXPECT_EQ(vec4, vec4);
+    }
+
 }
 
 /* ************************************************************************ */

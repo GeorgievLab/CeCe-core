@@ -495,46 +495,12 @@ extern template class Vector2<int>;
  * @return     Result vector.
  */
 template<typename T1, typename T2>
-inline Vector2<decltype(std::declval<T1>() + std::declval<T2>())>
+Vector2<decltype(std::declval<T1>() + std::declval<T2>())>
 operator+(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept;
 
 /* ************************************************************************ */
 
 /**
- * @brief      Addition operator.
- *
- * @param      lhs   Left operand.
- * @param      rhs   Right operand.
- *
- * @tparam     T1    Type of value in first Vector2.
- * @tparam     T2    Type of second operand.
- *
- * @return     Result vector.
- */
-template<typename T1, typename T2>
-inline Vector2<decltype(std::declval<T1>() + std::declval<T2>())>
-operator+(const Vector2<T1>& lhs, T2 rhs) noexcept;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Addition operator.
- *
- * @param      lhs   Left operand.
- * @param      rhs   Right operand.
- *
- * @tparam     T1    Type of first operand.
- * @tparam     T2    Type of value in second Vector2.
- *
- * @return     Result vector.
- */
-template<typename T1, typename T2>
-inline Vector2<decltype(std::declval<T1>() + std::declval<T2>())>
-operator+(T1 lhs, const Vector2<T2>& rhs) noexcept;
-
-/* ************************************************************************ */
-
-/**
  * @brief      Substract operator.
  *
  * @param      lhs   Left operand.
@@ -546,42 +512,8 @@ operator+(T1 lhs, const Vector2<T2>& rhs) noexcept;
  * @return     Result vector.
  */
 template<typename T1, typename T2>
-inline Vector2<decltype(std::declval<T1>() - std::declval<T2>())>
+Vector2<decltype(std::declval<T1>() - std::declval<T2>())>
 operator-(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Substract operator.
- *
- * @param      lhs   Left operand.
- * @param      rhs   Right operand.
- *
- * @tparam     T1    Type of value in first Vector2.
- * @tparam     T2    Type of second operand.
- *
- * @return     Result vector.
- */
-template<typename T1, typename T2>
-inline Vector2<decltype(std::declval<T1>() - std::declval<T2>())>
-operator-(const Vector2<T1>& lhs, T2 rhs) noexcept;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Substract operator.
- *
- * @param      lhs   Left operand.
- * @param      rhs   Right operand.
- *
- * @tparam     T1    Type of first operand.
- * @tparam     T2    Type of value in second Vector2.
- *
- * @return     Result vector.
- */
-template<typename T1, typename T2>
-inline Vector2<decltype(std::declval<T1>() - std::declval<T2>())>
-operator-(T1 lhs, const Vector2<T2>& rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -597,7 +529,7 @@ operator-(T1 lhs, const Vector2<T2>& rhs) noexcept;
  * @return     Result vector.
  */
 template<typename T1, typename T2>
-inline Vector2<decltype(std::declval<T1>() * std::declval<T2>())>
+Vector2<decltype(std::declval<T1>() * std::declval<T2>())>
 operator*(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept;
 
 /* ************************************************************************ */
@@ -614,7 +546,7 @@ operator*(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept;
  * @return     Result vector.
  */
 template<typename T1, typename T2>
-inline Vector2<decltype(std::declval<T1>() * std::declval<T2>())>
+Vector2<decltype(std::declval<T1>() * std::declval<T2>())>
 operator*(const Vector2<T1>& lhs, T2 rhs) noexcept;
 
 /* ************************************************************************ */
@@ -631,7 +563,7 @@ operator*(const Vector2<T1>& lhs, T2 rhs) noexcept;
  * @return     Result vector.
  */
 template<typename T1, typename T2>
-inline Vector2<decltype(std::declval<T1>() * std::declval<T2>())>
+Vector2<decltype(std::declval<T1>() * std::declval<T2>())>
 operator*(T1 lhs, const Vector2<T2>& rhs) noexcept;
 
 /* ************************************************************************ */
@@ -648,7 +580,7 @@ operator*(T1 lhs, const Vector2<T2>& rhs) noexcept;
  * @return     Result vector.
  */
 template<typename T1, typename T2>
-inline Vector2<decltype(std::declval<T1>() / std::declval<T2>())>
+Vector2<decltype(std::declval<T1>() / std::declval<T2>())>
 operator/(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept;
 
 /* ************************************************************************ */
@@ -665,7 +597,7 @@ operator/(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept;
  * @return     Result vector.
  */
 template<typename T1, typename T2>
-inline Vector2<decltype(std::declval<T1>() / std::declval<T2>())>
+Vector2<decltype(std::declval<T1>() / std::declval<T2>())>
 operator/(const Vector2<T1>& lhs, T2 rhs) noexcept;
 
 /* ************************************************************************ */
@@ -682,7 +614,7 @@ operator/(const Vector2<T1>& lhs, T2 rhs) noexcept;
  * @return     Result vector.
  */
 template<typename T1, typename T2>
-inline Vector2<decltype(std::declval<T1>() / std::declval<T2>())>
+Vector2<decltype(std::declval<T1>() / std::declval<T2>())>
 operator/(T1 lhs, const Vector2<T2>& rhs) noexcept;
 
 /* ************************************************************************ */
@@ -699,7 +631,23 @@ operator/(T1 lhs, const Vector2<T2>& rhs) noexcept;
  * @return     Comparision result.
  */
 template<typename T1, typename T2>
-inline bool operator==(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept;
+bool operator==(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept;
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Compare vectors.
+ *
+ * @param      lhs   Left operand.
+ * @param      rhs   Right operand.
+ *
+ * @tparam     T1    The first type.
+ * @tparam     T2    The second type.
+ *
+ * @return     Comparision result.
+ */
+template<typename T1, typename T2>
+bool operator!=(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -715,7 +663,6 @@ inline bool operator==(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept;
  * @return     Cross product.
  */
 template<typename T1, typename T2>
-inline
 decltype(std::declval<T1>() * std::declval<T2>())
 cross(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept;
 
@@ -733,7 +680,6 @@ cross(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept;
  * @return     Cross product.
  */
 template<typename T1, typename T2>
-inline
 Vector2<decltype(std::declval<T1>() * std::declval<T2>())>
 cross(const Vector2<T1>& lhs, const T2& rhs) noexcept;
 
@@ -751,7 +697,6 @@ cross(const Vector2<T1>& lhs, const T2& rhs) noexcept;
  * @return     Cross product.
  */
 template<typename T1, typename T2>
-inline
 Vector2<decltype(std::declval<T1>() * std::declval<T2>())>
 cross(const T1& lhs, const Vector2<T2>& rhs) noexcept;
 
@@ -1156,60 +1101,12 @@ operator+(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept
 /* ************************************************************************ */
 
 template<typename T1, typename T2>
-inline Vector2<decltype(std::declval<T1>() + std::declval<T2>())>
-operator+(const Vector2<T1>& lhs, T2 rhs) noexcept
-{
-    return {
-        lhs.getX() + rhs,
-        lhs.getY() + rhs
-    };
-}
-
-/* ************************************************************************ */
-
-template<typename T1, typename T2>
-inline Vector2<decltype(std::declval<T1>() + std::declval<T2>())>
-operator+(T1 lhs, const Vector2<T2>& rhs) noexcept
-{
-    return {
-        lhs + rhs.getX(),
-        lhs + rhs.getY()
-    };
-}
-
-/* ************************************************************************ */
-
-template<typename T1, typename T2>
 inline Vector2<decltype(std::declval<T1>() - std::declval<T2>())>
 operator-(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept
 {
     return {
         lhs.getX() - rhs.getX(),
         lhs.getY() - rhs.getY()
-    };
-}
-
-/* ************************************************************************ */
-
-template<typename T1, typename T2>
-inline Vector2<decltype(std::declval<T1>() - std::declval<T2>())>
-operator-(const Vector2<T1>& lhs, T2 rhs) noexcept
-{
-    return {
-        lhs.getX() - rhs,
-        lhs.getY() - rhs
-    };
-}
-
-/* ************************************************************************ */
-
-template<typename T1, typename T2>
-inline Vector2<decltype(std::declval<T1>() - std::declval<T2>())>
-operator-(T1 lhs, const Vector2<T2>& rhs) noexcept
-{
-    return {
-        lhs - rhs.getX(),
-        lhs - rhs.getY()
     };
 }
 
@@ -1294,6 +1191,14 @@ inline bool operator==(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept
         lhs.getX() == rhs.getX() &&
         lhs.getY() == rhs.getY()
     ;
+}
+
+/* ************************************************************************ */
+
+template<typename T1, typename T2>
+inline bool operator!=(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept
+{
+    return !operator==(lhs, rhs);
 }
 
 /* ************************************************************************ */

@@ -497,39 +497,39 @@ private:
 
 // TODO: rework
 template<typename T>
-struct BasicVector<T, 2> : public BasicVector2<T>
+struct BasicVector<T, 2> : public Vector2<T>
 {
-    using BasicVector2<T>::BasicVector2;
+    using Vector2<T>::Vector2;
 
     BasicVector() {};
-    BasicVector(const BasicVector2<T>& src)
-        : BasicVector2<T>(src)
+    BasicVector(const Vector2<T>& src)
+        : Vector2<T>(src)
     {
         //
     }
 
-    const T& getWidth() const noexcept { return BasicVector2<T>::getX(); }
-    const T& getHeight() const noexcept { return BasicVector2<T>::getY(); }
+    const T& getWidth() const noexcept { return Vector2<T>::getX(); }
+    const T& getHeight() const noexcept { return Vector2<T>::getY(); }
 };
 
 /* ************************************************************************ */
 
 // TODO: rework
 template<typename T>
-struct BasicVector<T, 3> : public BasicVector3<T>
+struct BasicVector<T, 3> : public Vector3<T>
 {
-    using BasicVector3<T>::BasicVector3;
+    using Vector3<T>::Vector3;
 
     BasicVector() {};
-    BasicVector(const BasicVector3<T>& src)
-        : BasicVector3<T>(src)
+    BasicVector(const Vector3<T>& src)
+        : Vector3<T>(src)
     {
         //
     }
 
-    const T& getWidth() const noexcept { return BasicVector3<T>::getX(); }
-    const T& getHeight() const noexcept { return BasicVector3<T>::getY(); }
-    const T& getDepth() const noexcept { return BasicVector3<T>::getZ(); }
+    const T& getWidth() const noexcept { return Vector3<T>::getX(); }
+    const T& getHeight() const noexcept { return Vector3<T>::getY(); }
+    const T& getDepth() const noexcept { return Vector3<T>::getZ(); }
 };
 
 /* ************************************************************************ */

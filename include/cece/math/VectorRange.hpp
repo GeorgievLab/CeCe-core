@@ -1,5 +1,5 @@
 /* ************************************************************************ */
-/* Georgiev Lab (c) 2015-2016                                               */
+/* Georgiev Lab (c) 2015-2017                                               */
 /* ************************************************************************ */
 /* Department of Cybernetics                                                */
 /* Faculty of Applied Sciences                                              */
@@ -39,9 +39,9 @@ namespace math {
 /* ************************************************************************ */
 
 /**
- * @brief Wrapper for vector iterator.
+ * @brief      Wrapper for vector iterator.
  *
- * @tparam T Element type of Vector.
+ * @tparam     T     Element type of Vector.
  */
 template<typename T>
 struct IteratorVector
@@ -64,11 +64,11 @@ public:
 
 
     /**
-     * @brief Constructor.
+     * @brief      Constructor.
      *
-     * @param value Current value.
-     * @param max   Maximum value.
-     * @param min   Minimum value.
+     * @param      value  Current value.
+     * @param      max    Maximum value.
+     * @param      min    Minimum value.
      */
     IteratorVector(Vector<T> value, Vector<T> max, Vector<T> min = Zero) noexcept
         : m_value(std::move(value))
@@ -84,7 +84,7 @@ public:
 
 
     /**
-     * @brief Cast to value.
+     * @brief      Cast to value.
      */
     operator Vector<T>() const noexcept
     {
@@ -93,11 +93,11 @@ public:
 
 
     /**
-     * @brief Compares values.
+     * @brief      Compares values.
      *
-     * @param rhs Second value.
+     * @param      rhs   Second value.
      *
-     * @return Are values equal?
+     * @return     Are values equal?
      */
     bool operator==(const IteratorVector& rhs) const noexcept
     {
@@ -106,11 +106,11 @@ public:
 
 
     /**
-     * @brief Compares values.
+     * @brief      Compares values.
      *
-     * @param rhs Second value.
+     * @param      rhs   Second value.
      *
-     * @return Aren't values equal?
+     * @return     Aren't values equal?
      */
     bool operator!=(const IteratorVector& rhs) const noexcept
     {
@@ -119,9 +119,9 @@ public:
 
 
     /**
-     * @brief Dereference operator.
+     * @brief      Dereference operator.
      *
-     * @return A reference to the current token.
+     * @return     A reference to the current token.
      */
     reference operator*() const noexcept
     {
@@ -130,9 +130,9 @@ public:
 
 
     /**
-     * @brief Dereference operator.
+     * @brief      Dereference operator.
      *
-     * @return A pointer to the current token.
+     * @return     A pointer to the current token.
      */
     pointer operator->() const noexcept
     {
@@ -141,20 +141,20 @@ public:
 
 
     /**
-     * @brief Increment operator.
+     * @brief      Increment operator.
      *
-     * @return *this.
+     * @return     *this.
      */
     IteratorVector& operator++() noexcept
     {
-        if (m_value.x() == m_max.x())
+        if (m_value.x == m_max.x)
         {
-            m_value.x() = m_min.x();
-            ++m_value.y();
+            m_value.x = m_min.x;
+            ++m_value.y;
         }
         else
         {
-            ++m_value.x();
+            ++m_value.x;
         }
 
         return *this;
@@ -162,11 +162,15 @@ public:
 
 
     /**
-     * @brief Post-increment operator.
+     * @brief      Post-increment operator.
      *
-     * @note Is deleted (because I'm to lazy to write it).
+     * @note       Is deleted (because I'm to lazy to write it).
+     *
+     * @param[in]  dummy  The dummy.
+     *
+     * @return     Iterator.
      */
-    IteratorVector operator++(int) = delete;
+    IteratorVector operator++(int dummy) = delete;
 
 
 // Private Data Members

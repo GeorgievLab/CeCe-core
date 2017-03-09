@@ -33,10 +33,10 @@ namespace math {
 
 /* ************************************************************************ */
 
-template class BasicVector2<float>;
-template class BasicVector2<double>;
-template class BasicVector2<unsigned int>;
-template class BasicVector2<int>;
+template class Vector2<float>;
+template class Vector2<double>;
+template class Vector2<unsigned int>;
+template class Vector2<int>;
 
 /* ************************************************************************ */
 

@@ -51,7 +51,7 @@ namespace math {
  * @tparam     T     Element type.
  */
 template<typename T>
-class BasicVector3
+class Vector3
 {
 
 
@@ -59,7 +59,7 @@ class BasicVector3
 public:
 
 
-    /// BasicVector3 value type.
+    /// Vector3 value type.
     using ValueType = T;
 
     /// Element type squared.
@@ -73,7 +73,7 @@ public:
     /**
      * @brief      Default constructor.
      */
-    BasicVector3() noexcept;
+    Vector3() noexcept;
 
 
     /**
@@ -83,7 +83,7 @@ public:
      * @param      y     The Y coordinate.
      * @param      y     The Z coordinate.
      */
-    BasicVector3(T x, T y, T z) noexcept;
+    Vector3(T x, T y, T z) noexcept;
 
 
     /**
@@ -91,7 +91,7 @@ public:
      *
      * @param[in]  zero  The zero value.
      */
-    BasicVector3(Zero_t zero) noexcept;
+    Vector3(Zero_t zero) noexcept;
 
 
     /**
@@ -99,7 +99,7 @@ public:
      *
      * @param[in]  src   The source vector.
      */
-    BasicVector3(const BasicVector3& src) noexcept;
+    Vector3(const Vector3& src) noexcept;
 
 
     /**
@@ -107,7 +107,7 @@ public:
      *
      * @param[in]  src   The source vector.
      */
-    BasicVector3(BasicVector3&& src) noexcept;
+    Vector3(Vector3&& src) noexcept;
 
 
     /**
@@ -118,7 +118,7 @@ public:
      * @tparam     T2    The source vector element type.
      */
     template<typename T2, typename std::enable_if<std::is_constructible<T, T2>::value>::type* = nullptr>
-    BasicVector3(const BasicVector3<T2>& rhs) noexcept;
+    Vector3(const Vector3<T2>& rhs) noexcept;
 
 
 // Public Operators
@@ -132,7 +132,7 @@ public:
      *
      * @return     *this.
      */
-    BasicVector3& operator=(Zero_t zero) noexcept;
+    Vector3& operator=(Zero_t zero) noexcept;
 
 
     /**
@@ -142,7 +142,7 @@ public:
      *
      * @return     *this.
      */
-    BasicVector3& operator=(const BasicVector3& src) noexcept;
+    Vector3& operator=(const Vector3& src) noexcept;
 
 
     /**
@@ -152,7 +152,7 @@ public:
      *
      * @return     *this.
      */
-    BasicVector3& operator=(BasicVector3&& src) noexcept;
+    Vector3& operator=(Vector3&& src) noexcept;
 
 
     /**
@@ -165,7 +165,7 @@ public:
      * @return     *this.
      */
     template<typename T2, typename std::enable_if<std::is_constructible<T, T2>::value>::type* = nullptr>
-    BasicVector3& operator=(const BasicVector3<T2>& src) noexcept;
+    Vector3& operator=(const Vector3<T2>& src) noexcept;
 
 
     /**
@@ -173,7 +173,7 @@ public:
      *
      * @return     Vector.
      */
-    BasicVector3 operator+() const noexcept;
+    Vector3 operator+() const noexcept;
 
 
     /**
@@ -181,7 +181,7 @@ public:
      *
      * @return     Vector.
      */
-    BasicVector3 operator-() const noexcept;
+    Vector3 operator-() const noexcept;
 
 
     /**
@@ -197,7 +197,7 @@ public:
         decltype(std::declval<T>() + std::declval<T1>()),
         T
     >::value>::type* = nullptr>
-    BasicVector3& operator+=(const BasicVector3<T1>& rhs) noexcept;
+    Vector3& operator+=(const Vector3<T1>& rhs) noexcept;
 
 
     /**
@@ -205,7 +205,7 @@ public:
      *
      * @param      rhs        Right operand.
      *
-     * @tparam     T1         Type of value in BasicVector3 operand.
+     * @tparam     T1         Type of value in Vector3 operand.
      *
      * @return     *this.
      */
@@ -213,7 +213,7 @@ public:
         decltype(std::declval<T>() - std::declval<T1>()),
         T
     >::value>::type* = nullptr>
-    BasicVector3& operator-=(const BasicVector3<T1>& rhs) noexcept;
+    Vector3& operator-=(const Vector3<T1>& rhs) noexcept;
 
 
     /**
@@ -232,7 +232,7 @@ public:
         T,
         decltype(std::declval<T>() * std::declval<T1>())
     >::value>::type* = nullptr>
-    BasicVector3& operator*=(T1 rhs) noexcept;
+    Vector3& operator*=(T1 rhs) noexcept;
 
 
     /**
@@ -240,7 +240,7 @@ public:
      *
      * @param      rhs        Right operand.
      *
-     * @tparam     T1         Type of value in BasicVector3 operand.
+     * @tparam     T1         Type of value in Vector3 operand.
      *
      * @return     *this.
      */
@@ -251,7 +251,7 @@ public:
         T,
         decltype(std::declval<T>() * std::declval<T1>())
     >::value>::type* = nullptr>
-    BasicVector3& operator*=(const BasicVector3<T1>& rhs) noexcept;
+    Vector3& operator*=(const Vector3<T1>& rhs) noexcept;
 
 
     /**
@@ -270,7 +270,7 @@ public:
         T,
         decltype(std::declval<T>() * std::declval<T1>())
     >::value>::type* = nullptr>
-    BasicVector3& operator/=(T1 rhs) noexcept;
+    Vector3& operator/=(T1 rhs) noexcept;
 
 
     /**
@@ -278,7 +278,7 @@ public:
      *
      * @param      rhs        Right operand.
      *
-     * @tparam     T1         Type of value in BasicVector3 operand.
+     * @tparam     T1         Type of value in Vector3 operand.
      *
      * @return     *this.
      */
@@ -289,7 +289,7 @@ public:
         T,
         decltype(std::declval<T>() * std::declval<T1>())
     >::value>::type* = nullptr>
-    BasicVector3& operator/=(const BasicVector3<T1>& rhs) noexcept;
+    Vector3& operator/=(const Vector3<T1>& rhs) noexcept;
 
 
     /**
@@ -408,7 +408,7 @@ public:
      *
      * @return     If current value is in given range.
      */
-    bool inRange(const BasicVector3& low, const BasicVector3& high) const noexcept;
+    bool inRange(const Vector3& low, const Vector3& high) const noexcept;
 
 
     /**
@@ -419,7 +419,7 @@ public:
      *
      * @return     If current value is in given range.
      */
-    bool inRange(const BasicVector3& high) const noexcept;
+    bool inRange(const Vector3& high) const noexcept;
 
 
 // Public Operations
@@ -449,7 +449,7 @@ public:
      *
      * @return     Dot product.
      */
-    ValueTypeSq dot(const BasicVector3& rhs) const noexcept;
+    ValueTypeSq dot(const Vector3& rhs) const noexcept;
 
 
     /**
@@ -459,7 +459,7 @@ public:
      *
      * @return     Distance.
      */
-    ValueTypeSq distanceSquared(const BasicVector3& rhs) const noexcept;
+    ValueTypeSq distanceSquared(const Vector3& rhs) const noexcept;
 
 
     /**
@@ -469,7 +469,7 @@ public:
      *
      * @return     Distance.
      */
-    ValueType distance(const BasicVector3& rhs) const noexcept;
+    ValueType distance(const Vector3& rhs) const noexcept;
 
 
     /**
@@ -480,7 +480,7 @@ public:
      * @return     Inversed vector.
      */
     template<typename T2 = T>
-    BasicVector3<T2> inversed() const noexcept;
+    Vector3<T2> inversed() const noexcept;
 
 
     /**
@@ -490,7 +490,7 @@ public:
      *
      * @return     Rotated vector.
      */
-    BasicVector3 rotated(unit::Angle angle) const noexcept;
+    Vector3 rotated(unit::Angle angle) const noexcept;
 
 
     /**
@@ -500,7 +500,7 @@ public:
      *
      * @return     Vector of {val, val}.
      */
-    static BasicVector3 createSingle(T val) noexcept;
+    static Vector3 createSingle(T val) noexcept;
 
 
 // Private Data Members
@@ -519,10 +519,10 @@ private:
 
 /* ************************************************************************ */
 
-extern template class BasicVector3<float>;
-extern template class BasicVector3<double>;
-extern template class BasicVector3<unsigned int>;
-extern template class BasicVector3<int>;
+extern template class Vector3<float>;
+extern template class Vector3<double>;
+extern template class Vector3<unsigned int>;
+extern template class Vector3<int>;
 
 /* ************************************************************************ */
 
@@ -532,14 +532,14 @@ extern template class BasicVector3<int>;
  * @param      lhs   Left operand.
  * @param      rhs   Right operand.
  *
- * @tparam     T1    Type of value in first BasicVector3.
- * @tparam     T2    Type of value in second BasicVector3.
+ * @tparam     T1    Type of value in first Vector3.
+ * @tparam     T2    Type of value in second Vector3.
  *
  * @return     Result vector.
  */
 template<typename T1, typename T2>
-inline BasicVector3<decltype(std::declval<T1>() + std::declval<T2>())>
-operator+(const BasicVector3<T1>& lhs, const BasicVector3<T2>& rhs) noexcept;
+inline Vector3<decltype(std::declval<T1>() + std::declval<T2>())>
+operator+(const Vector3<T1>& lhs, const Vector3<T2>& rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -549,14 +549,14 @@ operator+(const BasicVector3<T1>& lhs, const BasicVector3<T2>& rhs) noexcept;
  * @param      lhs   Left operand.
  * @param      rhs   Right operand.
  *
- * @tparam     T1    Type of value in first BasicVector3.
+ * @tparam     T1    Type of value in first Vector3.
  * @tparam     T2    Type of second operand.
  *
  * @return     Result vector.
  */
 template<typename T1, typename T2>
-inline BasicVector3<decltype(std::declval<T1>() + std::declval<T2>())>
-operator+(const BasicVector3<T1>& lhs, T2 rhs) noexcept;
+inline Vector3<decltype(std::declval<T1>() + std::declval<T2>())>
+operator+(const Vector3<T1>& lhs, T2 rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -567,13 +567,13 @@ operator+(const BasicVector3<T1>& lhs, T2 rhs) noexcept;
  * @param      rhs   Right operand.
  *
  * @tparam     T1    Type of first operand.
- * @tparam     T2    Type of value in second BasicVector3.
+ * @tparam     T2    Type of value in second Vector3.
  *
  * @return     Result vector.
  */
 template<typename T1, typename T2>
-inline BasicVector3<decltype(std::declval<T1>() + std::declval<T2>())>
-operator+(T1 lhs, const BasicVector3<T2>& rhs) noexcept;
+inline Vector3<decltype(std::declval<T1>() + std::declval<T2>())>
+operator+(T1 lhs, const Vector3<T2>& rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -583,14 +583,14 @@ operator+(T1 lhs, const BasicVector3<T2>& rhs) noexcept;
  * @param      lhs   Left operand.
  * @param      rhs   Right operand.
  *
- * @tparam     T1    Type of value in first BasicVector3.
- * @tparam     T2    Type of value in second BasicVector3.
+ * @tparam     T1    Type of value in first Vector3.
+ * @tparam     T2    Type of value in second Vector3.
  *
  * @return     Result vector.
  */
 template<typename T1, typename T2>
-inline BasicVector3<decltype(std::declval<T1>() - std::declval<T2>())>
-operator-(const BasicVector3<T1>& lhs, const BasicVector3<T2>& rhs) noexcept;
+inline Vector3<decltype(std::declval<T1>() - std::declval<T2>())>
+operator-(const Vector3<T1>& lhs, const Vector3<T2>& rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -600,14 +600,14 @@ operator-(const BasicVector3<T1>& lhs, const BasicVector3<T2>& rhs) noexcept;
  * @param      lhs   Left operand.
  * @param      rhs   Right operand.
  *
- * @tparam     T1    Type of value in first BasicVector3.
+ * @tparam     T1    Type of value in first Vector3.
  * @tparam     T2    Type of second operand.
  *
  * @return     Result vector.
  */
 template<typename T1, typename T2>
-inline BasicVector3<decltype(std::declval<T1>() - std::declval<T2>())>
-operator-(const BasicVector3<T1>& lhs, T2 rhs) noexcept;
+inline Vector3<decltype(std::declval<T1>() - std::declval<T2>())>
+operator-(const Vector3<T1>& lhs, T2 rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -618,13 +618,13 @@ operator-(const BasicVector3<T1>& lhs, T2 rhs) noexcept;
  * @param      rhs   Right operand.
  *
  * @tparam     T1    Type of first operand.
- * @tparam     T2    Type of value in second BasicVector3.
+ * @tparam     T2    Type of value in second Vector3.
  *
  * @return     Result vector.
  */
 template<typename T1, typename T2>
-inline BasicVector3<decltype(std::declval<T1>() - std::declval<T2>())>
-operator-(T1 lhs, const BasicVector3<T2>& rhs) noexcept;
+inline Vector3<decltype(std::declval<T1>() - std::declval<T2>())>
+operator-(T1 lhs, const Vector3<T2>& rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -634,14 +634,14 @@ operator-(T1 lhs, const BasicVector3<T2>& rhs) noexcept;
  * @param      lhs   Left operand.
  * @param      rhs   Right operand.
  *
- * @tparam     T1    Type of value in first BasicVector3.
- * @tparam     T2    Type of value in second BasicVector3.
+ * @tparam     T1    Type of value in first Vector3.
+ * @tparam     T2    Type of value in second Vector3.
  *
  * @return     Result vector.
  */
 template<typename T1, typename T2>
-inline BasicVector3<decltype(std::declval<T1>() * std::declval<T2>())>
-operator*(const BasicVector3<T1>& lhs, const BasicVector3<T2>& rhs) noexcept;
+inline Vector3<decltype(std::declval<T1>() * std::declval<T2>())>
+operator*(const Vector3<T1>& lhs, const Vector3<T2>& rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -651,14 +651,14 @@ operator*(const BasicVector3<T1>& lhs, const BasicVector3<T2>& rhs) noexcept;
  * @param      lhs   Left operand.
  * @param      rhs   Right operand.
  *
- * @tparam     T1    Type of value in first BasicVector3.
+ * @tparam     T1    Type of value in first Vector3.
  * @tparam     T2    Type of second operand.
  *
  * @return     Result vector.
  */
 template<typename T1, typename T2>
-inline BasicVector3<decltype(std::declval<T1>() * std::declval<T2>())>
-operator*(const BasicVector3<T1>& lhs, T2 rhs) noexcept;
+inline Vector3<decltype(std::declval<T1>() * std::declval<T2>())>
+operator*(const Vector3<T1>& lhs, T2 rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -669,13 +669,13 @@ operator*(const BasicVector3<T1>& lhs, T2 rhs) noexcept;
  * @param      rhs   Right operand.
  *
  * @tparam     T1    Type of first operand.
- * @tparam     T2    Type of value in second BasicVector3.
+ * @tparam     T2    Type of value in second Vector3.
  *
  * @return     Result vector.
  */
 template<typename T1, typename T2>
-inline BasicVector3<decltype(std::declval<T1>() * std::declval<T2>())>
-operator*(T1 lhs, const BasicVector3<T2>& rhs) noexcept;
+inline Vector3<decltype(std::declval<T1>() * std::declval<T2>())>
+operator*(T1 lhs, const Vector3<T2>& rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -685,14 +685,14 @@ operator*(T1 lhs, const BasicVector3<T2>& rhs) noexcept;
  * @param      lhs   Left operand.
  * @param      rhs   Right operand.
  *
- * @tparam     T1    Type of value in first BasicVector3.
- * @tparam     T2    Type of value in second BasicVector3.
+ * @tparam     T1    Type of value in first Vector3.
+ * @tparam     T2    Type of value in second Vector3.
  *
  * @return     Result vector.
  */
 template<typename T1, typename T2>
-inline BasicVector3<decltype(std::declval<T1>() / std::declval<T2>())>
-operator/(const BasicVector3<T1>& lhs, const BasicVector3<T2>& rhs) noexcept;
+inline Vector3<decltype(std::declval<T1>() / std::declval<T2>())>
+operator/(const Vector3<T1>& lhs, const Vector3<T2>& rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -702,14 +702,14 @@ operator/(const BasicVector3<T1>& lhs, const BasicVector3<T2>& rhs) noexcept;
  * @param      lhs   Left operand.
  * @param      rhs   Right operand.
  *
- * @tparam     T1    Type of value in first BasicVector3.
+ * @tparam     T1    Type of value in first Vector3.
  * @tparam     T2    Type of second operand.
  *
  * @return     Result vector.
  */
 template<typename T1, typename T2>
-inline BasicVector3<decltype(std::declval<T1>() / std::declval<T2>())>
-operator/(const BasicVector3<T1>& lhs, T2 rhs) noexcept;
+inline Vector3<decltype(std::declval<T1>() / std::declval<T2>())>
+operator/(const Vector3<T1>& lhs, T2 rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -720,13 +720,13 @@ operator/(const BasicVector3<T1>& lhs, T2 rhs) noexcept;
  * @param      rhs   Right operand.
  *
  * @tparam     T1    Type of first operand.
- * @tparam     T2    Type of value in second BasicVector3.
+ * @tparam     T2    Type of value in second Vector3.
  *
  * @return     Result vector.
  */
 template<typename T1, typename T2>
-inline BasicVector3<decltype(std::declval<T1>() / std::declval<T2>())>
-operator/(T1 lhs, const BasicVector3<T2>& rhs) noexcept;
+inline Vector3<decltype(std::declval<T1>() / std::declval<T2>())>
+operator/(T1 lhs, const Vector3<T2>& rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -742,7 +742,7 @@ operator/(T1 lhs, const BasicVector3<T2>& rhs) noexcept;
  * @return     Comparision result.
  */
 template<typename T1, typename T2>
-inline bool operator==(const BasicVector3<T1>& lhs, const BasicVector3<T2>& rhs) noexcept;
+inline bool operator==(const Vector3<T1>& lhs, const Vector3<T2>& rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -759,8 +759,8 @@ inline bool operator==(const BasicVector3<T1>& lhs, const BasicVector3<T2>& rhs)
  */
 template<typename T1, typename T2>
 inline
-BasicVector3<decltype(std::declval<T1>() * std::declval<T2>())>
-cross(const BasicVector3<T1>& lhs, const BasicVector3<T2>& rhs) noexcept;
+Vector3<decltype(std::declval<T1>() * std::declval<T2>())>
+cross(const Vector3<T1>& lhs, const Vector3<T2>& rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -777,7 +777,7 @@ namespace math {
 /* ************************************************************************ */
 
 template<typename T>
-inline BasicVector3<T>::BasicVector3() noexcept
+inline Vector3<T>::Vector3() noexcept
     : m_x{}
     , m_y{}
     , m_z{}
@@ -788,10 +788,10 @@ inline BasicVector3<T>::BasicVector3() noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline BasicVector3<T>::BasicVector3(T x, T y, T z) noexcept
+inline Vector3<T>::Vector3(T x, T y, T z) noexcept
     : m_x(x)
     , m_y(y)
-    , m_z(y)
+    , m_z(z)
 {
     // Nothing to do
 }
@@ -799,7 +799,7 @@ inline BasicVector3<T>::BasicVector3(T x, T y, T z) noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline BasicVector3<T>::BasicVector3(Zero_t zero) noexcept
+inline Vector3<T>::Vector3(Zero_t zero) noexcept
     : m_x{}
     , m_y{}
     , m_z{}
@@ -810,7 +810,7 @@ inline BasicVector3<T>::BasicVector3(Zero_t zero) noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline BasicVector3<T>::BasicVector3(const BasicVector3& src) noexcept
+inline Vector3<T>::Vector3(const Vector3& src) noexcept
     : m_x{src.getX()}
     , m_y{src.getY()}
     , m_z{src.getZ()}
@@ -821,7 +821,7 @@ inline BasicVector3<T>::BasicVector3(const BasicVector3& src) noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline BasicVector3<T>::BasicVector3(BasicVector3&& src) noexcept
+inline Vector3<T>::Vector3(Vector3&& src) noexcept
     : m_x{std::move(src.m_x)}
     , m_y{std::move(src.m_y)}
     , m_z{std::move(src.m_z)}
@@ -833,7 +833,7 @@ inline BasicVector3<T>::BasicVector3(BasicVector3&& src) noexcept
 
 template<typename T>
 template<typename T2, typename std::enable_if<std::is_constructible<T, T2>::value>::type*>
-inline BasicVector3<T>::BasicVector3(const BasicVector3<T2>& rhs) noexcept
+inline Vector3<T>::Vector3(const Vector3<T2>& rhs) noexcept
     : m_x(rhs.getX())
     , m_y(rhs.getY())
     , m_z(rhs.getZ())
@@ -844,7 +844,7 @@ inline BasicVector3<T>::BasicVector3(const BasicVector3<T2>& rhs) noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline BasicVector3<T>& BasicVector3<T>::operator=(Zero_t zero) noexcept
+inline Vector3<T>& Vector3<T>::operator=(Zero_t zero) noexcept
 {
     m_x = T{};
     m_y = T{};
@@ -856,7 +856,7 @@ inline BasicVector3<T>& BasicVector3<T>::operator=(Zero_t zero) noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline BasicVector3<T>& BasicVector3<T>::operator=(const BasicVector3& src) noexcept
+inline Vector3<T>& Vector3<T>::operator=(const Vector3& src) noexcept
 {
     m_x = src.m_x;
     m_y = src.m_y;
@@ -868,7 +868,7 @@ inline BasicVector3<T>& BasicVector3<T>::operator=(const BasicVector3& src) noex
 /* ************************************************************************ */
 
 template<typename T>
-inline BasicVector3<T>& BasicVector3<T>::operator=(BasicVector3&& src) noexcept
+inline Vector3<T>& Vector3<T>::operator=(Vector3&& src) noexcept
 {
     m_x = std::move(src.m_x);
     m_y = std::move(src.m_y);
@@ -881,7 +881,7 @@ inline BasicVector3<T>& BasicVector3<T>::operator=(BasicVector3&& src) noexcept
 
 template<typename T>
 template<typename T2, typename std::enable_if<std::is_constructible<T, T2>::value>::type*>
-inline BasicVector3<T>& BasicVector3<T>::operator=(const BasicVector3<T2>& src) noexcept
+inline Vector3<T>& Vector3<T>::operator=(const Vector3<T2>& src) noexcept
 {
     m_x = T(src.getX());
     m_y = T(src.getY());
@@ -893,7 +893,7 @@ inline BasicVector3<T>& BasicVector3<T>::operator=(const BasicVector3<T2>& src) 
 /* ************************************************************************ */
 
 template<typename T>
-inline BasicVector3<T> BasicVector3<T>::operator+() const noexcept
+inline Vector3<T> Vector3<T>::operator+() const noexcept
 {
     return *this;
 }
@@ -901,7 +901,7 @@ inline BasicVector3<T> BasicVector3<T>::operator+() const noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline BasicVector3<T> BasicVector3<T>::operator-() const noexcept
+inline Vector3<T> Vector3<T>::operator-() const noexcept
 {
     return {-m_x, -m_y, -m_z};
 }
@@ -913,7 +913,7 @@ template<typename T1, typename std::enable_if<std::is_same<
     decltype(std::declval<T>() + std::declval<T1>()),
     T
 >::value>::type*>
-inline BasicVector3<T>& BasicVector3<T>::operator+=(const BasicVector3<T1>& rhs) noexcept
+inline Vector3<T>& Vector3<T>::operator+=(const Vector3<T1>& rhs) noexcept
 {
     m_x += rhs.getX();
     m_y += rhs.getY();
@@ -929,7 +929,7 @@ template<typename T1, typename std::enable_if<std::is_same<
     decltype(std::declval<T>() - std::declval<T1>()),
     T
 >::value>::type*>
-inline BasicVector3<T>& BasicVector3<T>::operator-=(const BasicVector3<T1>& rhs) noexcept
+inline Vector3<T>& Vector3<T>::operator-=(const Vector3<T1>& rhs) noexcept
 {
     m_x -= rhs.getX();
     m_y -= rhs.getY();
@@ -948,7 +948,7 @@ template<typename T1, typename std::enable_if<std::is_same<
     T,
     decltype(std::declval<T>() * std::declval<T1>())
 >::value>::type*>
-inline BasicVector3<T>& BasicVector3<T>::operator*=(T1 rhs) noexcept
+inline Vector3<T>& Vector3<T>::operator*=(T1 rhs) noexcept
 {
     m_x *= rhs;
     m_y *= rhs;
@@ -967,7 +967,7 @@ template<typename T1, typename std::enable_if<std::is_same<
     T,
     decltype(std::declval<T>() * std::declval<T1>())
 >::value>::type*>
-inline BasicVector3<T>& BasicVector3<T>::operator*=(const BasicVector3<T1>& rhs) noexcept
+inline Vector3<T>& Vector3<T>::operator*=(const Vector3<T1>& rhs) noexcept
 {
     m_x *= rhs.getX();
     m_y *= rhs.getY();
@@ -986,7 +986,7 @@ template<typename T1, typename std::enable_if<std::is_same<
     T,
     decltype(std::declval<T>() * std::declval<T1>())
 >::value>::type*>
-inline BasicVector3<T>& BasicVector3<T>::operator/=(T1 rhs) noexcept
+inline Vector3<T>& Vector3<T>::operator/=(T1 rhs) noexcept
 {
     m_x /= rhs;
     m_y /= rhs;
@@ -1005,7 +1005,7 @@ template<typename T1, typename std::enable_if<std::is_same<
     T,
     decltype(std::declval<T>() * std::declval<T1>())
 >::value>::type*>
-inline BasicVector3<T>& BasicVector3<T>::operator/=(const BasicVector3<T1>& rhs) noexcept
+inline Vector3<T>& Vector3<T>::operator/=(const Vector3<T1>& rhs) noexcept
 {
     m_x /= rhs.getX();
     m_y /= rhs.getY();
@@ -1017,7 +1017,7 @@ inline BasicVector3<T>& BasicVector3<T>::operator/=(const BasicVector3<T1>& rhs)
 /* ************************************************************************ */
 
 template<typename T>
-inline T& BasicVector3<T>::operator[](int pos) noexcept
+inline T& Vector3<T>::operator[](int pos) noexcept
 {
     CECE_ASSERT(pos >= 0);
     CECE_ASSERT(pos < 3);
@@ -1027,7 +1027,7 @@ inline T& BasicVector3<T>::operator[](int pos) noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline const T& BasicVector3<T>::operator[](int pos) const noexcept
+inline const T& Vector3<T>::operator[](int pos) const noexcept
 {
     CECE_ASSERT(pos >= 0);
     CECE_ASSERT(pos < 3);
@@ -1037,7 +1037,7 @@ inline const T& BasicVector3<T>::operator[](int pos) const noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline T& BasicVector3<T>::x() noexcept
+inline T& Vector3<T>::x() noexcept
 {
     return m_x;
 }
@@ -1045,7 +1045,7 @@ inline T& BasicVector3<T>::x() noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline const T& BasicVector3<T>::getX() const noexcept
+inline const T& Vector3<T>::getX() const noexcept
 {
     return m_x;
 }
@@ -1053,7 +1053,7 @@ inline const T& BasicVector3<T>::getX() const noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline void BasicVector3<T>::setX(T x) noexcept
+inline void Vector3<T>::setX(T x) noexcept
 {
     m_x = std::move(x);
 }
@@ -1061,7 +1061,7 @@ inline void BasicVector3<T>::setX(T x) noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline T& BasicVector3<T>::y() noexcept
+inline T& Vector3<T>::y() noexcept
 {
     return m_y;
 }
@@ -1069,7 +1069,7 @@ inline T& BasicVector3<T>::y() noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline const T& BasicVector3<T>::getY() const noexcept
+inline const T& Vector3<T>::getY() const noexcept
 {
     return m_y;
 }
@@ -1077,7 +1077,7 @@ inline const T& BasicVector3<T>::getY() const noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline void BasicVector3<T>::setY(T y) noexcept
+inline void Vector3<T>::setY(T y) noexcept
 {
     m_y = std::move(y);
 }
@@ -1085,7 +1085,7 @@ inline void BasicVector3<T>::setY(T y) noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline T& BasicVector3<T>::z() noexcept
+inline T& Vector3<T>::z() noexcept
 {
     return m_z;
 }
@@ -1093,7 +1093,7 @@ inline T& BasicVector3<T>::z() noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline const T& BasicVector3<T>::getZ() const noexcept
+inline const T& Vector3<T>::getZ() const noexcept
 {
     return m_z;
 }
@@ -1101,7 +1101,7 @@ inline const T& BasicVector3<T>::getZ() const noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline void BasicVector3<T>::setZ(T z) noexcept
+inline void Vector3<T>::setZ(T z) noexcept
 {
     m_z = std::move(z);
 }
@@ -1109,7 +1109,7 @@ inline void BasicVector3<T>::setZ(T z) noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline bool BasicVector3<T>::inRange(T value, T low, T high) noexcept
+inline bool Vector3<T>::inRange(T value, T low, T high) noexcept
 {
     return value >= low && value < high;
 }
@@ -1117,7 +1117,7 @@ inline bool BasicVector3<T>::inRange(T value, T low, T high) noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline bool BasicVector3<T>::inRange(const BasicVector3& low, const BasicVector3& high) const noexcept
+inline bool Vector3<T>::inRange(const Vector3& low, const Vector3& high) const noexcept
 {
     bool res = true;
 
@@ -1131,7 +1131,7 @@ inline bool BasicVector3<T>::inRange(const BasicVector3& low, const BasicVector3
 /* ************************************************************************ */
 
 template<typename T>
-inline bool BasicVector3<T>::inRange(const BasicVector3& high) const noexcept
+inline bool Vector3<T>::inRange(const Vector3& high) const noexcept
 {
     return inRange(Zero, high);
 }
@@ -1139,7 +1139,7 @@ inline bool BasicVector3<T>::inRange(const BasicVector3& high) const noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline typename BasicVector3<T>::ValueType BasicVector3<T>::getLength() const noexcept
+inline typename Vector3<T>::ValueType Vector3<T>::getLength() const noexcept
 {
     using std::sqrt;
     return static_cast<T>(sqrt(getLengthSquared()));
@@ -1148,7 +1148,7 @@ inline typename BasicVector3<T>::ValueType BasicVector3<T>::getLength() const no
 /* ************************************************************************ */
 
 template<typename T>
-inline typename BasicVector3<T>::ValueTypeSq BasicVector3<T>::getLengthSquared() const noexcept
+inline typename Vector3<T>::ValueTypeSq Vector3<T>::getLengthSquared() const noexcept
 {
     return dot(*this);
 }
@@ -1156,7 +1156,7 @@ inline typename BasicVector3<T>::ValueTypeSq BasicVector3<T>::getLengthSquared()
 /* ************************************************************************ */
 
 template<typename T>
-inline typename BasicVector3<T>::ValueTypeSq BasicVector3<T>::dot(const BasicVector3& rhs) const noexcept
+inline typename Vector3<T>::ValueTypeSq Vector3<T>::dot(const Vector3& rhs) const noexcept
 {
     return
         getX() * rhs.getX() +
@@ -1168,7 +1168,7 @@ inline typename BasicVector3<T>::ValueTypeSq BasicVector3<T>::dot(const BasicVec
 /* ************************************************************************ */
 
 template<typename T>
-inline typename BasicVector3<T>::ValueTypeSq BasicVector3<T>::distanceSquared(const BasicVector3& rhs) const noexcept
+inline typename Vector3<T>::ValueTypeSq Vector3<T>::distanceSquared(const Vector3& rhs) const noexcept
 {
     return (*this - rhs).getLengthSquared();
 }
@@ -1176,7 +1176,7 @@ inline typename BasicVector3<T>::ValueTypeSq BasicVector3<T>::distanceSquared(co
 /* ************************************************************************ */
 
 template<typename T>
-inline typename BasicVector3<T>::ValueType BasicVector3<T>::distance(const BasicVector3& rhs) const noexcept
+inline typename Vector3<T>::ValueType Vector3<T>::distance(const Vector3& rhs) const noexcept
 {
     return (*this - rhs).getLength();
 }
@@ -1185,7 +1185,7 @@ inline typename BasicVector3<T>::ValueType BasicVector3<T>::distance(const Basic
 
 template<typename T>
 template<typename T2>
-inline BasicVector3<T2> BasicVector3<T>::inversed() const noexcept
+inline Vector3<T2> Vector3<T>::inversed() const noexcept
 {
     return {
         T2(1) / getX(),
@@ -1197,7 +1197,7 @@ inline BasicVector3<T2> BasicVector3<T>::inversed() const noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline BasicVector3<T> BasicVector3<T>::createSingle(T val) noexcept
+inline Vector3<T> Vector3<T>::createSingle(T val) noexcept
 {
     return {val, val, val};
 }
@@ -1205,8 +1205,8 @@ inline BasicVector3<T> BasicVector3<T>::createSingle(T val) noexcept
 /* ************************************************************************ */
 
 template<typename T1, typename T2>
-inline BasicVector3<decltype(std::declval<T1>() + std::declval<T2>())>
-operator+(const BasicVector3<T1>& lhs, const BasicVector3<T2>& rhs) noexcept
+inline Vector3<decltype(std::declval<T1>() + std::declval<T2>())>
+operator+(const Vector3<T1>& lhs, const Vector3<T2>& rhs) noexcept
 {
     return {
         lhs.getX() + rhs.getX(),
@@ -1218,8 +1218,8 @@ operator+(const BasicVector3<T1>& lhs, const BasicVector3<T2>& rhs) noexcept
 /* ************************************************************************ */
 
 template<typename T1, typename T2>
-inline BasicVector3<decltype(std::declval<T1>() + std::declval<T2>())>
-operator+(const BasicVector3<T1>& lhs, T2 rhs) noexcept
+inline Vector3<decltype(std::declval<T1>() + std::declval<T2>())>
+operator+(const Vector3<T1>& lhs, T2 rhs) noexcept
 {
     return {
         lhs.getX() + rhs,
@@ -1231,8 +1231,8 @@ operator+(const BasicVector3<T1>& lhs, T2 rhs) noexcept
 /* ************************************************************************ */
 
 template<typename T1, typename T2>
-inline BasicVector3<decltype(std::declval<T1>() + std::declval<T2>())>
-operator+(T1 lhs, const BasicVector3<T2>& rhs) noexcept
+inline Vector3<decltype(std::declval<T1>() + std::declval<T2>())>
+operator+(T1 lhs, const Vector3<T2>& rhs) noexcept
 {
     return {
         lhs + rhs.getX(),
@@ -1244,8 +1244,8 @@ operator+(T1 lhs, const BasicVector3<T2>& rhs) noexcept
 /* ************************************************************************ */
 
 template<typename T1, typename T2>
-inline BasicVector3<decltype(std::declval<T1>() - std::declval<T2>())>
-operator-(const BasicVector3<T1>& lhs, const BasicVector3<T2>& rhs) noexcept
+inline Vector3<decltype(std::declval<T1>() - std::declval<T2>())>
+operator-(const Vector3<T1>& lhs, const Vector3<T2>& rhs) noexcept
 {
     return {
         lhs.getX() - rhs.getX(),
@@ -1257,8 +1257,8 @@ operator-(const BasicVector3<T1>& lhs, const BasicVector3<T2>& rhs) noexcept
 /* ************************************************************************ */
 
 template<typename T1, typename T2>
-inline BasicVector3<decltype(std::declval<T1>() - std::declval<T2>())>
-operator-(const BasicVector3<T1>& lhs, T2 rhs) noexcept
+inline Vector3<decltype(std::declval<T1>() - std::declval<T2>())>
+operator-(const Vector3<T1>& lhs, T2 rhs) noexcept
 {
     return {
         lhs.getX() - rhs,
@@ -1270,8 +1270,8 @@ operator-(const BasicVector3<T1>& lhs, T2 rhs) noexcept
 /* ************************************************************************ */
 
 template<typename T1, typename T2>
-inline BasicVector3<decltype(std::declval<T1>() - std::declval<T2>())>
-operator-(T1 lhs, const BasicVector3<T2>& rhs) noexcept
+inline Vector3<decltype(std::declval<T1>() - std::declval<T2>())>
+operator-(T1 lhs, const Vector3<T2>& rhs) noexcept
 {
     return {
         lhs - rhs.getX(),
@@ -1283,8 +1283,8 @@ operator-(T1 lhs, const BasicVector3<T2>& rhs) noexcept
 /* ************************************************************************ */
 
 template<typename T1, typename T2>
-inline BasicVector3<decltype(std::declval<T1>() * std::declval<T2>())>
-operator*(const BasicVector3<T1>& lhs, const BasicVector3<T2>& rhs) noexcept
+inline Vector3<decltype(std::declval<T1>() * std::declval<T2>())>
+operator*(const Vector3<T1>& lhs, const Vector3<T2>& rhs) noexcept
 {
     return {
         lhs.getX() * rhs.getX(),
@@ -1296,8 +1296,8 @@ operator*(const BasicVector3<T1>& lhs, const BasicVector3<T2>& rhs) noexcept
 /* ************************************************************************ */
 
 template<typename T1, typename T2>
-inline BasicVector3<decltype(std::declval<T1>() * std::declval<T2>())>
-operator*(const BasicVector3<T1>& lhs, T2 rhs) noexcept
+inline Vector3<decltype(std::declval<T1>() * std::declval<T2>())>
+operator*(const Vector3<T1>& lhs, T2 rhs) noexcept
 {
     return {
         lhs.getX() * rhs,
@@ -1309,8 +1309,8 @@ operator*(const BasicVector3<T1>& lhs, T2 rhs) noexcept
 /* ************************************************************************ */
 
 template<typename T1, typename T2>
-inline BasicVector3<decltype(std::declval<T1>() * std::declval<T2>())>
-operator*(T1 lhs, const BasicVector3<T2>& rhs) noexcept
+inline Vector3<decltype(std::declval<T1>() * std::declval<T2>())>
+operator*(T1 lhs, const Vector3<T2>& rhs) noexcept
 {
     return {
         lhs * rhs.getX(),
@@ -1322,8 +1322,8 @@ operator*(T1 lhs, const BasicVector3<T2>& rhs) noexcept
 /* ************************************************************************ */
 
 template<typename T1, typename T2>
-inline BasicVector3<decltype(std::declval<T1>() / std::declval<T2>())>
-operator/(const BasicVector3<T1>& lhs, const BasicVector3<T2>& rhs) noexcept
+inline Vector3<decltype(std::declval<T1>() / std::declval<T2>())>
+operator/(const Vector3<T1>& lhs, const Vector3<T2>& rhs) noexcept
 {
     return {
         lhs.getX() / rhs.getX(),
@@ -1335,8 +1335,8 @@ operator/(const BasicVector3<T1>& lhs, const BasicVector3<T2>& rhs) noexcept
 /* ************************************************************************ */
 
 template<typename T1, typename T2>
-inline BasicVector3<decltype(std::declval<T1>() / std::declval<T2>())>
-operator/(const BasicVector3<T1>& lhs, T2 rhs) noexcept
+inline Vector3<decltype(std::declval<T1>() / std::declval<T2>())>
+operator/(const Vector3<T1>& lhs, T2 rhs) noexcept
 {
     return {
         lhs.getX() / rhs,
@@ -1348,8 +1348,8 @@ operator/(const BasicVector3<T1>& lhs, T2 rhs) noexcept
 /* ************************************************************************ */
 
 template<typename T1, typename T2>
-inline BasicVector3<decltype(std::declval<T1>() / std::declval<T2>())>
-operator/(T1 lhs, const BasicVector3<T2>& rhs) noexcept
+inline Vector3<decltype(std::declval<T1>() / std::declval<T2>())>
+operator/(T1 lhs, const Vector3<T2>& rhs) noexcept
 {
     return {
         lhs / rhs.getX(),
@@ -1361,7 +1361,7 @@ operator/(T1 lhs, const BasicVector3<T2>& rhs) noexcept
 /* ************************************************************************ */
 
 template<typename T1, typename T2>
-inline bool operator==(const BasicVector3<T1>& lhs, const BasicVector3<T2>& rhs) noexcept
+inline bool operator==(const Vector3<T1>& lhs, const Vector3<T2>& rhs) noexcept
 {
     return
         lhs.getX() == rhs.getX() &&
@@ -1374,8 +1374,8 @@ inline bool operator==(const BasicVector3<T1>& lhs, const BasicVector3<T2>& rhs)
 
 template<typename T1, typename T2>
 inline
-BasicVector3<decltype(std::declval<T1>() * std::declval<T2>())>
-cross(const BasicVector3<T1>& lhs, const BasicVector3<T2>& rhs) noexcept
+Vector3<decltype(std::declval<T1>() * std::declval<T2>())>
+cross(const Vector3<T1>& lhs, const Vector3<T2>& rhs) noexcept
 {
     return {
         lhs.getY() * rhs.getZ() - lhs.getZ() * rhs.getY(),

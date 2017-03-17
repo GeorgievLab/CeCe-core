@@ -23,7 +23,7 @@
 #                                                                           #
 # ######################################################################### #
 
-cece_add_test(core
+cece_add_test(math
     SOURCES
         Vector_test.cpp
         Vector2_test.cpp

@@ -169,7 +169,7 @@ public:
      * @param name Factory name.
      */
     template<typename FactoryTypeInner>
-    void create(String name) noexcept
+    void create(String name)
     {
         static_assert(
             std::is_base_of<FactoryType, FactoryTypeInner>::value,
@@ -188,7 +188,7 @@ public:
      * @param name Factory name.
      */
     template<typename ObjectType>
-    void createFor(String name) noexcept
+    void createFor(String name)
     {
         create<FactoryTyped<FactoryType, ObjectType>>(std::move(name));
     }

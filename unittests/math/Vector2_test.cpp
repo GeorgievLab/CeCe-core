@@ -257,35 +257,9 @@ TEST(Vector2, operators)
         EXPECT_FLOAT_EQ(1.0f, vec1[0]);
         EXPECT_FLOAT_EQ(2.0f, vec1[1]);
 
-        Vector2<float> vec2{1.0f, 2.0f};
-        vec1 *= vec2;
-
-        EXPECT_FLOAT_EQ(1.0f, vec1[0]);
-        EXPECT_FLOAT_EQ(4.0f, vec1[1]);
-    }
-
-    {
-        Vector2<float> vec1{1.0f, 2.0f};
-
-        EXPECT_FLOAT_EQ(1.0f, vec1[0]);
-        EXPECT_FLOAT_EQ(2.0f, vec1[1]);
-
         vec1 /= 2.0;
 
         EXPECT_FLOAT_EQ(0.5f, vec1[0]);
-        EXPECT_FLOAT_EQ(1.0f, vec1[1]);
-    }
-
-    {
-        Vector2<float> vec1{1.0f, 2.0f};
-
-        EXPECT_FLOAT_EQ(1.0f, vec1[0]);
-        EXPECT_FLOAT_EQ(2.0f, vec1[1]);
-
-        Vector2<float> vec2{1.0f, 2.0f};
-        vec1 /= vec2;
-
-        EXPECT_FLOAT_EQ(1.0f, vec1[0]);
         EXPECT_FLOAT_EQ(1.0f, vec1[1]);
     }
 }
@@ -346,32 +320,6 @@ TEST(Vector2, memberFunctions)
         const Vector2<float> vec{1.0f, 2.0f};
 
         EXPECT_FLOAT_EQ(5, vec.getLengthSquared());
-    }
-
-    {
-        const Vector2<float> vec;
-
-        EXPECT_FLOAT_EQ(vec.getLengthSquared(), vec.dot(vec));
-    }
-
-    {
-        const Vector2<float> vec{1.0f, 2.0f};
-
-        EXPECT_FLOAT_EQ(vec.getLengthSquared(), vec.dot(vec));
-    }
-
-    {
-        const Vector2<float> vec1;
-        const Vector2<float> vec2;
-
-        EXPECT_FLOAT_EQ(0, vec1.dot(vec2));
-    }
-
-    {
-        const Vector2<float> vec1{1.0f, 2.0f};
-        const Vector2<float> vec2{5.0f, 4.0f};
-
-        EXPECT_FLOAT_EQ(13, vec1.dot(vec2));
     }
 
     {
@@ -503,8 +451,24 @@ TEST(Vector2, functions)
         EXPECT_EQ(0, rot.getY());
     }
 
+    {
+        Vector2<float> vec1(0.94333f, 0.73733f);
+        Vector2<float> vec2(0.16110f, 0.61872f);
 
-    // TODO: cross, dot
+        EXPECT_FLOAT_EQ(0.94333f, vec1.getX());
+        EXPECT_FLOAT_EQ(0.73733f, vec1.getY());
+
+        EXPECT_FLOAT_EQ(0.16110f, vec2.getX());
+        EXPECT_FLOAT_EQ(0.61872f, vec2.getY());
+
+        auto res = dot(vec1, vec2);
+
+        EXPECT_FLOAT_EQ(
+            0.94333f * 0.16110f +
+            0.73733f * 0.61872f,
+            res
+        );
+    }
 }
 
 /* ************************************************************************ */
@@ -549,46 +513,6 @@ TEST(Vector2, freeOperators)
 
         EXPECT_FLOAT_EQ(3.3f - 5.3f, vec4.getX());
         EXPECT_FLOAT_EQ(1.2f - 8.9f, vec4.getY());
-    }
-
-    {
-        const Vector2<float> vec1(5.3f, 8.9f);
-        const Vector2<float> vec2(3.3f, 1.2f);
-
-        EXPECT_FLOAT_EQ(5.3f, vec1.getX());
-        EXPECT_FLOAT_EQ(8.9f, vec1.getY());
-
-        EXPECT_FLOAT_EQ(3.3f, vec2.getX());
-        EXPECT_FLOAT_EQ(1.2f, vec2.getY());
-
-        const auto vec3 = vec1 * vec2;
-        const auto vec4 = vec2 * vec1;
-
-        EXPECT_FLOAT_EQ(5.3f * 3.3f, vec3.getX());
-        EXPECT_FLOAT_EQ(8.9f * 1.2f, vec3.getY());
-
-        EXPECT_FLOAT_EQ(3.3f * 5.3f, vec4.getX());
-        EXPECT_FLOAT_EQ(1.2f * 8.9f, vec4.getY());
-    }
-
-    {
-        const Vector2<float> vec1(5.3f, 8.9f);
-        const Vector2<float> vec2(3.3f, 1.2f);
-
-        EXPECT_FLOAT_EQ(5.3f, vec1.getX());
-        EXPECT_FLOAT_EQ(8.9f, vec1.getY());
-
-        EXPECT_FLOAT_EQ(3.3f, vec2.getX());
-        EXPECT_FLOAT_EQ(1.2f, vec2.getY());
-
-        const auto vec3 = vec1 / vec2;
-        const auto vec4 = vec2 / vec1;
-
-        EXPECT_FLOAT_EQ(5.3f / 3.3f, vec3.getX());
-        EXPECT_FLOAT_EQ(8.9f / 1.2f, vec3.getY());
-
-        EXPECT_FLOAT_EQ(3.3f / 5.3f, vec4.getX());
-        EXPECT_FLOAT_EQ(1.2f / 8.9f, vec4.getY());
     }
 
     {

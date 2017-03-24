@@ -250,25 +250,6 @@ public:
 
 
     /**
-     * @brief      Multiplication operator.
-     *
-     * @param      rhs        Right operand.
-     *
-     * @tparam     T1         Type of value in Vector3 operand.
-     *
-     * @return     *this.
-     */
-    template<typename T1, typename std::enable_if<std::is_same<
-        decltype(std::declval<T>() * std::declval<T1>()),
-        T
-    >::value || std::is_constructible<
-        T,
-        decltype(std::declval<T>() * std::declval<T1>())
-    >::value>::type* = nullptr>
-    Vector3& operator*=(const Vector3<T1>& rhs) noexcept;
-
-
-    /**
      * @brief      Division operator.
      *
      * @param      rhs        Right operand.
@@ -285,25 +266,6 @@ public:
         decltype(std::declval<T>() * std::declval<T1>())
     >::value>::type* = nullptr>
     Vector3& operator/=(T1 rhs) noexcept;
-
-
-    /**
-     * @brief      Division operator.
-     *
-     * @param      rhs        Right operand.
-     *
-     * @tparam     T1         Type of value in Vector3 operand.
-     *
-     * @return     *this.
-     */
-    template<typename T1, typename std::enable_if<std::is_same<
-        decltype(std::declval<T>() / std::declval<T1>()),
-        T
-    >::value || std::is_constructible<
-        T,
-        decltype(std::declval<T>() * std::declval<T1>())
-    >::value>::type* = nullptr>
-    Vector3& operator/=(const Vector3<T1>& rhs) noexcept;
 
 
     /**
@@ -534,23 +496,6 @@ operator-(const Vector3<T1>& lhs, const Vector3<T2>& rhs) noexcept;
  * @param      rhs   Right operand.
  *
  * @tparam     T1    Type of value in first Vector3.
- * @tparam     T2    Type of value in second Vector3.
- *
- * @return     Result vector.
- */
-template<typename T1, typename T2>
-inline Vector3<decltype(std::declval<T1>() * std::declval<T2>())>
-operator*(const Vector3<T1>& lhs, const Vector3<T2>& rhs) noexcept;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Multiplication operator.
- *
- * @param      lhs   Left operand.
- * @param      rhs   Right operand.
- *
- * @tparam     T1    Type of value in first Vector3.
  * @tparam     T2    Type of second operand.
  *
  * @return     Result vector.
@@ -575,23 +520,6 @@ operator*(const Vector3<T1>& lhs, T2 rhs) noexcept;
 template<typename T1, typename T2>
 inline Vector3<decltype(std::declval<T1>() * std::declval<T2>())>
 operator*(T1 lhs, const Vector3<T2>& rhs) noexcept;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Division operator.
- *
- * @param      lhs   Left operand.
- * @param      rhs   Right operand.
- *
- * @tparam     T1    Type of value in first Vector3.
- * @tparam     T2    Type of value in second Vector3.
- *
- * @return     Result vector.
- */
-template<typename T1, typename T2>
-inline Vector3<decltype(std::declval<T1>() / std::declval<T2>())>
-operator/(const Vector3<T1>& lhs, const Vector3<T2>& rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -892,25 +820,6 @@ inline Vector3<T>& Vector3<T>::operator*=(T1 rhs) noexcept
 
 template<typename T>
 template<typename T1, typename std::enable_if<std::is_same<
-    decltype(std::declval<T>() * std::declval<T1>()),
-    T
->::value || std::is_constructible<
-    T,
-    decltype(std::declval<T>() * std::declval<T1>())
->::value>::type*>
-inline Vector3<T>& Vector3<T>::operator*=(const Vector3<T1>& rhs) noexcept
-{
-    x *= rhs.getX();
-    y *= rhs.getY();
-    z *= rhs.getZ();
-
-    return *this;
-}
-
-/* ************************************************************************ */
-
-template<typename T>
-template<typename T1, typename std::enable_if<std::is_same<
     decltype(std::declval<T>() / std::declval<T1>()),
     T
 >::value || std::is_constructible<
@@ -922,25 +831,6 @@ inline Vector3<T>& Vector3<T>::operator/=(T1 rhs) noexcept
     x /= rhs;
     y /= rhs;
     z /= rhs;
-
-    return *this;
-}
-
-/* ************************************************************************ */
-
-template<typename T>
-template<typename T1, typename std::enable_if<std::is_same<
-    decltype(std::declval<T>() / std::declval<T1>()),
-    T
->::value || std::is_constructible<
-    T,
-    decltype(std::declval<T>() * std::declval<T1>())
->::value>::type*>
-inline Vector3<T>& Vector3<T>::operator/=(const Vector3<T1>& rhs) noexcept
-{
-    x /= rhs.getX();
-    y /= rhs.getY();
-    z /= rhs.getZ();
 
     return *this;
 }
@@ -1131,19 +1021,6 @@ operator-(const Vector3<T1>& lhs, const Vector3<T2>& rhs) noexcept
 
 template<typename T1, typename T2>
 inline Vector3<decltype(std::declval<T1>() * std::declval<T2>())>
-operator*(const Vector3<T1>& lhs, const Vector3<T2>& rhs) noexcept
-{
-    return {
-        lhs.getX() * rhs.getX(),
-        lhs.getY() * rhs.getY(),
-        lhs.getZ() * rhs.getZ()
-    };
-}
-
-/* ************************************************************************ */
-
-template<typename T1, typename T2>
-inline Vector3<decltype(std::declval<T1>() * std::declval<T2>())>
 operator*(const Vector3<T1>& lhs, T2 rhs) noexcept
 {
     return {
@@ -1163,19 +1040,6 @@ operator*(T1 lhs, const Vector3<T2>& rhs) noexcept
         lhs * rhs.getX(),
         lhs * rhs.getY(),
         lhs * rhs.getZ()
-    };
-}
-
-/* ************************************************************************ */
-
-template<typename T1, typename T2>
-inline Vector3<decltype(std::declval<T1>() / std::declval<T2>())>
-operator/(const Vector3<T1>& lhs, const Vector3<T2>& rhs) noexcept
-{
-    return {
-        lhs.getX() / rhs.getX(),
-        lhs.getY() / rhs.getY(),
-        lhs.getZ() / rhs.getZ()
     };
 }
 

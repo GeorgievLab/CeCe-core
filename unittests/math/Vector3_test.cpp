@@ -614,8 +614,36 @@ TEST(Vector3, assignmentMove)
 
 /* ************************************************************************ */
 
-TEST(Vector3, operators)
+TEST(Vector3, operatorUnaryPlus)
 {
+    {
+        Vector3<int> vec1{1, 2, -8};
+
+        EXPECT_EQ(1, vec1[0]);
+        EXPECT_EQ(2, vec1[1]);
+        EXPECT_EQ(-8, vec1[2]);
+
+        Vector3<int> vec2 = +vec1;
+
+        EXPECT_EQ(1, vec2[0]);
+        EXPECT_EQ(2, vec2[1]);
+        EXPECT_EQ(-8, vec2[2]);
+    }
+
+    {
+        Vector3<unsigned int> vec1{1, 2, 8};
+
+        EXPECT_EQ(1, vec1[0]);
+        EXPECT_EQ(2, vec1[1]);
+        EXPECT_EQ(8, vec1[2]);
+
+        Vector3<unsigned int> vec2 = +vec1;
+
+        EXPECT_EQ(1, vec2[0]);
+        EXPECT_EQ(2, vec2[1]);
+        EXPECT_EQ(8, vec2[2]);
+    }
+
     {
         Vector3<float> vec1{1.0f, 2.0f, -8.1f};
 
@@ -631,6 +659,53 @@ TEST(Vector3, operators)
     }
 
     {
+        Vector3<double> vec1{1.0, 2.0, -8.1};
+
+        EXPECT_DOUBLE_EQ(1.0, vec1[0]);
+        EXPECT_DOUBLE_EQ(2.0, vec1[1]);
+        EXPECT_DOUBLE_EQ(-8.1, vec1[2]);
+
+        Vector3<double> vec2 = +vec1;
+
+        EXPECT_DOUBLE_EQ(1.0, vec2[0]);
+        EXPECT_DOUBLE_EQ(2.0, vec2[1]);
+        EXPECT_DOUBLE_EQ(-8.1, vec2[2]);
+    }
+}
+
+/* ************************************************************************ */
+
+TEST(Vector3, operatorUnaryMinus)
+{
+    {
+        Vector3<int> vec1{1, 2, -8};
+
+        EXPECT_EQ(1, vec1[0]);
+        EXPECT_EQ(2, vec1[1]);
+        EXPECT_EQ(-8, vec1[2]);
+
+        Vector3<int> vec2 = -vec1;
+
+        EXPECT_EQ(-1, vec2[0]);
+        EXPECT_EQ(-2, vec2[1]);
+        EXPECT_EQ(8, vec2[2]);
+    }
+
+    {
+        Vector3<unsigned int> vec1{1, 2, 8};
+
+        EXPECT_EQ(1, vec1[0]);
+        EXPECT_EQ(2, vec1[1]);
+        EXPECT_EQ(8, vec1[2]);
+
+        Vector3<unsigned int> vec2 = -vec1;
+
+        EXPECT_EQ(-1, vec2[0]);
+        EXPECT_EQ(-2, vec2[1]);
+        EXPECT_EQ(-8, vec2[2]);
+    }
+
+    {
         Vector3<float> vec1{1.0f, 2.0f, -8.1f};
 
         EXPECT_FLOAT_EQ(1.0f, vec1[0]);
@@ -642,6 +717,55 @@ TEST(Vector3, operators)
         EXPECT_FLOAT_EQ(-1.0f, vec2[0]);
         EXPECT_FLOAT_EQ(-2.0f, vec2[1]);
         EXPECT_FLOAT_EQ(8.1f, vec2[2]);
+    }
+
+    {
+        Vector3<double> vec1{1.0, 2.0, -8.1};
+
+        EXPECT_DOUBLE_EQ(1.0, vec1[0]);
+        EXPECT_DOUBLE_EQ(2.0, vec1[1]);
+        EXPECT_DOUBLE_EQ(-8.1, vec1[2]);
+
+        Vector3<double> vec2 = -vec1;
+
+        EXPECT_DOUBLE_EQ(-1.0, vec2[0]);
+        EXPECT_DOUBLE_EQ(-2.0, vec2[1]);
+        EXPECT_DOUBLE_EQ(8.1, vec2[2]);
+    }
+}
+
+/* ************************************************************************ */
+
+TEST(Vector3, operatorPlus)
+{
+    {
+        Vector3<int> vec1{1, 2, -8};
+
+        EXPECT_EQ(1, vec1[0]);
+        EXPECT_EQ(2, vec1[1]);
+        EXPECT_EQ(-8, vec1[2]);
+
+        Vector3<int> vec2{1, 2, -8};
+        vec1 += vec2;
+
+        EXPECT_EQ(2, vec1[0]);
+        EXPECT_EQ(4, vec1[1]);
+        EXPECT_EQ(-16, vec1[2]);
+    }
+
+    {
+        Vector3<unsigned int> vec1{1, 2, 8};
+
+        EXPECT_EQ(1, vec1[0]);
+        EXPECT_EQ(2, vec1[1]);
+        EXPECT_EQ(8, vec1[2]);
+
+        Vector3<unsigned int> vec2{1, 2, 8};
+        vec1 += vec2;
+
+        EXPECT_EQ(2, vec1[0]);
+        EXPECT_EQ(4, vec1[1]);
+        EXPECT_EQ(16, vec1[2]);
     }
 
     {
@@ -660,6 +784,56 @@ TEST(Vector3, operators)
     }
 
     {
+        Vector3<double> vec1{1.0, 2.0, -8.1};
+
+        EXPECT_DOUBLE_EQ(1.0, vec1[0]);
+        EXPECT_DOUBLE_EQ(2.0, vec1[1]);
+        EXPECT_DOUBLE_EQ(-8.1, vec1[2]);
+
+        Vector3<double> vec2{1.0, 2.0, -8.1};
+        vec1 += vec2;
+
+        EXPECT_DOUBLE_EQ(2.0, vec1[0]);
+        EXPECT_DOUBLE_EQ(4.0, vec1[1]);
+        EXPECT_DOUBLE_EQ(-16.2, vec1[2]);
+    }
+}
+
+/* ************************************************************************ */
+
+TEST(Vector3, operatorMinus)
+{
+    {
+        Vector3<int> vec1{1, 2, -8};
+
+        EXPECT_EQ(1, vec1[0]);
+        EXPECT_EQ(2, vec1[1]);
+        EXPECT_EQ(-8, vec1[2]);
+
+        Vector3<int> vec2{1, 2, -8};
+        vec1 -= vec2;
+
+        EXPECT_EQ(0, vec1[0]);
+        EXPECT_EQ(0, vec1[1]);
+        EXPECT_EQ(0, vec1[2]);
+    }
+
+    {
+        Vector3<unsigned int> vec1{1, 2, 8};
+
+        EXPECT_EQ(1, vec1[0]);
+        EXPECT_EQ(2, vec1[1]);
+        EXPECT_EQ(8, vec1[2]);
+
+        Vector3<unsigned int> vec2{1, 2, 8};
+        vec1 -= vec2;
+
+        EXPECT_EQ(0, vec1[0]);
+        EXPECT_EQ(0, vec1[1]);
+        EXPECT_EQ(0, vec1[2]);
+    }
+
+    {
         Vector3<float> vec1{1.0f, 2.0f, -8.1f};
 
         EXPECT_FLOAT_EQ(1.0f, vec1[0]);
@@ -672,6 +846,54 @@ TEST(Vector3, operators)
         EXPECT_FLOAT_EQ(0.0f, vec1[0]);
         EXPECT_FLOAT_EQ(0.0f, vec1[1]);
         EXPECT_FLOAT_EQ(0.0f, vec1[2]);
+    }
+
+    {
+        Vector3<double> vec1{1.0, 2.0, -8.1};
+
+        EXPECT_DOUBLE_EQ(1.0, vec1[0]);
+        EXPECT_DOUBLE_EQ(2.0, vec1[1]);
+        EXPECT_DOUBLE_EQ(-8.1, vec1[2]);
+
+        Vector3<double> vec2{1.0, 2.0, -8.1};
+        vec1 -= vec2;
+
+        EXPECT_DOUBLE_EQ(0.0, vec1[0]);
+        EXPECT_DOUBLE_EQ(0.0, vec1[1]);
+        EXPECT_DOUBLE_EQ(0.0, vec1[2]);
+    }
+}
+
+/* ************************************************************************ */
+
+TEST(Vector3, operatorMult)
+{
+    {
+        Vector3<int> vec1{1, 2, -8};
+
+        EXPECT_EQ(1, vec1[0]);
+        EXPECT_EQ(2, vec1[1]);
+        EXPECT_EQ(-8, vec1[2]);
+
+        vec1 *= 2.0;
+
+        EXPECT_EQ(2, vec1[0]);
+        EXPECT_EQ(4, vec1[1]);
+        EXPECT_EQ(-16, vec1[2]);
+    }
+
+    {
+        Vector3<unsigned int> vec1{1, 2, 8};
+
+        EXPECT_EQ(1, vec1[0]);
+        EXPECT_EQ(2, vec1[1]);
+        EXPECT_EQ(8, vec1[2]);
+
+        vec1 *= 2.0;
+
+        EXPECT_EQ(2, vec1[0]);
+        EXPECT_EQ(4, vec1[1]);
+        EXPECT_EQ(16, vec1[2]);
     }
 
     {
@@ -689,18 +911,50 @@ TEST(Vector3, operators)
     }
 
     {
-        Vector3<float> vec1{1.0f, 2.0f, -8.1f};
+        Vector3<double> vec1{1.0, 2.0, -8.1};
 
-        EXPECT_FLOAT_EQ(1.0f, vec1[0]);
-        EXPECT_FLOAT_EQ(2.0f, vec1[1]);
-        EXPECT_FLOAT_EQ(-8.1f, vec1[2]);
+        EXPECT_DOUBLE_EQ(1.0, vec1[0]);
+        EXPECT_DOUBLE_EQ(2.0, vec1[1]);
+        EXPECT_DOUBLE_EQ(-8.1, vec1[2]);
 
-        Vector3<float> vec2{1.0f, 2.0f, -8.1f};
-        vec1 *= vec2;
+        vec1 *= 2.0;
 
-        EXPECT_FLOAT_EQ(1.0f, vec1[0]);
-        EXPECT_FLOAT_EQ(4.0f, vec1[1]);
-        EXPECT_FLOAT_EQ(-8.1f * -8.1f, vec1[2]);
+        EXPECT_DOUBLE_EQ(2.0, vec1[0]);
+        EXPECT_DOUBLE_EQ(4.0, vec1[1]);
+        EXPECT_DOUBLE_EQ(-16.2, vec1[2]);
+    }
+}
+
+/* ************************************************************************ */
+
+TEST(Vector3, operatorDiv)
+{
+    {
+        Vector3<int> vec1{1, 2, -8};
+
+        EXPECT_EQ(1, vec1[0]);
+        EXPECT_EQ(2, vec1[1]);
+        EXPECT_EQ(-8, vec1[2]);
+
+        vec1 /= 2.0;
+
+        EXPECT_EQ(0, vec1[0]);
+        EXPECT_EQ(1, vec1[1]);
+        EXPECT_EQ(-4, vec1[2]);
+    }
+
+    {
+        Vector3<unsigned int> vec1{1, 2, 8};
+
+        EXPECT_EQ(1, vec1[0]);
+        EXPECT_EQ(2, vec1[1]);
+        EXPECT_EQ(8, vec1[2]);
+
+        vec1 /= 2.0;
+
+        EXPECT_EQ(0, vec1[0]);
+        EXPECT_EQ(1, vec1[1]);
+        EXPECT_EQ(4, vec1[2]);
     }
 
     {
@@ -718,18 +972,17 @@ TEST(Vector3, operators)
     }
 
     {
-        Vector3<float> vec1{1.0f, 2.0f, -8.1f};
+        Vector3<double> vec1{1.0, 2.0, -8.1};
 
-        EXPECT_FLOAT_EQ(1.0f, vec1[0]);
-        EXPECT_FLOAT_EQ(2.0f, vec1[1]);
-        EXPECT_FLOAT_EQ(-8.1f, vec1[2]);
+        EXPECT_DOUBLE_EQ(1.0, vec1[0]);
+        EXPECT_DOUBLE_EQ(2.0, vec1[1]);
+        EXPECT_DOUBLE_EQ(-8.1, vec1[2]);
 
-        Vector3<float> vec2{1.0f, 2.0f, -8.1f};
-        vec1 /= vec2;
+        vec1 /= 2.0;
 
-        EXPECT_FLOAT_EQ(1.0f, vec1[0]);
-        EXPECT_FLOAT_EQ(1.0f, vec1[1]);
-        EXPECT_FLOAT_EQ(1.0f, vec1[2]);
+        EXPECT_DOUBLE_EQ(0.5, vec1[0]);
+        EXPECT_DOUBLE_EQ(1.0, vec1[1]);
+        EXPECT_DOUBLE_EQ(-4.05, vec1[2]);
     }
 }
 
@@ -898,6 +1151,162 @@ TEST(Vector3, mutators)
         EXPECT_EQ(50, vec.y);
         EXPECT_EQ(10, vec.z);
     }
+
+    {
+        Vector3<unsigned int> vec;
+
+        EXPECT_EQ(0, vec.getX());
+        EXPECT_EQ(0, vec.getY());
+        EXPECT_EQ(0, vec.getZ());
+
+        vec.setX(100);
+
+        EXPECT_EQ(100, vec.getX());
+        EXPECT_EQ(0, vec.getY());
+        EXPECT_EQ(0, vec.getZ());
+
+        vec.setY(50);
+
+        EXPECT_EQ(100, vec.getX());
+        EXPECT_EQ(50, vec.getY());
+        EXPECT_EQ(0, vec.getZ());
+
+        vec.setZ(10);
+
+        EXPECT_EQ(100, vec.getX());
+        EXPECT_EQ(50, vec.getY());
+        EXPECT_EQ(10, vec.getZ());
+    }
+
+    {
+        Vector3<unsigned int> vec;
+
+        EXPECT_EQ(0, vec.x);
+        EXPECT_EQ(0, vec.y);
+        EXPECT_EQ(0, vec.z);
+
+        vec.x = 100;
+
+        EXPECT_EQ(100, vec.x);
+        EXPECT_EQ(0, vec.y);
+        EXPECT_EQ(0, vec.z);
+
+        vec.y = 50;
+
+        EXPECT_EQ(100, vec.x);
+        EXPECT_EQ(50, vec.y);
+        EXPECT_EQ(0, vec.z);
+
+        vec.z = 10;
+
+        EXPECT_EQ(100, vec.x);
+        EXPECT_EQ(50, vec.y);
+        EXPECT_EQ(10, vec.z);
+    }
+
+    {
+        Vector3<float> vec;
+
+        EXPECT_FLOAT_EQ(0, vec.getX());
+        EXPECT_FLOAT_EQ(0, vec.getY());
+        EXPECT_FLOAT_EQ(0, vec.getZ());
+
+        vec.setX(100.3f);
+
+        EXPECT_FLOAT_EQ(100.3f, vec.getX());
+        EXPECT_FLOAT_EQ(0, vec.getY());
+        EXPECT_FLOAT_EQ(0, vec.getZ());
+
+        vec.setY(50);
+
+        EXPECT_FLOAT_EQ(100.3f, vec.getX());
+        EXPECT_FLOAT_EQ(50, vec.getY());
+        EXPECT_FLOAT_EQ(0, vec.getZ());
+
+        vec.setZ(10);
+
+        EXPECT_FLOAT_EQ(100.3f, vec.getX());
+        EXPECT_FLOAT_EQ(50, vec.getY());
+        EXPECT_FLOAT_EQ(10, vec.getZ());
+    }
+
+    {
+        Vector3<float> vec;
+
+        EXPECT_FLOAT_EQ(0, vec.x);
+        EXPECT_FLOAT_EQ(0, vec.y);
+        EXPECT_FLOAT_EQ(0, vec.z);
+
+        vec.x = 100.3f;
+
+        EXPECT_FLOAT_EQ(100.3f, vec.x);
+        EXPECT_FLOAT_EQ(0, vec.y);
+        EXPECT_FLOAT_EQ(0, vec.z);
+
+        vec.y = 50;
+
+        EXPECT_FLOAT_EQ(100.3f, vec.x);
+        EXPECT_FLOAT_EQ(50, vec.y);
+        EXPECT_FLOAT_EQ(0, vec.z);
+
+        vec.z = 10;
+
+        EXPECT_FLOAT_EQ(100.3f, vec.x);
+        EXPECT_FLOAT_EQ(50, vec.y);
+        EXPECT_FLOAT_EQ(10, vec.z);
+    }
+
+    {
+        Vector3<double> vec;
+
+        EXPECT_DOUBLE_EQ(0, vec.getX());
+        EXPECT_DOUBLE_EQ(0, vec.getY());
+        EXPECT_DOUBLE_EQ(0, vec.getZ());
+
+        vec.setX(100.3);
+
+        EXPECT_DOUBLE_EQ(100.3, vec.getX());
+        EXPECT_DOUBLE_EQ(0, vec.getY());
+        EXPECT_DOUBLE_EQ(0, vec.getZ());
+
+        vec.setY(50);
+
+        EXPECT_DOUBLE_EQ(100.3, vec.getX());
+        EXPECT_DOUBLE_EQ(50, vec.getY());
+        EXPECT_DOUBLE_EQ(0, vec.getZ());
+
+        vec.setZ(10);
+
+        EXPECT_DOUBLE_EQ(100.3, vec.getX());
+        EXPECT_DOUBLE_EQ(50, vec.getY());
+        EXPECT_DOUBLE_EQ(10, vec.getZ());
+    }
+
+    {
+        Vector3<double> vec;
+
+        EXPECT_DOUBLE_EQ(0, vec.x);
+        EXPECT_DOUBLE_EQ(0, vec.y);
+        EXPECT_DOUBLE_EQ(0, vec.z);
+
+        vec.x = 100.3;
+
+        EXPECT_DOUBLE_EQ(100.3, vec.x);
+        EXPECT_DOUBLE_EQ(0, vec.y);
+        EXPECT_DOUBLE_EQ(0, vec.z);
+
+        vec.y = 50;
+
+        EXPECT_DOUBLE_EQ(100.3, vec.x);
+        EXPECT_DOUBLE_EQ(50, vec.y);
+        EXPECT_DOUBLE_EQ(0, vec.z);
+
+        vec.z = 10;
+
+        EXPECT_DOUBLE_EQ(100.3, vec.x);
+        EXPECT_DOUBLE_EQ(50, vec.y);
+        EXPECT_DOUBLE_EQ(10, vec.z);
+    }
 }
 
 /* ************************************************************************ */
@@ -996,54 +1405,6 @@ TEST(Vector3, freeOperators)
         EXPECT_FLOAT_EQ(3.3f - 5.3f, vec4.getX());
         EXPECT_FLOAT_EQ(1.2f - 8.9f, vec4.getY());
         EXPECT_FLOAT_EQ(2.5f - -8.1f, vec4.getZ());
-    }
-
-    {
-        const Vector3<float> vec1(5.3f, 8.9f, -8.1f);
-        const Vector3<float> vec2(3.3f, 1.2f, 2.5f);
-
-        EXPECT_FLOAT_EQ(5.3f, vec1.getX());
-        EXPECT_FLOAT_EQ(8.9f, vec1.getY());
-        EXPECT_FLOAT_EQ(-8.1f, vec1.getZ());
-
-        EXPECT_FLOAT_EQ(3.3f, vec2.getX());
-        EXPECT_FLOAT_EQ(1.2f, vec2.getY());
-        EXPECT_FLOAT_EQ(2.5f, vec2.getZ());
-
-        const auto vec3 = vec1 * vec2;
-        const auto vec4 = vec2 * vec1;
-
-        EXPECT_FLOAT_EQ(5.3f * 3.3f, vec3.getX());
-        EXPECT_FLOAT_EQ(8.9f * 1.2f, vec3.getY());
-        EXPECT_FLOAT_EQ(-8.1f * 2.5f, vec3.getZ());
-
-        EXPECT_FLOAT_EQ(3.3f * 5.3f, vec4.getX());
-        EXPECT_FLOAT_EQ(1.2f * 8.9f, vec4.getY());
-        EXPECT_FLOAT_EQ(2.5f * -8.1f, vec4.getZ());
-    }
-
-    {
-        const Vector3<float> vec1(5.3f, 8.9f, -8.1f);
-        const Vector3<float> vec2(3.3f, 1.2f, 2.5f);
-
-        EXPECT_FLOAT_EQ(5.3f, vec1.getX());
-        EXPECT_FLOAT_EQ(8.9f, vec1.getY());
-        EXPECT_FLOAT_EQ(-8.1f, vec1.getZ());
-
-        EXPECT_FLOAT_EQ(3.3f, vec2.getX());
-        EXPECT_FLOAT_EQ(1.2f, vec2.getY());
-        EXPECT_FLOAT_EQ(2.5f, vec2.getZ());
-
-        const auto vec3 = vec1 / vec2;
-        const auto vec4 = vec2 / vec1;
-
-        EXPECT_FLOAT_EQ(5.3f / 3.3f, vec3.getX());
-        EXPECT_FLOAT_EQ(8.9f / 1.2f, vec3.getY());
-        EXPECT_FLOAT_EQ(-8.1f / 2.5f, vec3.getZ());
-
-        EXPECT_FLOAT_EQ(3.3f / 5.3f, vec4.getX());
-        EXPECT_FLOAT_EQ(1.2f / 8.9f, vec4.getY());
-        EXPECT_FLOAT_EQ(2.5f / -8.1f, vec4.getZ());
     }
 
     {

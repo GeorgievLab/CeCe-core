@@ -245,25 +245,6 @@ public:
 
 
     /**
-     * @brief      Multiplication operator.
-     *
-     * @param      rhs        Right operand.
-     *
-     * @tparam     T1         Type of value in Vector2 operand.
-     *
-     * @return     *this.
-     */
-    template<typename T1, typename std::enable_if<std::is_same<
-        decltype(std::declval<T>() * std::declval<T1>()),
-        T
-    >::value || std::is_constructible<
-        T,
-        decltype(std::declval<T>() * std::declval<T1>())
-    >::value>::type* = nullptr>
-    Vector2& operator*=(const Vector2<T1>& rhs) noexcept;
-
-
-    /**
      * @brief      Division operator.
      *
      * @param      rhs        Right operand.
@@ -280,25 +261,6 @@ public:
         decltype(std::declval<T>() * std::declval<T1>())
     >::value>::type* = nullptr>
     Vector2& operator/=(T1 rhs) noexcept;
-
-
-    /**
-     * @brief      Division operator.
-     *
-     * @param      rhs        Right operand.
-     *
-     * @tparam     T1         Type of value in Vector2 operand.
-     *
-     * @return     *this.
-     */
-    template<typename T1, typename std::enable_if<std::is_same<
-        decltype(std::declval<T>() / std::declval<T1>()),
-        T
-    >::value || std::is_constructible<
-        T,
-        decltype(std::declval<T>() * std::declval<T1>())
-    >::value>::type* = nullptr>
-    Vector2& operator/=(const Vector2<T1>& rhs) noexcept;
 
 
     /**
@@ -412,16 +374,6 @@ public:
 
 
     /**
-     * @brief      Calculate dot of two vectors.
-     *
-     * @param      rhs   Second vector.
-     *
-     * @return     Dot product.
-     */
-    ValueTypeSq dot(const Vector2& rhs) const noexcept;
-
-
-    /**
      * @brief      Calculate vectors squared distance.
      *
      * @param      rhs   Second vector.
@@ -524,23 +476,6 @@ operator-(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept;
  * @param      rhs   Right operand.
  *
  * @tparam     T1    Type of value in first Vector2.
- * @tparam     T2    Type of value in second Vector2.
- *
- * @return     Result vector.
- */
-template<typename T1, typename T2>
-Vector2<decltype(std::declval<T1>() * std::declval<T2>())>
-operator*(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Multiplication operator.
- *
- * @param      lhs   Left operand.
- * @param      rhs   Right operand.
- *
- * @tparam     T1    Type of value in first Vector2.
  * @tparam     T2    Type of second operand.
  *
  * @return     Result vector.
@@ -565,23 +500,6 @@ operator*(const Vector2<T1>& lhs, T2 rhs) noexcept;
 template<typename T1, typename T2>
 Vector2<decltype(std::declval<T1>() * std::declval<T2>())>
 operator*(T1 lhs, const Vector2<T2>& rhs) noexcept;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Division operator.
- *
- * @param      lhs   Left operand.
- * @param      rhs   Right operand.
- *
- * @tparam     T1    Type of value in first Vector2.
- * @tparam     T2    Type of value in second Vector2.
- *
- * @return     Result vector.
- */
-template<typename T1, typename T2>
-Vector2<decltype(std::declval<T1>() / std::declval<T2>())>
-operator/(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -652,7 +570,7 @@ bool operator!=(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept;
 /* ************************************************************************ */
 
 /**
- * @brief      Calculate cross product of two vectors.
+ * @brief      Calculate dot product of two vectors.
  *
  * @param      lhs   Left operand.
  * @param      rhs   Right operand.
@@ -660,45 +578,11 @@ bool operator!=(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept;
  * @tparam     T1    The first type.
  * @tparam     T2    The second type.
  *
- * @return     Cross product.
+ * @return     Dot product.
  */
 template<typename T1, typename T2>
 decltype(std::declval<T1>() * std::declval<T2>())
-cross(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Calculate cross product of two vectors.
- *
- * @param      lhs   Left operand.
- * @param      rhs   Right operand.
- *
- * @tparam     T1    The first type.
- * @tparam     T2    The second type.
- *
- * @return     Cross product.
- */
-template<typename T1, typename T2>
-Vector2<decltype(std::declval<T1>() * std::declval<T2>())>
-cross(const Vector2<T1>& lhs, const T2& rhs) noexcept;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Calculate cross product of two vectors.
- *
- * @param      lhs   Left operand.
- * @param      rhs   Right operand.
- *
- * @tparam     T1    The first type.
- * @tparam     T2    The second type.
- *
- * @return     Cross product.
- */
-template<typename T1, typename T2>
-Vector2<decltype(std::declval<T1>() * std::declval<T2>())>
-cross(const T1& lhs, const Vector2<T2>& rhs) noexcept;
+dot(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -886,24 +770,6 @@ inline Vector2<T>& Vector2<T>::operator*=(T1 rhs) noexcept
 
 template<typename T>
 template<typename T1, typename std::enable_if<std::is_same<
-    decltype(std::declval<T>() * std::declval<T1>()),
-    T
->::value || std::is_constructible<
-    T,
-    decltype(std::declval<T>() * std::declval<T1>())
->::value>::type*>
-inline Vector2<T>& Vector2<T>::operator*=(const Vector2<T1>& rhs) noexcept
-{
-    x *= rhs.getX();
-    y *= rhs.getY();
-
-    return *this;
-}
-
-/* ************************************************************************ */
-
-template<typename T>
-template<typename T1, typename std::enable_if<std::is_same<
     decltype(std::declval<T>() / std::declval<T1>()),
     T
 >::value || std::is_constructible<
@@ -914,24 +780,6 @@ inline Vector2<T>& Vector2<T>::operator/=(T1 rhs) noexcept
 {
     x /= rhs;
     y /= rhs;
-
-    return *this;
-}
-
-/* ************************************************************************ */
-
-template<typename T>
-template<typename T1, typename std::enable_if<std::is_same<
-    decltype(std::declval<T>() / std::declval<T1>()),
-    T
->::value || std::is_constructible<
-    T,
-    decltype(std::declval<T>() * std::declval<T1>())
->::value>::type*>
-inline Vector2<T>& Vector2<T>::operator/=(const Vector2<T1>& rhs) noexcept
-{
-    x /= rhs.getX();
-    y /= rhs.getY();
 
     return *this;
 }
@@ -1031,15 +879,7 @@ inline typename Vector2<T>::ValueType Vector2<T>::getLength() const noexcept
 template<typename T>
 inline typename Vector2<T>::ValueTypeSq Vector2<T>::getLengthSquared() const noexcept
 {
-    return dot(*this);
-}
-
-/* ************************************************************************ */
-
-template<typename T>
-inline typename Vector2<T>::ValueTypeSq Vector2<T>::dot(const Vector2& rhs) const noexcept
-{
-    return getX() * rhs.getX() + getY() * rhs.getY();
+    return getX() * getX() + getY() * getY();
 }
 
 /* ************************************************************************ */
@@ -1114,18 +954,6 @@ operator-(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept
 
 template<typename T1, typename T2>
 inline Vector2<decltype(std::declval<T1>() * std::declval<T2>())>
-operator*(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept
-{
-    return {
-        lhs.getX() * rhs.getX(),
-        lhs.getY() * rhs.getY()
-    };
-}
-
-/* ************************************************************************ */
-
-template<typename T1, typename T2>
-inline Vector2<decltype(std::declval<T1>() * std::declval<T2>())>
 operator*(const Vector2<T1>& lhs, T2 rhs) noexcept
 {
     return {
@@ -1143,18 +971,6 @@ operator*(T1 lhs, const Vector2<T2>& rhs) noexcept
     return {
         lhs * rhs.getX(),
         lhs * rhs.getY()
-    };
-}
-
-/* ************************************************************************ */
-
-template<typename T1, typename T2>
-inline Vector2<decltype(std::declval<T1>() / std::declval<T2>())>
-operator/(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept
-{
-    return {
-        lhs.getX() / rhs.getX(),
-        lhs.getY() / rhs.getY()
     };
 }
 
@@ -1206,29 +1022,12 @@ inline bool operator!=(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept
 template<typename T1, typename T2>
 inline
 decltype(std::declval<T1>() * std::declval<T2>())
-cross(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept
+dot(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept
 {
-    return {lhs.getX() * rhs.getY() - lhs.getY() * rhs.getX()};
-}
-
-/* ************************************************************************ */
-
-template<typename T1, typename T2>
-inline
-Vector2<decltype(std::declval<T1>() * std::declval<T2>())>
-cross(const Vector2<T1>& lhs, const T2& rhs) noexcept
-{
-    return {rhs * lhs.getY(), -rhs * lhs.getX()};
-}
-
-/* ************************************************************************ */
-
-template<typename T1, typename T2>
-inline
-Vector2<decltype(std::declval<T1>() * std::declval<T2>())>
-cross(const T1& lhs, const Vector2<T2>& rhs) noexcept
-{
-    return {-lhs * rhs.getY(), lhs * rhs.getX()};
+    return {
+        lhs.getX() * rhs.getX() +
+        lhs.getY() * rhs.getY()
+    };
 }
 
 /* ************************************************************************ */

@@ -25,6 +25,7 @@
 
 cece_add_test(math
     SOURCES
+        VectorBase_test.cpp
         Vector_test.cpp
         Vector2_test.cpp
         Vector3_test.cpp

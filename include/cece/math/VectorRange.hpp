@@ -203,7 +203,7 @@ template<typename T>
 constexpr IteratorRange<IteratorVector<T>> range(Vector<T> begin, Vector<T> end) noexcept
 {
     return makeRange(
-        IteratorVector<T>{begin, end - T{1}, begin},
+        IteratorVector<T>{begin, end - Vector<T>{1}, begin},
         IteratorVector<T>{Vector<T>{begin.getX(), end.getY()}, Zero, Zero}
     );
 }

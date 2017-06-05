@@ -28,14 +28,14 @@
 /* ************************************************************************ */
 
 // C++
-#include <cmath>
 #include <type_traits>
+#include <utility>
 
 // CeCe
 #include "cece/common.hpp"
 #include "cece/Assert.hpp"
 #include "cece/math/Zero.hpp"
-#include "cece/unit/math.hpp"
+#include "cece/math/VectorBase.hpp"
 #include "cece/unit/Units.hpp"
 
 /* ************************************************************************ */
@@ -51,7 +51,7 @@ namespace math {
  * @tparam     T     Element type.
  */
 template<typename T>
-class Vector2
+class Vector2 : public VectorBase<Vector2, T>
 {
 
 
@@ -62,18 +62,24 @@ public:
     /// Vector2 value type.
     using ValueType = T;
 
-    /// Element type squared.
-    using ValueTypeSq = decltype(std::declval<T>() * std::declval<T>());
-
 
 // Public Data Members
 public:
 
-    /// X coordinate.
-    T x;
 
-    /// Y coordinate.
-    T y;
+    union
+    {
+        struct
+        {
+            /// X coordinate.
+            T x;
+
+            /// Y coordinate.
+            T y;
+        };
+
+        T m[2];
+    };
 
 
 // Public Ctors
@@ -83,7 +89,15 @@ public:
     /**
      * @brief      Default constructor.
      */
-    Vector2() noexcept;
+    Vector2();
+
+
+    /**
+     * @brief      Constructor.
+     *
+     * @param      x     The X and Y coordinate.
+     */
+    explicit Vector2(T value);
 
 
     /**
@@ -92,7 +106,7 @@ public:
      * @param      x     The X coordinate.
      * @param      y     The Y coordinate.
      */
-    Vector2(T x, T y) noexcept;
+    Vector2(T x, T y);
 
 
     /**
@@ -100,7 +114,7 @@ public:
      *
      * @param[in]  zero  The zero value.
      */
-    Vector2(Zero_t zero) noexcept;
+    Vector2(Zero_t zero);
 
 
     /**
@@ -108,7 +122,7 @@ public:
      *
      * @param[in]  src   The source vector.
      */
-    Vector2(const Vector2& src) noexcept;
+    Vector2(const Vector2& src);
 
 
     /**
@@ -116,7 +130,7 @@ public:
      *
      * @param[in]  src   The source vector.
      */
-    Vector2(Vector2&& src) noexcept;
+    Vector2(Vector2&& src);
 
 
     /**
@@ -127,7 +141,7 @@ public:
      * @tparam     T2    The source vector element type.
      */
     template<typename T2, typename std::enable_if<std::is_constructible<T, T2>::value>::type* = nullptr>
-    Vector2(const Vector2<T2>& rhs) noexcept;
+    Vector2(const Vector2<T2>& rhs);
 
 
 // Public Operators
@@ -141,7 +155,7 @@ public:
      *
      * @return     *this.
      */
-    Vector2& operator=(Zero_t zero) noexcept;
+    Vector2& operator=(Zero_t zero);
 
 
     /**
@@ -151,7 +165,7 @@ public:
      *
      * @return     *this.
      */
-    Vector2& operator=(const Vector2& src) noexcept;
+    Vector2& operator=(const Vector2& src);
 
 
     /**
@@ -161,7 +175,7 @@ public:
      *
      * @return     *this.
      */
-    Vector2& operator=(Vector2&& src) noexcept;
+    Vector2& operator=(Vector2&& src);
 
 
     /**
@@ -174,93 +188,7 @@ public:
      * @return     *this.
      */
     template<typename T2, typename std::enable_if<std::is_constructible<T, T2>::value>::type* = nullptr>
-    Vector2& operator=(const Vector2<T2>& src) noexcept;
-
-
-    /**
-     * @brief      Unary plus operator.
-     *
-     * @return     Vector.
-     */
-    Vector2 operator+() const noexcept;
-
-
-    /**
-     * @brief      Unary minus operator.
-     *
-     * @return     Vector.
-     */
-    Vector2 operator-() const noexcept;
-
-
-    /**
-     * @brief      Addition operator.
-     *
-     * @param      rhs        Right operand.
-     *
-     * @tparam     T1         Type of right operand.
-     *
-     * @return     *this.
-     */
-    template<typename T1, typename std::enable_if<std::is_same<
-        decltype(std::declval<T>() + std::declval<T1>()),
-        T
-    >::value>::type* = nullptr>
-    Vector2& operator+=(const Vector2<T1>& rhs) noexcept;
-
-
-    /**
-     * @brief      Subtraction operator.
-     *
-     * @param      rhs        Right operand.
-     *
-     * @tparam     T1         Type of value in Vector2 operand.
-     *
-     * @return     *this.
-     */
-    template<typename T1, typename std::enable_if<std::is_same<
-        decltype(std::declval<T>() - std::declval<T1>()),
-        T
-    >::value>::type* = nullptr>
-    Vector2& operator-=(const Vector2<T1>& rhs) noexcept;
-
-
-    /**
-     * @brief      Multiplication operator.
-     *
-     * @param      rhs        Right operand.
-     *
-     * @tparam     T1         Type of right operand.
-     *
-     * @return     *this.
-     */
-    template<typename T1, typename std::enable_if<std::is_same<
-        decltype(std::declval<T>() * std::declval<T1>()),
-        T
-    >::value || std::is_constructible<
-        T,
-        decltype(std::declval<T>() * std::declval<T1>())
-    >::value>::type* = nullptr>
-    Vector2& operator*=(T1 rhs) noexcept;
-
-
-    /**
-     * @brief      Division operator.
-     *
-     * @param      rhs        Right operand.
-     *
-     * @tparam     T1         Type of right operand.
-     *
-     * @return     *this.
-     */
-    template<typename T1, typename std::enable_if<std::is_same<
-        decltype(std::declval<T>() / std::declval<T1>()),
-        T
-    >::value || std::is_constructible<
-        T,
-        decltype(std::declval<T>() * std::declval<T1>())
-    >::value>::type* = nullptr>
-    Vector2& operator/=(T1 rhs) noexcept;
+    Vector2& operator=(const Vector2<T2>& src);
 
 
     /**
@@ -288,6 +216,14 @@ public:
 
 
     /**
+     * @brief      Returns vector size.
+     *
+     * @return     The size.
+     */
+    int getSize() const noexcept;
+
+
+    /**
      * @brief      Returns X coordinate.
      *
      * @return     The X coordinate.
@@ -300,7 +236,7 @@ public:
      *
      * @param      x     The X coordinate.
      */
-    void setX(T x) noexcept;
+    void setX(T x);
 
 
     /**
@@ -316,115 +252,24 @@ public:
      *
      * @param      y     The Y coordinate.
      */
-    void setY(T y) noexcept;
-
-
-    /**
-     * @brief      Check if given value is in given range.
-     *
-     * @param      value  Given value.
-     * @param      low    Minimum value (>=).
-     * @param      high   Maximum value (<).
-     *
-     * @return     If given value is in given range.
-     */
-    static bool inRange(T value, T low, T high) noexcept;
-
-
-    /**
-     * @brief      Check if current vector is in given range.
-     *
-     * @param      low   Minimum coordinates (>=).
-     * @param      high  Maximum coordinates (<).
-     *
-     * @return     If current value is in given range.
-     */
-    bool inRange(const Vector2& low, const Vector2& high) const noexcept;
-
-
-    /**
-     * @brief      Check if current vector is in given range where the low range
-     *             is Zero vector.
-     *
-     * @param      high  Maximum coordinates (<).
-     *
-     * @return     If current value is in given range.
-     */
-    bool inRange(const Vector2& high) const noexcept;
-
-
-// Public Operations
-public:
-
-
-    /**
-     * @brief      Calculate vector length.
-     *
-     * @return     The length.
-     */
-    ValueType getLength() const noexcept;
-
-
-    /**
-     * @brief      Calculate vector length - squared.
-     *
-     * @return     The length squared.
-     */
-    ValueTypeSq getLengthSquared() const noexcept;
-
-
-    /**
-     * @brief      Calculate vectors squared distance.
-     *
-     * @param      rhs   Second vector.
-     *
-     * @return     Distance.
-     */
-    ValueTypeSq distanceSquared(const Vector2& rhs) const noexcept;
-
-
-    /**
-     * @brief      Calculate vectors distance.
-     *
-     * @param      rhs   Second vector.
-     *
-     * @return     Distance.
-     */
-    ValueType distance(const Vector2& rhs) const noexcept;
-
-
-    /**
-     * @brief      Inverse current vector (1 / *this).
-     *
-     * @tparam     T2    Type of result vector's element.
-     *
-     * @return     Inversed vector.
-     */
-    template<typename T2 = T>
-    Vector2<T2> inversed() const noexcept;
-
-
-    /**
-     * @brief      Rotate current vector counter-clockwise and return rotated
-     *             version.
-     *
-     * @param      angle  Rotation angle.
-     *
-     * @return     Rotated vector.
-     */
-    Vector2 rotated(unit::Angle angle) const noexcept;
-
-
-    /**
-     * @brief      Create from single value.
-     *
-     * @param      val   The value
-     *
-     * @return     Vector of {val, val}.
-     */
-    static Vector2 createSingle(T val) noexcept;
+    void setY(T y);
 
 };
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Rotate the vector counter-clockwise and return rotated version.
+ *
+ * @param[in]  vec    The vector.
+ * @param[in]  angle  Rotation angle.
+ *
+ * @tparam     T      The vector element type.
+ *
+ * @return     Rotated vector.
+ */
+template<typename T>
+Vector2<T> rotate(const Vector2<T>& vec, unit::Angle angle) noexcept;
 
 /* ************************************************************************ */
 
@@ -432,157 +277,6 @@ extern template class Vector2<float>;
 extern template class Vector2<double>;
 extern template class Vector2<unsigned int>;
 extern template class Vector2<int>;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Addition operator.
- *
- * @param      lhs   Left operand.
- * @param      rhs   Right operand.
- *
- * @tparam     T1    Type of value in first Vector2.
- * @tparam     T2    Type of value in second Vector2.
- *
- * @return     Result vector.
- */
-template<typename T1, typename T2>
-Vector2<decltype(std::declval<T1>() + std::declval<T2>())>
-operator+(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Substract operator.
- *
- * @param      lhs   Left operand.
- * @param      rhs   Right operand.
- *
- * @tparam     T1    Type of value in first Vector2.
- * @tparam     T2    Type of value in second Vector2.
- *
- * @return     Result vector.
- */
-template<typename T1, typename T2>
-Vector2<decltype(std::declval<T1>() - std::declval<T2>())>
-operator-(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Multiplication operator.
- *
- * @param      lhs   Left operand.
- * @param      rhs   Right operand.
- *
- * @tparam     T1    Type of value in first Vector2.
- * @tparam     T2    Type of second operand.
- *
- * @return     Result vector.
- */
-template<typename T1, typename T2>
-Vector2<decltype(std::declval<T1>() * std::declval<T2>())>
-operator*(const Vector2<T1>& lhs, T2 rhs) noexcept;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Multiplication operator.
- *
- * @param      lhs   Left operand.
- * @param      rhs   Right operand.
- *
- * @tparam     T1    Type of first operand.
- * @tparam     T2    Type of value in second Vector2.
- *
- * @return     Result vector.
- */
-template<typename T1, typename T2>
-Vector2<decltype(std::declval<T1>() * std::declval<T2>())>
-operator*(T1 lhs, const Vector2<T2>& rhs) noexcept;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Division operator.
- *
- * @param      lhs   Left operand.
- * @param      rhs   Right operand.
- *
- * @tparam     T1    Type of value in first Vector2.
- * @tparam     T2    Type of second operand.
- *
- * @return     Result vector.
- */
-template<typename T1, typename T2>
-Vector2<decltype(std::declval<T1>() / std::declval<T2>())>
-operator/(const Vector2<T1>& lhs, T2 rhs) noexcept;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Division operator.
- *
- * @param      lhs   Left operand.
- * @param      rhs   Right operand.
- *
- * @tparam     T1    Type of first operand.
- * @tparam     T2    Type of value in second Vector2.
- *
- * @return     Result vector.
- */
-template<typename T1, typename T2>
-Vector2<decltype(std::declval<T1>() / std::declval<T2>())>
-operator/(T1 lhs, const Vector2<T2>& rhs) noexcept;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Compare vectors.
- *
- * @param      lhs   Left operand.
- * @param      rhs   Right operand.
- *
- * @tparam     T1    The first type.
- * @tparam     T2    The second type.
- *
- * @return     Comparision result.
- */
-template<typename T1, typename T2>
-bool operator==(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Compare vectors.
- *
- * @param      lhs   Left operand.
- * @param      rhs   Right operand.
- *
- * @tparam     T1    The first type.
- * @tparam     T2    The second type.
- *
- * @return     Comparision result.
- */
-template<typename T1, typename T2>
-bool operator!=(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Calculate dot product of two vectors.
- *
- * @param      lhs   Left operand.
- * @param      rhs   Right operand.
- *
- * @tparam     T1    The first type.
- * @tparam     T2    The second type.
- *
- * @return     Dot product.
- */
-template<typename T1, typename T2>
-decltype(std::declval<T1>() * std::declval<T2>())
-dot(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept;
 
 /* ************************************************************************ */
 
@@ -599,7 +293,7 @@ namespace math {
 /* ************************************************************************ */
 
 template<typename T>
-inline Vector2<T>::Vector2() noexcept
+inline Vector2<T>::Vector2()
     : x{}
     , y{}
 {
@@ -609,7 +303,17 @@ inline Vector2<T>::Vector2() noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline Vector2<T>::Vector2(T x, T y) noexcept
+inline Vector2<T>::Vector2(T val)
+    : x{val}
+    , y{val}
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline Vector2<T>::Vector2(T x, T y)
     : x{std::move(x)}
     , y{std::move(y)}
 {
@@ -619,7 +323,7 @@ inline Vector2<T>::Vector2(T x, T y) noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline Vector2<T>::Vector2(Zero_t zero) noexcept
+inline Vector2<T>::Vector2(Zero_t zero)
     : x{}
     , y{}
 {
@@ -629,7 +333,7 @@ inline Vector2<T>::Vector2(Zero_t zero) noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline Vector2<T>::Vector2(const Vector2& src) noexcept
+inline Vector2<T>::Vector2(const Vector2& src)
     : x{src.getX()}
     , y{src.getY()}
 {
@@ -639,7 +343,7 @@ inline Vector2<T>::Vector2(const Vector2& src) noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline Vector2<T>::Vector2(Vector2&& src) noexcept
+inline Vector2<T>::Vector2(Vector2&& src)
     : x{std::move(src.x)}
     , y{std::move(src.y)}
 {
@@ -650,7 +354,7 @@ inline Vector2<T>::Vector2(Vector2&& src) noexcept
 
 template<typename T>
 template<typename T2, typename std::enable_if<std::is_constructible<T, T2>::value>::type*>
-inline Vector2<T>::Vector2(const Vector2<T2>& rhs) noexcept
+inline Vector2<T>::Vector2(const Vector2<T2>& rhs)
     : x(rhs.getX())
     , y(rhs.getY())
 {
@@ -660,7 +364,7 @@ inline Vector2<T>::Vector2(const Vector2<T2>& rhs) noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline Vector2<T>& Vector2<T>::operator=(Zero_t zero) noexcept
+inline Vector2<T>& Vector2<T>::operator=(Zero_t zero)
 {
     x = T{};
     y = T{};
@@ -671,7 +375,7 @@ inline Vector2<T>& Vector2<T>::operator=(Zero_t zero) noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline Vector2<T>& Vector2<T>::operator=(const Vector2& src) noexcept
+inline Vector2<T>& Vector2<T>::operator=(const Vector2& src)
 {
     x = src.x;
     y = src.y;
@@ -682,7 +386,7 @@ inline Vector2<T>& Vector2<T>::operator=(const Vector2& src) noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline Vector2<T>& Vector2<T>::operator=(Vector2&& src) noexcept
+inline Vector2<T>& Vector2<T>::operator=(Vector2&& src)
 {
     x = std::move(src.x);
     y = std::move(src.y);
@@ -694,7 +398,7 @@ inline Vector2<T>& Vector2<T>::operator=(Vector2&& src) noexcept
 
 template<typename T>
 template<typename T2, typename std::enable_if<std::is_constructible<T, T2>::value>::type*>
-inline Vector2<T>& Vector2<T>::operator=(const Vector2<T2>& src) noexcept
+inline Vector2<T>& Vector2<T>::operator=(const Vector2<T2>& src)
 {
     x = T(src.getX());
     y = T(src.getY());
@@ -705,92 +409,10 @@ inline Vector2<T>& Vector2<T>::operator=(const Vector2<T2>& src) noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline Vector2<T> Vector2<T>::operator+() const noexcept
-{
-    return *this;
-}
-
-/* ************************************************************************ */
-
-template<typename T>
-inline Vector2<T> Vector2<T>::operator-() const noexcept
-{
-    return {-x, -y};
-}
-
-/* ************************************************************************ */
-
-template<typename T>
-template<typename T1, typename std::enable_if<std::is_same<
-    decltype(std::declval<T>() + std::declval<T1>()),
-    T
->::value>::type*>
-inline Vector2<T>& Vector2<T>::operator+=(const Vector2<T1>& rhs) noexcept
-{
-    x += rhs.getX();
-    y += rhs.getY();
-
-    return *this;
-}
-
-/* ************************************************************************ */
-
-template<typename T>
-template<typename T1, typename std::enable_if<std::is_same<
-    decltype(std::declval<T>() - std::declval<T1>()),
-    T
->::value>::type*>
-inline Vector2<T>& Vector2<T>::operator-=(const Vector2<T1>& rhs) noexcept
-{
-    x -= rhs.getX();
-    y -= rhs.getY();
-
-    return *this;
-}
-
-/* ************************************************************************ */
-
-template<typename T>
-template<typename T1, typename std::enable_if<std::is_same<
-    decltype(std::declval<T>() * std::declval<T1>()),
-    T
->::value || std::is_constructible<
-    T,
-    decltype(std::declval<T>() * std::declval<T1>())
->::value>::type*>
-inline Vector2<T>& Vector2<T>::operator*=(T1 rhs) noexcept
-{
-    x *= rhs;
-    y *= rhs;
-
-    return *this;
-}
-
-/* ************************************************************************ */
-
-template<typename T>
-template<typename T1, typename std::enable_if<std::is_same<
-    decltype(std::declval<T>() / std::declval<T1>()),
-    T
->::value || std::is_constructible<
-    T,
-    decltype(std::declval<T>() * std::declval<T1>())
->::value>::type*>
-inline Vector2<T>& Vector2<T>::operator/=(T1 rhs) noexcept
-{
-    x /= rhs;
-    y /= rhs;
-
-    return *this;
-}
-
-/* ************************************************************************ */
-
-template<typename T>
 inline T& Vector2<T>::operator[](int pos) noexcept
 {
     CECE_ASSERT(pos >= 0);
-    CECE_ASSERT(pos < 2);
+    CECE_ASSERT(pos < getSize());
     return (&x)[pos];
 }
 
@@ -800,8 +422,16 @@ template<typename T>
 inline const T& Vector2<T>::operator[](int pos) const noexcept
 {
     CECE_ASSERT(pos >= 0);
-    CECE_ASSERT(pos < 2);
+    CECE_ASSERT(pos < getSize());
     return (&x)[pos];
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline int Vector2<T>::getSize() const noexcept
+{
+    return 2;
 }
 
 /* ************************************************************************ */
@@ -815,7 +445,7 @@ inline const T& Vector2<T>::getX() const noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline void Vector2<T>::setX(T x) noexcept
+inline void Vector2<T>::setX(T x)
 {
     this->x = std::move(x);
 }
@@ -831,7 +461,7 @@ inline const T& Vector2<T>::getY() const noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline void Vector2<T>::setY(T y) noexcept
+inline void Vector2<T>::setY(T y)
 {
     this->y = std::move(y);
 }
@@ -839,194 +469,11 @@ inline void Vector2<T>::setY(T y) noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline bool Vector2<T>::inRange(T value, T low, T high) noexcept
-{
-    return value >= low && value < high;
-}
-
-/* ************************************************************************ */
-
-template<typename T>
-inline bool Vector2<T>::inRange(const Vector2& low, const Vector2& high) const noexcept
-{
-    bool res = true;
-
-    res = res && inRange(getX(), low.getX(), high.getX());
-    res = res && inRange(getY(), low.getY(), high.getY());
-
-    return res;
-}
-
-/* ************************************************************************ */
-
-template<typename T>
-inline bool Vector2<T>::inRange(const Vector2& high) const noexcept
-{
-    return inRange(Zero, high);
-}
-
-/* ************************************************************************ */
-
-template<typename T>
-inline typename Vector2<T>::ValueType Vector2<T>::getLength() const noexcept
-{
-    using std::sqrt;
-    return static_cast<T>(sqrt(getLengthSquared()));
-}
-
-/* ************************************************************************ */
-
-template<typename T>
-inline typename Vector2<T>::ValueTypeSq Vector2<T>::getLengthSquared() const noexcept
-{
-    return getX() * getX() + getY() * getY();
-}
-
-/* ************************************************************************ */
-
-template<typename T>
-inline typename Vector2<T>::ValueTypeSq Vector2<T>::distanceSquared(const Vector2& rhs) const noexcept
-{
-    return (*this - rhs).getLengthSquared();
-}
-
-/* ************************************************************************ */
-
-template<typename T>
-inline typename Vector2<T>::ValueType Vector2<T>::distance(const Vector2& rhs) const noexcept
-{
-    return (*this - rhs).getLength();
-}
-
-/* ************************************************************************ */
-
-template<typename T>
-template<typename T2>
-inline Vector2<T2> Vector2<T>::inversed() const noexcept
-{
-    return {T2(1) / getX(), T2(1) / getY()};
-}
-
-/* ************************************************************************ */
-
-template<typename T>
-inline Vector2<T> Vector2<T>::rotated(unit::Angle angle) const noexcept
+inline Vector2<T> rotate(const Vector2<T>& vec, unit::Angle angle) noexcept
 {
     return {
-        static_cast<T>(getX() * cos(static_cast<RealType>(angle)) - getY() * sin(static_cast<RealType>(angle))),
-        static_cast<T>(getX() * sin(static_cast<RealType>(angle)) + getY() * cos(static_cast<RealType>(angle)))
-    };
-}
-
-/* ************************************************************************ */
-
-template<typename T>
-inline Vector2<T> Vector2<T>::createSingle(T val) noexcept
-{
-    return {val, val};
-}
-
-/* ************************************************************************ */
-
-template<typename T1, typename T2>
-inline Vector2<decltype(std::declval<T1>() + std::declval<T2>())>
-operator+(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept
-{
-    return {
-        lhs.getX() + rhs.getX(),
-        lhs.getY() + rhs.getY()
-    };
-}
-
-/* ************************************************************************ */
-
-template<typename T1, typename T2>
-inline Vector2<decltype(std::declval<T1>() - std::declval<T2>())>
-operator-(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept
-{
-    return {
-        lhs.getX() - rhs.getX(),
-        lhs.getY() - rhs.getY()
-    };
-}
-
-/* ************************************************************************ */
-
-template<typename T1, typename T2>
-inline Vector2<decltype(std::declval<T1>() * std::declval<T2>())>
-operator*(const Vector2<T1>& lhs, T2 rhs) noexcept
-{
-    return {
-        lhs.getX() * rhs,
-        lhs.getY() * rhs
-    };
-}
-
-/* ************************************************************************ */
-
-template<typename T1, typename T2>
-inline Vector2<decltype(std::declval<T1>() * std::declval<T2>())>
-operator*(T1 lhs, const Vector2<T2>& rhs) noexcept
-{
-    return {
-        lhs * rhs.getX(),
-        lhs * rhs.getY()
-    };
-}
-
-/* ************************************************************************ */
-
-template<typename T1, typename T2>
-inline Vector2<decltype(std::declval<T1>() / std::declval<T2>())>
-operator/(const Vector2<T1>& lhs, T2 rhs) noexcept
-{
-    return {
-        lhs.getX() / rhs,
-        lhs.getY() / rhs
-    };
-}
-
-/* ************************************************************************ */
-
-template<typename T1, typename T2>
-inline Vector2<decltype(std::declval<T1>() / std::declval<T2>())>
-operator/(T1 lhs, const Vector2<T2>& rhs) noexcept
-{
-    return {
-        lhs / rhs.getX(),
-        lhs / rhs.getY()
-    };
-}
-
-/* ************************************************************************ */
-
-template<typename T1, typename T2>
-inline bool operator==(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept
-{
-    return
-        lhs.getX() == rhs.getX() &&
-        lhs.getY() == rhs.getY()
-    ;
-}
-
-/* ************************************************************************ */
-
-template<typename T1, typename T2>
-inline bool operator!=(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept
-{
-    return !operator==(lhs, rhs);
-}
-
-/* ************************************************************************ */
-
-template<typename T1, typename T2>
-inline
-decltype(std::declval<T1>() * std::declval<T2>())
-dot(const Vector2<T1>& lhs, const Vector2<T2>& rhs) noexcept
-{
-    return {
-        lhs.getX() * rhs.getX() +
-        lhs.getY() * rhs.getY()
+        static_cast<T>(vec.getX() * cos(static_cast<RealType>(angle)) - vec.getY() * sin(static_cast<RealType>(angle))),
+        static_cast<T>(vec.getX() * sin(static_cast<RealType>(angle)) + vec.getY() * cos(static_cast<RealType>(angle)))
     };
 }
 

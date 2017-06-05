@@ -134,6 +134,55 @@ TEST(Vector3, ctorZero)
 
 /* ************************************************************************ */
 
+TEST(Vector3, ctorSingle)
+{
+    {
+        Vector3<int> vec{1};
+
+        EXPECT_EQ(1, vec.getX());
+        EXPECT_EQ(1, vec.getY());
+        EXPECT_EQ(1, vec.getZ());
+        EXPECT_EQ(1, vec[0]);
+        EXPECT_EQ(1, vec[1]);
+        EXPECT_EQ(1, vec[2]);
+    }
+
+    {
+        Vector3<unsigned int> vec{3};
+
+        EXPECT_EQ(3, vec.getX());
+        EXPECT_EQ(3, vec.getY());
+        EXPECT_EQ(3, vec.getZ());
+        EXPECT_EQ(3, vec[0]);
+        EXPECT_EQ(3, vec[1]);
+        EXPECT_EQ(3, vec[2]);
+    }
+
+    {
+        Vector3<float> vec{1.2f};
+
+        EXPECT_FLOAT_EQ(1.2f, vec.getX());
+        EXPECT_FLOAT_EQ(1.2f, vec.getY());
+        EXPECT_FLOAT_EQ(1.2f, vec.getZ());
+        EXPECT_FLOAT_EQ(1.2f, vec[0]);
+        EXPECT_FLOAT_EQ(1.2f, vec[1]);
+        EXPECT_FLOAT_EQ(1.2f, vec[2]);
+    }
+
+    {
+        Vector3<double> vec{1.2};
+
+        EXPECT_DOUBLE_EQ(1.2, vec.getX());
+        EXPECT_DOUBLE_EQ(1.2, vec.getY());
+        EXPECT_DOUBLE_EQ(1.2, vec.getZ());
+        EXPECT_DOUBLE_EQ(1.2, vec[0]);
+        EXPECT_DOUBLE_EQ(1.2, vec[1]);
+        EXPECT_DOUBLE_EQ(1.2, vec[2]);
+    }
+}
+
+/* ************************************************************************ */
+
 TEST(Vector3, ctorElements)
 {
     {
@@ -988,36 +1037,6 @@ TEST(Vector3, operatorDiv)
 
 /* ************************************************************************ */
 
-TEST(Vector3, inRange)
-{
-    {
-        const Vector3<float> vecMin{-10.0f, -5.0f, -2.0f};
-        const Vector3<float> vecMax{10.0f, 20.0f, 5.0f};
-
-        Vector3<float> vec1;
-        Vector3<float> vec2{-15.0f, 0.0f, 0.0f};
-        Vector3<float> vec3{5.0f, 0.0f, 3.0f};
-
-        EXPECT_TRUE(vec1.inRange(vecMin, vecMax));
-        EXPECT_FALSE(vec2.inRange(vecMin, vecMax));
-        EXPECT_TRUE(vec3.inRange(vecMin, vecMax));
-    }
-
-    {
-        const Vector3<float> vecMax{10.0f, 20.0f, 8.0f};
-
-        Vector3<float> vec1;
-        Vector3<float> vec2{-15.0f, 0.0f, 3.0f};
-        Vector3<float> vec3{5.0f, 0.0f, 3.0f};
-
-        EXPECT_TRUE(vec1.inRange(vecMax));
-        EXPECT_FALSE(vec2.inRange(vecMax));
-        EXPECT_TRUE(vec3.inRange(vecMax));
-    }
-}
-
-/* ************************************************************************ */
-
 TEST(Vector3, memberFunctions)
 {
     {
@@ -1042,57 +1061,6 @@ TEST(Vector3, memberFunctions)
         const Vector3<float> vec{1.0f, 2.0f, 3.0f};
 
         EXPECT_FLOAT_EQ(14, vec.getLengthSquared());
-    }
-
-    {
-        const Vector3<float> vec;
-
-        EXPECT_FLOAT_EQ(0.0f, vec.distanceSquared(vec));
-    }
-
-    {
-        const Vector3<float> vec{1.0f, 2.0f, 3.0f};
-
-        EXPECT_FLOAT_EQ(0.0f, vec.distanceSquared(vec));
-    }
-
-    {
-        const Vector3<float> vec1{1.0f, 2.0f, 3.0f};
-        const Vector3<float> vec2{5.0f, 4.0f, 3.0f};
-
-        EXPECT_FLOAT_EQ(20.0f, vec1.distanceSquared(vec2));
-    }
-
-    {
-        const Vector3<float> vec1{1.0f, 2.0f, 3.0f};
-        const Vector3<float> vec2{5.0f, 4.0f, 3.0f};
-
-        EXPECT_FLOAT_EQ(4.4721360f, vec1.distance(vec2));
-    }
-
-    {
-        const Vector3<float> vec{1.0f, 2.0f, 3.0f};
-
-        auto inv = vec.inversed();
-
-        EXPECT_FLOAT_EQ(1.0f, inv[0]);
-        EXPECT_FLOAT_EQ(0.5f, inv[1]);
-        EXPECT_FLOAT_EQ(1.0f / 3.0f, inv[2]);
-    }
-
-    {
-        auto vec = Vector3<float>::createSingle(1);
-
-        EXPECT_FLOAT_EQ(1.0f, vec[0]);
-        EXPECT_FLOAT_EQ(1.0f, vec[1]);
-        EXPECT_FLOAT_EQ(1.0f, vec[2]);
-    }
-
-    {
-        auto vec = Vector3<float>::createSingle(375.1721f);
-
-        EXPECT_FLOAT_EQ(375.1721f, vec[0]);
-        EXPECT_FLOAT_EQ(375.1721f, vec[1]);
     }
 }
 
@@ -1352,6 +1320,32 @@ TEST(Vector3, functions)
             0.92636f * 0.21556f,
             res
         );
+    }
+
+    {
+        const Vector3<float> vec;
+
+        EXPECT_FLOAT_EQ(0.0f, distanceSquared(vec, vec));
+    }
+
+    {
+        const Vector3<float> vec{1.0f, 2.0f, 3.0f};
+
+        EXPECT_FLOAT_EQ(0.0f, distanceSquared(vec, vec));
+    }
+
+    {
+        const Vector3<float> vec1{1.0f, 2.0f, 3.0f};
+        const Vector3<float> vec2{5.0f, 4.0f, 3.0f};
+
+        EXPECT_FLOAT_EQ(20.0f, distanceSquared(vec1, vec2));
+    }
+
+    {
+        const Vector3<float> vec1{1.0f, 2.0f, 3.0f};
+        const Vector3<float> vec2{5.0f, 4.0f, 3.0f};
+
+        EXPECT_FLOAT_EQ(4.4721360f, distance(vec1, vec2));
     }
 }
 

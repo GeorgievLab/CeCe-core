@@ -27,7 +27,7 @@
 #include "gtest/gtest.h"
 
 // CeCe
-#include "cece/math/Vector2.hpp"
+#include "cece/math/Vector.hpp"
 #include "cece/unit/math.hpp"
 
 /* ************************************************************************ */
@@ -44,6 +44,8 @@ TEST(Vector2, ctor)
 
         EXPECT_EQ(0, vec.getX());
         EXPECT_EQ(0, vec.getY());
+        EXPECT_EQ(0, vec.getWidth());
+        EXPECT_EQ(0, vec.getHeight());
         EXPECT_EQ(0, vec[0]);
         EXPECT_EQ(0, vec[1]);
     }
@@ -53,6 +55,8 @@ TEST(Vector2, ctor)
 
         EXPECT_EQ(0, vec.getX());
         EXPECT_EQ(0, vec.getY());
+        EXPECT_EQ(0, vec.getWidth());
+        EXPECT_EQ(0, vec.getHeight());
         EXPECT_EQ(0, vec[0]);
         EXPECT_EQ(0, vec[1]);
     }
@@ -62,6 +66,8 @@ TEST(Vector2, ctor)
 
         EXPECT_FLOAT_EQ(12.3f, vec.getX());
         EXPECT_FLOAT_EQ(12.3f, vec.getY());
+        EXPECT_FLOAT_EQ(12.3f, vec.getWidth());
+        EXPECT_FLOAT_EQ(12.3f, vec.getHeight());
         EXPECT_FLOAT_EQ(12.3f, vec[0]);
         EXPECT_FLOAT_EQ(12.3f, vec[1]);
     }
@@ -72,6 +78,8 @@ TEST(Vector2, ctor)
 
         EXPECT_FLOAT_EQ(1.2f, vec.getX());
         EXPECT_FLOAT_EQ(3.0f, vec.getY());
+        EXPECT_FLOAT_EQ(1.2f, vec.getWidth());
+        EXPECT_FLOAT_EQ(3.0f, vec.getHeight());
         EXPECT_FLOAT_EQ(1.2f, vec[0]);
         EXPECT_FLOAT_EQ(3.0f, vec[1]);
     }
@@ -81,6 +89,8 @@ TEST(Vector2, ctor)
 
         EXPECT_FLOAT_EQ(1.2f, vec1.getX());
         EXPECT_FLOAT_EQ(3.0f, vec1.getY());
+        EXPECT_FLOAT_EQ(1.2f, vec1.getWidth());
+        EXPECT_FLOAT_EQ(3.0f, vec1.getHeight());
         EXPECT_FLOAT_EQ(1.2f, vec1[0]);
         EXPECT_FLOAT_EQ(3.0f, vec1[1]);
 
@@ -88,6 +98,8 @@ TEST(Vector2, ctor)
 
         EXPECT_FLOAT_EQ(1.2f, vec2.getX());
         EXPECT_FLOAT_EQ(3.0f, vec2.getY());
+        EXPECT_FLOAT_EQ(1.2f, vec2.getWidth());
+        EXPECT_FLOAT_EQ(3.0f, vec2.getHeight());
         EXPECT_FLOAT_EQ(1.2f, vec2[0]);
         EXPECT_FLOAT_EQ(3.0f, vec2[1]);
     }
@@ -97,6 +109,8 @@ TEST(Vector2, ctor)
 
         EXPECT_FLOAT_EQ(1.2f, vec1.getX());
         EXPECT_FLOAT_EQ(3.0f, vec1.getY());
+        EXPECT_FLOAT_EQ(1.2f, vec1.getWidth());
+        EXPECT_FLOAT_EQ(3.0f, vec1.getHeight());
         EXPECT_FLOAT_EQ(1.2f, vec1[0]);
         EXPECT_FLOAT_EQ(3.0f, vec1[1]);
 
@@ -104,6 +118,8 @@ TEST(Vector2, ctor)
 
         EXPECT_FLOAT_EQ(1.2f, vec2.getX());
         EXPECT_FLOAT_EQ(3.0f, vec2.getY());
+        EXPECT_FLOAT_EQ(1.2f, vec2.getWidth());
+        EXPECT_FLOAT_EQ(3.0f, vec2.getHeight());
         EXPECT_FLOAT_EQ(1.2f, vec2[0]);
         EXPECT_FLOAT_EQ(3.0f, vec2[1]);
     }
@@ -113,6 +129,8 @@ TEST(Vector2, ctor)
 
         EXPECT_EQ(1, vec1.getX());
         EXPECT_EQ(3, vec1.getY());
+        EXPECT_EQ(1, vec1.getWidth());
+        EXPECT_EQ(3, vec1.getHeight());
         EXPECT_EQ(1, vec1[0]);
         EXPECT_EQ(3, vec1[1]);
 
@@ -120,6 +138,8 @@ TEST(Vector2, ctor)
 
         EXPECT_FLOAT_EQ(1.0f, vec2.getX());
         EXPECT_FLOAT_EQ(3.0f, vec2.getY());
+        EXPECT_FLOAT_EQ(1.0f, vec2.getWidth());
+        EXPECT_FLOAT_EQ(3.0f, vec2.getHeight());
         EXPECT_FLOAT_EQ(1.0f, vec2[0]);
         EXPECT_FLOAT_EQ(3.0f, vec2[1]);
     }
@@ -340,6 +360,29 @@ TEST(Vector2, mutators)
 
         EXPECT_EQ(100, vec.x);
         EXPECT_EQ(50, vec.y);
+    }
+
+    {
+        Vector2<int> vec;
+
+        EXPECT_EQ(0, vec.x);
+        EXPECT_EQ(0, vec.y);
+        EXPECT_EQ(0, vec.width);
+        EXPECT_EQ(0, vec.height);
+
+        vec.width = 100;
+
+        EXPECT_EQ(100, vec.x);
+        EXPECT_EQ(0, vec.y);
+        EXPECT_EQ(100, vec.width);
+        EXPECT_EQ(0, vec.height);
+
+        vec.height = 50;
+
+        EXPECT_EQ(100, vec.x);
+        EXPECT_EQ(50, vec.y);
+        EXPECT_EQ(100, vec.width);
+        EXPECT_EQ(50, vec.height);
     }
 }
 

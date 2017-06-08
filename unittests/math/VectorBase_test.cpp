@@ -27,6 +27,7 @@
 #include "gtest/gtest.h"
 
 // CeCe
+#include "cece/math/Zero.hpp"
 #include "cece/math/VectorBase.hpp"
 
 /* ************************************************************************ */
@@ -36,10 +37,11 @@ using namespace cece::math;
 
 /* ************************************************************************ */
 
-template<typename T>
-struct Vec2 : public VectorBase<Vec2, T>
+template<typename T, int N = 2>
+struct Vec2 : public VectorBase<Vec2, T, 2>
 {
     Vec2() : x{}, y{} {}
+    Vec2(Zero_t) : x{}, y{} {}
     Vec2(T x, T y) : x{x}, y{y} {}
 
     T& operator[](int pos) { return (&x)[pos]; }
@@ -102,6 +104,19 @@ TEST(VectorBase, operators)
 
         EXPECT_FLOAT_EQ(2.0f, vec1[0]);
         EXPECT_FLOAT_EQ(4.0f, vec1[1]);
+    }
+
+    {
+        Vec2<int> vec1{1, 2};
+
+        EXPECT_EQ(1, vec1[0]);
+        EXPECT_EQ(2, vec1[1]);
+
+        Vec2<float> vec2{1.0f, 2.0f};
+        vec1 += vec2;
+
+        EXPECT_EQ(2, vec1[0]);
+        EXPECT_EQ(4, vec1[1]);
     }
 
     {
@@ -264,6 +279,33 @@ TEST(VectorBase, functions)
             res
         );
     }
+
+    {
+        const Vec2<float> vecMin{-10.0f, -5.0f};
+        const Vec2<float> vecMax{10.0f, 20.0f};
+
+        Vec2<float> vec1;
+        Vec2<float> vec2{-15.0f, 0.0f};
+        Vec2<float> vec3{5.0f, 0.0f};
+        Vec2<float> vec4{5.0f, 25.0f};
+
+        EXPECT_TRUE(inRange(vec1, vecMin, vecMax));
+        EXPECT_FALSE(inRange(vec2, vecMin, vecMax));
+        EXPECT_TRUE(inRange(vec3, vecMin, vecMax));
+        EXPECT_FALSE(inRange(vec4, vecMin, vecMax));
+    }
+
+    {
+        const Vec2<float> vecMax{10.0f, 20.0f};
+
+        Vec2<float> vec1;
+        Vec2<float> vec2{-15.0f, 0.0f};
+        Vec2<float> vec3{5.0f, 0.0f};
+
+        EXPECT_TRUE(inRange(vec1, vecMax));
+        EXPECT_FALSE(inRange(vec2, vecMax));
+        EXPECT_TRUE(inRange(vec3, vecMax));
+    }
 }
 
 /* ************************************************************************ */
@@ -383,11 +425,15 @@ TEST(VectorBase, freeOperators)
     }
 
     {
+        const Vec2<float> vec0(Zero);
         const Vec2<float> vec1(5.3f, 8.9f);
         const Vec2<float> vec2(5.3f, 8.9f);
         const Vec2<float> vec3(1.3f, 8.9f);
         const Vec2<float> vec4(5.3f, 0.9f);
         const Vec2<float> vec5(1.3f, 0.9f);
+
+        EXPECT_EQ(vec0, Zero);
+        EXPECT_EQ(Zero, vec0);
 
         EXPECT_EQ(vec1, vec1);
         EXPECT_EQ(vec1, vec2);
@@ -408,22 +454,6 @@ TEST(VectorBase, freeOperators)
         EXPECT_NE(vec4, vec2);
         EXPECT_NE(vec4, vec3);
         EXPECT_EQ(vec4, vec4);
-
-        EXPECT_FALSE(vec1 < vec2);
-
-        EXPECT_GE(vec1, vec1);
-        EXPECT_GE(vec1, vec2);
-        EXPECT_GE(vec1, vec3);
-        EXPECT_GE(vec1, vec4);
-
-        EXPECT_GT(vec1, vec5);
-
-        EXPECT_LE(vec1, vec1);
-        EXPECT_LE(vec1, vec2);
-        EXPECT_LE(vec3, vec1);
-        EXPECT_LE(vec4, vec1);
-
-        EXPECT_LT(vec5, vec1);
     }
 
 }

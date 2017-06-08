@@ -31,6 +31,7 @@
 
 // CeCe
 #include "cece/unit/UnitIo.hpp"
+#include "cece/math/VectorIo.hpp"
 #include "cece/plugin/Api.hpp"
 #include "cece/simulation/Initializer.hpp"
 #include "cece/simulation/Module.hpp"

@@ -48,12 +48,12 @@ namespace math {
  *
  * @tparam     VectorType  The vector type.
  * @tparam     T           Value type.
- * @tparam     Tags        Additional tags.
+ * @tparam     N           Vector size.
  */
 template<
-    template<typename, int...> typename VectorType,
+    template<typename, int> typename VectorType,
     typename T,
-    int... Tags
+    int N
 >
 class VectorBase
 {
@@ -75,7 +75,7 @@ public:
      *
      * @return     Vector.
      */
-    VectorType<T, Tags...> operator+() const noexcept;
+    VectorType<T, N> operator+() const noexcept;
 
 
     /**
@@ -83,7 +83,7 @@ public:
      *
      * @return     Vector.
      */
-    VectorType<T, Tags...> operator-() const noexcept;
+    VectorType<T, N> operator-() const noexcept;
 
 
     /**
@@ -96,7 +96,7 @@ public:
      * @return     *this.
      */
     template<typename T1>
-    VectorType<T, Tags...>& operator+=(const VectorType<T1, Tags...>& rhs);
+    VectorType<T, N>& operator+=(const VectorType<T1, N>& rhs);
 
 
     /**
@@ -109,7 +109,7 @@ public:
      * @return     *this.
      */
     template<typename T1>
-    VectorType<T, Tags...>& operator-=(const VectorType<T1, Tags...>& rhs);
+    VectorType<T, N>& operator-=(const VectorType<T1, N>& rhs);
 
 
     /**
@@ -122,7 +122,7 @@ public:
      * @return     *this.
      */
     template<typename T1>
-    VectorType<T, Tags...>& operator*=(T1 rhs);
+    VectorType<T, N>& operator*=(T1 rhs);
 
 
     /**
@@ -135,7 +135,7 @@ public:
      * @return     *this.
      */
     template<typename T1>
-    VectorType<T, Tags...>& operator*=(const VectorType<T1, Tags...>& rhs);
+    VectorType<T, N>& operator*=(const VectorType<T1, N>& rhs);
 
 
     /**
@@ -148,7 +148,7 @@ public:
      * @return     *this.
      */
     template<typename T1>
-    VectorType<T, Tags...>& operator/=(T1 rhs);
+    VectorType<T, N>& operator/=(T1 rhs);
 
 
     /**
@@ -161,7 +161,7 @@ public:
      * @return     *this.
      */
     template<typename T1>
-    VectorType<T, Tags...>& operator/=(const VectorType<T1, Tags...>& rhs);
+    VectorType<T, N>& operator/=(const VectorType<T1, N>& rhs);
 
 
     /**
@@ -193,7 +193,7 @@ public:
      *
      * @return     The size.
      */
-    int getSize() const;
+    constexpr int getSize() const noexcept;
 
 
 // Public Operations
@@ -232,10 +232,10 @@ public:
  *
  * @return     Result vector.
  */
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
-VectorType<decltype(std::declval<T1>() + std::declval<T2>()), Tags...> operator+(
-    const VectorType<T1, Tags...>& lhs,
-    const VectorType<T2, Tags...>& rhs
+template<template<typename, int> typename VectorType, typename T1, typename T2, int N>
+VectorType<decltype(std::declval<T1>() + std::declval<T2>()), N> operator+(
+    const VectorType<T1, N>& lhs,
+    const VectorType<T2, N>& rhs
 );
 
 /* ************************************************************************ */
@@ -253,10 +253,10 @@ VectorType<decltype(std::declval<T1>() + std::declval<T2>()), Tags...> operator+
  *
  * @return     Result vector.
  */
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
-VectorType<decltype(std::declval<T1>() - std::declval<T2>()), Tags...> operator-(
-    const VectorType<T1, Tags...>& lhs,
-    const VectorType<T2, Tags...>& rhs
+template<template<typename, int> typename VectorType, typename T1, typename T2, int N>
+VectorType<decltype(std::declval<T1>() - std::declval<T2>()), N> operator-(
+    const VectorType<T1, N>& lhs,
+    const VectorType<T2, N>& rhs
 );
 
 /* ************************************************************************ */
@@ -274,10 +274,10 @@ VectorType<decltype(std::declval<T1>() - std::declval<T2>()), Tags...> operator-
  *
  * @return     Result vector.
  */
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
-VectorType<decltype(std::declval<T1>() * std::declval<T2>()), Tags...> operator*(
-    const VectorType<T1, Tags...>& lhs,
-    const VectorType<T2, Tags...>& rhs
+template<template<typename, int> typename VectorType, typename T1, typename T2, int N>
+VectorType<decltype(std::declval<T1>() * std::declval<T2>()), N> operator*(
+    const VectorType<T1, N>& lhs,
+    const VectorType<T2, N>& rhs
 );
 
 /* ************************************************************************ */
@@ -295,9 +295,9 @@ VectorType<decltype(std::declval<T1>() * std::declval<T2>()), Tags...> operator*
  *
  * @return     Result vector.
  */
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
-VectorType<decltype(std::declval<T1>() * std::declval<T2>()), Tags...> operator*(
-    const VectorType<T1, Tags...>& lhs,
+template<template<typename, int> typename VectorType, typename T1, typename T2, int N>
+VectorType<decltype(std::declval<T1>() * std::declval<T2>()), N> operator*(
+    const VectorType<T1, N>& lhs,
     const T2& rhs
 );
 
@@ -316,10 +316,10 @@ VectorType<decltype(std::declval<T1>() * std::declval<T2>()), Tags...> operator*
  *
  * @return     Result vector.
  */
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
-VectorType<decltype(std::declval<T1>() * std::declval<T2>()), Tags...> operator*(
+template<template<typename, int> typename VectorType, typename T1, typename T2, int N>
+VectorType<decltype(std::declval<T1>() * std::declval<T2>()), N> operator*(
     const T1& lhs,
-    const VectorType<T2, Tags...>& rhs
+    const VectorType<T2, N>& rhs
 );
 
 /* ************************************************************************ */
@@ -337,10 +337,10 @@ VectorType<decltype(std::declval<T1>() * std::declval<T2>()), Tags...> operator*
  *
  * @return     Result vector.
  */
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
-VectorType<decltype(std::declval<T1>() / std::declval<T2>()), Tags...> operator/(
-    const VectorType<T1, Tags...>& lhs,
-    const VectorType<T2, Tags...>& rhs
+template<template<typename, int> typename VectorType, typename T1, typename T2, int N>
+VectorType<decltype(std::declval<T1>() / std::declval<T2>()), N> operator/(
+    const VectorType<T1, N>& lhs,
+    const VectorType<T2, N>& rhs
 );
 
 /* ************************************************************************ */
@@ -358,9 +358,9 @@ VectorType<decltype(std::declval<T1>() / std::declval<T2>()), Tags...> operator/
  *
  * @return     Result vector.
  */
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
-VectorType<decltype(std::declval<T1>() / std::declval<T2>()), Tags...> operator/(
-    const VectorType<T1, Tags...>& lhs,
+template<template<typename, int> typename VectorType, typename T1, typename T2, int N>
+VectorType<decltype(std::declval<T1>() / std::declval<T2>()), N> operator/(
+    const VectorType<T1, N>& lhs,
     const T2& rhs
 );
 
@@ -379,10 +379,10 @@ VectorType<decltype(std::declval<T1>() / std::declval<T2>()), Tags...> operator/
  *
  * @return     Result vector.
  */
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
-VectorType<decltype(std::declval<T1>() / std::declval<T2>()), Tags...> operator/(
+template<template<typename, int> typename VectorType, typename T1, typename T2, int N>
+VectorType<decltype(std::declval<T1>() / std::declval<T2>()), N> operator/(
     const T1& lhs,
-    const VectorType<T2, Tags...>& rhs
+    const VectorType<T2, N>& rhs
 );
 
 /* ************************************************************************ */
@@ -400,10 +400,10 @@ VectorType<decltype(std::declval<T1>() / std::declval<T2>()), Tags...> operator/
  *
  * @return     Operation result.
  */
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
+template<template<typename, int> typename VectorType, typename T1, typename T2, int N>
 bool operator==(
-    const VectorType<T1, Tags...>& lhs,
-    const VectorType<T2, Tags...>& rhs
+    const VectorType<T1, N>& lhs,
+    const VectorType<T2, N>& rhs
 );
 
 /* ************************************************************************ */
@@ -420,9 +420,9 @@ bool operator==(
  *
  * @return     Operation result.
  */
-template<template<typename, int...> typename VectorType, typename T1, int... Tags>
+template<template<typename, int> typename VectorType, typename T1, int N>
 bool operator==(
-    const VectorType<T1, Tags...>& lhs,
+    const VectorType<T1, N>& lhs,
     const Zero_t& rhs
 );
 
@@ -440,10 +440,10 @@ bool operator==(
  *
  * @return     Operation result.
  */
-template<template<typename, int...> typename VectorType, typename T2, int... Tags>
+template<template<typename, int> typename VectorType, typename T2, int N>
 bool operator==(
     const Zero_t& lhs,
-    const VectorType<T2, Tags...>& rhs
+    const VectorType<T2, N>& rhs
 );
 
 /* ************************************************************************ */
@@ -461,10 +461,10 @@ bool operator==(
  *
  * @return     Operation result.
  */
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
+template<template<typename, int> typename VectorType, typename T1, typename T2, int N>
 bool operator!=(
-    const VectorType<T1, Tags...>& lhs,
-    const VectorType<T2, Tags...>& rhs
+    const VectorType<T1, N>& lhs,
+    const VectorType<T2, N>& rhs
 );
 
 /* ************************************************************************ */
@@ -481,9 +481,9 @@ bool operator!=(
  *
  * @return     Operation result.
  */
-template<template<typename, int...> typename VectorType, typename T1, int... Tags>
+template<template<typename, int> typename VectorType, typename T1, int N>
 bool operator!=(
-    const VectorType<T1, Tags...>& lhs,
+    const VectorType<T1, N>& lhs,
     const Zero_t& rhs
 );
 
@@ -501,94 +501,10 @@ bool operator!=(
  *
  * @return     Operation result.
  */
-template<template<typename, int...> typename VectorType, typename T2, int... Tags>
+template<template<typename, int> typename VectorType, typename T2, int N>
 bool operator!=(
     const Zero_t& lhs,
-    const VectorType<T2, Tags...>& rhs
-);
-
-/* ************************************************************************ */
-
-/**
- * @brief      Compare vectors.
- *
- * @param      lhs         The left operand.
- * @param      rhs         The right operand.
- *
- * @tparam     VectorType  Vector type.
- * @tparam     T1          Type of value in first VectorBase.
- * @tparam     T2          Type of value in second VectorBase.
- * @tparam     Tags        Vector type tags.
- *
- * @return     Operation result.
- */
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
-bool operator<(
-    const VectorType<T1, Tags...>& lhs,
-    const VectorType<T2, Tags...>& rhs
-);
-
-/* ************************************************************************ */
-
-/**
- * @brief      Compare vectors.
- *
- * @param      lhs         The left operand.
- * @param      rhs         The right operand.
- *
- * @tparam     VectorType  Vector type.
- * @tparam     T1          Type of value in first VectorBase.
- * @tparam     T2          Type of value in second VectorBase.
- * @tparam     Tags        Vector type tags.
- *
- * @return     Operation result.
- */
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
-bool operator<=(
-    const VectorType<T1, Tags...>& lhs,
-    const VectorType<T2, Tags...>& rhs
-);
-
-/* ************************************************************************ */
-
-/**
- * @brief      Compare vectors.
- *
- * @param      lhs         The left operand.
- * @param      rhs         The right operand.
- *
- * @tparam     VectorType  Vector type.
- * @tparam     T1          Type of value in first VectorBase.
- * @tparam     T2          Type of value in second VectorBase.
- * @tparam     Tags        Vector type tags.
- *
- * @return     Operation result.
- */
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
-bool operator>(
-    const VectorType<T1, Tags...>& lhs,
-    const VectorType<T2, Tags...>& rhs
-);
-
-/* ************************************************************************ */
-
-/**
- * @brief      Compare vectors.
- *
- * @param      lhs         The left operand.
- * @param      rhs         The right operand.
- *
- * @tparam     VectorType  Vector type.
- * @tparam     T1          Type of value in first VectorBase.
- * @tparam     T2          Type of value in second VectorBase.
- * @tparam     Tags        Vector type tags.
- *
- * @return     Operation result.
- */
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
-bool operator>=(
-    const VectorType<T1, Tags...>& lhs,
-    const VectorType<T2, Tags...>& rhs
+    const VectorType<T2, N>& rhs
 );
 
 /* ************************************************************************ */
@@ -596,15 +512,20 @@ bool operator>=(
 /**
  * @brief      Calculate dot product of two vectors.
  *
- * @param      lhs   Left operand.
- * @param      rhs   Right operand.
+ * @param      lhs         Left operand.
+ * @param      rhs         Right operand.
+ *
+ * @tparam     VectorType  Vector type.
+ * @tparam     T1          Type of value in first VectorBase.
+ * @tparam     T2          Type of value in second VectorBase.
+ * @tparam     Tags        Vector type tags.
  *
  * @return     Dot product.
  */
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
+template<template<typename, int> typename VectorType, typename T1, typename T2, int N>
 decltype(std::declval<T1>() * std::declval<T2>()) dot(
-    const VectorType<T1, Tags...>& lhs,
-    const VectorType<T2, Tags...>& rhs
+    const VectorType<T1, N>& lhs,
+    const VectorType<T2, N>& rhs
 );
 
 /* ************************************************************************ */
@@ -612,15 +533,20 @@ decltype(std::declval<T1>() * std::declval<T2>()) dot(
 /**
  * @brief      Calculate distance of two vectors.
  *
- * @param      lhs   Left operand.
- * @param      rhs   Right operand.
+ * @param      lhs         Left operand.
+ * @param      rhs         Right operand.
+ *
+ * @tparam     VectorType  Vector type.
+ * @tparam     T1          Type of value in first VectorBase.
+ * @tparam     T2          Type of value in second VectorBase.
+ * @tparam     Tags        Vector type tags.
  *
  * @return     Distance.
  */
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
+template<template<typename, int> typename VectorType, typename T1, typename T2, int N>
 decltype(std::declval<decltype(std::declval<T1>() - std::declval<T2>())>() * std::declval<decltype(std::declval<T1>() - std::declval<T2>())>()) distanceSquared(
-    const VectorType<T1, Tags...>& lhs,
-    const VectorType<T2, Tags...>& rhs
+    const VectorType<T1, N>& lhs,
+    const VectorType<T2, N>& rhs
 );
 
 /* ************************************************************************ */
@@ -628,15 +554,70 @@ decltype(std::declval<decltype(std::declval<T1>() - std::declval<T2>())>() * std
 /**
  * @brief      Calculate distance of two vectors.
  *
- * @param      lhs   Left operand.
- * @param      rhs   Right operand.
+ * @param      lhs         Left operand.
+ * @param      rhs         Right operand.
+ *
+ * @tparam     VectorType  Vector type.
+ * @tparam     T1          Type of value in first VectorBase.
+ * @tparam     T2          Type of value in second VectorBase.
+ * @tparam     Tags        Vector type tags.
  *
  * @return     Distance.
  */
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
+template<template<typename, int> typename VectorType, typename T1, typename T2, int N>
 decltype(std::declval<T1>() - std::declval<T2>()) distance(
-    const VectorType<T1, Tags...>& lhs,
-    const VectorType<T2, Tags...>& rhs
+    const VectorType<T1, N>& lhs,
+    const VectorType<T2, N>& rhs
+);
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Check if value is in given range.
+ *
+ * @code
+ *  value >= low && value < high;
+ * @endcode
+ *
+ * @param[in]  value       The tested value.
+ * @param[in]  low         The low value.
+ * @param[in]  high        The high value.
+ *
+ * @tparam     VectorType  Vector type.
+ * @tparam     T           Type of value.
+ * @tparam     Tags        Vector type tags.
+ *
+ * @return     If value is in range.
+ */
+template<template<typename, int> typename VectorType, typename T, int N>
+bool inRange(
+    const VectorType<T, N>& value,
+    const VectorType<T, N>& low,
+    const VectorType<T, N>& high
+);
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Check if value is in given range.
+ *
+ * @code
+ *  value >= Zero && value < high;
+ * @endcode
+ *
+ * @param[in]  value       The tested value.
+ * @param[in]  high        The high value.
+ *
+ * @tparam     VectorType  Vector type.
+ * @tparam     T           Type of value.
+ * @tparam     Tags        Vector type tags.
+ *
+ * @return     If value is in range.
+ */
+template<template<typename, int> typename VectorType, typename T, int N>
+bool inRange(
+    const VectorType<T, N>& value,
+    const VectorType<T, N>& high
 );
 
 /* ************************************************************************ */
@@ -653,20 +634,20 @@ namespace math {
 
 /* ************************************************************************ */
 
-template<template<typename, int...> typename VectorType, typename T, int... Tags>
-inline VectorType<T, Tags...> VectorBase<VectorType, T, Tags...>::operator+() const noexcept
+template<template<typename, int> typename VectorType, typename T, int N>
+inline VectorType<T, N> VectorBase<VectorType, T, N>::operator+() const noexcept
 {
-    return *static_cast<const VectorType<T, Tags...>*>(this);
+    return *static_cast<const VectorType<T, N>*>(this);
 }
 
 /* ************************************************************************ */
 
-template<template<typename, int...> typename VectorType, typename T, int... Tags>
-inline VectorType<T, Tags...> VectorBase<VectorType, T, Tags...>::operator-() const noexcept
+template<template<typename, int> typename VectorType, typename T, int N>
+inline VectorType<T, N> VectorBase<VectorType, T, N>::operator-() const noexcept
 {
-    VectorType<T, Tags...> res;
+    VectorType<T, N> res;
 
-    for (int i = 0; i < getSize(); ++i)
+    for (int i = 0; i < N; ++i)
         res[i] = -(*this)[i];
 
     return res;
@@ -674,107 +655,106 @@ inline VectorType<T, Tags...> VectorBase<VectorType, T, Tags...>::operator-() co
 
 /* ************************************************************************ */
 
-template<template<typename, int...> typename VectorType, typename T, int... Tags>
+template<template<typename, int> typename VectorType, typename T, int N>
 template<typename T1>
-inline VectorType<T, Tags...>& VectorBase<VectorType, T, Tags...>::operator+=(const VectorType<T1, Tags...>& rhs)
+inline VectorType<T, N>& VectorBase<VectorType, T, N>::operator+=(const VectorType<T1, N>& rhs)
 {
-    for (int i = 0; i < getSize(); ++i)
+    for (int i = 0; i < N; ++i)
         (*this)[i] += rhs[i];
 
-    return *static_cast<VectorType<T, Tags...>*>(this);
+    return *static_cast<VectorType<T, N>*>(this);
 }
 
 /* ************************************************************************ */
 
-template<template<typename, int...> typename VectorType, typename T, int... Tags>
+template<template<typename, int> typename VectorType, typename T, int N>
 template<typename T1>
-inline VectorType<T, Tags...>& VectorBase<VectorType, T, Tags...>::operator-=(const VectorType<T1, Tags...>& rhs)
+inline VectorType<T, N>& VectorBase<VectorType, T, N>::operator-=(const VectorType<T1, N>& rhs)
 {
-    for (int i = 0; i < getSize(); ++i)
+    for (int i = 0; i < N; ++i)
         (*this)[i] -= rhs[i];
 
-    return *static_cast<VectorType<T, Tags...>*>(this);
+    return *static_cast<VectorType<T, N>*>(this);
 }
 
 /* ************************************************************************ */
 
-template<template<typename, int...> typename VectorType, typename T, int... Tags>
+template<template<typename, int> typename VectorType, typename T, int N>
 template<typename T1>
-inline VectorType<T, Tags...>& VectorBase<VectorType, T, Tags...>::operator*=(T1 rhs)
+inline VectorType<T, N>& VectorBase<VectorType, T, N>::operator*=(T1 rhs)
 {
-    for (int i = 0; i < getSize(); ++i)
+    for (int i = 0; i < N; ++i)
         (*this)[i] *= rhs;
 
-    return *static_cast<VectorType<T, Tags...>*>(this);
+    return *static_cast<VectorType<T, N>*>(this);
 }
 
 /* ************************************************************************ */
 
-template<template<typename, int...> typename VectorType, typename T, int... Tags>
+template<template<typename, int> typename VectorType, typename T, int N>
 template<typename T1>
-inline VectorType<T, Tags...>& VectorBase<VectorType, T, Tags...>::operator*=(const VectorType<T1, Tags...>& rhs)
+inline VectorType<T, N>& VectorBase<VectorType, T, N>::operator*=(const VectorType<T1, N>& rhs)
 {
-    for (int i = 0; i < getSize(); ++i)
+    for (int i = 0; i < N; ++i)
         (*this)[i] *= rhs[i];
 
-    return *static_cast<VectorType<T, Tags...>*>(this);
+    return *static_cast<VectorType<T, N>*>(this);
 }
 
 /* ************************************************************************ */
 
-template<template<typename, int...> typename VectorType, typename T, int... Tags>
+template<template<typename, int> typename VectorType, typename T, int N>
 template<typename T1>
-inline VectorType<T, Tags...>& VectorBase<VectorType, T, Tags...>::operator/=(T1 rhs)
+inline VectorType<T, N>& VectorBase<VectorType, T, N>::operator/=(T1 rhs)
 {
-    for (int i = 0; i < getSize(); ++i)
+    for (int i = 0; i < N; ++i)
         (*this)[i] /= rhs;
 
-    return *static_cast<VectorType<T, Tags...>*>(this);
+    return *static_cast<VectorType<T, N>*>(this);
 }
 
 /* ************************************************************************ */
 
-template<template<typename, int...> typename VectorType, typename T, int... Tags>
+template<template<typename, int> typename VectorType, typename T, int N>
 template<typename T1>
-inline VectorType<T, Tags...>& VectorBase<VectorType, T, Tags...>::operator/=(const VectorType<T1, Tags...>& rhs)
+inline VectorType<T, N>& VectorBase<VectorType, T, N>::operator/=(const VectorType<T1, N>& rhs)
 {
-    for (int i = 0; i < getSize(); ++i)
+    for (int i = 0; i < N; ++i)
         (*this)[i] /= rhs[i];
 
-    return *static_cast<VectorType<T, Tags...>*>(this);
+    return *static_cast<VectorType<T, N>*>(this);
 }
 
 /* ************************************************************************ */
 
-template<template<typename, int...> typename VectorType, typename T, int... Tags>
-inline T& VectorBase<VectorType, T, Tags...>::operator[](int pos)
+template<template<typename, int> typename VectorType, typename T, int N>
+inline T& VectorBase<VectorType, T, N>::operator[](int pos)
 {
     // TODO: recursion possibility
-    return (*static_cast<VectorType<T, Tags...>*>(this))[pos];
+    return (*static_cast<VectorType<T, N>*>(this))[pos];
 }
 
 /* ************************************************************************ */
 
-template<template<typename, int...> typename VectorType, typename T, int... Tags>
-inline const T& VectorBase<VectorType, T, Tags...>::operator[](int pos) const
+template<template<typename, int> typename VectorType, typename T, int N>
+inline const T& VectorBase<VectorType, T, N>::operator[](int pos) const
 {
     // TODO: recursion possibility
-    return (*static_cast<const VectorType<T, Tags...>*>(this))[pos];
+    return (*static_cast<const VectorType<T, N>*>(this))[pos];
 }
 
 /* ************************************************************************ */
 
-template<template<typename, int...> typename VectorType, typename T, int... Tags>
-inline int VectorBase<VectorType, T, Tags...>::getSize() const
+template<template<typename, int> typename VectorType, typename T, int N>
+inline constexpr int VectorBase<VectorType, T, N>::getSize() const noexcept
 {
-    // TODO: recursion possibility
-    return static_cast<const VectorType<T, Tags...>*>(this)->getSize();
+    return N;
 }
 
 /* ************************************************************************ */
 
-template<template<typename, int...> typename VectorType, typename T, int... Tags>
-inline T VectorBase<VectorType, T, Tags...>::getLength() const
+template<template<typename, int> typename VectorType, typename T, int N>
+inline T VectorBase<VectorType, T, N>::getLength() const
 {
     using std::sqrt;
     return static_cast<T>(sqrt(getLengthSquared()));
@@ -782,12 +762,12 @@ inline T VectorBase<VectorType, T, Tags...>::getLength() const
 
 /* ************************************************************************ */
 
-template<template<typename, int...> typename VectorType, typename T, int... Tags>
-inline decltype(std::declval<T>() * std::declval<T>()) VectorBase<VectorType, T, Tags...>::getLengthSquared() const
+template<template<typename, int> typename VectorType, typename T, int N>
+inline decltype(std::declval<T>() * std::declval<T>()) VectorBase<VectorType, T, N>::getLengthSquared() const
 {
     decltype(std::declval<T>() * std::declval<T>()) res{};
 
-    for (int i = 0; i < getSize(); ++i)
+    for (int i = 0; i < N; ++i)
         res += (*this)[i] * (*this)[i];
 
     return res;
@@ -795,19 +775,15 @@ inline decltype(std::declval<T>() * std::declval<T>()) VectorBase<VectorType, T,
 
 /* ************************************************************************ */
 
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
-inline VectorType<decltype(std::declval<T1>() + std::declval<T2>()), Tags...> operator+(
-    const VectorType<T1, Tags...>& lhs,
-    const VectorType<T2, Tags...>& rhs
+template<template<typename, int> typename VectorType, typename T1, typename T2, int N>
+inline VectorType<decltype(std::declval<T1>() + std::declval<T2>()), N> operator+(
+    const VectorType<T1, N>& lhs,
+    const VectorType<T2, N>& rhs
 )
 {
-    VectorType<decltype(std::declval<T1>() + std::declval<T2>()), Tags...> res;
+    VectorType<decltype(std::declval<T1>() + std::declval<T2>()), N> res;
 
-    CECE_ASSERT(lhs.getSize() == rhs.getSize());
-    CECE_ASSERT(res.getSize() == lhs.getSize());
-    CECE_ASSERT(res.getSize() == rhs.getSize());
-
-    for (int i = 0; i < res.getSize(); ++i)
+    for (int i = 0; i < N; ++i)
         res[i] = lhs[i] + rhs[i];
 
     return res;
@@ -815,19 +791,15 @@ inline VectorType<decltype(std::declval<T1>() + std::declval<T2>()), Tags...> op
 
 /* ************************************************************************ */
 
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
-inline VectorType<decltype(std::declval<T1>() - std::declval<T2>()), Tags...> operator-(
-    const VectorType<T1, Tags...>& lhs,
-    const VectorType<T2, Tags...>& rhs
+template<template<typename, int> typename VectorType, typename T1, typename T2, int N>
+inline VectorType<decltype(std::declval<T1>() - std::declval<T2>()), N> operator-(
+    const VectorType<T1, N>& lhs,
+    const VectorType<T2, N>& rhs
 )
 {
-    VectorType<decltype(std::declval<T1>() - std::declval<T2>()), Tags...> res;
+    VectorType<decltype(std::declval<T1>() - std::declval<T2>()), N> res;
 
-    CECE_ASSERT(lhs.getSize() == rhs.getSize());
-    CECE_ASSERT(res.getSize() == lhs.getSize());
-    CECE_ASSERT(res.getSize() == rhs.getSize());
-
-    for (int i = 0; i < res.getSize(); ++i)
+    for (int i = 0; i < N; ++i)
         res[i] = lhs[i] - rhs[i];
 
     return res;
@@ -835,19 +807,15 @@ inline VectorType<decltype(std::declval<T1>() - std::declval<T2>()), Tags...> op
 
 /* ************************************************************************ */
 
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
-inline VectorType<decltype(std::declval<T1>() * std::declval<T2>()), Tags...> operator*(
-    const VectorType<T1, Tags...>& lhs,
-    const VectorType<T2, Tags...>& rhs
+template<template<typename, int> typename VectorType, typename T1, typename T2, int N>
+inline VectorType<decltype(std::declval<T1>() * std::declval<T2>()), N> operator*(
+    const VectorType<T1, N>& lhs,
+    const VectorType<T2, N>& rhs
 )
 {
-    VectorType<decltype(std::declval<T1>() * std::declval<T2>()), Tags...> res;
+    VectorType<decltype(std::declval<T1>() * std::declval<T2>()), N> res;
 
-    CECE_ASSERT(lhs.getSize() == rhs.getSize());
-    CECE_ASSERT(res.getSize() == lhs.getSize());
-    CECE_ASSERT(res.getSize() == rhs.getSize());
-
-    for (int i = 0; i < res.getSize(); ++i)
+    for (int i = 0; i < N; ++i)
         res[i] = lhs[i] * rhs[i];
 
     return res;
@@ -855,17 +823,15 @@ inline VectorType<decltype(std::declval<T1>() * std::declval<T2>()), Tags...> op
 
 /* ************************************************************************ */
 
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
-inline VectorType<decltype(std::declval<T1>() * std::declval<T2>()), Tags...> operator*(
-    const VectorType<T1, Tags...>& lhs,
+template<template<typename, int> typename VectorType, typename T1, typename T2, int N>
+inline VectorType<decltype(std::declval<T1>() * std::declval<T2>()), N> operator*(
+    const VectorType<T1, N>& lhs,
     const T2& rhs
 )
 {
-    VectorType<decltype(std::declval<T1>() * std::declval<T2>()), Tags...> res;
+    VectorType<decltype(std::declval<T1>() * std::declval<T2>()), N> res;
 
-    CECE_ASSERT(res.getSize() == lhs.getSize());
-
-    for (int i = 0; i < res.getSize(); ++i)
+    for (int i = 0; i < N; ++i)
         res[i] = lhs[i] * rhs;
 
     return res;
@@ -873,17 +839,15 @@ inline VectorType<decltype(std::declval<T1>() * std::declval<T2>()), Tags...> op
 
 /* ************************************************************************ */
 
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
-inline VectorType<decltype(std::declval<T1>() * std::declval<T2>()), Tags...> operator*(
+template<template<typename, int> typename VectorType, typename T1, typename T2, int N>
+inline VectorType<decltype(std::declval<T1>() * std::declval<T2>()), N> operator*(
     const T1& lhs,
-    const VectorType<T2, Tags...>& rhs
+    const VectorType<T2, N>& rhs
 )
 {
-    VectorType<decltype(std::declval<T1>() * std::declval<T2>()), Tags...> res;
+    VectorType<decltype(std::declval<T1>() * std::declval<T2>()), N> res;
 
-    CECE_ASSERT(res.getSize() == rhs.getSize());
-
-    for (int i = 0; i < res.getSize(); ++i)
+    for (int i = 0; i < N; ++i)
         res[i] = lhs * rhs[i];
 
     return res;
@@ -891,19 +855,15 @@ inline VectorType<decltype(std::declval<T1>() * std::declval<T2>()), Tags...> op
 
 /* ************************************************************************ */
 
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
-inline VectorType<decltype(std::declval<T1>() / std::declval<T2>()), Tags...> operator/(
-    const VectorType<T1, Tags...>& lhs,
-    const VectorType<T2, Tags...>& rhs
+template<template<typename, int> typename VectorType, typename T1, typename T2, int N>
+inline VectorType<decltype(std::declval<T1>() / std::declval<T2>()), N> operator/(
+    const VectorType<T1, N>& lhs,
+    const VectorType<T2, N>& rhs
 )
 {
-    VectorType<decltype(std::declval<T1>() / std::declval<T2>()), Tags...> res;
+    VectorType<decltype(std::declval<T1>() / std::declval<T2>()), N> res;
 
-    CECE_ASSERT(lhs.getSize() == rhs.getSize());
-    CECE_ASSERT(res.getSize() == lhs.getSize());
-    CECE_ASSERT(res.getSize() == rhs.getSize());
-
-    for (int i = 0; i < res.getSize(); ++i)
+    for (int i = 0; i < N; ++i)
         res[i] = lhs[i] / rhs[i];
 
     return res;
@@ -911,17 +871,15 @@ inline VectorType<decltype(std::declval<T1>() / std::declval<T2>()), Tags...> op
 
 /* ************************************************************************ */
 
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
-inline VectorType<decltype(std::declval<T1>() / std::declval<T2>()), Tags...> operator/(
-    const VectorType<T1, Tags...>& lhs,
+template<template<typename, int> typename VectorType, typename T1, typename T2, int N>
+inline VectorType<decltype(std::declval<T1>() / std::declval<T2>()), N> operator/(
+    const VectorType<T1, N>& lhs,
     const T2& rhs
 )
 {
-    VectorType<decltype(std::declval<T1>() / std::declval<T2>()), Tags...> res;
+    VectorType<decltype(std::declval<T1>() / std::declval<T2>()), N> res;
 
-    CECE_ASSERT(res.getSize() == lhs.getSize());
-
-    for (int i = 0; i < res.getSize(); ++i)
+    for (int i = 0; i < N; ++i)
         res[i] = lhs[i] / rhs;
 
     return res;
@@ -929,17 +887,15 @@ inline VectorType<decltype(std::declval<T1>() / std::declval<T2>()), Tags...> op
 
 /* ************************************************************************ */
 
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
-inline VectorType<decltype(std::declval<T1>() / std::declval<T2>()), Tags...> operator/(
+template<template<typename, int> typename VectorType, typename T1, typename T2, int N>
+inline VectorType<decltype(std::declval<T1>() / std::declval<T2>()), N> operator/(
     const T1& lhs,
-    const VectorType<T2, Tags...>& rhs
+    const VectorType<T2, N>& rhs
 )
 {
-    VectorType<decltype(std::declval<T1>() / std::declval<T2>()), Tags...> res;
+    VectorType<decltype(std::declval<T1>() / std::declval<T2>()), N> res;
 
-    CECE_ASSERT(res.getSize() == rhs.getSize());
-
-    for (int i = 0; i < res.getSize(); ++i)
+    for (int i = 0; i < N; ++i)
         res[i] = lhs / rhs[i];
 
     return res;
@@ -947,17 +903,15 @@ inline VectorType<decltype(std::declval<T1>() / std::declval<T2>()), Tags...> op
 
 /* ************************************************************************ */
 
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
+template<template<typename, int> typename VectorType, typename T1, typename T2, int N>
 inline bool operator==(
-    const VectorType<T1, Tags...>& lhs,
-    const VectorType<T2, Tags...>& rhs
+    const VectorType<T1, N>& lhs,
+    const VectorType<T2, N>& rhs
 )
 {
     bool res = true;
 
-    CECE_ASSERT(lhs.getSize() == rhs.getSize());
-
-    for (int i = 0; i < lhs.getSize(); ++i)
+    for (int i = 0; i < N; ++i)
         res = res && lhs[i] == rhs[i];
 
     return res;
@@ -965,32 +919,32 @@ inline bool operator==(
 
 /* ************************************************************************ */
 
-template<template<typename, int...> typename VectorType, typename T1, int... Tags>
+template<template<typename, int> typename VectorType, typename T1, int N>
 inline bool operator==(
-    const VectorType<T1, Tags...>& lhs,
+    const VectorType<T1, N>& lhs,
     const Zero_t& rhs
 )
 {
-    return operator==(lhs, VectorType<T1, Tags...>(Zero));
+    return operator==(lhs, VectorType<T1, N>(Zero));
 }
 
 /* ************************************************************************ */
 
-template<template<typename, int...> typename VectorType, typename T2, int... Tags>
+template<template<typename, int> typename VectorType, typename T2, int N>
 inline bool operator==(
     const Zero_t& lhs,
-    const VectorType<T2, Tags...>& rhs
+    const VectorType<T2, N>& rhs
 )
 {
-    return operator==(VectorType<T2, Tags...>(lhs), rhs);
+    return operator==(VectorType<T2, N>(lhs), rhs);
 }
 
 /* ************************************************************************ */
 
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
+template<template<typename, int> typename VectorType, typename T1, typename T2, int N>
 inline bool operator!=(
-    const VectorType<T1, Tags...>& lhs,
-    const VectorType<T2, Tags...>& rhs
+    const VectorType<T1, N>& lhs,
+    const VectorType<T2, N>& rhs
 )
 {
     return !operator==(lhs, rhs);
@@ -998,9 +952,9 @@ inline bool operator!=(
 
 /* ************************************************************************ */
 
-template<template<typename, int...> typename VectorType, typename T1, int... Tags>
+template<template<typename, int> typename VectorType, typename T1, int N>
 inline bool operator!=(
-    const VectorType<T1, Tags...>& lhs,
+    const VectorType<T1, N>& lhs,
     const Zero_t& rhs
 )
 {
@@ -1009,10 +963,10 @@ inline bool operator!=(
 
 /* ************************************************************************ */
 
-template<template<typename, int...> typename VectorType, typename T2, int... Tags>
+template<template<typename, int> typename VectorType, typename T2, int N>
 inline bool operator!=(
     const Zero_t& lhs,
-    const VectorType<T2, Tags...>& rhs
+    const VectorType<T2, N>& rhs
 )
 {
     return !operator==(lhs, rhs);
@@ -1020,68 +974,15 @@ inline bool operator!=(
 
 /* ************************************************************************ */
 
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
-inline bool operator<(
-    const VectorType<T1, Tags...>& lhs,
-    const VectorType<T2, Tags...>& rhs
-)
-{
-    bool res = true;
-
-    CECE_ASSERT(lhs.getSize() == rhs.getSize());
-
-    for (int i = 0; i < lhs.getSize(); ++i)
-        res = res && (lhs[i] < rhs[i]);
-
-    return res;
-}
-
-/* ************************************************************************ */
-
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
-inline bool operator<=(
-    const VectorType<T1, Tags...>& lhs,
-    const VectorType<T2, Tags...>& rhs
-)
-{
-    return !operator>(lhs, rhs);
-}
-
-/* ************************************************************************ */
-
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
-inline bool operator>(
-    const VectorType<T1, Tags...>& lhs,
-    const VectorType<T2, Tags...>& rhs
-)
-{
-    return operator<(rhs, lhs);
-}
-
-/* ************************************************************************ */
-
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
-inline bool operator>=(
-    const VectorType<T1, Tags...>& lhs,
-    const VectorType<T2, Tags...>& rhs
-)
-{
-    return !operator<(lhs, rhs);
-}
-
-/* ************************************************************************ */
-
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
+template<template<typename, int> typename VectorType, typename T1, typename T2, int N>
 inline decltype(std::declval<T1>() * std::declval<T2>()) dot(
-    const VectorType<T1, Tags...>& lhs,
-    const VectorType<T2, Tags...>& rhs
+    const VectorType<T1, N>& lhs,
+    const VectorType<T2, N>& rhs
 )
 {
     decltype(std::declval<T1>() * std::declval<T2>()) res{};
 
-    CECE_ASSERT(lhs.getSize() == rhs.getSize());
-
-    for (int i = 0; i < lhs.getSize(); ++i)
+    for (int i = 0; i < N; ++i)
         res += lhs[i] * rhs[i];
 
     return res;
@@ -1089,10 +990,10 @@ inline decltype(std::declval<T1>() * std::declval<T2>()) dot(
 
 /* ************************************************************************ */
 
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
+template<template<typename, int> typename VectorType, typename T1, typename T2, int N>
 inline decltype(std::declval<decltype(std::declval<T1>() - std::declval<T2>())>() * std::declval<decltype(std::declval<T1>() - std::declval<T2>())>()) distanceSquared(
-    const VectorType<T1, Tags...>& lhs,
-    const VectorType<T2, Tags...>& rhs
+    const VectorType<T1, N>& lhs,
+    const VectorType<T2, N>& rhs
 )
 {
     return (lhs - rhs).getLengthSquared();
@@ -1100,13 +1001,41 @@ inline decltype(std::declval<decltype(std::declval<T1>() - std::declval<T2>())>(
 
 /* ************************************************************************ */
 
-template<template<typename, int...> typename VectorType, typename T1, typename T2, int... Tags>
+template<template<typename, int> typename VectorType, typename T1, typename T2, int N>
 inline decltype(std::declval<T1>() - std::declval<T2>()) distance(
-    const VectorType<T1, Tags...>& lhs,
-    const VectorType<T2, Tags...>& rhs
+    const VectorType<T1, N>& lhs,
+    const VectorType<T2, N>& rhs
 )
 {
     return (lhs - rhs).getLength();
+}
+
+/* ************************************************************************ */
+
+template<template<typename, int> typename VectorType, typename T, int N>
+inline bool inRange(
+    const VectorType<T, N>& value,
+    const VectorType<T, N>& low,
+    const VectorType<T, N>& high
+)
+{
+    bool res = true;
+
+    for (int i = 0; i < N; ++i)
+        res = res && (value[i] >= low[i] && value[i] < high[i]);
+
+    return res;
+}
+
+/* ************************************************************************ */
+
+template<template<typename, int> typename VectorType, typename T, int N>
+inline bool inRange(
+    const VectorType<T, N>& value,
+    const VectorType<T, N>& high
+)
+{
+    return inRange(value, VectorType<T, N>(Zero), high);
 }
 
 /* ************************************************************************ */

@@ -27,7 +27,7 @@
 #include "gtest/gtest.h"
 
 // CeCe
-#include "cece/math/Vector3.hpp"
+#include "cece/math/Vector.hpp"
 
 /* ************************************************************************ */
 

@@ -37,6 +37,7 @@
 #include "cece/Assert.hpp"
 #include "cece/log/Log.hpp"
 #include "cece/unit/UnitIo.hpp"
+#include "cece/math/VectorIo.hpp"
 #include "cece/io/FileStream.hpp"
 #include "cece/config/Configuration.hpp"
 #include "cece/plugin/Context.hpp"

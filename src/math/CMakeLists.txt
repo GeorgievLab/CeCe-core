@@ -25,8 +25,6 @@
 
 set(SRCS
     Vector.cpp
-    Vector2.cpp
-    Vector3.cpp
     Grid.cpp
 )
 

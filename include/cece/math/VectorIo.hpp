@@ -1,5 +1,5 @@
 /* ************************************************************************ */
-/* Georgiev Lab (c) 2015-2016                                               */
+/* Georgiev Lab (c) 2015-2017                                               */
 /* ************************************************************************ */
 /* Department of Cybernetics                                                */
 /* Faculty of Applied Sciences                                              */
@@ -29,95 +29,97 @@
 
 // CeCe
 #include "cece/common.hpp"
-#include "cece/math/Vector.hpp"
-#include "cece/unit/Units.hpp"
+#include "cece/Assert.hpp"
+#include "cece/io/InStream.hpp"
+#include "cece/io/OutStream.hpp"
+#include "cece/math/VectorBase.hpp"
 
 /* ************************************************************************ */
 
 namespace cece {
-namespace unit {
-
-/* ************************************************************************ */
-
-/**
- * @brief      Position vector structure.
- * @deprecated
- */
-using PositionVector = math::Vector<Length>;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Position vector structure.
- */
-using LengthVector = math::Vector<Length>;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Velocity vector structure.
- */
-using VelocityVector = math::Vector<Velocity>;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Acceleration vector structure.
- */
-using AccelerationVector = math::Vector<Acceleration>;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Force vector structure.
- */
-using ForceVector = math::Vector<Force>;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Impulse vector structure.
- */
-using ImpulseVector = math::Vector<Impulse>;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Scale vector.
- * @deprecated
- */
-using ScaleVector = math::Vector<RealType>;
-
-/* ************************************************************************ */
-
-/**
- * @brief      Size vector.
- * @deprecated
- */
-using SizeVector = math::Vector<Length>;
-
-/* ************************************************************************ */
-
-}
-
-/* ************************************************************************ */
-
 namespace math {
 
 /* ************************************************************************ */
 
-extern template class Vector<unit::Length, DIMENSION>;
-extern template class Vector<unit::Velocity, DIMENSION>;
-extern template class Vector<unit::Acceleration, DIMENSION>;
-extern template class Vector<unit::Force, DIMENSION>;
-extern template class Vector<unit::Impulse, DIMENSION>;
+/**
+ * @brief      Input stream operator.
+ *
+ * @param      is          Input stream.
+ * @param      vector      Result value.
+ *
+ * @tparam     VectorType  Vector type.
+ * @tparam     T           Type of value.
+ * @tparam     Tags        Vector type tags.
+ *
+ * @return     Input stream.
+ */
+template<template<typename, int...> typename VectorType, typename T, int... Tags>
+io::InStream& operator>>(io::InStream& is, VectorType<T, Tags...>& vector);
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Output stream operator.
+ *
+ * @param      os          Output stream.
+ * @param      vector      Input value.
+ *
+ * @tparam     VectorType  Vector type.
+ * @tparam     T           Type of value.
+ * @tparam     Tags        Vector type tags.
+ *
+ * @return     Output stream.
+ */
+template<template<typename, int...> typename VectorType, typename T, int... Tags>
+io::OutStream& operator<<(io::OutStream& os, const VectorType<T, Tags...>& vector);
 
 /* ************************************************************************ */
 
 }
+}
+
+/* ************************************************************************ */
+/* ************************************************************************ */
+/* ************************************************************************ */
+
+namespace cece {
+namespace math {
 
 /* ************************************************************************ */
 
+template<template<typename, int...> typename VectorType, typename T, int... Tags>
+inline io::InStream& operator>>(io::InStream& is, VectorType<T, Tags...>& vector)
+{
+    // Read all elements
+    for (int i = 0; i < vector.getSize(); ++i)
+    {
+        // Unable to read element
+        if (!(is >> std::skipws >> vector[i]))
+            break;
+    }
+
+    return is;
+}
+
+/* ************************************************************************ */
+
+template<template<typename, int...> typename VectorType, typename T, int... Tags>
+inline io::OutStream& operator<<(io::OutStream& os, const VectorType<T, Tags...>& vector)
+{
+    for (int i = 0; i < vector.getSize(); ++i)
+    {
+        if (i != 0)
+            os << " ";
+
+        os << vector[i];
+    }
+
+    return os;
+}
+
+/* ************************************************************************ */
+
+}
 }
 
 /* ************************************************************************ */

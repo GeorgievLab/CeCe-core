@@ -1,5 +1,5 @@
 /* ************************************************************************ */
-/* Georgiev Lab (c) 2015-2017                                               */
+/* Georgiev Lab (c) 2015-2016                                               */
 /* ************************************************************************ */
 /* Department of Cybernetics                                                */
 /* Faculty of Applied Sciences                                              */
@@ -23,24 +23,114 @@
 /*                                                                          */
 /* ************************************************************************ */
 
-// Declaration
-#include "cece/math/Vector2.hpp"
+// GTest
+#include "gtest/gtest.h"
+
+// CeCe
+#include "cece/io/StringStream.hpp"
+#include "cece/math/VectorIo.hpp"
+#include "cece/math/Vector.hpp"
 
 /* ************************************************************************ */
 
-namespace cece {
-namespace math {
+using namespace cece;
+using namespace cece::math;
 
 /* ************************************************************************ */
 
-template class Vector2<float>;
-template class Vector2<double>;
-template class Vector2<unsigned int>;
-template class Vector2<int>;
+TEST(VectorIo, read)
+{
+    {
+        io::InStringStream iss("200 100");
 
-/* ************************************************************************ */
+        Vector2<int> vec;
+        iss >> vec;
 
+        EXPECT_EQ(200, vec.x);
+        EXPECT_EQ(100, vec.y);
+    }
+
+    {
+        io::InStringStream iss("200 100");
+
+        Vector2<float> vec;
+        iss >> vec;
+
+        EXPECT_FLOAT_EQ(200.f, vec.x);
+        EXPECT_FLOAT_EQ(100.f, vec.y);
+    }
+
+    {
+        io::InStringStream iss("2.3 100.15");
+
+        Vector2<float> vec;
+        iss >> vec;
+
+        EXPECT_FLOAT_EQ(2.3f, vec.x);
+        EXPECT_FLOAT_EQ(100.15f, vec.y);
+    }
 }
+
+/* ************************************************************************ */
+
+TEST(VectorIo, readFail)
+{
+    {
+        io::InStringStream iss("200");
+
+        Vector2<int> vec;
+        iss >> vec;
+        EXPECT_FALSE(iss);
+    }
+
+    {
+        io::InStringStream iss("23.3");
+
+        Vector2<float> vec;
+        iss >> vec;
+        EXPECT_FALSE(iss);
+    }
+}
+
+/* ************************************************************************ */
+
+TEST(VectorIo, write)
+{
+    {
+        io::OutStringStream oss;
+
+        Vector2<int> vec{200, 100};
+        EXPECT_EQ(200, vec.x);
+        EXPECT_EQ(100, vec.y);
+
+        oss << vec;
+
+        EXPECT_EQ("200 100", oss.str());
+    }
+
+    {
+        io::OutStringStream oss;
+
+        Vector2<float> vec{200.f, 100.f};
+        EXPECT_FLOAT_EQ(200.f, vec.x);
+        EXPECT_FLOAT_EQ(100.f, vec.y);
+
+        oss << vec;
+
+        EXPECT_EQ("200 100", oss.str());
+    }
+
+    {
+        io::OutStringStream oss;
+
+        Vector2<float> vec{2.3f, 100.15f};
+        EXPECT_FLOAT_EQ(2.3f, vec.x);
+        EXPECT_FLOAT_EQ(100.15f, vec.y);
+
+        oss << vec;
+
+        EXPECT_EQ("2.3 100.15", oss.str());
+    }
 }
 
 /* ************************************************************************ */

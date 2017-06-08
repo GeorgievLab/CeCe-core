@@ -30,6 +30,7 @@ cece_add_test(math
         Vector2_test.cpp
         Vector3_test.cpp
         VectorRangeTest.cpp
+        VectorIo_test.cpp
 )
 
 # ######################################################################### #

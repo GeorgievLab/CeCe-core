@@ -41,6 +41,7 @@
 #include "cece/Exception.hpp"
 #include "cece/log/Log.hpp"
 #include "cece/unit/UnitIo.hpp"
+#include "cece/math/VectorIo.hpp"
 #include "cece/io/FileStream.hpp"
 #include "cece/io/OutStream.hpp"
 #include "cece/plugin/Api.hpp"

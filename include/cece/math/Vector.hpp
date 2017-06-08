@@ -37,13 +37,9 @@
 #include "cece/Assert.hpp"
 #include "cece/StaticArray.hpp"
 #include "cece/math/Zero.hpp"
-#include "cece/io/InStream.hpp"
-#include "cece/io/OutStream.hpp"
 #include "cece/unit/math.hpp"
 #include "cece/unit/Units.hpp"
 #include "cece/math/VectorBase.hpp"
-#include "cece/math/Vector2.hpp"
-#include "cece/math/Vector3.hpp"
 
 /* ************************************************************************ */
 
@@ -58,8 +54,8 @@ namespace math {
  * @tparam     T     Element type.
  * @tparam     N     Number of elements.
  */
-template<typename T, int N>
-class BasicVector : public VectorBase<BasicVector, T, N>
+template<typename T, int N = DIMENSION>
+class Vector : public VectorBase<Vector, T, N>
 {
     static_assert(N > 0, "Cannot create empty vector");
 
@@ -68,7 +64,7 @@ class BasicVector : public VectorBase<BasicVector, T, N>
 public:
 
 
-    /// BasicVector value type.
+    /// Vector value type.
     using ValueType = T;
 
 
@@ -87,7 +83,7 @@ public:
     /**
      * @brief      Default constructor.
      */
-    BasicVector() noexcept;
+    Vector() noexcept;
 
 
     /**
@@ -95,7 +91,7 @@ public:
      *
      * @param      data  The source data.
      */
-    BasicVector(std::initializer_list<T> data);
+    Vector(std::initializer_list<T> data);
 
 
     /**
@@ -103,7 +99,7 @@ public:
      *
      * @param      data  The source data.
      */
-    explicit BasicVector(T (&data)[N]);
+    explicit Vector(T (&data)[N]);
 
 
     /**
@@ -111,7 +107,7 @@ public:
      *
      * @param      data  The source data.
      */
-    explicit BasicVector(const StaticArray<T, N>& data);
+    explicit Vector(const StaticArray<T, N>& data);
 
 
     /**
@@ -119,7 +115,7 @@ public:
      *
      * @param[in]  zero  The zero value.
      */
-    BasicVector(Zero_t zero);
+    Vector(Zero_t zero);
 
 
     /**
@@ -127,7 +123,7 @@ public:
      *
      * @param[in]  src   The source vector.
      */
-    BasicVector(const BasicVector& src);
+    Vector(const Vector& src);
 
 
     /**
@@ -135,7 +131,7 @@ public:
      *
      * @param[in]  src   The source vector.
      */
-    BasicVector(BasicVector&& src);
+    Vector(Vector&& src);
 
 
     /**
@@ -146,7 +142,7 @@ public:
      * @tparam     T2    The source vector element type.
      */
     template<typename T2, typename std::enable_if<std::is_constructible<T, T2>::value>::type* = nullptr>
-    explicit BasicVector(const BasicVector<T2, N>& src);
+    explicit Vector(const Vector<T2, N>& src);
 
 
 // Public Operators
@@ -160,7 +156,7 @@ public:
      *
      * @return     *this.
      */
-    BasicVector& operator=(Zero_t zero);
+    Vector& operator=(Zero_t zero);
 
 
     /**
@@ -170,7 +166,7 @@ public:
      *
      * @return     *this.
      */
-    BasicVector& operator=(std::initializer_list<T> data);
+    Vector& operator=(std::initializer_list<T> data);
 
 
     /**
@@ -180,7 +176,7 @@ public:
      *
      * @return     *this.
      */
-    BasicVector& operator=(T (&data)[N]);
+    Vector& operator=(T (&data)[N]);
 
 
     /**
@@ -190,7 +186,7 @@ public:
      *
      * @return     *this.
      */
-    BasicVector& operator=(const StaticArray<T, N>& data);
+    Vector& operator=(const StaticArray<T, N>& data);
 
 
     /**
@@ -200,7 +196,7 @@ public:
      *
      * @return     *this.
      */
-    BasicVector& operator=(const BasicVector& src);
+    Vector& operator=(const Vector& src);
 
 
     /**
@@ -210,7 +206,7 @@ public:
      *
      * @return     *this.
      */
-    BasicVector& operator=(BasicVector&& src);
+    Vector& operator=(Vector&& src);
 
 
     /**
@@ -223,7 +219,184 @@ public:
      * @return     *this.
      */
     template<typename T2, typename std::enable_if<std::is_constructible<T, T2>::value>::type* = nullptr>
-    BasicVector& operator=(const BasicVector<T2, N>& src);
+    Vector& operator=(const Vector<T2, N>& src);
+
+
+    /**
+     * @brief      Access operator.
+     *
+     * @param      pos   The position.
+     *
+     * @return     Reference to the element.
+     */
+    T& operator[](int pos) noexcept;
+
+
+    /**
+     * @brief      Access operator.
+     *
+     * @param      pos   The position.
+     *
+     * @return     Reference to the element.
+     */
+    const T& operator[](int pos) const noexcept;
+
+};
+
+/* ************************************************************************ */
+
+/**
+ * @brief      2D vector specialization.
+ *
+ * @tparam     T     Element type.
+ */
+template<typename T>
+struct Vector<T, 2> : public VectorBase<Vector, T, 2>
+{
+
+// Public Types
+public:
+
+
+    /// Element type.
+    using ValueType = T;
+
+
+// Public Data Members
+public:
+
+
+    union
+    {
+        struct
+        {
+            /// X coordinate.
+            T x;
+
+            /// Y coordinate.
+            T y;
+        };
+
+        struct
+        {
+            /// Width
+            T width;
+
+            /// Height.
+            T height;
+        };
+
+        T m[2];
+    };
+
+
+// Public Ctors
+public:
+
+
+    /**
+     * @brief      Default constructor.
+     */
+    Vector();
+
+
+    /**
+     * @brief      Constructor.
+     *
+     * @param      x     The X and Y coordinate.
+     */
+    explicit Vector(T value);
+
+
+    /**
+     * @brief      Constructor.
+     *
+     * @param      x     The X coordinate.
+     * @param      y     The Y coordinate.
+     */
+    Vector(T x, T y);
+
+
+    /**
+     * @brief      Zero value constructor.
+     *
+     * @param[in]  zero  The zero value.
+     */
+    Vector(Zero_t zero);
+
+
+    /**
+     * @brief      Copy constructor.
+     *
+     * @param[in]  src   The source vector.
+     */
+    Vector(const Vector& src);
+
+
+    /**
+     * @brief      Move constructor.
+     *
+     * @param[in]  src   The source vector.
+     */
+    Vector(Vector&& src);
+
+
+    /**
+     * @brief      Copy constructor.
+     *
+     * @param      rhs   Source vector.
+     *
+     * @tparam     T2    The source vector element type.
+     */
+    template<typename T2, typename std::enable_if<std::is_constructible<T, T2>::value>::type* = nullptr>
+    Vector(const Vector<T2, 2>& rhs);
+
+
+// Public Operators
+public:
+
+
+    /**
+     * @brief      Copy constructor.
+     *
+     * @param[in]  zero  The zero value.
+     *
+     * @return     *this.
+     */
+    Vector& operator=(Zero_t zero);
+
+
+    /**
+     * @brief      Copy constructor.
+     *
+     * @param[in]  src   The source vector.
+     *
+     * @return     *this.
+     */
+    Vector& operator=(const Vector& src);
+
+
+    /**
+     * @brief      Move constructor.
+     *
+     * @param[in]  src   The source vector.
+     *
+     * @return     *this.
+     */
+    Vector& operator=(Vector&& src);
+
+
+    /**
+     * @brief      Copy constructor.
+     *
+     * @param      v     The source vector.
+     *
+     * @tparam     T2    The source vector element type.
+     *
+     * @return     *this.
+     */
+    template<typename T2, typename std::enable_if<std::is_constructible<T, T2>::value>::type* = nullptr>
+    Vector& operator=(const Vector<T2, 2>& src);
 
 
     /**
@@ -251,62 +424,104 @@ public:
 
 
     /**
-     * @brief      Returns vector size.
+     * @brief      Returns X coordinate.
      *
-     * @return     The size.
+     * @return     The X coordinate.
      */
-    int getSize() const noexcept;
+    const T& getX() const noexcept;
 
-};
 
-/* ************************************************************************ */
+    /**
+     * @brief      Set X coordinate.
+     *
+     * @param[in]  x     The X coordinate.
+     */
+    void setX(T x);
 
-// TODO: rework
-template<typename T>
-struct BasicVector<T, 2> : public Vector2<T>
-{
-    using Vector2<T>::Vector2;
 
-    BasicVector() {};
-    BasicVector(const Vector2<T>& src)
-        : Vector2<T>(src)
+    /**
+     * @brief      Returns Y coordinate.
+     *
+     * @return     The Y coordinate.
+     */
+    const T& getY() const noexcept;
+
+
+    /**
+     * @brief      Set Y coordinate.
+     *
+     * @param[in]  y     The Y coordinate.
+     */
+    void setY(T y);
+
+
+    /**
+     * @brief      Gets the width.
+     *
+     * @return     The width.
+     */
+    const T& getWidth() const noexcept;
+
+
+    /**
+     * @brief      Set the width.
+     *
+     * @param[in]  width  The width.
+     */
+    void setWidth(T width);
+
+
+    /**
+     * @brief      Gets the height.
+     *
+     * @return     The height.
+     */
+    const T& getHeight() const noexcept;
+
+
+    /**
+     * @brief      Sets the height.
+     *
+     * @param[in]  height  The height
+     */
+    void setHeight(T height);
+
+
+// Public Deprecated
+public:
+
+
+    // @deprecated
+    bool inRange(const Vector& low, const Vector& high) const noexcept
     {
-        //
+        return math::inRange(*this, low, high);
     }
 
-    const T& getWidth() const noexcept { return Vector2<T>::getX(); }
 
-    const T& getHeight() const noexcept { return Vector2<T>::getY(); }
-
-    static bool inRange(T value, T low, T high) noexcept { return value >= low && value < high; }
-
-    bool inRange(const BasicVector& low, const BasicVector& high) const noexcept
+    // @deprecated
+    bool inRange(const Vector& high) const noexcept
     {
-        bool res = true;
-
-        res = res && inRange(Vector2<T>::getX(), low.getX(), high.getX());
-        res = res && inRange(Vector2<T>::getY(), low.getY(), high.getY());
-
-        return res;
+        return math::inRange(*this, high);
     }
 
-    bool inRange(const BasicVector& high) const noexcept
+
+    // @deprecated
+    static Vector createSingle(T val) noexcept
     {
-        return inRange(Zero, high);
+        return Vector(val, val);
     }
 
-    static BasicVector createSingle(T val) noexcept { return BasicVector(val, val); }
 
+    // @deprecated
     template<typename T2 = T>
-    BasicVector inversed() const noexcept
+    Vector inversed() const noexcept
     {
-        return BasicVector(
-            T2(1) / Vector2<T>::getX(),
-            T2(1) / Vector2<T>::getY()
-        );
+        return T2(1) / *this;
     }
 
-    BasicVector rotated(unit::Angle angle) const noexcept
+
+    // @deprecated
+    Vector rotated(unit::Angle angle) const noexcept
     {
         return rotate(*this, angle);
     }
@@ -314,170 +529,492 @@ struct BasicVector<T, 2> : public Vector2<T>
 
 /* ************************************************************************ */
 
-// TODO: rework
+/**
+ * @brief      3D vector specialization.
+ *
+ * @tparam     T     Element type.
+ */
 template<typename T>
-struct BasicVector<T, 3> : public Vector3<T>
+struct Vector<T, 3> : public VectorBase<Vector, T, 3>
 {
-    using Vector3<T>::Vector3;
 
-    BasicVector() {};
-    BasicVector(const Vector3<T>& src)
-        : Vector3<T>(src)
+
+// Public Types
+public:
+
+
+    /// Vector element type.
+    using ValueType = T;
+
+
+// Public Data Members
+public:
+
+
+    union
     {
-        //
+        struct
+        {
+            /// X coordinate.
+            T x;
+
+            /// Y coordinate.
+            T y;
+
+            /// Z coordinate.
+            T z;
+        };
+
+        struct
+        {
+            /// Width.
+            T width;
+
+            /// Height.
+            T height;
+
+            /// Depth.
+            T depth;
+        };
+
+        T m[3];
+    };
+
+
+// Public Ctors
+public:
+
+
+    /**
+     * @brief      Default constructor.
+     */
+    Vector() noexcept;
+
+
+    /**
+     * @brief      Constructor.
+     *
+     * @param      val   The X, Y and Z coordinate.
+     */
+    explicit Vector(T val);
+
+
+    /**
+     * @brief      Constructor.
+     *
+     * @param      x     The X coordinate.
+     * @param      y     The Y coordinate.
+     * @param      y     The Z coordinate.
+     */
+    Vector(T x, T y, T z);
+
+
+    /**
+     * @brief      Zero value constructor.
+     *
+     * @param[in]  zero  The zero value.
+     */
+    Vector(Zero_t zero);
+
+
+    /**
+     * @brief      Copy constructor.
+     *
+     * @param[in]  src   The source vector.
+     */
+    Vector(const Vector& src);
+
+
+    /**
+     * @brief      Move constructor.
+     *
+     * @param[in]  src   The source vector.
+     */
+    Vector(Vector&& src);
+
+
+    /**
+     * @brief      Copy constructor.
+     *
+     * @param      rhs   Source vector.
+     *
+     * @tparam     T2    The source vector element type.
+     */
+    template<typename T2, typename std::enable_if<std::is_constructible<T, T2>::value>::type* = nullptr>
+    Vector(const Vector<T2, 3>& rhs);
+
+
+// Public Operators
+public:
+
+
+    /**
+     * @brief      Copy constructor.
+     *
+     * @param[in]  zero  The zero value.
+     *
+     * @return     *this.
+     */
+    Vector& operator=(Zero_t zero);
+
+
+    /**
+     * @brief      Copy constructor.
+     *
+     * @param[in]  src   The source vector.
+     *
+     * @return     *this.
+     */
+    Vector& operator=(const Vector& src);
+
+
+    /**
+     * @brief      Move constructor.
+     *
+     * @param[in]  src   The source vector.
+     *
+     * @return     *this.
+     */
+    Vector& operator=(Vector&& src);
+
+
+    /**
+     * @brief      Copy constructor.
+     *
+     * @param      v     The source vector.
+     *
+     * @tparam     T2    The source vector element type.
+     *
+     * @return     *this.
+     */
+    template<typename T2, typename std::enable_if<std::is_constructible<T, T2>::value>::type* = nullptr>
+    Vector& operator=(const Vector<T2, 3>& src);
+
+
+    /**
+     * @brief      Access operator.
+     *
+     * @param      pos   The position.
+     *
+     * @return     Reference to the element.
+     */
+    T& operator[](int pos) noexcept;
+
+
+    /**
+     * @brief      Access operator.
+     *
+     * @param      pos   The position.
+     *
+     * @return     Reference to the element.
+     */
+    const T& operator[](int pos) const noexcept;
+
+
+// Public Accessors
+public:
+
+
+    /**
+     * @brief      Returns X coordinate.
+     *
+     * @return     The X coordinate.
+     */
+    const T& getX() const noexcept;
+
+
+    /**
+     * @brief      Set X coordinate.
+     *
+     * @param      x     The X coordinate.
+     */
+    void setX(T x);
+
+
+    /**
+     * @brief      Returns Y coordinate.
+     *
+     * @return     The Y coordinate.
+     */
+    const T& getY() const noexcept;
+
+
+    /**
+     * @brief      Set Y coordinate.
+     *
+     * @param      y     The Y coordinate.
+     */
+    void setY(T y);
+
+
+    /**
+     * @brief      Returns Z coordinate.
+     *
+     * @return     The Z coordinate.
+     */
+    const T& getZ() const noexcept;
+
+
+    /**
+     * @brief      Set Z coordinate.
+     *
+     * @param      z     The Z coordinate.
+     */
+    void setZ(T z);
+
+
+    /**
+     * @brief      Gets the width.
+     *
+     * @return     The width.
+     */
+    const T& getWidth() const noexcept;
+
+
+    /**
+     * @brief      Set the width.
+     *
+     * @param[in]  width  The width.
+     */
+    void setWidth(T width);
+
+
+    /**
+     * @brief      Gets the height.
+     *
+     * @return     The height.
+     */
+    const T& getHeight() const noexcept;
+
+
+    /**
+     * @brief      Sets the height.
+     *
+     * @param[in]  height  The height
+     */
+    void setHeight(T height);
+
+
+    /**
+     * @brief      Gets the depth.
+     *
+     * @return     The depth.
+     */
+    const T& getDepth() const noexcept;
+
+
+    /**
+     * @brief      Sets the depth.
+     *
+     * @param[in]  depth  The depth
+     */
+    void setDepth(T depth);
+
+
+// Public Deprecated
+public:
+
+
+    // @deprecated
+    bool inRange(const Vector& low, const Vector& high) const noexcept
+    {
+        return math::inRange(*this, low, high);
     }
 
-    const T& getWidth() const noexcept { return Vector3<T>::getX(); }
-    const T& getHeight() const noexcept { return Vector3<T>::getY(); }
-    const T& getDepth() const noexcept { return Vector3<T>::getZ(); }
 
-    static bool inRange(T value, T low, T high) noexcept { return value >= low && value < high; }
-
-    bool inRange(const BasicVector& low, const BasicVector& high) const noexcept
+    // @deprecated
+    bool inRange(const Vector& high) const noexcept
     {
-        bool res = true;
-
-        res = res && inRange(Vector3<T>::getX(), low.getX(), high.getX());
-        res = res && inRange(Vector3<T>::getY(), low.getY(), high.getY());
-        res = res && inRange(Vector3<T>::getZ(), low.getZ(), high.getZ());
-
-        return res;
+        return math::inRange(*this, high);
     }
 
-    bool inRange(const BasicVector& high) const noexcept
+
+    // @deprecated
+    static Vector createSingle(T val) noexcept
     {
-        return inRange(Zero, high);
+        return Vector(val, val, val);
     }
 
-    static BasicVector createSingle(T val) noexcept { return BasicVector(val, val, val); }
 
+    // @deprecated
     template<typename T2 = T>
-    BasicVector inversed() const noexcept
+    Vector inversed() const noexcept
     {
-        return BasicVector(
-            T2(1) / Vector3<T>::getX(),
-            T2(1) / Vector3<T>::getY(),
-            T2(1) / Vector3<T>::getZ()
-        );
+        return T2(1) / *this;
     }
 };
 
 /* ************************************************************************ */
 
 /**
- * @brief Basic vector.
+ * @brief      2D vector alias.
  */
 template<typename T>
-using Vector = BasicVector<T, DIMENSION>;
+using Vector2 = Vector<T, 2>;
 
 /* ************************************************************************ */
 
 /**
- * @brief Vector for integer size.
+ * @brief      3D vector alias.
+ */
+template<typename T>
+using Vector3 = Vector<T, 3>;
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Vector for integer size.
+ * @deprecated
  */
 using Size = Vector<unsigned int>;
 
 /* ************************************************************************ */
 
 /**
- * @brief Vector for coordinates.
+ * @brief      Vector for coordinates.
+ * @deprecated
  */
 using Coordinate = Vector<unsigned int>;
 
 /* ************************************************************************ */
 
 /**
- * @brief Vector of int.
+ * @brief      Vector of int.
+ * @deprecated
  */
 using VectorInt = Vector<int>;
 
 /* ************************************************************************ */
 
 /**
- * @brief Vector of float.
+ * @brief      Vector of float.
+ * @deprecated
  */
 using VectorFloat = Vector<float>;
 
 /* ************************************************************************ */
 
 /**
- * @brief Vector of float.
+ * @brief      Vector of double.
+ * @deprecated
  */
-using VectorDouble = Vector<float>;
+using VectorDouble = Vector<double>;
 
 /* ************************************************************************ */
 
 /**
- * @brief Vector of float.
+ * @brief      Vector of long double.
+ * @deprecated
  */
-using VectorLongDouble = Vector<float>;
+using VectorLongDouble = Vector<long double>;
 
 /* ************************************************************************ */
 
 /**
- * @brief Vector of float.
+ * @brief      Vector of float.
+ * @deprecated
  */
 using VectorReal = Vector<RealType>;
 
 /* ************************************************************************ */
 
 /**
- * @brief Input stream operator.
- *
- * @param is     Input stream.
- * @param vector Result value.
- *
- * @return is.
+ * @brief      Vector of integers.
  */
-template<typename T, int N>
-io::InStream& operator>>(io::InStream& is, BasicVector<T, N>& vector)
-{
-    int i = 0;
-
-    for (; i < N; ++i)
-    {
-        if (!(is >> std::skipws >> vector[i]))
-            break;
-    }
-
-    if (i == 0)
-        return is;
-
-    // Copy missing values
-    // TODO: have this feature?
-    for (int j = i; j < N; ++j)
-        vector[j] = vector[i - 1];
-
-    return is;
-}
+using IntVector = Vector<int>;
 
 /* ************************************************************************ */
 
 /**
- * @brief Output stream operator.
- *
- * @param os     Output stream.
- * @param vector Input value.
- *
- * @return os.
+ * @brief      Vector of float.
  */
-template<typename T, int N>
-io::OutStream& operator<<(io::OutStream& os, const BasicVector<T, N>& vector) noexcept
-{
-    for (int i = 0; i < N; ++i)
-    {
-        if (i != 0)
-            os << " ";
-
-        os << vector[i];
-    }
-
-    return os;
-}
+using FloatVector = Vector<float>;
 
 /* ************************************************************************ */
 
-extern template class BasicVector<RealType, DIMENSION>;
+/**
+ * @brief      Vector of double.
+ */
+using DoubleVector = Vector<double>;
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Vector of long double.
+ */
+using LongDoubleVector = Vector<long double>;
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Vector of float.
+ */
+using RealVector = Vector<RealType>;
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Vector for indices.
+ */
+using IndexVector = Vector<unsigned long>;
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Vector for sizes.
+ */
+using SizeVector = Vector<unsigned long>;
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Rotate the vector counter-clockwise and return rotated version.
+ *
+ * @param[in]  vec    The vector.
+ * @param[in]  angle  Rotation angle.
+ *
+ * @tparam     T      The vector element type.
+ *
+ * @return     Rotated vector.
+ */
+template<typename T>
+Vector<T, 2> rotate(const Vector<T, 2>& vec, unit::Angle angle) noexcept;
+
+/* ************************************************************************ */
+
+/**
+ * @brief      Calculate cross product of two vectors.
+ *
+ * @param      lhs   Left operand.
+ * @param      rhs   Right operand.
+ *
+ * @tparam     T1    The first type.
+ * @tparam     T2    The second type.
+ *
+ * @return     Cross product.
+ */
+template<typename T1, typename T2>
+Vector<decltype(std::declval<T1>() * std::declval<T2>()), 3>
+cross(const Vector<T1, 3>& lhs, const Vector<T2, 3>& rhs);
+
+/* ************************************************************************ */
+
+extern template class Vector<int, 2>;
+extern template class Vector<int, 3>;
+extern template class Vector<unsigned int, 2>;
+extern template class Vector<unsigned int, 3>;
+extern template class Vector<unsigned long, 2>;
+extern template class Vector<unsigned long, 3>;
+extern template class Vector<float, 2>;
+extern template class Vector<float, 3>;
+extern template class Vector<double, 2>;
+extern template class Vector<double, 3>;
+
+/* ************************************************************************ */
+
+/// @deprecated
+template<typename T, int N>
+using BasicVector = Vector<T, N>;
 
 /* ************************************************************************ */
 
@@ -494,7 +1031,7 @@ namespace math {
 /* ************************************************************************ */
 
 template<typename T, int N>
-inline BasicVector<T, N>::BasicVector() noexcept
+inline Vector<T, N>::Vector() noexcept
     : m{}
 {
     // Nothing to do
@@ -503,33 +1040,33 @@ inline BasicVector<T, N>::BasicVector() noexcept
 /* ************************************************************************ */
 
 template<typename T, int N>
-inline BasicVector<T, N>::BasicVector(std::initializer_list<T> data)
+inline Vector<T, N>::Vector(std::initializer_list<T> data)
 {
-    CECE_ASSERT(data.size() == getSize());
+    CECE_ASSERT(data.size() == N);
 
     using std::begin;
     auto it = begin(data);
 
-    for (int i = 0; i < getSize(); ++i, ++it)
+    for (int i = 0; i < N; ++i, ++it)
         m[i] = *it;
 }
 
 /* ************************************************************************ */
 
 template<typename T, int N>
-inline BasicVector<T, N>::BasicVector(T (&data)[N])
+inline Vector<T, N>::Vector(T (&data)[N])
 {
     using std::begin;
     auto it = begin(data);
 
-    for (int i = 0; i < getSize(); ++i, ++it)
+    for (int i = 0; i < N; ++i, ++it)
         m[i] = *it;
 }
 
 /* ************************************************************************ */
 
 template<typename T, int N>
-inline BasicVector<T, N>::BasicVector(const StaticArray<T, N>& data)
+inline Vector<T, N>::Vector(const StaticArray<T, N>& data)
     : m(data)
 {
     // Nothing to do
@@ -538,27 +1075,27 @@ inline BasicVector<T, N>::BasicVector(const StaticArray<T, N>& data)
 /* ************************************************************************ */
 
 template<typename T, int N>
-inline BasicVector<T, N>::BasicVector(Zero_t zero)
+inline Vector<T, N>::Vector(Zero_t zero)
 {
-    for (int i = 0; i < getSize(); ++i)
+    for (int i = 0; i < N; ++i)
         m[i] = T{};
 }
 
 /* ************************************************************************ */
 
 template<typename T, int N>
-inline BasicVector<T, N>::BasicVector(const BasicVector& src)
+inline Vector<T, N>::Vector(const Vector& src)
 {
-    for (int i = 0; i < getSize(); ++i)
+    for (int i = 0; i < N; ++i)
         m[i] = src.m[i];
 }
 
 /* ************************************************************************ */
 
 template<typename T, int N>
-inline BasicVector<T, N>::BasicVector(BasicVector&& src)
+inline Vector<T, N>::Vector(Vector&& src)
 {
-    for (int i = 0; i < getSize(); ++i)
+    for (int i = 0; i < N; ++i)
         m[i] = std::move(src.m[i]);
 }
 
@@ -566,18 +1103,18 @@ inline BasicVector<T, N>::BasicVector(BasicVector&& src)
 
 template<typename T, int N>
 template<typename T2, typename std::enable_if<std::is_constructible<T, T2>::value>::type*>
-inline BasicVector<T, N>::BasicVector(const BasicVector<T2, N>& src)
+inline Vector<T, N>::Vector(const Vector<T2, N>& src)
 {
-    for (int i = 0; i < getSize(); ++i)
+    for (int i = 0; i < N; ++i)
         m[i] = T(src[i]);
 }
 
 /* ************************************************************************ */
 
 template<typename T, int N>
-inline BasicVector<T, N>& BasicVector<T, N>::operator=(Zero_t zero)
+inline Vector<T, N>& Vector<T, N>::operator=(Zero_t zero)
 {
-    for (int i = 0; i < getSize(); ++i)
+    for (int i = 0; i < N; ++i)
         m[i] = T{};
 
     return *this;
@@ -586,14 +1123,14 @@ inline BasicVector<T, N>& BasicVector<T, N>::operator=(Zero_t zero)
 /* ************************************************************************ */
 
 template<typename T, int N>
-inline BasicVector<T, N>& BasicVector<T, N>::operator=(std::initializer_list<T> data)
+inline Vector<T, N>& Vector<T, N>::operator=(std::initializer_list<T> data)
 {
-    CECE_ASSERT(data.size() == getSize());
+    CECE_ASSERT(data.size() == N);
 
     using std::begin;
     auto it = begin(data);
 
-    for (int i = 0; i < getSize(); ++i, ++it)
+    for (int i = 0; i < N; ++i, ++it)
         m[i] = *it;
 
     return *this;
@@ -602,12 +1139,12 @@ inline BasicVector<T, N>& BasicVector<T, N>::operator=(std::initializer_list<T> 
 /* ************************************************************************ */
 
 template<typename T, int N>
-inline BasicVector<T, N>& BasicVector<T, N>::operator=(T (&data)[N])
+inline Vector<T, N>& Vector<T, N>::operator=(T (&data)[N])
 {
     using std::begin;
     auto it = begin(data);
 
-    for (int i = 0; i < getSize(); ++i, ++it)
+    for (int i = 0; i < N; ++i, ++it)
         m[i] = *it;
 
     return *this;
@@ -616,7 +1153,7 @@ inline BasicVector<T, N>& BasicVector<T, N>::operator=(T (&data)[N])
 /* ************************************************************************ */
 
 template<typename T, int N>
-inline BasicVector<T, N>& BasicVector<T, N>::operator=(const StaticArray<T, N>& data)
+inline Vector<T, N>& Vector<T, N>::operator=(const StaticArray<T, N>& data)
 {
     m = data;
 
@@ -626,9 +1163,9 @@ inline BasicVector<T, N>& BasicVector<T, N>::operator=(const StaticArray<T, N>& 
 /* ************************************************************************ */
 
 template<typename T, int N>
-inline BasicVector<T, N>& BasicVector<T, N>::operator=(const BasicVector& src)
+inline Vector<T, N>& Vector<T, N>::operator=(const Vector& src)
 {
-    for (int i = 0; i < getSize(); ++i)
+    for (int i = 0; i < N; ++i)
         m[i] = src.m[i];
 
     return *this;
@@ -637,9 +1174,9 @@ inline BasicVector<T, N>& BasicVector<T, N>::operator=(const BasicVector& src)
 /* ************************************************************************ */
 
 template<typename T, int N>
-inline BasicVector<T, N>& BasicVector<T, N>::operator=(BasicVector&& src)
+inline Vector<T, N>& Vector<T, N>::operator=(Vector&& src)
 {
-    for (int i = 0; i < getSize(); ++i)
+    for (int i = 0; i < N; ++i)
         m[i] = std::move(src.m[i]);
 
     return *this;
@@ -649,9 +1186,9 @@ inline BasicVector<T, N>& BasicVector<T, N>::operator=(BasicVector&& src)
 
 template<typename T, int N>
 template<typename T2, typename std::enable_if<std::is_constructible<T, T2>::value>::type*>
-inline BasicVector<T, N>& BasicVector<T, N>::operator=(const BasicVector<T2, N>& src)
+inline Vector<T, N>& Vector<T, N>::operator=(const Vector<T2, N>& src)
 {
-    for (int i = 0; i < getSize(); ++i)
+    for (int i = 0; i < N; ++i)
         m[i] = T(src[i]);
 
     return *this;
@@ -660,29 +1197,490 @@ inline BasicVector<T, N>& BasicVector<T, N>::operator=(const BasicVector<T2, N>&
 /* ************************************************************************ */
 
 template<typename T, int N>
-inline T& BasicVector<T, N>::operator[](int pos) noexcept
+inline T& Vector<T, N>::operator[](int pos) noexcept
 {
     CECE_ASSERT(pos >= 0);
-    CECE_ASSERT(pos < getSize());
+    CECE_ASSERT(pos < N);
     return m[pos];
 }
 
 /* ************************************************************************ */
 
 template<typename T, int N>
-inline const T& BasicVector<T, N>::operator[](int pos) const noexcept
+inline const T& Vector<T, N>::operator[](int pos) const noexcept
 {
     CECE_ASSERT(pos >= 0);
-    CECE_ASSERT(pos < getSize());
+    CECE_ASSERT(pos < N);
     return m[pos];
 }
 
 /* ************************************************************************ */
 
-template<typename T, int N>
-int BasicVector<T, N>::getSize() const noexcept
+template<typename T>
+inline Vector<T, 2>::Vector()
+    : x{}
+    , y{}
 {
-    return N;
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline Vector<T, 2>::Vector(T val)
+    : x{val}
+    , y{val}
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline Vector<T, 2>::Vector(T x, T y)
+    : x{std::move(x)}
+    , y{std::move(y)}
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline Vector<T, 2>::Vector(Zero_t zero)
+    : x{}
+    , y{}
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline Vector<T, 2>::Vector(const Vector& src)
+    : x{src.getX()}
+    , y{src.getY()}
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline Vector<T, 2>::Vector(Vector&& src)
+    : x{std::move(src.x)}
+    , y{std::move(src.y)}
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+template<typename T2, typename std::enable_if<std::is_constructible<T, T2>::value>::type*>
+inline Vector<T, 2>::Vector(const Vector<T2, 2>& rhs)
+    : x(rhs.getX())
+    , y(rhs.getY())
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline Vector<T, 2>& Vector<T, 2>::operator=(Zero_t zero)
+{
+    x = T{};
+    y = T{};
+
+    return *this;
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline Vector<T, 2>& Vector<T, 2>::operator=(const Vector& src)
+{
+    x = src.x;
+    y = src.y;
+
+    return *this;
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline Vector<T, 2>& Vector<T, 2>::operator=(Vector&& src)
+{
+    x = std::move(src.x);
+    y = std::move(src.y);
+
+    return *this;
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+template<typename T2, typename std::enable_if<std::is_constructible<T, T2>::value>::type*>
+inline Vector<T, 2>& Vector<T, 2>::operator=(const Vector<T2, 2>& src)
+{
+    x = T(src.getX());
+    y = T(src.getY());
+
+    return *this;
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline T& Vector<T, 2>::operator[](int pos) noexcept
+{
+    CECE_ASSERT(pos >= 0);
+    CECE_ASSERT(pos < 2);
+    return (&x)[pos];
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline const T& Vector<T, 2>::operator[](int pos) const noexcept
+{
+    CECE_ASSERT(pos >= 0);
+    CECE_ASSERT(pos < 2);
+    return (&x)[pos];
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline const T& Vector<T, 2>::getX() const noexcept
+{
+    return x;
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline void Vector<T, 2>::setX(T x)
+{
+    this->x = std::move(x);
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline const T& Vector<T, 2>::getY() const noexcept
+{
+    return y;
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline void Vector<T, 2>::setY(T y)
+{
+    this->y = std::move(y);
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline const T& Vector<T, 2>::getWidth() const noexcept
+{
+    return width;
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline void Vector<T, 2>::setWidth(T width)
+{
+    this->width = std::move(width);
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline const T& Vector<T, 2>::getHeight() const noexcept
+{
+    return height;
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline void Vector<T, 2>::setHeight(T height)
+{
+    this->height = std::move(height);
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline Vector<T, 3>::Vector() noexcept
+    : x{}
+    , y{}
+    , z{}
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline Vector<T, 3>::Vector(T val)
+    : x{val}
+    , y{val}
+    , z{val}
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline Vector<T, 3>::Vector(T x, T y, T z)
+    : x{std::move(x)}
+    , y{std::move(y)}
+    , z{std::move(z)}
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline Vector<T, 3>::Vector(Zero_t zero)
+    : x{}
+    , y{}
+    , z{}
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline Vector<T, 3>::Vector(const Vector& src)
+    : x{src.getX()}
+    , y{src.getY()}
+    , z{src.getZ()}
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline Vector<T, 3>::Vector(Vector&& src)
+    : x{std::move(src.x)}
+    , y{std::move(src.y)}
+    , z{std::move(src.z)}
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+template<typename T2, typename std::enable_if<std::is_constructible<T, T2>::value>::type*>
+inline Vector<T, 3>::Vector(const Vector<T2, 3>& rhs)
+    : x(rhs.getX())
+    , y(rhs.getY())
+    , z(rhs.getZ())
+{
+    // Nothing to do
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline Vector<T, 3>& Vector<T, 3>::operator=(Zero_t zero)
+{
+    x = T{};
+    y = T{};
+    z = T{};
+
+    return *this;
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline Vector<T, 3>& Vector<T, 3>::operator=(const Vector& src)
+{
+    x = src.x;
+    y = src.y;
+    z = src.z;
+
+    return *this;
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline Vector<T, 3>& Vector<T, 3>::operator=(Vector&& src)
+{
+    x = std::move(src.x);
+    y = std::move(src.y);
+    z = std::move(src.z);
+
+    return *this;
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+template<typename T2, typename std::enable_if<std::is_constructible<T, T2>::value>::type*>
+inline Vector<T, 3>& Vector<T, 3>::operator=(const Vector<T2, 3>& src)
+{
+    x = T(src.getX());
+    y = T(src.getY());
+    z = T(src.getZ());
+
+    return *this;
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline T& Vector<T, 3>::operator[](int pos) noexcept
+{
+    CECE_ASSERT(pos >= 0);
+    CECE_ASSERT(pos < 3);
+    return (&x)[pos];
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline const T& Vector<T, 3>::operator[](int pos) const noexcept
+{
+    CECE_ASSERT(pos >= 0);
+    CECE_ASSERT(pos < 3);
+    return (&x)[pos];
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline const T& Vector<T, 3>::getX() const noexcept
+{
+    return x;
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline void Vector<T, 3>::setX(T x)
+{
+    this->x = std::move(x);
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline const T& Vector<T, 3>::getY() const noexcept
+{
+    return y;
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline void Vector<T, 3>::setY(T y)
+{
+    this->y = std::move(y);
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline const T& Vector<T, 3>::getZ() const noexcept
+{
+    return z;
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline void Vector<T, 3>::setZ(T z)
+{
+    this->z = std::move(z);
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline const T& Vector<T, 3>::getWidth() const noexcept
+{
+    return width;
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline void Vector<T, 3>::setWidth(T width)
+{
+    this->width = std::move(width);
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline const T& Vector<T, 3>::getHeight() const noexcept
+{
+    return height;
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline void Vector<T, 3>::setHeight(T height)
+{
+    this->height = std::move(height);
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline const T& Vector<T, 3>::getDepth() const noexcept
+{
+    return depth;
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline void Vector<T, 3>::setDepth(T depth)
+{
+    this->depth = std::move(depth);
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline Vector<T, 2> rotate(const Vector<T, 2>& vec, unit::Angle angle) noexcept
+{
+    return {
+        static_cast<T>(vec.getX() * cos(static_cast<RealType>(angle)) - vec.getY() * sin(static_cast<RealType>(angle))),
+        static_cast<T>(vec.getX() * sin(static_cast<RealType>(angle)) + vec.getY() * cos(static_cast<RealType>(angle)))
+    };
+}
+
+/* ************************************************************************ */
+
+template<typename T1, typename T2>
+inline Vector<decltype(std::declval<T1>() * std::declval<T2>()), 3> cross(
+    const Vector<T1, 3>& lhs,
+    const Vector<T2, 3>& rhs
+)
+{
+    return {
+        lhs.getY() * rhs.getZ() - lhs.getZ() * rhs.getY(),
+        lhs.getZ() * rhs.getX() - lhs.getX() * rhs.getZ(),
+        lhs.getX() * rhs.getY() - lhs.getY() * rhs.getX()
+    };
 }
 
 /* ************************************************************************ */

@@ -33,9 +33,16 @@ namespace math {
 
 /* ************************************************************************ */
 
-template class BasicVector<RealType, DIMENSION>;
-template class BasicVector<unsigned int, DIMENSION>;
-template class BasicVector<int, DIMENSION>;
+template class Vector<int, 2>;
+template class Vector<int, 3>;
+template class Vector<unsigned int, 2>;
+template class Vector<unsigned int, 3>;
+template class Vector<unsigned long, 2>;
+template class Vector<unsigned long, 3>;
+template class Vector<float, 2>;
+template class Vector<float, 3>;
+template class Vector<double, 2>;
+template class Vector<double, 3>;
 
 /* ************************************************************************ */
 

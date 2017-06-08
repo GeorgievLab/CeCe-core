@@ -39,7 +39,7 @@ using namespace cece::math;
 TEST(Vector, ctor)
 {
     {
-        BasicVector<int, 5> vec;
+        Vector<int, 5> vec;
 
         EXPECT_EQ(5, vec.getSize());
         EXPECT_EQ(0, vec[0]);
@@ -50,7 +50,7 @@ TEST(Vector, ctor)
     }
 
     {
-        BasicVector<int, 10> vec(Zero);
+        Vector<int, 10> vec(Zero);
 
         EXPECT_EQ(10, vec.getSize());
         EXPECT_EQ(0, vec[0]);
@@ -66,7 +66,7 @@ TEST(Vector, ctor)
     }
 
     {
-        BasicVector<float, 5> vec = {1.2f, 3.0f, 0.0f, 45.1f, -34.f};
+        Vector<float, 5> vec = {1.2f, 3.0f, 0.0f, 45.1f, -34.f};
 
         EXPECT_EQ(5, vec.getSize());
         EXPECT_FLOAT_EQ(1.2f, vec[0]);
@@ -79,7 +79,7 @@ TEST(Vector, ctor)
     {
         float data[5] = {1.2f, 3.0f, 0.0f, 45.1f, -34.f};
 
-        BasicVector<float, 5> vec(data);
+        Vector<float, 5> vec(data);
 
         EXPECT_EQ(5, vec.getSize());
         EXPECT_FLOAT_EQ(1.2f, vec[0]);
@@ -92,7 +92,7 @@ TEST(Vector, ctor)
     {
         StaticArray<float, 5> data = {1.2f, 3.0f, 0.0f, 45.1f, -34.f};
 
-        BasicVector<float, 5> vec(data);
+        Vector<float, 5> vec(data);
 
         EXPECT_EQ(5, vec.getSize());
         EXPECT_FLOAT_EQ(1.2f, vec[0]);
@@ -103,7 +103,7 @@ TEST(Vector, ctor)
     }
 
     {
-        const BasicVector<float, 5> vec1 = {1.2f, 3.0f, 0.0f, 45.1f, -34.f};
+        const Vector<float, 5> vec1 = {1.2f, 3.0f, 0.0f, 45.1f, -34.f};
 
         EXPECT_EQ(5, vec1.getSize());
         EXPECT_FLOAT_EQ(1.2f, vec1[0]);
@@ -112,7 +112,7 @@ TEST(Vector, ctor)
         EXPECT_FLOAT_EQ(45.1f, vec1[3]);
         EXPECT_FLOAT_EQ(-34.0f, vec1[4]);
 
-        BasicVector<float, 5> vec2(vec1);
+        Vector<float, 5> vec2(vec1);
 
         EXPECT_EQ(5, vec2.getSize());
         EXPECT_FLOAT_EQ(1.2f, vec2[0]);
@@ -123,7 +123,7 @@ TEST(Vector, ctor)
     }
 
     {
-        BasicVector<float, 5> vec1 = {1.2f, 3.0f, 0.0f, 45.1f, -34.f};
+        Vector<float, 5> vec1 = {1.2f, 3.0f, 0.0f, 45.1f, -34.f};
 
         EXPECT_EQ(5, vec1.getSize());
         EXPECT_FLOAT_EQ(1.2f, vec1[0]);
@@ -132,7 +132,7 @@ TEST(Vector, ctor)
         EXPECT_FLOAT_EQ(45.1f, vec1[3]);
         EXPECT_FLOAT_EQ(-34.0f, vec1[4]);
 
-        BasicVector<float, 5> vec2(std::move(vec1));
+        Vector<float, 5> vec2(std::move(vec1));
 
         EXPECT_EQ(5, vec2.getSize());
         EXPECT_FLOAT_EQ(1.2f, vec2[0]);
@@ -143,7 +143,7 @@ TEST(Vector, ctor)
     }
 
     {
-        const BasicVector<int, 5> vec1 = {1, 3, 0, 45, -34};
+        const Vector<int, 5> vec1 = {1, 3, 0, 45, -34};
 
         EXPECT_EQ(5, vec1.getSize());
         EXPECT_EQ(1, vec1[0]);
@@ -152,7 +152,7 @@ TEST(Vector, ctor)
         EXPECT_EQ(45, vec1[3]);
         EXPECT_EQ(-34, vec1[4]);
 
-        BasicVector<float, 5> vec2(vec1);
+        Vector<float, 5> vec2(vec1);
 
         EXPECT_EQ(5, vec2.getSize());
         EXPECT_FLOAT_EQ(1.0, vec2[0]);
@@ -168,7 +168,7 @@ TEST(Vector, ctor)
 TEST(Vector, assignment)
 {
     {
-        BasicVector<int, 10> vec{1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+        Vector<int, 10> vec{1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
         EXPECT_EQ(10, vec.getSize());
         EXPECT_EQ(1, vec[0]);
@@ -198,7 +198,7 @@ TEST(Vector, assignment)
     }
 
     {
-        BasicVector<float, 5> vec;
+        Vector<float, 5> vec;
 
         EXPECT_EQ(5, vec.getSize());
         EXPECT_EQ(0, vec[0]);
@@ -218,7 +218,7 @@ TEST(Vector, assignment)
     }
 
     {
-        BasicVector<float, 5> vec;
+        Vector<float, 5> vec;
 
         EXPECT_EQ(5, vec.getSize());
         EXPECT_EQ(0, vec[0]);
@@ -240,7 +240,7 @@ TEST(Vector, assignment)
     }
 
     {
-        BasicVector<float, 5> vec;
+        Vector<float, 5> vec;
 
         EXPECT_EQ(5, vec.getSize());
         EXPECT_EQ(0, vec[0]);
@@ -262,7 +262,7 @@ TEST(Vector, assignment)
     }
 
     {
-        const BasicVector<float, 5> vec1 = {1.2f, 3.0f, 0.0f, 45.1f, -34.f};
+        const Vector<float, 5> vec1 = {1.2f, 3.0f, 0.0f, 45.1f, -34.f};
 
         EXPECT_EQ(5, vec1.getSize());
         EXPECT_FLOAT_EQ(1.2f, vec1[0]);
@@ -271,7 +271,7 @@ TEST(Vector, assignment)
         EXPECT_FLOAT_EQ(45.1f, vec1[3]);
         EXPECT_FLOAT_EQ(-34.0f, vec1[4]);
 
-        BasicVector<float, 5> vec2;
+        Vector<float, 5> vec2;
 
         vec2 = vec1;
 
@@ -284,7 +284,7 @@ TEST(Vector, assignment)
     }
 
     {
-        BasicVector<float, 5> vec1 = {1.2f, 3.0f, 0.0f, 45.1f, -34.f};
+        Vector<float, 5> vec1 = {1.2f, 3.0f, 0.0f, 45.1f, -34.f};
 
         EXPECT_EQ(5, vec1.getSize());
         EXPECT_FLOAT_EQ(1.2f, vec1[0]);
@@ -293,7 +293,7 @@ TEST(Vector, assignment)
         EXPECT_FLOAT_EQ(45.1f, vec1[3]);
         EXPECT_FLOAT_EQ(-34.0f, vec1[4]);
 
-        BasicVector<float, 5> vec2;
+        Vector<float, 5> vec2;
 
         vec2 = std::move(vec1);
 
@@ -306,7 +306,7 @@ TEST(Vector, assignment)
     }
 
     {
-        const BasicVector<int, 5> vec1 = {1, 3, 0, 45, -34};
+        const Vector<int, 5> vec1 = {1, 3, 0, 45, -34};
 
         EXPECT_EQ(5, vec1.getSize());
         EXPECT_EQ(1, vec1[0]);
@@ -315,7 +315,7 @@ TEST(Vector, assignment)
         EXPECT_EQ(45, vec1[3]);
         EXPECT_EQ(-34, vec1[4]);
 
-        BasicVector<float, 5> vec2;
+        Vector<float, 5> vec2;
 
         vec2 = vec1;
 
@@ -333,7 +333,7 @@ TEST(Vector, assignment)
 TEST(Vector, operators)
 {
     {
-        BasicVector<float, 5> vec1{1.0f, 2.0f, -5.0f, 0.0f, -300.8f};
+        Vector<float, 5> vec1{1.0f, 2.0f, -5.0f, 0.0f, -300.8f};
 
         EXPECT_EQ(5, vec1.getSize());
         EXPECT_FLOAT_EQ(1.0f, vec1[0]);
@@ -342,7 +342,7 @@ TEST(Vector, operators)
         EXPECT_FLOAT_EQ(0.0f, vec1[3]);
         EXPECT_FLOAT_EQ(-300.8f, vec1[4]);
 
-        BasicVector<float, 5> vec2 = +vec1;
+        Vector<float, 5> vec2 = +vec1;
 
         EXPECT_EQ(5, vec2.getSize());
         EXPECT_FLOAT_EQ(1.0f, vec2[0]);
@@ -353,7 +353,7 @@ TEST(Vector, operators)
     }
 
     {
-        BasicVector<float, 5> vec1{1.0f, 2.0f, -5.0f, 0.0f, -300.8f};
+        Vector<float, 5> vec1{1.0f, 2.0f, -5.0f, 0.0f, -300.8f};
 
         EXPECT_EQ(5, vec1.getSize());
         EXPECT_FLOAT_EQ(1.0f, vec1[0]);
@@ -362,7 +362,7 @@ TEST(Vector, operators)
         EXPECT_FLOAT_EQ(0.0f, vec1[3]);
         EXPECT_FLOAT_EQ(-300.8f, vec1[4]);
 
-        BasicVector<float, 5> vec2 = -vec1;
+        Vector<float, 5> vec2 = -vec1;
 
         EXPECT_EQ(5, vec2.getSize());
         EXPECT_FLOAT_EQ(-1.0f, vec2[0]);
@@ -373,7 +373,7 @@ TEST(Vector, operators)
     }
 
     {
-        BasicVector<float, 5> vec1{1.0f, 2.0f, -5.0f, 0.0f, -3.8f};
+        Vector<float, 5> vec1{1.0f, 2.0f, -5.0f, 0.0f, -3.8f};
 
         EXPECT_EQ(5, vec1.getSize());
         EXPECT_FLOAT_EQ(1.0f, vec1[0]);
@@ -382,7 +382,7 @@ TEST(Vector, operators)
         EXPECT_FLOAT_EQ(0.0f, vec1[3]);
         EXPECT_FLOAT_EQ(-3.8f, vec1[4]);
 
-        BasicVector<float, 5> vec2{1.0f, 2.0f, 3.0f, 4.0f, 5.0f};
+        Vector<float, 5> vec2{1.0f, 2.0f, 3.0f, 4.0f, 5.0f};
         vec1 += vec2;
 
         EXPECT_EQ(5, vec1.getSize());
@@ -394,7 +394,7 @@ TEST(Vector, operators)
     }
 
     {
-        BasicVector<float, 5> vec1{1.0f, 2.0f, -5.0f, 0.0f, -3.8f};
+        Vector<float, 5> vec1{1.0f, 2.0f, -5.0f, 0.0f, -3.8f};
 
         EXPECT_EQ(5, vec1.getSize());
         EXPECT_FLOAT_EQ(1.0f, vec1[0]);
@@ -403,7 +403,7 @@ TEST(Vector, operators)
         EXPECT_FLOAT_EQ(0.0f, vec1[3]);
         EXPECT_FLOAT_EQ(-3.8f, vec1[4]);
 
-        BasicVector<float, 5> vec2{1.0f, 2.0f, 3.0f, 4.0f, 5.0f};
+        Vector<float, 5> vec2{1.0f, 2.0f, 3.0f, 4.0f, 5.0f};
         vec1 -= vec2;
 
         EXPECT_EQ(5, vec1.getSize());
@@ -415,7 +415,7 @@ TEST(Vector, operators)
     }
 
     {
-        BasicVector<float, 5> vec1{1.0f, 2.0f, -5.0f, 0.0f, -3.8f};
+        Vector<float, 5> vec1{1.0f, 2.0f, -5.0f, 0.0f, -3.8f};
 
         EXPECT_EQ(5, vec1.getSize());
         EXPECT_FLOAT_EQ(1.0f, vec1[0]);
@@ -435,7 +435,7 @@ TEST(Vector, operators)
     }
 
     {
-        BasicVector<float, 5> vec1{1.0f, 2.0f, -5.0f, 0.0f, -3.8f};
+        Vector<float, 5> vec1{1.0f, 2.0f, -5.0f, 0.0f, -3.8f};
 
         EXPECT_EQ(5, vec1.getSize());
         EXPECT_FLOAT_EQ(1.0f, vec1[0]);
@@ -444,7 +444,7 @@ TEST(Vector, operators)
         EXPECT_FLOAT_EQ(0.0f, vec1[3]);
         EXPECT_FLOAT_EQ(-3.8f, vec1[4]);
 
-        BasicVector<float, 5> vec2{1.0f, 2.0f, 3.0f, 4.0f, 5.0f};
+        Vector<float, 5> vec2{1.0f, 2.0f, 3.0f, 4.0f, 5.0f};
         vec1 *= vec2;
 
         EXPECT_EQ(5, vec1.getSize());
@@ -456,7 +456,7 @@ TEST(Vector, operators)
     }
 
     {
-        BasicVector<float, 5> vec1{1.0f, 2.0f, -5.0f, 0.0f, -3.8f};
+        Vector<float, 5> vec1{1.0f, 2.0f, -5.0f, 0.0f, -3.8f};
 
         EXPECT_EQ(5, vec1.getSize());
         EXPECT_FLOAT_EQ(1.0f, vec1[0]);
@@ -476,7 +476,7 @@ TEST(Vector, operators)
     }
 
     {
-        BasicVector<float, 5> vec1{1.0f, 2.0f, -5.0f, 0.0f, -3.8f};
+        Vector<float, 5> vec1{1.0f, 2.0f, -5.0f, 0.0f, -3.8f};
 
         EXPECT_EQ(5, vec1.getSize());
         EXPECT_FLOAT_EQ(1.0f, vec1[0]);
@@ -485,7 +485,7 @@ TEST(Vector, operators)
         EXPECT_FLOAT_EQ(0.0f, vec1[3]);
         EXPECT_FLOAT_EQ(-3.8f, vec1[4]);
 
-        BasicVector<float, 5> vec2{1.0f, 2.0f, 3.0f, 4.0f, 5.0f};
+        Vector<float, 5> vec2{1.0f, 2.0f, 3.0f, 4.0f, 5.0f};
         vec1 /= vec2;
 
         EXPECT_EQ(5, vec1.getSize());
@@ -502,77 +502,77 @@ TEST(Vector, operators)
 TEST(Vector, memberFunctions)
 {
     {
-        const BasicVector<float, 5> vec;
+        const Vector<float, 5> vec;
 
         EXPECT_FLOAT_EQ(0, vec.getLength());
     }
 
     {
-        const BasicVector<float, 5> vec{1.0f, 2.0f, 3.0f, 4.0f, 5.0f};
+        const Vector<float, 5> vec{1.0f, 2.0f, 3.0f, 4.0f, 5.0f};
 
         EXPECT_FLOAT_EQ(7.4162f, vec.getLength());
     }
 
     {
-        const BasicVector<float, 5> vec;
+        const Vector<float, 5> vec;
 
         EXPECT_FLOAT_EQ(0, vec.getLengthSquared());
     }
 
     {
-        const BasicVector<float, 5> vec{1.0f, 2.0f, 3.0f, 4.0f, 5.0f};
+        const Vector<float, 5> vec{1.0f, 2.0f, 3.0f, 4.0f, 5.0f};
 
         EXPECT_FLOAT_EQ(55, vec.getLengthSquared());
     }
 
     {
-        const BasicVector<float, 5> vec;
+        const Vector<float, 5> vec;
 
         EXPECT_FLOAT_EQ(vec.getLengthSquared(), dot(vec, vec));
     }
 
     {
-        const BasicVector<float, 5> vec{1.0f, 2.0f, 3.0f, 4.0f, 5.0f};
+        const Vector<float, 5> vec{1.0f, 2.0f, 3.0f, 4.0f, 5.0f};
 
         EXPECT_FLOAT_EQ(vec.getLengthSquared(), dot(vec, vec));
     }
 
     {
-        const BasicVector<float, 5> vec1;
-        const BasicVector<float, 5> vec2;
+        const Vector<float, 5> vec1;
+        const Vector<float, 5> vec2;
 
         EXPECT_FLOAT_EQ(0, dot(vec1, vec2));
     }
 
     {
-        const BasicVector<float, 5> vec1{1.0f, 2.0f, 3.0f, 4.0f, 5.0f};
-        const BasicVector<float, 5> vec2{5.0f, 4.0f, 3.0f, 2.0f, 1.0f};
+        const Vector<float, 5> vec1{1.0f, 2.0f, 3.0f, 4.0f, 5.0f};
+        const Vector<float, 5> vec2{5.0f, 4.0f, 3.0f, 2.0f, 1.0f};
 
         EXPECT_FLOAT_EQ(35, dot(vec1, vec2));
     }
 
     {
-        const BasicVector<float, 5> vec;
+        const Vector<float, 5> vec;
 
         EXPECT_FLOAT_EQ(0.0f, distanceSquared(vec, vec));
     }
 
     {
-        const BasicVector<float, 5> vec{1.0f, 2.0f, 3.0f, 4.0f, 5.0f};
+        const Vector<float, 5> vec{1.0f, 2.0f, 3.0f, 4.0f, 5.0f};
 
         EXPECT_FLOAT_EQ(0.0f, distanceSquared(vec, vec));
     }
 
     {
-        const BasicVector<float, 5> vec1{1.0f, 2.0f, 3.0f, 4.0f, 5.0f};
-        const BasicVector<float, 5> vec2{5.0f, 4.0f, 3.0f, 2.0f, 1.0f};
+        const Vector<float, 5> vec1{1.0f, 2.0f, 3.0f, 4.0f, 5.0f};
+        const Vector<float, 5> vec2{5.0f, 4.0f, 3.0f, 2.0f, 1.0f};
 
         EXPECT_FLOAT_EQ(40.0f, distanceSquared(vec1, vec2));
     }
 
     {
-        const BasicVector<float, 5> vec1{1.0f, 2.0f, 3.0f, 4.0f, 5.0f};
-        const BasicVector<float, 5> vec2{5.0f, 4.0f, 3.0f, 2.0f, 1.0f};
+        const Vector<float, 5> vec1{1.0f, 2.0f, 3.0f, 4.0f, 5.0f};
+        const Vector<float, 5> vec2{5.0f, 4.0f, 3.0f, 2.0f, 1.0f};
 
         EXPECT_FLOAT_EQ(6.3245554f, distance(vec1, vec2));
     }

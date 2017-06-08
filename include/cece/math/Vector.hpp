@@ -83,7 +83,7 @@ public:
     /**
      * @brief      Default constructor.
      */
-    Vector() noexcept;
+    constexpr Vector() noexcept;
 
 
     /**
@@ -239,7 +239,7 @@ public:
      *
      * @return     Reference to the element.
      */
-    const T& operator[](int pos) const noexcept;
+    constexpr const T& operator[](int pos) const noexcept;
 
 };
 
@@ -297,7 +297,7 @@ public:
     /**
      * @brief      Default constructor.
      */
-    Vector();
+    constexpr Vector();
 
 
     /**
@@ -305,7 +305,7 @@ public:
      *
      * @param      x     The X and Y coordinate.
      */
-    explicit Vector(T value);
+    explicit constexpr Vector(T value);
 
 
     /**
@@ -314,7 +314,7 @@ public:
      * @param      x     The X coordinate.
      * @param      y     The Y coordinate.
      */
-    Vector(T x, T y);
+    constexpr Vector(T x, T y);
 
 
     /**
@@ -322,7 +322,7 @@ public:
      *
      * @param[in]  zero  The zero value.
      */
-    Vector(Zero_t zero);
+    constexpr Vector(Zero_t zero);
 
 
     /**
@@ -330,7 +330,7 @@ public:
      *
      * @param[in]  src   The source vector.
      */
-    Vector(const Vector& src);
+    constexpr Vector(const Vector& src);
 
 
     /**
@@ -338,7 +338,7 @@ public:
      *
      * @param[in]  src   The source vector.
      */
-    Vector(Vector&& src);
+    constexpr Vector(Vector&& src);
 
 
     /**
@@ -349,7 +349,7 @@ public:
      * @tparam     T2    The source vector element type.
      */
     template<typename T2, typename std::enable_if<std::is_constructible<T, T2>::value>::type* = nullptr>
-    Vector(const Vector<T2, 2>& rhs);
+    constexpr Vector(const Vector<T2, 2>& rhs);
 
 
 // Public Operators
@@ -416,7 +416,7 @@ public:
      *
      * @return     Reference to the element.
      */
-    const T& operator[](int pos) const noexcept;
+    constexpr const T& operator[](int pos) const noexcept;
 
 
 // Public Accessors
@@ -428,7 +428,7 @@ public:
      *
      * @return     The X coordinate.
      */
-    const T& getX() const noexcept;
+    constexpr const T& getX() const noexcept;
 
 
     /**
@@ -444,7 +444,7 @@ public:
      *
      * @return     The Y coordinate.
      */
-    const T& getY() const noexcept;
+    constexpr const T& getY() const noexcept;
 
 
     /**
@@ -460,7 +460,7 @@ public:
      *
      * @return     The width.
      */
-    const T& getWidth() const noexcept;
+    constexpr const T& getWidth() const noexcept;
 
 
     /**
@@ -476,7 +476,7 @@ public:
      *
      * @return     The height.
      */
-    const T& getHeight() const noexcept;
+    constexpr const T& getHeight() const noexcept;
 
 
     /**
@@ -588,7 +588,7 @@ public:
     /**
      * @brief      Default constructor.
      */
-    Vector() noexcept;
+    constexpr Vector() noexcept;
 
 
     /**
@@ -596,7 +596,7 @@ public:
      *
      * @param      val   The X, Y and Z coordinate.
      */
-    explicit Vector(T val);
+    explicit constexpr Vector(T val);
 
 
     /**
@@ -606,7 +606,7 @@ public:
      * @param      y     The Y coordinate.
      * @param      y     The Z coordinate.
      */
-    Vector(T x, T y, T z);
+    constexpr Vector(T x, T y, T z);
 
 
     /**
@@ -614,7 +614,7 @@ public:
      *
      * @param[in]  zero  The zero value.
      */
-    Vector(Zero_t zero);
+    constexpr Vector(Zero_t zero);
 
 
     /**
@@ -622,7 +622,7 @@ public:
      *
      * @param[in]  src   The source vector.
      */
-    Vector(const Vector& src);
+    constexpr Vector(const Vector& src);
 
 
     /**
@@ -630,7 +630,7 @@ public:
      *
      * @param[in]  src   The source vector.
      */
-    Vector(Vector&& src);
+    constexpr Vector(Vector&& src);
 
 
     /**
@@ -641,7 +641,7 @@ public:
      * @tparam     T2    The source vector element type.
      */
     template<typename T2, typename std::enable_if<std::is_constructible<T, T2>::value>::type* = nullptr>
-    Vector(const Vector<T2, 3>& rhs);
+    constexpr Vector(const Vector<T2, 3>& rhs);
 
 
 // Public Operators
@@ -708,7 +708,7 @@ public:
      *
      * @return     Reference to the element.
      */
-    const T& operator[](int pos) const noexcept;
+    constexpr const T& operator[](int pos) const noexcept;
 
 
 // Public Accessors
@@ -720,7 +720,7 @@ public:
      *
      * @return     The X coordinate.
      */
-    const T& getX() const noexcept;
+    constexpr const T& getX() const noexcept;
 
 
     /**
@@ -736,7 +736,7 @@ public:
      *
      * @return     The Y coordinate.
      */
-    const T& getY() const noexcept;
+    constexpr const T& getY() const noexcept;
 
 
     /**
@@ -752,7 +752,7 @@ public:
      *
      * @return     The Z coordinate.
      */
-    const T& getZ() const noexcept;
+    constexpr const T& getZ() const noexcept;
 
 
     /**
@@ -768,7 +768,7 @@ public:
      *
      * @return     The width.
      */
-    const T& getWidth() const noexcept;
+    constexpr const T& getWidth() const noexcept;
 
 
     /**
@@ -784,7 +784,7 @@ public:
      *
      * @return     The height.
      */
-    const T& getHeight() const noexcept;
+    constexpr const T& getHeight() const noexcept;
 
 
     /**
@@ -800,7 +800,7 @@ public:
      *
      * @return     The depth.
      */
-    const T& getDepth() const noexcept;
+    constexpr const T& getDepth() const noexcept;
 
 
     /**
@@ -978,7 +978,7 @@ using SizeVector = Vector<unsigned long>;
  * @return     Rotated vector.
  */
 template<typename T>
-Vector<T, 2> rotate(const Vector<T, 2>& vec, unit::Angle angle) noexcept;
+constexpr Vector<T, 2> rotate(const Vector<T, 2>& vec, unit::Angle angle) noexcept;
 
 /* ************************************************************************ */
 
@@ -994,7 +994,7 @@ Vector<T, 2> rotate(const Vector<T, 2>& vec, unit::Angle angle) noexcept;
  * @return     Cross product.
  */
 template<typename T1, typename T2>
-Vector<decltype(std::declval<T1>() * std::declval<T2>()), 3>
+constexpr Vector<decltype(std::declval<T1>() * std::declval<T2>()), 3>
 cross(const Vector<T1, 3>& lhs, const Vector<T2, 3>& rhs);
 
 /* ************************************************************************ */
@@ -1031,7 +1031,7 @@ namespace math {
 /* ************************************************************************ */
 
 template<typename T, int N>
-inline Vector<T, N>::Vector() noexcept
+inline constexpr Vector<T, N>::Vector() noexcept
     : m{}
 {
     // Nothing to do
@@ -1207,17 +1207,19 @@ inline T& Vector<T, N>::operator[](int pos) noexcept
 /* ************************************************************************ */
 
 template<typename T, int N>
-inline const T& Vector<T, N>::operator[](int pos) const noexcept
+inline constexpr const T& Vector<T, N>::operator[](int pos) const noexcept
 {
+#if __cplusplus >= 201402L
     CECE_ASSERT(pos >= 0);
     CECE_ASSERT(pos < N);
+#endif
     return m[pos];
 }
 
 /* ************************************************************************ */
 
 template<typename T>
-inline Vector<T, 2>::Vector()
+inline constexpr Vector<T, 2>::Vector()
     : x{}
     , y{}
 {
@@ -1227,7 +1229,7 @@ inline Vector<T, 2>::Vector()
 /* ************************************************************************ */
 
 template<typename T>
-inline Vector<T, 2>::Vector(T val)
+inline constexpr Vector<T, 2>::Vector(T val)
     : x{val}
     , y{val}
 {
@@ -1237,7 +1239,7 @@ inline Vector<T, 2>::Vector(T val)
 /* ************************************************************************ */
 
 template<typename T>
-inline Vector<T, 2>::Vector(T x, T y)
+inline constexpr Vector<T, 2>::Vector(T x, T y)
     : x{std::move(x)}
     , y{std::move(y)}
 {
@@ -1247,7 +1249,7 @@ inline Vector<T, 2>::Vector(T x, T y)
 /* ************************************************************************ */
 
 template<typename T>
-inline Vector<T, 2>::Vector(Zero_t zero)
+inline constexpr Vector<T, 2>::Vector(Zero_t zero)
     : x{}
     , y{}
 {
@@ -1257,7 +1259,7 @@ inline Vector<T, 2>::Vector(Zero_t zero)
 /* ************************************************************************ */
 
 template<typename T>
-inline Vector<T, 2>::Vector(const Vector& src)
+inline constexpr Vector<T, 2>::Vector(const Vector& src)
     : x{src.getX()}
     , y{src.getY()}
 {
@@ -1267,7 +1269,7 @@ inline Vector<T, 2>::Vector(const Vector& src)
 /* ************************************************************************ */
 
 template<typename T>
-inline Vector<T, 2>::Vector(Vector&& src)
+inline constexpr Vector<T, 2>::Vector(Vector&& src)
     : x{std::move(src.x)}
     , y{std::move(src.y)}
 {
@@ -1278,7 +1280,7 @@ inline Vector<T, 2>::Vector(Vector&& src)
 
 template<typename T>
 template<typename T2, typename std::enable_if<std::is_constructible<T, T2>::value>::type*>
-inline Vector<T, 2>::Vector(const Vector<T2, 2>& rhs)
+inline constexpr Vector<T, 2>::Vector(const Vector<T2, 2>& rhs)
     : x(rhs.getX())
     , y(rhs.getY())
 {
@@ -1343,17 +1345,19 @@ inline T& Vector<T, 2>::operator[](int pos) noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline const T& Vector<T, 2>::operator[](int pos) const noexcept
+inline constexpr const T& Vector<T, 2>::operator[](int pos) const noexcept
 {
+#if __cplusplus >= 201402L
     CECE_ASSERT(pos >= 0);
     CECE_ASSERT(pos < 2);
+#endif
     return (&x)[pos];
 }
 
 /* ************************************************************************ */
 
 template<typename T>
-inline const T& Vector<T, 2>::getX() const noexcept
+inline constexpr const T& Vector<T, 2>::getX() const noexcept
 {
     return x;
 }
@@ -1369,7 +1373,7 @@ inline void Vector<T, 2>::setX(T x)
 /* ************************************************************************ */
 
 template<typename T>
-inline const T& Vector<T, 2>::getY() const noexcept
+inline constexpr const T& Vector<T, 2>::getY() const noexcept
 {
     return y;
 }
@@ -1385,7 +1389,7 @@ inline void Vector<T, 2>::setY(T y)
 /* ************************************************************************ */
 
 template<typename T>
-inline const T& Vector<T, 2>::getWidth() const noexcept
+inline constexpr const T& Vector<T, 2>::getWidth() const noexcept
 {
     return width;
 }
@@ -1401,7 +1405,7 @@ inline void Vector<T, 2>::setWidth(T width)
 /* ************************************************************************ */
 
 template<typename T>
-inline const T& Vector<T, 2>::getHeight() const noexcept
+inline constexpr const T& Vector<T, 2>::getHeight() const noexcept
 {
     return height;
 }
@@ -1417,7 +1421,7 @@ inline void Vector<T, 2>::setHeight(T height)
 /* ************************************************************************ */
 
 template<typename T>
-inline Vector<T, 3>::Vector() noexcept
+inline constexpr Vector<T, 3>::Vector() noexcept
     : x{}
     , y{}
     , z{}
@@ -1428,7 +1432,7 @@ inline Vector<T, 3>::Vector() noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline Vector<T, 3>::Vector(T val)
+inline constexpr Vector<T, 3>::Vector(T val)
     : x{val}
     , y{val}
     , z{val}
@@ -1439,7 +1443,7 @@ inline Vector<T, 3>::Vector(T val)
 /* ************************************************************************ */
 
 template<typename T>
-inline Vector<T, 3>::Vector(T x, T y, T z)
+inline constexpr Vector<T, 3>::Vector(T x, T y, T z)
     : x{std::move(x)}
     , y{std::move(y)}
     , z{std::move(z)}
@@ -1450,7 +1454,7 @@ inline Vector<T, 3>::Vector(T x, T y, T z)
 /* ************************************************************************ */
 
 template<typename T>
-inline Vector<T, 3>::Vector(Zero_t zero)
+inline constexpr Vector<T, 3>::Vector(Zero_t zero)
     : x{}
     , y{}
     , z{}
@@ -1461,7 +1465,7 @@ inline Vector<T, 3>::Vector(Zero_t zero)
 /* ************************************************************************ */
 
 template<typename T>
-inline Vector<T, 3>::Vector(const Vector& src)
+inline constexpr Vector<T, 3>::Vector(const Vector& src)
     : x{src.getX()}
     , y{src.getY()}
     , z{src.getZ()}
@@ -1472,7 +1476,7 @@ inline Vector<T, 3>::Vector(const Vector& src)
 /* ************************************************************************ */
 
 template<typename T>
-inline Vector<T, 3>::Vector(Vector&& src)
+inline constexpr Vector<T, 3>::Vector(Vector&& src)
     : x{std::move(src.x)}
     , y{std::move(src.y)}
     , z{std::move(src.z)}
@@ -1484,7 +1488,7 @@ inline Vector<T, 3>::Vector(Vector&& src)
 
 template<typename T>
 template<typename T2, typename std::enable_if<std::is_constructible<T, T2>::value>::type*>
-inline Vector<T, 3>::Vector(const Vector<T2, 3>& rhs)
+inline constexpr Vector<T, 3>::Vector(const Vector<T2, 3>& rhs)
     : x(rhs.getX())
     , y(rhs.getY())
     , z(rhs.getZ())
@@ -1554,17 +1558,19 @@ inline T& Vector<T, 3>::operator[](int pos) noexcept
 /* ************************************************************************ */
 
 template<typename T>
-inline const T& Vector<T, 3>::operator[](int pos) const noexcept
+inline constexpr const T& Vector<T, 3>::operator[](int pos) const noexcept
 {
+#if __cplusplus >= 201402L
     CECE_ASSERT(pos >= 0);
     CECE_ASSERT(pos < 3);
+#endif
     return (&x)[pos];
 }
 
 /* ************************************************************************ */
 
 template<typename T>
-inline const T& Vector<T, 3>::getX() const noexcept
+inline constexpr const T& Vector<T, 3>::getX() const noexcept
 {
     return x;
 }
@@ -1580,7 +1586,7 @@ inline void Vector<T, 3>::setX(T x)
 /* ************************************************************************ */
 
 template<typename T>
-inline const T& Vector<T, 3>::getY() const noexcept
+inline constexpr const T& Vector<T, 3>::getY() const noexcept
 {
     return y;
 }
@@ -1596,7 +1602,7 @@ inline void Vector<T, 3>::setY(T y)
 /* ************************************************************************ */
 
 template<typename T>
-inline const T& Vector<T, 3>::getZ() const noexcept
+inline constexpr const T& Vector<T, 3>::getZ() const noexcept
 {
     return z;
 }
@@ -1612,7 +1618,7 @@ inline void Vector<T, 3>::setZ(T z)
 /* ************************************************************************ */
 
 template<typename T>
-inline const T& Vector<T, 3>::getWidth() const noexcept
+inline constexpr const T& Vector<T, 3>::getWidth() const noexcept
 {
     return width;
 }
@@ -1628,7 +1634,7 @@ inline void Vector<T, 3>::setWidth(T width)
 /* ************************************************************************ */
 
 template<typename T>
-inline const T& Vector<T, 3>::getHeight() const noexcept
+inline constexpr const T& Vector<T, 3>::getHeight() const noexcept
 {
     return height;
 }
@@ -1644,7 +1650,7 @@ inline void Vector<T, 3>::setHeight(T height)
 /* ************************************************************************ */
 
 template<typename T>
-inline const T& Vector<T, 3>::getDepth() const noexcept
+inline constexpr const T& Vector<T, 3>::getDepth() const noexcept
 {
     return depth;
 }
@@ -1660,7 +1666,7 @@ inline void Vector<T, 3>::setDepth(T depth)
 /* ************************************************************************ */
 
 template<typename T>
-inline Vector<T, 2> rotate(const Vector<T, 2>& vec, unit::Angle angle) noexcept
+inline constexpr Vector<T, 2> rotate(const Vector<T, 2>& vec, unit::Angle angle) noexcept
 {
     return {
         static_cast<T>(vec.getX() * cos(static_cast<RealType>(angle)) - vec.getY() * sin(static_cast<RealType>(angle))),
@@ -1671,7 +1677,7 @@ inline Vector<T, 2> rotate(const Vector<T, 2>& vec, unit::Angle angle) noexcept
 /* ************************************************************************ */
 
 template<typename T1, typename T2>
-inline Vector<decltype(std::declval<T1>() * std::declval<T2>()), 3> cross(
+inline constexpr Vector<decltype(std::declval<T1>() * std::declval<T2>()), 3> cross(
     const Vector<T1, 3>& lhs,
     const Vector<T2, 3>& rhs
 )

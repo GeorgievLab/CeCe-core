@@ -181,7 +181,7 @@ public:
      *
      * @return     Reference to the element.
      */
-    const T& operator[](int pos) const;
+    constexpr const T& operator[](int pos) const;
 
 
 // Public Accessors
@@ -737,7 +737,7 @@ inline T& VectorBase<VectorType, T, N>::operator[](int pos)
 /* ************************************************************************ */
 
 template<template<typename, int> typename VectorType, typename T, int N>
-inline const T& VectorBase<VectorType, T, N>::operator[](int pos) const
+inline constexpr const T& VectorBase<VectorType, T, N>::operator[](int pos) const
 {
     // TODO: recursion possibility
     return (*static_cast<const VectorType<T, N>*>(this))[pos];

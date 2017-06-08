@@ -50,7 +50,29 @@ TEST(Vector3, ctorDefault)
     }
 
     {
+        constexpr Vector3<int> vec;
+
+        EXPECT_EQ(0, vec.getX());
+        EXPECT_EQ(0, vec.getY());
+        EXPECT_EQ(0, vec.getZ());
+        EXPECT_EQ(0, vec[0]);
+        EXPECT_EQ(0, vec[1]);
+        EXPECT_EQ(0, vec[2]);
+    }
+
+    {
         Vector3<unsigned int> vec;
+
+        EXPECT_EQ(0, vec.getX());
+        EXPECT_EQ(0, vec.getY());
+        EXPECT_EQ(0, vec.getZ());
+        EXPECT_EQ(0, vec[0]);
+        EXPECT_EQ(0, vec[1]);
+        EXPECT_EQ(0, vec[2]);
+    }
+
+    {
+        constexpr Vector3<unsigned int> vec;
 
         EXPECT_EQ(0, vec.getX());
         EXPECT_EQ(0, vec.getY());
@@ -89,6 +111,17 @@ TEST(Vector3, ctorZero)
 {
     {
         Vector3<int> vec(Zero);
+
+        EXPECT_EQ(0, vec.getX());
+        EXPECT_EQ(0, vec.getY());
+        EXPECT_EQ(0, vec.getZ());
+        EXPECT_EQ(0, vec[0]);
+        EXPECT_EQ(0, vec[1]);
+        EXPECT_EQ(0, vec[2]);
+    }
+
+    {
+        constexpr Vector3<int> vec(Zero);
 
         EXPECT_EQ(0, vec.getX());
         EXPECT_EQ(0, vec.getY());
@@ -138,6 +171,17 @@ TEST(Vector3, ctorSingle)
 {
     {
         Vector3<int> vec{1};
+
+        EXPECT_EQ(1, vec.getX());
+        EXPECT_EQ(1, vec.getY());
+        EXPECT_EQ(1, vec.getZ());
+        EXPECT_EQ(1, vec[0]);
+        EXPECT_EQ(1, vec[1]);
+        EXPECT_EQ(1, vec[2]);
+    }
+
+    {
+        constexpr Vector3<int> vec{1};
 
         EXPECT_EQ(1, vec.getX());
         EXPECT_EQ(1, vec.getY());
@@ -1248,6 +1292,35 @@ TEST(Vector3, mutators)
         EXPECT_DOUBLE_EQ(100.3, vec.getX());
         EXPECT_DOUBLE_EQ(50, vec.getY());
         EXPECT_DOUBLE_EQ(10, vec.getZ());
+    }
+
+    {
+        Vector3<double> vec;
+
+        EXPECT_DOUBLE_EQ(0, vec.getX());
+        EXPECT_DOUBLE_EQ(0, vec.getY());
+        EXPECT_DOUBLE_EQ(0, vec.getZ());
+
+        vec.setWidth(100.3);
+
+        EXPECT_DOUBLE_EQ(100.3, vec.getX());
+        EXPECT_DOUBLE_EQ(0, vec.getY());
+        EXPECT_DOUBLE_EQ(0, vec.getZ());
+
+        vec.setHeight(50);
+
+        EXPECT_DOUBLE_EQ(100.3, vec.getX());
+        EXPECT_DOUBLE_EQ(50, vec.getY());
+        EXPECT_DOUBLE_EQ(0, vec.getZ());
+
+        vec.setDepth(10);
+
+        EXPECT_DOUBLE_EQ(100.3, vec.getX());
+        EXPECT_DOUBLE_EQ(50, vec.getY());
+        EXPECT_DOUBLE_EQ(10, vec.getZ());
+        EXPECT_DOUBLE_EQ(100.3, vec.getWidth());
+        EXPECT_DOUBLE_EQ(50, vec.getHeight());
+        EXPECT_DOUBLE_EQ(10, vec.getDepth());
     }
 
     {

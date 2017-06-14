@@ -164,38 +164,6 @@ public:
     VectorType<T, N>& operator/=(const VectorType<T1, N>& rhs);
 
 
-    /**
-     * @brief      Access operator.
-     *
-     * @param      pos   The position.
-     *
-     * @return     Reference to the element.
-     */
-    T& operator[](int pos);
-
-
-    /**
-     * @brief      Access operator.
-     *
-     * @param      pos   The position.
-     *
-     * @return     Reference to the element.
-     */
-    constexpr const T& operator[](int pos) const;
-
-
-// Public Accessors
-public:
-
-
-    /**
-     * @brief      Returns vector size.
-     *
-     * @return     The size.
-     */
-    constexpr int getSize() const noexcept;
-
-
 // Public Operations
 public:
 
@@ -647,8 +615,11 @@ inline VectorType<T, N> VectorBase<VectorType, T, N>::operator-() const noexcept
 {
     VectorType<T, N> res;
 
+    // Typed alias
+    auto& self = *static_cast<const VectorType<T, N>*>(this);
+
     for (int i = 0; i < N; ++i)
-        res[i] = -(*this)[i];
+        res[i] = -self[i];
 
     return res;
 }
@@ -659,10 +630,13 @@ template<template<typename, int> typename VectorType, typename T, int N>
 template<typename T1>
 inline VectorType<T, N>& VectorBase<VectorType, T, N>::operator+=(const VectorType<T1, N>& rhs)
 {
-    for (int i = 0; i < N; ++i)
-        (*this)[i] += rhs[i];
+    // Typed alias
+    auto& self = *static_cast<VectorType<T, N>*>(this);
 
-    return *static_cast<VectorType<T, N>*>(this);
+    for (int i = 0; i < N; ++i)
+        self[i] += rhs[i];
+
+    return self;
 }
 
 /* ************************************************************************ */
@@ -671,10 +645,13 @@ template<template<typename, int> typename VectorType, typename T, int N>
 template<typename T1>
 inline VectorType<T, N>& VectorBase<VectorType, T, N>::operator-=(const VectorType<T1, N>& rhs)
 {
-    for (int i = 0; i < N; ++i)
-        (*this)[i] -= rhs[i];
+    // Typed alias
+    auto& self = *static_cast<VectorType<T, N>*>(this);
 
-    return *static_cast<VectorType<T, N>*>(this);
+    for (int i = 0; i < N; ++i)
+        self[i] -= rhs[i];
+
+    return self;
 }
 
 /* ************************************************************************ */
@@ -683,10 +660,13 @@ template<template<typename, int> typename VectorType, typename T, int N>
 template<typename T1>
 inline VectorType<T, N>& VectorBase<VectorType, T, N>::operator*=(T1 rhs)
 {
-    for (int i = 0; i < N; ++i)
-        (*this)[i] *= rhs;
+    // Typed alias
+    auto& self = *static_cast<VectorType<T, N>*>(this);
 
-    return *static_cast<VectorType<T, N>*>(this);
+    for (int i = 0; i < N; ++i)
+        self[i] *= rhs;
+
+    return self;
 }
 
 /* ************************************************************************ */
@@ -695,10 +675,13 @@ template<template<typename, int> typename VectorType, typename T, int N>
 template<typename T1>
 inline VectorType<T, N>& VectorBase<VectorType, T, N>::operator*=(const VectorType<T1, N>& rhs)
 {
-    for (int i = 0; i < N; ++i)
-        (*this)[i] *= rhs[i];
+    // Typed alias
+    auto& self = *static_cast<VectorType<T, N>*>(this);
 
-    return *static_cast<VectorType<T, N>*>(this);
+    for (int i = 0; i < N; ++i)
+        self[i] *= rhs[i];
+
+    return self;
 }
 
 /* ************************************************************************ */
@@ -707,10 +690,13 @@ template<template<typename, int> typename VectorType, typename T, int N>
 template<typename T1>
 inline VectorType<T, N>& VectorBase<VectorType, T, N>::operator/=(T1 rhs)
 {
-    for (int i = 0; i < N; ++i)
-        (*this)[i] /= rhs;
+    // Typed alias
+    auto& self = *static_cast<VectorType<T, N>*>(this);
 
-    return *static_cast<VectorType<T, N>*>(this);
+    for (int i = 0; i < N; ++i)
+        self[i] /= rhs;
+
+    return self;
 }
 
 /* ************************************************************************ */
@@ -719,36 +705,13 @@ template<template<typename, int> typename VectorType, typename T, int N>
 template<typename T1>
 inline VectorType<T, N>& VectorBase<VectorType, T, N>::operator/=(const VectorType<T1, N>& rhs)
 {
+    // Typed alias
+    auto& self = *static_cast<VectorType<T, N>*>(this);
+
     for (int i = 0; i < N; ++i)
-        (*this)[i] /= rhs[i];
+        self[i] /= rhs[i];
 
-    return *static_cast<VectorType<T, N>*>(this);
-}
-
-/* ************************************************************************ */
-
-template<template<typename, int> typename VectorType, typename T, int N>
-inline T& VectorBase<VectorType, T, N>::operator[](int pos)
-{
-    // TODO: recursion possibility
-    return (*static_cast<VectorType<T, N>*>(this))[pos];
-}
-
-/* ************************************************************************ */
-
-template<template<typename, int> typename VectorType, typename T, int N>
-inline constexpr const T& VectorBase<VectorType, T, N>::operator[](int pos) const
-{
-    // TODO: recursion possibility
-    return (*static_cast<const VectorType<T, N>*>(this))[pos];
-}
-
-/* ************************************************************************ */
-
-template<template<typename, int> typename VectorType, typename T, int N>
-inline constexpr int VectorBase<VectorType, T, N>::getSize() const noexcept
-{
-    return N;
+    return self;
 }
 
 /* ************************************************************************ */
@@ -767,8 +730,11 @@ inline decltype(std::declval<T>() * std::declval<T>()) VectorBase<VectorType, T,
 {
     decltype(std::declval<T>() * std::declval<T>()) res{};
 
+    // Typed alias
+    auto& self = *static_cast<const VectorType<T, N>*>(this);
+
     for (int i = 0; i < N; ++i)
-        res += (*this)[i] * (*this)[i];
+        res += self[i] * self[i];
 
     return res;
 }

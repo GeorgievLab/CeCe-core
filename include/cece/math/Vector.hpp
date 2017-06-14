@@ -241,6 +241,18 @@ public:
      */
     constexpr const T& operator[](int pos) const noexcept;
 
+
+// Public Accessors
+public:
+
+
+    /**
+     * @brief      Returns vector size.
+     *
+     * @return     The size.
+     */
+    constexpr int getSize() const noexcept;
+
 };
 
 /* ************************************************************************ */
@@ -421,6 +433,14 @@ public:
 
 // Public Accessors
 public:
+
+
+    /**
+     * @brief      Returns vector size.
+     *
+     * @return     The size.
+     */
+    constexpr int getSize() const noexcept;
 
 
     /**
@@ -713,6 +733,14 @@ public:
 
 // Public Accessors
 public:
+
+
+    /**
+     * @brief      Returns vector size.
+     *
+     * @return     The size.
+     */
+    constexpr int getSize() const noexcept;
 
 
     /**
@@ -1218,6 +1246,14 @@ inline constexpr const T& Vector<T, N>::operator[](int pos) const noexcept
 
 /* ************************************************************************ */
 
+template<typename T, int N>
+inline constexpr int Vector<T, N>::getSize() const noexcept
+{
+    return N;
+}
+
+/* ************************************************************************ */
+
 template<typename T>
 inline constexpr Vector<T, 2>::Vector()
     : x{}
@@ -1352,6 +1388,14 @@ inline constexpr const T& Vector<T, 2>::operator[](int pos) const noexcept
     CECE_ASSERT(pos < 2);
 #endif
     return (&x)[pos];
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline constexpr int Vector<T, 2>::getSize() const noexcept
+{
+    return 2;
 }
 
 /* ************************************************************************ */
@@ -1573,6 +1617,14 @@ template<typename T>
 inline constexpr const T& Vector<T, 3>::getX() const noexcept
 {
     return x;
+}
+
+/* ************************************************************************ */
+
+template<typename T>
+inline constexpr int Vector<T, 3>::getSize() const noexcept
+{
+    return 3;
 }
 
 /* ************************************************************************ */

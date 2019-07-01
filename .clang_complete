@@ -1,0 +1,5 @@
+-I.
+-Iinclude
+-Ibuild-debug/src
+-Ivendor/Box2D/Box2D/include
+-Ivendor/googletest/include
